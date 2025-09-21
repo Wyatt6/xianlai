@@ -4,15 +4,14 @@
 
     <groupId>fun.xianlai</groupId>
     <artifactId>xianlai</artifactId>
-    <version>1.0.0</version>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
-        <!-- Replace with your Nexus repository addresses -->
+        <!-- 替换成你的Nexus构件库地址 -->
         <distribution.releases.url>http://192.168.1.100:8081/repository/maven-releases/</distribution.releases.url>
         <distribution.snapshots.url>http://192.168.1.100:8081/repository/maven-snapshots/</distribution.snapshots.url>
-        <!-- Do not change the properties below -->
+        <!-- 不要修改以下参数 -->
         <java.version>17</java.version>
         <spring-boot.version>3.2.4</spring-boot.version>
         <spring-cloud.version>2023.0.1</spring-cloud.version>
