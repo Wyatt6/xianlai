@@ -8,6 +8,9 @@
     <packaging>pom</packaging>
 
     <properties>
+        <!-- TODO CBR: 每次发版前检查模块版本号 -->
+        <xianlai-basic.version>1.0.0</xianlai-basic.version>
+        <xianlai-microservice-gateway.version>1.0.0</xianlai-microservice-gateway.version>
         <!-- 替换成你的Nexus构件库地址 -->
         <distribution.releases.url>http://192.168.1.100:8081/repository/maven-releases/</distribution.releases.url>
         <distribution.snapshots.url>http://192.168.1.100:8081/repository/maven-snapshots/</distribution.snapshots.url>
@@ -26,6 +29,11 @@
         <version>3.2.4</version>
         <relativePath/>
     </parent>
+
+    <modules>
+        <module>xianlai-basic</module>
+        <module>xianlai-microservice-gateway</module>
+    </modules>
 
     <dependencyManagement>
         <dependencies>
