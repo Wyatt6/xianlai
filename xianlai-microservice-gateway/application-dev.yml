@@ -3,3 +3,6 @@ nacos:
   namespace: xxx
   username: xxx
   password: xxx
+  group: DEFAULT_GROUP
+  data-id: gateway-dynamic-routes
+  timeout: 10000
