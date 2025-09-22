@@ -1,0 +1,5 @@
+nacos:
+  server-addr: ip:port
+  namespace: xxx
+  username: xxx
+  password: xxx

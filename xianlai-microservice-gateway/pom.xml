@@ -9,8 +9,50 @@
     </parent>
 
     <artifactId>xianlai-microservice-gateway</artifactId>
+    <version>${xianlai-microservice-gateway.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>
+        <dependency>
+            <groupId>fun.xianlai</groupId>
+            <artifactId>xianlai-basic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>**/application-dev.yml</exclude>
+                    <exclude>**/application-run.yml</exclude>
+                </excludes>
+            </resource>
+        </resources>
+    </build>
 </project>
