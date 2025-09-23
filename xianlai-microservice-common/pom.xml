@@ -14,6 +14,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>fun.xianlai</groupId>
+            <artifactId>xianlai-basic</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
@@ -22,8 +26,6 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
