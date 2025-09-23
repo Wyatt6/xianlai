@@ -1,0 +1,12 @@
+server:
+  port: 30001
+spring:
+  application:
+    name: xianlai-microservice-common
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${nacos.server-addr}
+        namespace: ${nacos.namespace}
+        username: ${nacos.username}
+        password: ${nacos.password}
