@@ -54,9 +54,6 @@ public class SysOption {
     @Column(length = 1024)
     private String description;
 
-    @Column(columnDefinition = "bit not null default 1")
-    private Boolean editable;           // 是否允许修改（即使是内置参数也要editable才允许修改value和sortId）
-
     @Column(columnDefinition = "bit not null default 0")
     private Boolean frontLoad;          // 是否加载到前端
 
