@@ -29,11 +29,9 @@ public class RedirectLogGlobalFilter implements GlobalFilter, Ordered {
         // WebFlux框架不能像Web框架那样继承OnePerRequestFilter重写doFilterInternal即可
         // 因为Filter和业务逻辑不在同一个线程，无法实现基于线程的MDC存储traceId
         // 需要用这种放入当前上下文的方式，类似于ThreadLocal
-        String traceId = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12);
+        String traceId = MDC.get("traceId");
         ServerHttpRequest request = exchange.getRequest().mutate().header("traceId", traceId).build();
         exchange.mutate().request(request).build();
-        // traceId保存在日志框架的MDC上下文中，方便gateway的其他地方获取使用
-        MDC.put("traceId", traceId);
         log.info("traceId: {}", exchange.getRequest().getHeaders().get("traceId"));
         // 记录开始时间
         exchange.getAttributes().put(BEGIN_TIME, new Date());

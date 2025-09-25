@@ -1,12 +1,15 @@
 package fun.xianlai.microservice.gateway.logger;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
+
+import java.util.UUID;
 
 /**
  * 打印每个请求的分界线
@@ -24,6 +27,8 @@ public class RequestLogFilter implements WebFilter {
                     ServerHttpRequest request = exchange.getRequest();
                     String url = request.getURI().toString();
                     if (!url.matches(".*/actuator.*")) {
+                        String traceId = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12);
+                        MDC.put("traceId", traceId);
                         log.info(">>>>> 开始处理请求: {} {}", request.getMethod(), request.getURI());
                     }
                     return context;
