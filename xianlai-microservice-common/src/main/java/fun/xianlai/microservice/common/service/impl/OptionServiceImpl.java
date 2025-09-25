@@ -85,7 +85,7 @@ public class OptionServiceImpl implements OptionService {
     @Override
     @SimpleServiceLog("缓存某个加载到后端的系统参数")
     public void cacheCertainBackLoadSysOption(String key) {
-        Optional<SysOption> option = sysOptionRepository.findByKeyAndBackLoad(key, true);
+        Optional<SysOption> option = sysOptionRepository.findByOptionKeyAndBackLoad(key, true);
         redis.delete(CACHE_PREFIX + key);
         if (option.isPresent()) {
             redis.opsForValue().set(CACHE_PREFIX + key, option.get().getOptionValue(), Duration.ofHours(CACHE_HOURS));

@@ -16,5 +16,5 @@ public interface SysOptionRepository extends JpaRepository<SysOption, String> {
 
     List<SysOption> findByBackLoad(Boolean backLoad);
 
-    Optional<SysOption> findByKeyAndBackLoad(String key, Boolean backLoad);
+    Optional<SysOption> findByOptionKeyAndBackLoad(String optionKey, Boolean backLoad);
 }
