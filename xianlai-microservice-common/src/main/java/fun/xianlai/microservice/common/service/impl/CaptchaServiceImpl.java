@@ -71,7 +71,7 @@ public class CaptchaServiceImpl implements CaptchaService {
     public DataMap generateCaptcha() {
         try {
             Integer length = (Integer) optionService.getCertainBackLoadSysOptionValueFromCache("captcha.length").orElse(5);
-            Integer expireSeconds = (Integer) optionService.getCertainBackLoadSysOptionValueFromCache("captcha.expireSeconds").orElse(60);
+            Long expireSeconds = (Long) optionService.getCertainBackLoadSysOptionValueFromCache("captcha.expireSeconds").orElse(60L);
 
             Producer producer = getKaptchaProducer(String.valueOf(length));
             // 生成验证码KEY、验证码文本，并缓存到Redis
