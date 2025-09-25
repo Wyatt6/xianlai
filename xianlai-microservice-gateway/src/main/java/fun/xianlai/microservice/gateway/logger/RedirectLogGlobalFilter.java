@@ -1,6 +1,7 @@
 package fun.xianlai.microservice.gateway.logger;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -31,6 +32,8 @@ public class RedirectLogGlobalFilter implements GlobalFilter, Ordered {
         String traceId = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12);
         ServerHttpRequest request = exchange.getRequest().mutate().header("traceId", traceId).build();
         exchange.mutate().request(request).build();
+        // traceId保存在日志框架的MDC上下文中，方便gateway的其他地方获取使用
+        MDC.put("traceId", traceId);
         log.info("traceId: {}", exchange.getRequest().getHeaders().get("traceId"));
         // 记录开始时间
         exchange.getAttributes().put(BEGIN_TIME, new Date());
