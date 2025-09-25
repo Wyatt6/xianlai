@@ -12,6 +12,7 @@
         <xianlai-basic.version>1.0.0-SNAPSHOT</xianlai-basic.version>
         <xianlai-microservice-gateway.version>1.1.2</xianlai-microservice-gateway.version>
         <xianlai-microservice-common.version>1.2.2</xianlai-microservice-common.version>
+        <xianlai-microservice-iam.version>1.0.0</xianlai-microservice-iam.version>
         <!-- 替换成你的Nexus构件库地址 -->
         <distribution.releases.url>http://192.168.1.100:8081/repository/maven-releases/</distribution.releases.url>
         <distribution.snapshots.url>http://192.168.1.100:8081/repository/maven-snapshots/</distribution.snapshots.url>
@@ -35,6 +36,7 @@
         <module>xianlai-basic</module>
         <module>xianlai-microservice-gateway</module>
         <module>xianlai-microservice-common</module>
+        <module>xianlai-microservice-iam</module>
     </modules>
 
     <dependencyManagement>
