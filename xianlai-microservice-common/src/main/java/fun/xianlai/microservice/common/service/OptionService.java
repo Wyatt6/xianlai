@@ -1,6 +1,7 @@
 package fun.xianlai.microservice.common.service;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author WyattLau
@@ -34,5 +35,5 @@ public interface OptionService {
     /**
      * 从缓存获取某个加载到后端的系统参数值
      */
-    String getCertainBackLoadSysOptionValueFromCache(String key);
+    Optional<Object> getCertainBackLoadSysOptionValueFromCache(String key);
 }

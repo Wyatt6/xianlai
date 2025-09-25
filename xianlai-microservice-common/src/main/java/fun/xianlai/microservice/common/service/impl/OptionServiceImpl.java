@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import fun.xianlai.basic.annotation.SimpleServiceLog;
 import fun.xianlai.basic.utils.ChecksumUtil;
 import fun.xianlai.microservice.common.model.entity.SysOption;
+import fun.xianlai.microservice.common.model.enums.JavaType;
 import fun.xianlai.microservice.common.repository.SysOptionRepository;
 import fun.xianlai.microservice.common.service.OptionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -77,7 +77,10 @@ public class OptionServiceImpl implements OptionService {
         List<SysOption> options = sysOptionRepository.findByBackLoad(true);
         if (options != null) {
             for (SysOption option : options) {
-                redis.opsForValue().set(CACHE_PREFIX + option.getOptionKey(), option.getOptionValue(), Duration.ofHours(CACHE_HOURS));
+                Map<String, Object> valueObject = new HashMap<>();
+                valueObject.put("value", option.getOptionValue());
+                valueObject.put("type", option.getJavaType());
+                redis.opsForValue().set(CACHE_PREFIX + option.getOptionKey(), valueObject, Duration.ofHours(CACHE_HOURS));
             }
         }
     }
@@ -88,19 +91,52 @@ public class OptionServiceImpl implements OptionService {
         Optional<SysOption> option = sysOptionRepository.findByOptionKeyAndBackLoad(key, true);
         redis.delete(CACHE_PREFIX + key);
         if (option.isPresent()) {
-            redis.opsForValue().set(CACHE_PREFIX + key, option.get().getOptionValue(), Duration.ofHours(CACHE_HOURS));
+            Map<String, Object> valueObject = new HashMap<>();
+            valueObject.put("value", option.get().getOptionValue());
+            valueObject.put("type", option.get().getJavaType());
+            redis.opsForValue().set(CACHE_PREFIX + key, valueObject, Duration.ofHours(CACHE_HOURS));
         }
     }
 
     @Override
     @SimpleServiceLog("从缓存获取某个加载到后端的系统参数值")
-    public String getCertainBackLoadSysOptionValueFromCache(String key) {
-        String value = (String) redis.opsForValue().get(CACHE_PREFIX + key);
-        if (value != null) {
-            return value;
-        } else {
+    public Optional<Object> getCertainBackLoadSysOptionValueFromCache(String key) {
+        Map<String, Object> valueObject = (HashMap<String, Object>) redis.opsForValue().get(CACHE_PREFIX + key);
+        if (valueObject == null) {
             self.cacheCertainBackLoadSysOption(key);
-            return (String) redis.opsForValue().get(CACHE_PREFIX + key);
         }
+        // null时再次获取后才做的类型转换
+        if (valueObject != null) {
+            String value = (String) valueObject.get("value");
+            JavaType type = (JavaType) valueObject.get("type");
+            if (JavaType.BYTE.equals(type)) {
+                return Optional.of(Byte.parseByte(value));
+            }
+            if (JavaType.SHORT.equals(type)) {
+                return Optional.of(Short.parseShort(value));
+            }
+            if (JavaType.INT.equals(type)) {
+                return Optional.of(Integer.parseInt(value));
+            }
+            if (JavaType.LONG.equals(type)) {
+                return Optional.of(Long.parseLong(value));
+            }
+            if (JavaType.FLOAT.equals(type)) {
+                return Optional.of(Float.parseFloat(value));
+            }
+            if (JavaType.DOUBLE.equals(type)) {
+                return Optional.of(Double.parseDouble(value));
+            }
+            if (JavaType.BOOLEAN.equals(type)) {
+                return Optional.of(Boolean.parseBoolean(value));
+            }
+            if (JavaType.CHAR.equals(type)) {
+                return Optional.of(value.charAt(0));
+            }
+            if (JavaType.STRING.equals(type)) {
+                return Optional.of(value);
+            }
+        }
+        return Optional.empty();
     }
 }
