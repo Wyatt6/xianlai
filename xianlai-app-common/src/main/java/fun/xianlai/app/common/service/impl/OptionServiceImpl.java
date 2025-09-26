@@ -1,12 +1,11 @@
 package fun.xianlai.app.common.service.impl;
 
 import com.alibaba.fastjson2.JSONObject;
-import fun.xianlai.basic.annotation.SimpleServiceLog;
-import fun.xianlai.basic.utils.ChecksumUtil;
 import fun.xianlai.app.common.model.entity.SysOption;
-import fun.xianlai.app.common.model.enums.JavaType;
 import fun.xianlai.app.common.repository.SysOptionRepository;
 import fun.xianlai.app.common.service.OptionService;
+import fun.xianlai.basic.annotation.SimpleServiceLog;
+import fun.xianlai.basic.utils.ChecksumUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -77,10 +76,7 @@ public class OptionServiceImpl implements OptionService {
         List<SysOption> options = sysOptionRepository.findByBackLoad(true);
         if (options != null) {
             for (SysOption option : options) {
-                Map<String, Object> valueObject = new HashMap<>();
-                valueObject.put("value", option.getOptionValue());
-                valueObject.put("type", option.getJavaType());
-                redis.opsForValue().set(CACHE_PREFIX + option.getOptionKey(), valueObject, Duration.ofHours(CACHE_HOURS));
+                redis.opsForValue().set(CACHE_PREFIX + option.getOptionKey(), option.getOptionValue(), Duration.ofHours(CACHE_HOURS));
             }
         }
     }
@@ -91,52 +87,40 @@ public class OptionServiceImpl implements OptionService {
         Optional<SysOption> option = sysOptionRepository.findByOptionKeyAndBackLoad(key, true);
         redis.delete(CACHE_PREFIX + key);
         if (option.isPresent()) {
-            Map<String, Object> valueObject = new HashMap<>();
-            valueObject.put("value", option.get().getOptionValue());
-            valueObject.put("type", option.get().getJavaType());
-            redis.opsForValue().set(CACHE_PREFIX + key, valueObject, Duration.ofHours(CACHE_HOURS));
+            redis.opsForValue().set(CACHE_PREFIX + key, option.get().getOptionValue(), Duration.ofHours(CACHE_HOURS));
         }
     }
 
     @Override
     @SimpleServiceLog("从缓存获取某个加载到后端的系统参数值")
-    public Optional<Object> getCertainBackLoadSysOptionValueFromCache(String key) {
-        Map<String, Object> valueObject = (HashMap<String, Object>) redis.opsForValue().get(CACHE_PREFIX + key);
-        if (valueObject == null) {
+    public String getCertainBackLoadSysOptionValueFromCache(String key) {
+        String value = (String) redis.opsForValue().get(CACHE_PREFIX + key);
+        if (value != null) {
+            return value;
+        } else {
             self.cacheCertainBackLoadSysOption(key);
+            return (String) redis.opsForValue().get(CACHE_PREFIX + key);
         }
-        // null时再次获取后才做的类型转换
-        if (valueObject != null) {
-            String value = (String) valueObject.get("value");
-            JavaType type = (JavaType) valueObject.get("type");
-            if (JavaType.BYTE.equals(type)) {
-                return Optional.of(Byte.parseByte(value));
-            }
-            if (JavaType.SHORT.equals(type)) {
-                return Optional.of(Short.parseShort(value));
-            }
-            if (JavaType.INT.equals(type)) {
-                return Optional.of(Integer.parseInt(value));
-            }
-            if (JavaType.LONG.equals(type)) {
-                return Optional.of(Long.parseLong(value));
-            }
-            if (JavaType.FLOAT.equals(type)) {
-                return Optional.of(Float.parseFloat(value));
-            }
-            if (JavaType.DOUBLE.equals(type)) {
-                return Optional.of(Double.parseDouble(value));
-            }
-            if (JavaType.BOOLEAN.equals(type)) {
-                return Optional.of(Boolean.parseBoolean(value));
-            }
-            if (JavaType.CHAR.equals(type)) {
-                return Optional.of(value.charAt(0));
-            }
-            if (JavaType.STRING.equals(type)) {
-                return Optional.of(value);
-            }
-        }
-        return Optional.empty();
+    }
+
+    @Override
+    @SimpleServiceLog("以String类型读取参数值")
+    public Optional<String> readValueInString(String key) {
+        String value = self.getCertainBackLoadSysOptionValueFromCache(key);
+        return value != null ? value.describeConstable() : Optional.empty();
+    }
+
+    @Override
+    @SimpleServiceLog("以Integer类型读取参数值")
+    public Optional<Integer> readValueInInteger(String key) {
+        String value = self.getCertainBackLoadSysOptionValueFromCache(key);
+        return value != null ? ((Integer) Integer.parseInt(value)).describeConstable() : Optional.empty();
+    }
+
+    @Override
+    @SimpleServiceLog("以Long类型读取参数值")
+    public Optional<Long> readValueInLong(String key) {
+        String value = self.getCertainBackLoadSysOptionValueFromCache(key);
+        return value != null ? ((Long) Long.parseLong(value)).describeConstable() : Optional.empty();
     }
 }

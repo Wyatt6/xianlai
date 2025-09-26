@@ -1,6 +1,5 @@
 package fun.xianlai.app.common.model.entity;
 
-import fun.xianlai.app.common.model.enums.JavaType;
 import fun.xianlai.app.common.model.enums.JsType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -55,16 +54,12 @@ public class SysOption {
     private String description;
 
     @Column(columnDefinition = "bit not null default 0")
+    private Boolean backLoad;           // 是否加载到后端
+
+    @Column(columnDefinition = "bit not null default 0")
     private Boolean frontLoad;          // 是否加载到前端
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private JsType jsType;              // 参数值的js数据类型（frontLoad = true才有意义）
-
-    @Column(columnDefinition = "bit not null default 0")
-    private Boolean backLoad;           // 是否加载到后端
-
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    private JavaType javaType;          // 参数值的java数据类型（backLoad = true才有意义）
 }

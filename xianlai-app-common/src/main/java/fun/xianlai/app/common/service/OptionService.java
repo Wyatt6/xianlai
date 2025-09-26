@@ -35,5 +35,20 @@ public interface OptionService {
     /**
      * 从缓存获取某个加载到后端的系统参数值
      */
-    Optional<Object> getCertainBackLoadSysOptionValueFromCache(String key);
+    String getCertainBackLoadSysOptionValueFromCache(String key);
+
+    /**
+     * 以String类型读取参数值
+     */
+    Optional<String> readValueInString(String key);
+
+    /**
+     * 以Integer类型读取参数值
+     */
+    Optional<Integer> readValueInInteger(String key);
+
+    /**
+     * 以Long类型读取参数值
+     */
+    Optional<Long> readValueInLong(String key);
 }
