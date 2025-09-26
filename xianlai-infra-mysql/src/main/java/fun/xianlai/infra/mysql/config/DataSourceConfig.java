@@ -1,8 +1,8 @@
-package fun.xianlai.app.common.config;
+package fun.xianlai.infra.mysql.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import fun.xianlai.app.common.properties.DruidPoolProperties;
-import fun.xianlai.app.common.properties.MysqlProperties;
+import fun.xianlai.infra.mysql.properties.DruidPoolProperties;
+import fun.xianlai.infra.mysql.properties.MysqlProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
