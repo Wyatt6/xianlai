@@ -1,4 +1,4 @@
-package fun.xianlai.microservice.gateway.service;
+package fun.xianlai.app.gateway.service;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.nacos.api.config.ConfigService;

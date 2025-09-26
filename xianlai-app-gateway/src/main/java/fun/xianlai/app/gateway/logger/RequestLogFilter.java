@@ -1,4 +1,4 @@
-package fun.xianlai.microservice.gateway.logger;
+package fun.xianlai.app.gateway.logger;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
