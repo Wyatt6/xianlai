@@ -10,6 +10,7 @@
     <properties>
         <!-- TODO CBR: 每次发版前检查模块版本号 -->
         <xianlai-basic.version>1.0.0</xianlai-basic.version>
+        <xianlai-infra-mysql.version>1.0.0</xianlai-infra-mysql.version>
         <xianlai-app-gateway.version>1.0.0</xianlai-app-gateway.version>
         <xianlai-app-common.version>1.0.0</xianlai-app-common.version>
         <xianlai-app-iam.version>1.0.0</xianlai-app-iam.version>
@@ -34,6 +35,7 @@
 
     <modules>
         <module>xianlai-basic</module>
+        <module>xianlai-infra-mysql</module>
         <module>xianlai-app-gateway</module>
         <module>xianlai-app-common</module>
         <module>xianlai-app-iam</module>
@@ -46,6 +48,11 @@
                 <groupId>fun.xianlai</groupId>
                 <artifactId>xianlai-basic</artifactId>
                 <version>${xianlai-basic.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>fun.xianlai</groupId>
+                <artifactId>xianlai-infra-mysql</artifactId>
+                <version>${xianlai-infra-mysql.version}</version>
             </dependency>
 
             <!-- 第三方依赖 -->
