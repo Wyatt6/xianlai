@@ -1,8 +1,8 @@
 nacos:
-  server-addr: ip:port
-  namespace: xxx
-  username: xxx
-  password: xxx
+  server-addr: ???
+  namespace: ???
+  username: ???
+  password: ???
 datasource:
   mysql:
     host: ???
