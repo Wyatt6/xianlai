@@ -2,7 +2,7 @@ server:
   port: 30001
 spring:
   application:
-    name: xianlai-microservice-common
+    name: xianlai-app-common
   cloud:
     nacos:
       discovery:

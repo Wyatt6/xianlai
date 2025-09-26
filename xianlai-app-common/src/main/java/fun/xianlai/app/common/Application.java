@@ -14,6 +14,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
-        log.info("--------------- 微服务 xianlai-microservice-common 已启动 ---------------");
+        log.info("--------------- 微服务 xianlai-app-common 已启动 ---------------");
     }
 }
