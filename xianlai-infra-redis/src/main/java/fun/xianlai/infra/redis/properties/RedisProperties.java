@@ -1,4 +1,4 @@
-package fun.xianlai.app.common.properties;
+package fun.xianlai.infra.redis.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
