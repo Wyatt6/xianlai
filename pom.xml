@@ -9,10 +9,10 @@
 
     <properties>
         <!-- TODO CBR: 每次发版前检查模块版本号 -->
-        <xianlai-app-common.version>1.2.3</xianlai-app-common.version>
-        <xianlai-app-gateway.version>1.1.2</xianlai-app-gateway.version>
-        <xianlai-app-iam.version>1.1.0</xianlai-app-iam.version>
         <xianlai-basic.version>1.0.0</xianlai-basic.version>
+        <xianlai-app-gateway.version>1.0.0</xianlai-app-gateway.version>
+        <xianlai-app-common.version>1.0.0</xianlai-app-common.version>
+        <xianlai-app-iam.version>1.0.0</xianlai-app-iam.version>
         <!-- 替换成你的Nexus构件库地址 -->
         <distribution.releases.url>http://192.168.1.100:8081/repository/maven-releases/</distribution.releases.url>
         <distribution.snapshots.url>http://192.168.1.100:8081/repository/maven-snapshots/</distribution.snapshots.url>
@@ -33,10 +33,10 @@
     </parent>
 
     <modules>
-        <module>xianlai-app-common</module>
-        <module>xianlai-app-gateway</module>
-        <module>xianlai-app-iam</module>
         <module>xianlai-basic</module>
+        <module>xianlai-app-gateway</module>
+        <module>xianlai-app-common</module>
+        <module>xianlai-app-iam</module>
     </modules>
 
     <dependencyManagement>
