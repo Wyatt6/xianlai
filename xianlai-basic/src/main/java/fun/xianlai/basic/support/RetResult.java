@@ -1,6 +1,6 @@
 package fun.xianlai.basic.support;
 
-import lombok.Getter;
+import lombok.Data;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,9 +8,9 @@ import java.util.Map;
 /**
  * @author WyattLau
  */
-@Getter
+@Data
 public class RetResult {
-    private Boolean success;                // true - 成功 / false - 失败
+    private boolean success;                // true - 成功 / false - 失败
     private DataMap data = new DataMap();   // 返回数据
     private String traceId;                 // 日志跟踪ID
 
@@ -26,6 +26,14 @@ public class RetResult {
     public RetResult fail() {
         this.success = false;
         return this;
+    }
+
+    /**
+     * Lombok的@Getter给boolean生成的是isXXX()这样的方法，给Boolean生成的是getXXX()这样的方法
+     * 这时候fastjson就无法正确解析json字符串中的布尔值，因为它找的是getXXX()这样的方法
+     */
+    public boolean getSuccess() {
+        return this.success;
     }
 
     public RetResult setFailCode(String code) {
