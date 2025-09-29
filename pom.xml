@@ -12,6 +12,7 @@
         <xianlai-basic.version>1.0.0</xianlai-basic.version>
         <xianlai-infra-mysql.version>1.0.0</xianlai-infra-mysql.version>
         <xianlai-infra-redis.version>1.0.0</xianlai-infra-redis.version>
+        <xianlai-infra-feign.version>1.0.0</xianlai-infra-feign.version>
         <xianlai-app-gateway.version>1.0.0</xianlai-app-gateway.version>
         <xianlai-app-common.version>1.0.0</xianlai-app-common.version>
         <xianlai-app-iam.version>1.0.0</xianlai-app-iam.version>
@@ -38,6 +39,7 @@
         <module>xianlai-basic</module>
         <module>xianlai-infra-mysql</module>
         <module>xianlai-infra-redis</module>
+        <module>xianlai-infra-feign</module>
         <module>xianlai-app-gateway</module>
         <module>xianlai-app-common</module>
         <module>xianlai-app-iam</module>
@@ -60,6 +62,11 @@
                 <groupId>fun.xianlai</groupId>
                 <artifactId>xianlai-infra-redis</artifactId>
                 <version>${xianlai-infra-redis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>fun.xianlai</groupId>
+                <artifactId>xianlai-infra-feign</artifactId>
+                <version>${xianlai-infra-feign.version}</version>
             </dependency>
 
             <!-- 第三方依赖 -->

@@ -1,5 +1,6 @@
 package fun.xianlai.basic.support;
 
+import fun.xianlai.basic.exception.SysException;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -65,8 +66,21 @@ public class RetResult {
     }
 
     public RetResult writeFeignData(Object value) {
-        this.success().addData("feignResult", value);
+        this.success().addData("retResult", value);
         return this;
+    }
+
+    public Object readFeignData() {
+        return this.data.get("retResult");
+    }
+
+    public RetResult writeFeignSysException(SysException e) {
+        this.fail().addData("sysException", e.getMessage());
+        return this;
+    }
+
+    public SysException readFeignSysException() {
+        return new SysException((String) this.data.get("sysException"));
     }
 
     public RetResult setTraceId(String traceId) {
