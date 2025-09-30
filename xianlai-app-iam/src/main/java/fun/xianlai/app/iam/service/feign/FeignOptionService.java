@@ -13,4 +13,7 @@ import java.util.Optional;
 public interface FeignOptionService {
     @GetMapping("/readValueInString")
     Optional<String> readValueInString(@RequestParam String key);
+
+    @GetMapping("/readValueInLong")
+    Optional<Long> readValueInLong(@RequestParam String key);
 }

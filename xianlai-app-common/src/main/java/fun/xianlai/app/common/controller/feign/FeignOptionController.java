@@ -18,7 +18,12 @@ public class FeignOptionController {
     private OptionService optionService;
 
     @GetMapping("/readValueInString")
-    public RetResult readValueInString(@RequestParam("key") String key) {
+    public RetResult readValueInString(@RequestParam String key) {
         return new RetResult().writeFeignData(optionService.readValueInString(key));
+    }
+
+    @GetMapping("/readValueInLong")
+    public RetResult readValueInLong(@RequestParam String key) {
+        return new RetResult().writeFeignData(optionService.readValueInLong(key));
     }
 }

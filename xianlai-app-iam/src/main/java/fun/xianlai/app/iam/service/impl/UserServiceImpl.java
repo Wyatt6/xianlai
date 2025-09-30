@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * @author WyattLau
@@ -44,9 +45,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @ServiceLog("创建新用户")
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void createUser(String username, String password) {
+    public User createUser(String username, String password) {
         log.info("检查用户名是否已被注册");
-        if (userRepository.findByUsername(username).isPresent()) {
+        if (userRepository.findByUsername(username) != null) {
             throw new SysException("用户名已被使用");
         }
 
@@ -60,7 +61,20 @@ public class UserServiceImpl implements UserService {
         newUser.setSalt(salt);
         newUser.setRegisterTime(new Date());
         newUser.setActive(true);
-        User user = userRepository.save(newUser);
-        log.info("成功创建新用户: id=[{}]", user.getId());
+        User savedUser = userRepository.save(newUser);
+        log.info("成功创建新用户: id=[{}]", savedUser.getId());
+
+        return savedUser;
+    }
+
+    @Override
+    @ServiceLog("身份验证服务")
+    public User authentication(String username, String password) {
+        User user = userRepository.findByUsername(username);
+        if (user == null || !user.getPassword().equals(PasswordUtil.encode(password, user.getSalt()))) {
+            throw new SysException("用户名或密码错误");
+        }
+        log.info("身份验证通过");
+        return user;
     }
 }

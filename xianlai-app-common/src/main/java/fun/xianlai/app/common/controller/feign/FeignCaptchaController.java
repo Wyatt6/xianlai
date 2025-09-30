@@ -17,7 +17,7 @@ public class FeignCaptchaController {
     private CaptchaService captchaService;
 
     @GetMapping("/verifyCaptcha")
-    public void verifyCaptcha(@RequestParam("captchaKey") String captchaKey, @RequestParam("captcha") String captcha) {
+    public void verifyCaptcha(@RequestParam String captchaKey, @RequestParam String captcha) {
         captchaService.verifyCaptcha(captchaKey, captcha);
     }
 }
