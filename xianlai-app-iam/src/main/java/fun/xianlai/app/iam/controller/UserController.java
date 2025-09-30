@@ -119,4 +119,15 @@ public class UserController {
                 .addData("department", department)
                 .addData("position", position);
     }
+
+    @ControllerLog("退出登录")
+    @SaCheckLogin
+    @GetMapping("/logout")
+    public RetResult logout() {
+        log.info("token=[{}]", StpUtil.getTokenValue());
+        log.info("loginId=[{}]", StpUtil.getLoginIdAsLong());
+        StpUtil.logout();
+        log.info("退出登录成功");
+        return new RetResult().success();
+    }
 }
