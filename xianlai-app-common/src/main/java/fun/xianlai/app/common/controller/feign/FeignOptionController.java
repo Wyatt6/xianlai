@@ -1,7 +1,6 @@
 package fun.xianlai.app.common.controller.feign;
 
 import fun.xianlai.app.common.service.OptionService;
-import fun.xianlai.basic.exception.SysException;
 import fun.xianlai.basic.support.RetResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
