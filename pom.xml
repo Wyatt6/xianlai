@@ -2,20 +2,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fun.xianlai</groupId>
-    <artifactId>xianlai</artifactId>
-    <version>1.0.0</version>
-    <packaging>pom</packaging>
-
     <properties>
         <!-- TODO CBR: 每次发版前检查模块版本号 -->
-        <xianlai-basic.version>1.0.0</xianlai-basic.version>
-        <xianlai-infra-mysql.version>1.0.0</xianlai-infra-mysql.version>
-        <xianlai-infra-redis.version>1.0.0</xianlai-infra-redis.version>
-        <xianlai-infra-feign.version>1.0.0</xianlai-infra-feign.version>
-        <xianlai-app-gateway.version>1.0.0</xianlai-app-gateway.version>
-        <xianlai-app-common.version>1.0.0-SNAPSHOT</xianlai-app-common.version>
-        <xianlai-app-iam.version>1.0.0-SNAPSHOT</xianlai-app-iam.version>
+        <xianlai.version>0.1.0</xianlai.version>
         <!-- 替换成你的Nexus构件库地址 -->
         <distribution.releases.url>http://192.168.1.100:8081/repository/maven-releases/</distribution.releases.url>
         <distribution.snapshots.url>http://192.168.1.100:8081/repository/maven-snapshots/</distribution.snapshots.url>
@@ -35,6 +24,11 @@
         <relativePath/>
     </parent>
 
+    <groupId>fun.xianlai</groupId>
+    <artifactId>xianlai</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
     <modules>
         <module>xianlai-basic</module>
         <module>xianlai-infra-mysql</module>
@@ -51,22 +45,22 @@
             <dependency>
                 <groupId>fun.xianlai</groupId>
                 <artifactId>xianlai-basic</artifactId>
-                <version>${xianlai-basic.version}</version>
+                <version>${xianlai.version}</version>
             </dependency>
             <dependency>
                 <groupId>fun.xianlai</groupId>
                 <artifactId>xianlai-infra-mysql</artifactId>
-                <version>${xianlai-infra-mysql.version}</version>
+                <version>${xianlai.version}</version>
             </dependency>
             <dependency>
                 <groupId>fun.xianlai</groupId>
                 <artifactId>xianlai-infra-redis</artifactId>
-                <version>${xianlai-infra-redis.version}</version>
+                <version>${xianlai.version}</version>
             </dependency>
             <dependency>
                 <groupId>fun.xianlai</groupId>
                 <artifactId>xianlai-infra-feign</artifactId>
-                <version>${xianlai-infra-feign.version}</version>
+                <version>${xianlai.version}</version>
             </dependency>
 
             <!-- 第三方依赖 -->
