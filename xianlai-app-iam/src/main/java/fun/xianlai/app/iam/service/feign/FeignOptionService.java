@@ -9,8 +9,8 @@ import java.util.Optional;
 /**
  * @author WyattLau
  */
-@FeignClient(name = "xianlai-microservice-common", path = "/feign/option")
+@FeignClient(contextId = "xianlai-app-common-option", name="xianlai-app-common", path = "/feign/option")
 public interface FeignOptionService {
-    @GetMapping("/getCertainBackLoadSysOptionValueFromCache")
-    Optional<Object> getCertainBackLoadSysOptionValueFromCache(@RequestParam("key") String key);
+    @GetMapping("/readValueInString")
+    Optional<String> readValueInString(@RequestParam String key);
 }

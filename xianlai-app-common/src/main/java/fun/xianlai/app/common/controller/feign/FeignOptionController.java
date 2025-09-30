@@ -1,13 +1,13 @@
 package fun.xianlai.app.common.controller.feign;
 
 import fun.xianlai.app.common.service.OptionService;
+import fun.xianlai.basic.exception.SysException;
+import fun.xianlai.basic.support.RetResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 /**
  * @author WyattLau
@@ -18,9 +18,8 @@ public class FeignOptionController {
     @Autowired
     private OptionService optionService;
 
-//    @FeignProducerLog("从缓存获取某个加载到后端的系统参数值")
-    @GetMapping("/getCertainBackLoadSysOptionValueFromCache")
-    public Optional<Object> getCertainBackLoadSysOptionValueFromCache(@RequestParam("key") String key) {
-        return optionService.getCertainBackLoadSysOptionValueFromCache(key);
+    @GetMapping("/readValueInString")
+    public RetResult readValueInString(@RequestParam("key") String key) {
+        return new RetResult().writeFeignData(optionService.readValueInString(key));
     }
 }
