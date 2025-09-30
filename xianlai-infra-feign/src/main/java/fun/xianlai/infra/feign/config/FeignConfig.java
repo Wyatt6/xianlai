@@ -49,6 +49,13 @@ public class FeignConfig {
                 String bodyStr = Util.toString(response.body().asReader(Util.UTF_8));
                 RetResult retResult = JSON.parseObject(bodyStr, RetResult.class);
                 if (retResult.getSuccess()) {
+                    // FastJSON优先将不越界的数字解析成Integer，Integer无法隐式转换成Long，需要手工解析
+                    if (long.class.getTypeName().equalsIgnoreCase(type.getTypeName())) {
+                        return Long.parseLong(retResult.readFeignData().toString());
+                    }
+                    if (Long.class.getTypeName().equalsIgnoreCase(type.getTypeName())) {
+                        return Long.parseLong(retResult.readFeignData().toString());
+                    }
                     return retResult.readFeignData();
                 } else {
                     throw retResult.readFeignSysException();
