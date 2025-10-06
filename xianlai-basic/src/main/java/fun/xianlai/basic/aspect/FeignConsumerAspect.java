@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 public class FeignConsumerAspect {
-    @Pointcut("execution(* fun.xianlai..*.service.feign..*(..))")
+    @Pointcut("execution(* fun.xianlai..*.feign.consumer..*(..))")
     public void pointcut() {
     }
 

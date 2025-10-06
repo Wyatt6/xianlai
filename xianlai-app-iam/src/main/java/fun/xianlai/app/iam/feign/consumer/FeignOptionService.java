@@ -1,4 +1,4 @@
-package fun.xianlai.app.iam.service.feign;
+package fun.xianlai.app.iam.feign.consumer;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package fun.xianlai.app.common.controller.feign;
+package fun.xianlai.app.common.feign.producer;
 
 import fun.xianlai.app.common.service.OptionService;
 import fun.xianlai.basic.support.RetResult;

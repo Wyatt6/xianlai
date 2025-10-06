@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 public class FeignProducerAspect {
-    @Pointcut("execution(* fun.xianlai..*.controller.feign..*(..))")
+    @Pointcut("execution(* fun.xianlai..*.feign.producer..*(..))")
     public void pointcut() {
     }
 
