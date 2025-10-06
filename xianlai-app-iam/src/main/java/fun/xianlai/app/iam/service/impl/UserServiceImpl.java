@@ -3,7 +3,7 @@ package fun.xianlai.app.iam.service.impl;
 import fun.xianlai.app.iam.model.entity.rbac.User;
 import fun.xianlai.app.iam.repository.UserRepository;
 import fun.xianlai.app.iam.service.UserService;
-import fun.xianlai.app.iam.service.feign.FeignOptionService;
+import fun.xianlai.app.iam.feign.consumer.FeignOptionService;
 import fun.xianlai.basic.annotation.ServiceLog;
 import fun.xianlai.basic.annotation.SimpleServiceLog;
 import fun.xianlai.basic.exception.SysException;
