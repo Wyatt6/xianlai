@@ -4,7 +4,7 @@ INSERT IGNORE INTO tb_common_sys_option(`sort_id`, `back_load`, `front_load`, `j
 (1, 0, 1, 'STRING', 'portal.coverTitle', 'XianLai', 'XianLai', '封面标题', null),
 (1, 0, 1, 'NUMBER', 'portal.coverTitleSize', '5', '5', '封面标题字体大小', null),
 (1, 0, 1, 'STRING', 'portal.coverTitleColor', '#ffffff', '#ffffff', '封面标题字体颜色', '十六进制颜色值'),
-(1, 0, 1, 'STRING', 'portal.coverSubTitle', '一款开源、轻量、配置式的多功能后台管理系统', '一款开源、轻量、配置式的多功能后台管理系统', '封面副标题', null),
+(1, 0, 1, 'STRING', 'portal.coverSubTitle', '开源、轻量、配置式的多功能后台管理系统', '开源、轻量、配置式的多功能后台管理系统', '封面副标题', null),
 (1, 0, 1, 'NUMBER', 'portal.coverSubTitleSize', '2', '2', '封面副标题字体大小', null),
 (1, 0, 1, 'STRING', 'portal.coverSubTitleColor', '#ffffff', '#ffffff', '封面副标题字体颜色', '十六进制颜色值'),
 (1, 0, 1, 'STRING', 'portal.footerCopyright', '', '', '门户页脚版权声明', '十六进制颜色值'),
