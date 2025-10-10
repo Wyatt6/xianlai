@@ -6,8 +6,5 @@ package fun.xianlai.app.common.model.enums;
 public enum JsType {
     NUMBER,
     STRING,
-    BOOLEAN,
-    BIGINT,
-    OBJECT,
-    ARRAY
+    BOOLEAN
 }
