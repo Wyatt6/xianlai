@@ -24,7 +24,7 @@ import java.util.Optional;
  */
 @Service
 public class OptionServiceImpl implements OptionService {
-    private static final long CACHE_HOURS = 168L;   // 7天
+    private static final long CACHE_HOURS = 720L;   // 30天
     private static final String CACHE_PREFIX = "backSysOption:";
 
     @Autowired
