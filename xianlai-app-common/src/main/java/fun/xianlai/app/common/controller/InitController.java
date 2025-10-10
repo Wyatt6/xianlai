@@ -1,5 +1,6 @@
 package fun.xianlai.app.common.controller;
 
+import fun.xianlai.app.common.service.ApiService;
 import fun.xianlai.app.common.service.MenuService;
 import fun.xianlai.app.common.service.OptionService;
 import fun.xianlai.app.common.service.PathService;
@@ -24,6 +25,8 @@ public class InitController {
     private PathService pathService;
     @Autowired
     private MenuService menuService;
+    @Autowired
+    private ApiService apiService;
 
     @ControllerLog("获取初始化数据")
     @GetMapping("/getInitData")
@@ -31,6 +34,7 @@ public class InitController {
         return new RetResult().success()
                 .addData("options", optionService.getFrontLoadSysOptionsFromCache())
                 .addData("paths", pathService.getSysPathsFromCache())
-                .addData("menus", menuService.getActiveSysMenusFromCache());
+                .addData("menus", menuService.getActiveSysMenusFromCache())
+                .addData("apis", apiService.getSysApisFromCache());
     }
 }

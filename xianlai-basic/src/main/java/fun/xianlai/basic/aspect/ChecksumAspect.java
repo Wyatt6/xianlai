@@ -37,5 +37,15 @@ public class ChecksumAspect {
         if (sysPathsChecksum != null) {
             result.addChecksum("sysPathsChecksum", sysPathsChecksum);
         }
+
+        String sysMenusChecksum = (String) redis.opsForValue().get("sysMenusChecksum");
+        if (sysMenusChecksum != null) {
+            result.addChecksum("sysMenusChecksum", sysMenusChecksum);
+        }
+
+        String sysApisChecksum = (String) redis.opsForValue().get("sysApisChecksum");
+        if (sysApisChecksum != null) {
+            result.addChecksum("sysApisChecksum", sysApisChecksum);
+        }
     }
 }
