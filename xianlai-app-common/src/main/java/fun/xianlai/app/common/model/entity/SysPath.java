@@ -29,7 +29,8 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "tb_common_sys_path", indexes = {
-        @Index(columnList = "path", unique = true)
+        @Index(columnList = "path", unique = true),
+        @Index(columnList = "sortId")
 })
 public class SysPath {
     @Id
