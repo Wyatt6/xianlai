@@ -34,6 +34,10 @@ import org.hibernate.annotations.DynamicUpdate;
 public class SysPath {
     @Id
     private String name;
+
     @Column(columnDefinition = "varchar(1024) not null")
     private String path;
+
+    @Column(columnDefinition = "bigint not null default 0")
+    private Long sortId;
 }

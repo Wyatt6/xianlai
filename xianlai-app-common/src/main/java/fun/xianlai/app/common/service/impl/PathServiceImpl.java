@@ -8,6 +8,7 @@ import fun.xianlai.basic.annotation.SimpleServiceLog;
 import fun.xianlai.basic.utils.ChecksumUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -36,7 +37,7 @@ public class PathServiceImpl implements PathService {
     @SimpleServiceLog("缓存系统路径")
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void cacheSysPaths() {
-        List<SysPath> paths = sysPathRepository.findAll();
+        List<SysPath> paths = sysPathRepository.findAll(Sort.by(Sort.Order.asc("sortId")));
         redis.opsForValue().set("sysPathsChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(paths)), Duration.ofHours(CACHE_HOURS));
         redis.opsForValue().set("sysPaths", paths, Duration.ofHours(CACHE_HOURS));
     }
