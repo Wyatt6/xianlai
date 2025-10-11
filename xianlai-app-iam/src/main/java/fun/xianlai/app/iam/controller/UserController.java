@@ -2,6 +2,7 @@ package fun.xianlai.app.iam.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.stp.parameter.SaLoginParameter;
 import fun.xianlai.app.iam.model.entity.other.Department;
@@ -93,20 +94,31 @@ public class UserController {
         log.info("loginId=[{}]", StpUtil.getLoginId());
         log.info("token=[{}]", StpUtil.getTokenValue());
         log.info("sessionId=[{}]", StpUtil.getSession().getId());
+        SaSession session = StpUtil.getSession();
 
-        log.info("用户数据脱敏");
+        // TODO 登录日志
+
+        log.info("User脱敏并缓存");
         user.setPassword(null);
         user.setSalt(null);
+        session.set("user", user);
 
+        log.info("获取Profile并缓存");
         Profile profile = profileService.getProfile(user.getId());
+        session.set("profile", profile);
+
         Department department = null;
         Position position = null;
         if (profile != null) {
             if (profile.getMainDepartmentId() != null) {
+                log.info("获取Department并缓存");
                 department = departmentService.getDepartment(profile.getMainDepartmentId());
+                session.set("department", department);
             }
             if (profile.getMainPositionId() != null) {
+                log.info("获取Position并缓存");
                 position = positionService.getPosition(profile.getMainPositionId());
+                session.set("position", position);
             }
         }
 
