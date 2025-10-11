@@ -60,6 +60,12 @@ public class SysRoute {
     @Column
     private String permission;          // needPermission = true 时才有意义
 
+    @Column(columnDefinition = "bit not null default 0")
+    private Boolean showTag;            // 是否在标签栏显示
+
+    @Column
+    private String tagTitle;            // showTag = true 时才有意义
+
     @Column(columnDefinition = "bigint not null default 0")
     private Long parentId;
 }

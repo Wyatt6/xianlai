@@ -53,6 +53,8 @@ public class RouteServiceImpl implements RouteService {
                 mapRoute.put("needLogin", route.getNeedLogin());
                 mapRoute.put("needPermission", route.getNeedPermission());
                 mapRoute.put("permission", route.getPermission());
+                mapRoute.put("showTag", route.getShowTag());
+                mapRoute.put("tagTitle", route.getTagTitle());
                 mapRoute.put("children", new ArrayList<>());
                 finder.put(route.getId(), mapRoute);
             }
