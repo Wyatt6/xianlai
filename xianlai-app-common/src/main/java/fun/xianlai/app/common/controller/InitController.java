@@ -4,6 +4,7 @@ import fun.xianlai.app.common.service.ApiService;
 import fun.xianlai.app.common.service.MenuService;
 import fun.xianlai.app.common.service.OptionService;
 import fun.xianlai.app.common.service.PathService;
+import fun.xianlai.app.common.service.RouteService;
 import fun.xianlai.basic.annotation.ControllerLog;
 import fun.xianlai.basic.support.RetResult;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,8 @@ public class InitController {
     private MenuService menuService;
     @Autowired
     private ApiService apiService;
+    @Autowired
+    private RouteService routeService;
 
     @ControllerLog("获取初始化数据")
     @GetMapping("/getInitData")
@@ -35,6 +38,7 @@ public class InitController {
                 .addData("options", optionService.getFrontLoadSysOptionsFromCache())
                 .addData("paths", pathService.getSysPathsFromCache())
                 .addData("menus", menuService.getActiveSysMenusFromCache())
-                .addData("apis", apiService.getSysApisFromCache());
+                .addData("apis", apiService.getSysApisFromCache())
+                .addData("routes", routeService.getSysRoutesFromCache());
     }
 }

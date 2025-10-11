@@ -47,5 +47,10 @@ public class ChecksumAspect {
         if (sysApisChecksum != null) {
             result.addChecksum("sysApisChecksum", sysApisChecksum);
         }
+
+        String sysRoutesChecksum = (String) redis.opsForValue().get("sysRoutesChecksum");
+        if (sysRoutesChecksum != null) {
+            result.addChecksum("sysRoutesChecksum", sysRoutesChecksum);
+        }
     }
 }
