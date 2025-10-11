@@ -1,5 +1,7 @@
 package fun.xianlai.app.iam.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.stp.parameter.SaLoginParameter;
 import fun.xianlai.app.iam.model.entity.other.Department;
@@ -124,9 +126,21 @@ public class UserController {
     @SaCheckLogin
     @GetMapping("/logout")
     public RetResult logout() {
-        log.info("token=[{}]", StpUtil.getTokenValue());
-        log.info("loginId=[{}]", StpUtil.getLoginIdAsLong());
-        StpUtil.logout();
+        try {
+            log.info("token=[{}]", StpUtil.getTokenValue());
+            log.info("loginId=[{}]", StpUtil.getLoginIdAsLong());
+        } catch (Exception e) {
+            if (e instanceof NotLoginException) {
+                log.info("用户处于未登录状态");
+            } else {
+                throw e;
+            }
+        } finally {
+            StpUtil.logout();
+        }
+
+        // TODO 清除缓存
+
         log.info("退出登录成功");
         return new RetResult().success();
     }
