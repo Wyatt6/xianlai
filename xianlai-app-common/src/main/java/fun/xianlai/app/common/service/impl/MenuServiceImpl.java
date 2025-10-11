@@ -2,7 +2,6 @@ package fun.xianlai.app.common.service.impl;
 
 import com.alibaba.fastjson2.JSONObject;
 import fun.xianlai.app.common.model.entity.SysMenu;
-import fun.xianlai.app.common.model.entity.SysOption;
 import fun.xianlai.app.common.repository.SysMenuRepository;
 import fun.xianlai.app.common.service.MenuService;
 import fun.xianlai.basic.annotation.SimpleServiceLog;
