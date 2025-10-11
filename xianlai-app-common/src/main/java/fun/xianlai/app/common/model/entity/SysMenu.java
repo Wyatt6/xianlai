@@ -46,7 +46,7 @@ public class SysMenu {
     @Column
     private String title;
 
-    @Column(columnDefinition = "not null")
+    @Column(columnDefinition = "varchar(255) not null")
     private String pathName;    // SysPath的name
 
     @Column
