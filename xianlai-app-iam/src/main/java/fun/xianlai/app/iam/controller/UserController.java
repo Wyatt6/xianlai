@@ -123,7 +123,6 @@ public class UserController {
     }
 
     @ControllerLog("退出登录")
-    @SaCheckLogin
     @GetMapping("/logout")
     public RetResult logout() {
         try {
