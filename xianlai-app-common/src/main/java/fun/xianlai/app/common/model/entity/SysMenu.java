@@ -49,8 +49,11 @@ public class SysMenu {
     @Column(columnDefinition = "varchar(255) not null")
     private String pathName;    // SysPath的name
 
+    @Column(columnDefinition = "bit not null default 0")
+    private Boolean needPermission;
+
     @Column
-    private String permission;
+    private String permission;  // needPermission = true 时才有意义
 
     @Column(columnDefinition = "bit not null default 0")
     private Boolean active;

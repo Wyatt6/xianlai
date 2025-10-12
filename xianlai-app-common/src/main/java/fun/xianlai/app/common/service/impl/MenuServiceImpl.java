@@ -48,6 +48,7 @@ public class MenuServiceImpl implements MenuService {
                 mapMenu.put("icon", menu.getIcon());
                 mapMenu.put("title", menu.getTitle());
                 mapMenu.put("pathName", menu.getPathName());
+                mapMenu.put("needPermission", menu.getNeedPermission());
                 mapMenu.put("permission", menu.getPermission());
                 mapMenu.put("children", new ArrayList<>());
                 finder.put(menu.getId(), mapMenu);
