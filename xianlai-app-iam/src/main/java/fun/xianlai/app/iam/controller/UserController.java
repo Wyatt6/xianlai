@@ -98,7 +98,6 @@ public class UserController {
         StpUtil.login(user.getId(), new SaLoginParameter()
                 .setTimeout(optionService.readValueInLong("token.timeout").orElse(43200L))
                 .setActiveTimeout(optionService.readValueInLong("token.activeTimeout").orElse(3600L)));
-        log.info("loginId=[{}]", StpUtil.getLoginId());
         log.info("token=[{}]", StpUtil.getTokenValue());
         log.info("loginId=[{}]", StpUtil.getLoginIdAsLong());
         log.info("sessionId=[{}]", StpUtil.getSession().getId());
