@@ -1,20 +1,21 @@
 package fun.xianlai.app.iam.controller;
 
-import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.stp.parameter.SaLoginParameter;
+import fun.xianlai.app.iam.feign.consumer.FeignCaptchaService;
+import fun.xianlai.app.iam.feign.consumer.FeignOptionService;
 import fun.xianlai.app.iam.model.entity.other.Department;
 import fun.xianlai.app.iam.model.entity.other.Position;
 import fun.xianlai.app.iam.model.entity.other.Profile;
 import fun.xianlai.app.iam.model.entity.rbac.User;
 import fun.xianlai.app.iam.service.DepartmentService;
+import fun.xianlai.app.iam.service.PermissionService;
 import fun.xianlai.app.iam.service.PositionService;
 import fun.xianlai.app.iam.service.ProfileService;
+import fun.xianlai.app.iam.service.RoleService;
 import fun.xianlai.app.iam.service.UserService;
-import fun.xianlai.app.iam.feign.consumer.FeignCaptchaService;
-import fun.xianlai.app.iam.feign.consumer.FeignOptionService;
 import fun.xianlai.basic.annotation.ControllerLog;
 import fun.xianlai.basic.exception.SysException;
 import fun.xianlai.basic.support.RetResult;
@@ -26,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @author WyattLau
  */
@@ -34,11 +37,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserController {
     @Autowired
-    private UserService userService;
-    @Autowired
     private FeignCaptchaService captchaService;
     @Autowired
     private FeignOptionService optionService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private PermissionService permissionService;
     @Autowired
     private ProfileService profileService;
     @Autowired
@@ -93,6 +100,7 @@ public class UserController {
                 .setActiveTimeout(optionService.readValueInLong("token.activeTimeout").orElse(3600L)));
         log.info("loginId=[{}]", StpUtil.getLoginId());
         log.info("token=[{}]", StpUtil.getTokenValue());
+        log.info("loginId=[{}]", StpUtil.getLoginIdAsLong());
         log.info("sessionId=[{}]", StpUtil.getSession().getId());
         SaSession session = StpUtil.getSession();
 
@@ -102,6 +110,12 @@ public class UserController {
         user.setPassword(null);
         user.setSalt(null);
         session.set("user", user);
+
+        log.info("获取角色标识符（Service中已缓存）");
+        List<String> roles = roleService.getActiveRoleIdentifiers(user.getId());
+
+        log.info("获取权限标识符（Service中已缓存）");
+        List<String> permissions = permissionService.getActivePermissionIdentifiers(user.getId());
 
         log.info("获取Profile并缓存");
         Profile profile = profileService.getProfile(user.getId());
@@ -122,13 +136,12 @@ public class UserController {
             }
         }
 
-        // TODO 登录日志
-        // TODO 缓存用户数据
-
         return new RetResult().success()
                 .addData("token", StpUtil.getTokenValue())
                 .addData("tokenExpireTime", System.currentTimeMillis() + StpUtil.getTokenTimeout() * 1000)
                 .addData("user", user)
+                .addData("roles", roles)
+                .addData("permissions", permissions)
                 .addData("profile", profile)
                 .addData("department", department)
                 .addData("position", position);
@@ -149,8 +162,6 @@ public class UserController {
         } finally {
             StpUtil.logout();
         }
-
-        // TODO 清除缓存
 
         log.info("退出登录成功");
         return new RetResult().success();
