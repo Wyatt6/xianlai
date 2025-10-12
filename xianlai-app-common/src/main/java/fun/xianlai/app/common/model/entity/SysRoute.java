@@ -48,7 +48,7 @@ public class SysRoute {
     @Column
     private String redirectPathName;    // SysPath的name
 
-    @Column(columnDefinition = "varchar(1024) not null")
+    @Column(length = 1024)
     private String componentPath;       // 相对路径
 
     @Column(columnDefinition = "bit not null default 1")
