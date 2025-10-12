@@ -12,7 +12,7 @@ INSERT IGNORE INTO tb_common_sys_menu(`id`, `sort_id`, `icon`, `title`, `path_na
 (200004, 200004, 'ri-shield-keyhole-fill', '权限管理', 'IAM_PERMISSION_MANAGE', 1, 'menu:iam_permission_manage', 1, 200001);
 
 INSERT IGNORE INTO tb_common_sys_route(`id`, `sort_id`, `name`, `path_name`, `redirect_path_name`, `component_path`, `need_login`, `need_permission`, `permission`, `show_tag`, `tag_title`, `parent_id`) VALUE
-(200001, 200001, 'iam', 'IAM', 'IAM_REDIRECT', 'layout/components/Placeholder/index.vue', 1, 0, null, 0, null, 100005),
-(200002, 200002, 'iam_user_manage', 'IAM_USER_MANAGE', null, 'iam/user_manage/index.vue', 1, 0, null, 1, '用户管理', 200001),
-(200003, 200003, 'iam_role_manage', 'IAM_ROLE_MANAGE', null, 'iam/role_manage/index.vue', 1, 0, null, 1, '角色管理', 200001),
-(200004, 200004, 'iam_permission_manage', 'IAM_PERMISSION_MANAGE', null, 'iam/permission_manage/index.vue', 1, 0, null, 1, '权限管理', 200001);
+(200001, 200001, 'iam', 'IAM', 'IAM_REDIRECT', 'layout/components/Placeholder/index.vue', 1, 1, 'menu:iam', 0, null, 100005),
+(200002, 200002, 'iam_user_manage', 'IAM_USER_MANAGE', null, 'iam/user_manage/index.vue', 1, 1, 'menu:iam_user_manage', 1, '用户管理', 200001),
+(200003, 200003, 'iam_role_manage', 'IAM_ROLE_MANAGE', null, 'iam/role_manage/index.vue', 1, 1, 'menu:iam_role_manage', 1, '角色管理', 200001),
+(200004, 200004, 'iam_permission_manage', 'IAM_PERMISSION_MANAGE', null, 'iam/permission_manage/index.vue', 1, 1, 'menu:iam_permission_manage', 1, '权限管理', 200001);
