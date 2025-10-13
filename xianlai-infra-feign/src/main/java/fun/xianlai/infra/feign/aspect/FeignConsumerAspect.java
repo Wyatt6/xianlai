@@ -1,4 +1,4 @@
-package fun.xianlai.basic.aspect;
+package fun.xianlai.infra.feign.aspect;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;

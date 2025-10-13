@@ -1,6 +1,7 @@
 package fun.xianlai.infra.feign.config;
 
 import com.alibaba.fastjson2.JSON;
+import feign.Feign;
 import feign.FeignException;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
@@ -30,6 +31,11 @@ import java.lang.reflect.Type;
 public class FeignConfig {
     @Autowired
     private ObjectFactory<HttpMessageConverters> messageConverters;
+
+    @Bean
+    public Feign.Builder feignBuilder(Decoder decoder) {
+        return Feign.builder().decoder(decoder).decodeVoid();
+    }
 
     @Bean
     public RequestInterceptor feignRequestInterceptor() {
