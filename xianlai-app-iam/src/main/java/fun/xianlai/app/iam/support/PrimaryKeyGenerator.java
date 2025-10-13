@@ -1,4 +1,4 @@
-package fun.xianlai.app.iam.model.support;
+package fun.xianlai.app.iam.support;
 
 import fun.xianlai.basic.utils.FakeSnowflakeUtil;
 import org.hibernate.HibernateException;

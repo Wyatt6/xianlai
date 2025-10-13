@@ -1,6 +1,6 @@
 package fun.xianlai.app.iam.model.entity.rbac;
 
-import fun.xianlai.app.iam.model.support.PrimaryKeyGenerator;
+import fun.xianlai.app.iam.support.PrimaryKeyGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
