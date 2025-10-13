@@ -11,13 +11,16 @@ import fun.xianlai.basic.annotation.SimpleServiceLog;
 import fun.xianlai.basic.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author WyattLau
@@ -133,35 +136,15 @@ public class PermissionServiceImpl implements PermissionService {
 //
 //        return permissionRepository.findIdsByRoleId(roleId);
 //    }
-//
-//    @Override
-//    public Page<Permission> getPermissionsByPageConditionally(int pageNum,
-//                                                              int pageSize,
-//                                                              String module,
-//                                                              String identifier,
-//                                                              String name,
-//                                                              Boolean active,
-//                                                              Date stTime,
-//                                                              Date edTime) {
-//        log.info("[[条件查询权限分页]]");
-//        log.info("输入参数: pageNum=[{}], pageSize=[{}], module=[{}], identifier=[{}], name=[{}], active=[{}], stTime=[{}], edTime=[{}]",
-//                pageNum, pageSize, module, identifier, name, active, DateUtil.commonFormat(stTime), DateUtil.commonFormat(edTime));
-//
-//        Sort sort = Sort.by(Sort.Order.asc("module"), Sort.Order.asc("identifier"));
-//        Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
-//        Page<Permission> permissionPage = permissionRepository.findConditionally(
-//                module,
-//                identifier,
-//                name,
-//                active,
-//                stTime,
-//                edTime,
-//                pageable);
-//        log.info("查询结果: {}", permissionPage);
-//
-//        return permissionPage;
-//    }
-//
+
+    @Override
+    @SimpleServiceLog("条件查询权限分页")
+    public Page<Permission> getPermissionsByPageConditionally(int pageNum, int pageSize, Long id, String identifier, String name) {
+        Sort sort = Sort.by(Sort.Order.asc("sortId"), Sort.Order.asc("identifier"));
+        Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
+        return permissionRepository.findConditionally(id, identifier, name, pageable);
+    }
+
 //    @Override
 //    public Long getRowNum(Long permissionId) {
 //        return permissionRepository.findRowNumById(permissionId);

@@ -1,6 +1,9 @@
 package fun.xianlai.app.iam.service;
 
 
+import fun.xianlai.app.iam.model.entity.rbac.Permission;
+import org.springframework.data.domain.Page;
+
 import java.util.Date;
 import java.util.List;
 
@@ -46,29 +49,18 @@ public interface PermissionService {
 //     */
 //    List<Long> getPermissionIdsOfRole(Long roleId);
 //
-//    /**
-//     * 条件查询权限分页
-//     *
-//     * @param pageNum    页码
-//     * @param pageSize   页大小
-//     * @param module     模块分组（模糊）
-//     * @param identifier 权限标识（模糊）
-//     * @param name       权限名称（模糊）
-//     * @param activated  生效状态
-//     * @param stTime     创建时间左边界（含）
-//     * @param edTime     创建时间右边界（含）
-//     * @return 权限分页数据
-//     */
-//    Page<Permission> getPermissionsByPageConditionally(
-//            int pageNum,
-//            int pageSize,
-//            String module,
-//            String identifier,
-//            String name,
-//            Boolean activated,
-//            Date stTime,
-//            Date edTime);
-//
+    /**
+     * 条件查询权限分页
+     *
+     * @param pageNum    页码
+     * @param pageSize   页大小
+     * @param id         模块ID
+     * @param identifier 权限标识（模糊）
+     * @param name       权限名称（模糊）
+     * @return 权限分页数据
+     */
+    Page<Permission> getPermissionsByPageConditionally(int pageNum, int pageSize, Long id, String identifier, String name);
+
 //    /**
 //     * 查询某权限的排名
 //     *

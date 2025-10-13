@@ -1,6 +1,8 @@
 package fun.xianlai.app.iam.repository;
 
 import fun.xianlai.app.iam.model.entity.rbac.Permission;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,4 +21,11 @@ public interface PermissionRepository extends JpaRepository<Permission, Long> {
             "      inner join Permission p on rp.permissionId = p.id " +
             " where ur.userId = ?1")
     List<Permission> findActivePermissionsByUserId(Long userId);
+
+    @Query("select distinct new Permission(p.id, p.identifier, p.name, p.description, p.sortId) " +
+            " from Permission p " +
+            " where (?1 is null or p.id = ?1) " +
+            "      and (?2 is null or p.identifier like %?2%) " +
+            "      and (?3 is null or p.name like %?3%)")
+    Page<Permission> findConditionally(Long id, String identifier, String name, Pageable pageable);
 }
