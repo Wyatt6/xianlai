@@ -11,13 +11,13 @@ import java.util.List;
  * @author WyattLau
  */
 public interface PermissionService {
-//    /**
-//     * 创建权限对象
-//     *
-//     * @param permission 新权限信息
-//     * @return 新权限对象
-//     */
-//    Permission createPermission(Permission permission);
+    /**
+     * 创建权限对象
+     *
+     * @param permission 新权限信息
+     * @return 新权限对象
+     */
+    Permission createPermission(Permission permission);
 
     /**
      * 删除权限对象

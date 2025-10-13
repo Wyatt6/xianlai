@@ -9,9 +9,11 @@ import fun.xianlai.app.iam.repository.RolePermissionRepository;
 import fun.xianlai.app.iam.service.PermissionService;
 import fun.xianlai.basic.annotation.ServiceLog;
 import fun.xianlai.basic.annotation.SimpleServiceLog;
+import fun.xianlai.basic.exception.SysException;
 import fun.xianlai.basic.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,25 +38,22 @@ public class PermissionServiceImpl implements PermissionService {
     @Autowired
     private RolePermissionRepository rolePermissionRepository;
 
-//    @Override
-//    public Permission createPermission(Permission permission) {
-//        log.info("[[创建权限对象]]");
-//        Assert.notNull(permission, "新权限数据为空");
-//        Assert.hasText(permission.getIdentifier(), "新权限标识符为空");
-//        log.info("输入参数: {}", permission);
-//        try {
-//            log.info("插入记录");
-//            permission.setId(null);
-//            if (permission.getactive() == null) permission.setactive(false);
-//            permission.setCreateTime(new Date());
-//            permission = permissionRepository.save(permission);
-//            log.info("新权限成功保存到数据库: id=[{}]", permission.getId());
-//            return permission;
-//        } catch (DataIntegrityViolationException e) {
-//            log.info(e.getMessage());
-//            throw new SystemException("权限标识符重复");
-//        }
-//    }
+    @Override
+    @ServiceLog("创建权限")
+    public Permission createPermission(Permission permission) {
+        try {
+            log.info("插入记录");
+            permission.setId(null);
+            permission = permissionRepository.save(permission);
+            permission.setSortId(permission.getId());
+            permission = permissionRepository.save(permission);
+            log.info("新权限成功保存到数据库: id=[{}]", permission.getId());
+            return permission;
+        } catch (DataIntegrityViolationException e) {
+            log.info(e.getMessage());
+            throw new SysException("权限标识符重复");
+        }
+    }
 
     @Override
     @ServiceLog("删除权限")

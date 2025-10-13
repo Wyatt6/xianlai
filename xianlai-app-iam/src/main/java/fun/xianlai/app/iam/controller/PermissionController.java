@@ -4,12 +4,16 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import fun.xianlai.app.iam.model.entity.rbac.Permission;
 import fun.xianlai.app.iam.model.form.PermissionCondition;
+import fun.xianlai.app.iam.model.form.PermissionForm;
 import fun.xianlai.app.iam.service.PermissionService;
 import fun.xianlai.basic.annotation.ControllerLog;
 import fun.xianlai.basic.support.RetResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,14 +47,12 @@ public class PermissionController {
                                           @RequestParam int pageSize,
                                           @RequestBody(required = false) PermissionCondition condition) {
         log.info("请求参数: pageNum=[{}], pageSize=[{}], condition=[{}]", pageNum, pageSize, condition);
-
         Page<Permission> permissions = permissionService.getPermissionsByPageConditionally(
                 pageNum,
                 pageSize,
                 (condition == null || condition.getId() == null) ? null : condition.getId(),
                 (condition == null || condition.getIdentifier() == null) ? null : condition.getIdentifier(),
                 (condition == null || condition.getName() == null) ? null : condition.getName());
-
         return new RetResult().success()
                 .addData("pageNum", permissions.getPageable().getPageNumber())
                 .addData("pageSize", permissions.getPageable().getPageSize())
@@ -71,8 +73,24 @@ public class PermissionController {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public RetResult deletePermission(@RequestParam Long permissionId) {
         log.info("请求参数: permissionId=[{}]", permissionId);
-
         permissionService.deletePermission(permissionId);
         return new RetResult().success();
     }
+
+    /**
+     * 新增权限
+     *
+     * @param input 新权限信息
+     * @return permission 新权限对象
+     */
+    @ControllerLog("新增权限")
+    @SaCheckLogin
+    @SaCheckPermission("permission:add")
+    @PostMapping("/addPermission")
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public RetResult addPermission(@RequestBody PermissionForm input) {
+        log.info("请求参数: {}", input);
+        return new RetResult().success().addData("permission", permissionService.createPermission(input.convert()));
+    }
+
 }
