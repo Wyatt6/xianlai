@@ -141,10 +141,10 @@ public class PermissionServiceImpl implements PermissionService {
         return permissionRepository.findConditionally(id, identifier, name, pageable);
     }
 
-//    @Override
-//    public Long getRowNum(Long permissionId) {
-//        return permissionRepository.findRowNumById(permissionId);
-//    }
+    @Override
+    public Long getRowNum(Long permissionId) {
+        return permissionRepository.findRowNumById(permissionId);
+    }
 
     /**
      * 公共标记：rolesDbRefreshed                  数据库的角色数据更新的时间

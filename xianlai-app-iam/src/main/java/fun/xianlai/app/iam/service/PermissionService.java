@@ -62,13 +62,13 @@ public interface PermissionService {
      */
     Page<Permission> getPermissionsByPageConditionally(int pageNum, int pageSize, Long id, String identifier, String name);
 
-//    /**
-//     * 查询某权限的排名
-//     *
-//     * @param permissionId 权限ID
-//     * @return 排名（从1开始）
-//     */
-//    Long getRowNum(Long permissionId);
+    /**
+     * 查询某权限的排名
+     *
+     * @param permissionId 权限ID
+     * @return 排名（从1开始）
+     */
+    Long getRowNum(Long permissionId);
 
     /**
      * 从缓存或数据库获取用户生效中的权限标识符

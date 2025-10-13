@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -93,4 +94,17 @@ public class PermissionController {
         return new RetResult().success().addData("permission", permissionService.createPermission(input.convert()));
     }
 
+    /**
+     * 查询权限的排名（从1开始）
+     *
+     * @param permissionId 权限ID
+     */
+    @ControllerLog("查询权限的排名（从1开始）")
+    @SaCheckLogin
+    @SaCheckPermission("permission:query")
+    @GetMapping("/getRowNumStartFrom1")
+    public RetResult getRowNumStartFrom1(@RequestParam Long permissionId) {
+        log.info("请求参数: permissionId=[{}]", permissionId);
+        return new RetResult().success().addData("rowNum", permissionService.getRowNum(permissionId));
+    }
 }

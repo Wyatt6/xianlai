@@ -28,4 +28,12 @@ public interface PermissionRepository extends JpaRepository<Permission, Long> {
             "      and (?2 is null or p.identifier like %?2%) " +
             "      and (?3 is null or p.name like %?3%)")
     Page<Permission> findConditionally(Long id, String identifier, String name, Pageable pageable);
+
+    @Query(value = "select num " +
+            " from (select @rownum \\:= @rownum + 1 as num, p.id as id, p.identifier, p.sort_id " +
+            "      from tb_iam_permission p, (select @rownum \\:= 0) n " +
+            "      order by p.sort_id asc, p.identifier asc) t " +
+            " where t.id = ?1", nativeQuery = true)
+    Long findRowNumById(Long id);
+
 }
