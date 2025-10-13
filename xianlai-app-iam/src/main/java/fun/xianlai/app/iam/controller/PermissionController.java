@@ -50,7 +50,6 @@ public class PermissionController {
         Page<Permission> permissions = permissionService.getPermissionsByPageConditionally(
                 pageNum,
                 pageSize,
-                (condition == null || condition.getId() == null) ? null : condition.getId(),
                 (condition == null || condition.getIdentifier() == null) ? null : condition.getIdentifier(),
                 (condition == null || condition.getName() == null) ? null : condition.getName());
         return new RetResult().success()

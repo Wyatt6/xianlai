@@ -55,12 +55,11 @@ public interface PermissionService {
      *
      * @param pageNum    页码
      * @param pageSize   页大小
-     * @param id         模块ID
      * @param identifier 权限标识（模糊）
      * @param name       权限名称（模糊）
      * @return 权限分页数据
      */
-    Page<Permission> getPermissionsByPageConditionally(int pageNum, int pageSize, Long id, String identifier, String name);
+    Page<Permission> getPermissionsByPageConditionally(int pageNum, int pageSize, String identifier, String name);
 
     /**
      * 查询某权限的排名

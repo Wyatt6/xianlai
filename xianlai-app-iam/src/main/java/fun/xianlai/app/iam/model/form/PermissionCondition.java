@@ -7,7 +7,6 @@ import lombok.Data;
  */
 @Data
 public class PermissionCondition {
-    private Long id;
     private String identifier;
     private String name;
 }

@@ -46,8 +46,6 @@ public class PermissionServiceImpl implements PermissionService {
             log.info("插入记录");
             permission.setId(null);
             permission = permissionRepository.save(permission);
-            permission.setSortId(permission.getId());
-            permission = permissionRepository.save(permission);
             log.info("新权限成功保存到数据库: id=[{}]", permission.getId());
             return permission;
         } catch (DataIntegrityViolationException e) {
@@ -74,6 +72,7 @@ public class PermissionServiceImpl implements PermissionService {
         String identifier = permission.getIdentifier();
         String name = permission.getName();
         String description = permission.getDescription();
+        Long sortId = permission.getSortId();
 
         log.info("查询是否存在该权限");
         Optional<Permission> oldPermission = permissionRepository.findById(permission.getId());
@@ -83,6 +82,7 @@ public class PermissionServiceImpl implements PermissionService {
             if (identifier != null) newPermission.setIdentifier(identifier);
             if (name != null) newPermission.setName(name);
             if (description != null) newPermission.setDescription(description);
+            if (sortId != null) newPermission.setSortId(sortId);
 
             try {
                 log.info("更新数据库");
@@ -124,10 +124,10 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     @SimpleServiceLog("条件查询权限分页")
-    public Page<Permission> getPermissionsByPageConditionally(int pageNum, int pageSize, Long id, String identifier, String name) {
+    public Page<Permission> getPermissionsByPageConditionally(int pageNum, int pageSize, String identifier, String name) {
         Sort sort = Sort.by(Sort.Order.asc("sortId"), Sort.Order.asc("identifier"));
         Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
-        return permissionRepository.findConditionally(id, identifier, name, pageable);
+        return permissionRepository.findConditionally(identifier, name, pageable);
     }
 
     @Override
