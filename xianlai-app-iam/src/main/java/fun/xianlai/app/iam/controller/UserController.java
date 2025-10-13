@@ -53,7 +53,6 @@ public class UserController {
     @Autowired
     private PositionService positionService;
 
-
     @ControllerLog("注册新用户")
     @PostMapping("/register")
     public RetResult register(@RequestBody User input) {
