@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface PermissionService {
     /**
-     * 创建权限对象
+     * 创建权限
      *
      * @param permission 新权限信息
      * @return 新权限对象
@@ -20,20 +20,20 @@ public interface PermissionService {
     Permission createPermission(Permission permission);
 
     /**
-     * 删除权限对象
+     * 删除权限
      *
      * @param permissionId 要删除的权限ID
      */
     void deletePermission(Long permissionId);
 
-//    /**
-//     * 更新权限对象
-//     *
-//     * @param permission 新权限数据
-//     * @return 权限对象
-//     */
-//    Permission updatePermission(Permission permission);
-//
+    /**
+     * 更新权限
+     *
+     * @param permission 新权限数据
+     * @return 权限对象
+     */
+    Permission updatePermission(Permission permission);
+
 //    /**
 //     * 获取全量权限数据
 //     *

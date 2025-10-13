@@ -22,7 +22,7 @@ public class PermissionForm {
         result.setIdentifier(identifier != null ? identifier.trim() : null);
         result.setName(name != null ? name.trim() : null);
         result.setDescription(description != null ? description.trim() : null);
-        result.setId(sortId);
+        result.setSortId(sortId);
         return result;
     }
 }

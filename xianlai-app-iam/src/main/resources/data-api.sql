@@ -7,4 +7,5 @@ INSERT IGNORE INTO tb_common_sys_api(`id`, `call_path`, `description`, `request_
 (201001, 'iam.permission.getPermissionsByPage', '条件查询权限分页', 'POST', '/api/iam/permission/getPermissionsByPage'),
 (201002, 'iam.permission.deletePermission', '删除权限', 'GET', '/api/iam/permission/deletePermission'),
 (201003, 'iam.permission.addPermission', '新增权限', 'POST', '/api/iam/permission/addPermission'),
-(201004, 'iam.permission.getRowNumStartFrom1', '查询权限的排名（从1开始）', 'GET', '/api/iam/permission/getRowNumStartFrom1');
+(201004, 'iam.permission.getRowNumStartFrom1', '查询权限的排名（从1开始）', 'GET', '/api/iam/permission/getRowNumStartFrom1'),
+(201005, 'iam.permission.editPermission', '修改权限', 'POST', '/api/iam/permission/editPermission');

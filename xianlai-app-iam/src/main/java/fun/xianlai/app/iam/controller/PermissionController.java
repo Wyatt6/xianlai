@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -106,5 +105,20 @@ public class PermissionController {
     public RetResult getRowNumStartFrom1(@RequestParam Long permissionId) {
         log.info("请求参数: permissionId=[{}]", permissionId);
         return new RetResult().success().addData("rowNum", permissionService.getRowNum(permissionId));
+    }
+
+    /**
+     * 修改权限
+     *
+     * @param input 要修改的权限数据
+     * @return permission 新权限对象
+     */
+    @ControllerLog("修改权限")
+    @SaCheckLogin
+    @SaCheckPermission("permission:edit")
+    @PostMapping("/editPermission")
+    public RetResult editPermission(@RequestBody PermissionForm input) {
+        log.info("请求参数: {}", input);
+        return new RetResult().success().addData("permission", permissionService.updatePermission(input.convert()));
     }
 }

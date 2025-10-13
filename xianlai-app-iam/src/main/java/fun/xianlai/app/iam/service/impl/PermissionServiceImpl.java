@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author WyattLau
@@ -66,53 +67,41 @@ public class PermissionServiceImpl implements PermissionService {
         setPermissionsDbRefreshed(new Date());
     }
 
-//    @Override
-//    public Permission updatePermission(Permission permission) {
-//        log.info("[[更新权限对象]]");
-//        Assert.notNull(permission, "权限数据为空");
-//        Assert.notNull(permission.getId(), "权限ID为空");
-//        log.info("输入参数: {}", permission);
-//
-//        String module = permission.getModule();
-//        String identifier = permission.getIdentifier();
-//        String name = permission.getName();
-//        Boolean active = permission.getactive();
-//        Date createTime = permission.getCreateTime();
-//        String remark = permission.getRemark();
-//
-//        log.info("查询是否存在该权限");
-//        Optional<Permission> oldPermission = permissionRepository.findById(permission.getId());
-//        if (oldPermission.isPresent()) {
-//            log.info("权限存在，组装用来更新的对象");
-//            Permission newPermission = oldPermission.get();
-//            if (module != null) newPermission.setModule(module);
-//            if (identifier != null) newPermission.setIdentifier(identifier);
-//            if (name != null) newPermission.setName(name);
-//            if (active != null) newPermission.setactive(active);
-//            if (createTime != null) newPermission.setCreateTime(createTime);
-//            if (remark != null) newPermission.setRemark(remark);
-//
-//            try {
-//                log.info("更新数据库");
-//                newPermission = permissionRepository.save(newPermission);
-//            } catch (DataIntegrityViolationException e) {
-//                log.info(e.getMessage());
-//                throw new SystemException("权限标识重复");
-//            }
-//
-//            boolean critical = false;
-//            if (identifier != null) critical = true;
-//            if (active != null) critical = true;
-//            if (critical) {
-//                log.info("编辑此权限数据影响到用户权限控制，需要更新缓存");
-//                log.info("更新标记permissionsDbRefreshed（数据库的权限数据更新的时间）");
-//                setPermissionsDbRefreshed(new Date());
-//            }
-//            return newPermission;
-//        } else {
-//            throw new SystemException("要修改的权限不存在");
-//        }
-//    }
+    @Override
+    @ServiceLog("更新权限")
+    public Permission updatePermission(Permission permission) {
+        log.info("{}", permission);
+        String identifier = permission.getIdentifier();
+        String name = permission.getName();
+        String description = permission.getDescription();
+
+        log.info("查询是否存在该权限");
+        Optional<Permission> oldPermission = permissionRepository.findById(permission.getId());
+        if (oldPermission.isPresent()) {
+            log.info("权限存在，组装用来更新的对象");
+            Permission newPermission = oldPermission.get();
+            if (identifier != null) newPermission.setIdentifier(identifier);
+            if (name != null) newPermission.setName(name);
+            if (description != null) newPermission.setDescription(description);
+
+            try {
+                log.info("更新数据库");
+                newPermission = permissionRepository.save(newPermission);
+            } catch (DataIntegrityViolationException e) {
+                log.info(e.getMessage());
+                throw new SysException("权限标识重复");
+            }
+
+            if (identifier != null) {
+                log.info("编辑此权限数据影响到用户权限控制，需要更新缓存");
+                log.info("更新标记permissionsDbRefreshed（数据库的权限数据更新的时间）");
+                setPermissionsDbRefreshed(new Date());
+            }
+            return newPermission;
+        } else {
+            throw new SysException("要修改的权限不存在");
+        }
+    }
 
 //    @Override
 //    public List<Permission> listPermissions() {
