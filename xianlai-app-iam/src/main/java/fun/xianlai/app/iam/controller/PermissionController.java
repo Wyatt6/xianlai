@@ -39,9 +39,11 @@ public class PermissionController {
     @SaCheckLogin
     @SaCheckPermission("permission:query")
     @PostMapping("/getPermissionsByPage")
-    public RetResult getPermissionsByPage(@RequestParam("pageNum") int pageNum,
-                                          @RequestParam("pageSize") int pageSize,
+    public RetResult getPermissionsByPage(@RequestParam int pageNum,
+                                          @RequestParam int pageSize,
                                           @RequestBody(required = false) PermissionCondition condition) {
+        log.info("请求参数: pageNum=[{}], pageSize=[{}], condition=[{}]", pageNum, pageSize, condition);
+
         Page<Permission> permissions = permissionService.getPermissionsByPageConditionally(
                 pageNum,
                 pageSize,
@@ -55,5 +57,22 @@ public class PermissionController {
                 .addData("totalPages", permissions.getTotalPages())
                 .addData("totalElements", permissions.getTotalElements())
                 .addData("permissions", permissions.getContent());
+    }
+
+    /**
+     * 删除权限
+     *
+     * @param permissionId 要删除的权限ID
+     */
+    @ControllerLog("删除权限")
+    @SaCheckLogin
+    @SaCheckPermission("permission:delete")
+    @GetMapping("/deletePermission")
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public RetResult deletePermission(@RequestParam Long permissionId) {
+        log.info("请求参数: permissionId=[{}]", permissionId);
+
+        permissionService.deletePermission(permissionId);
+        return new RetResult().success();
     }
 }

@@ -18,14 +18,14 @@ public interface PermissionService {
 //     * @return 新权限对象
 //     */
 //    Permission createPermission(Permission permission);
-//
-//    /**
-//     * 删除权限对象
-//     *
-//     * @param permissionId 要删除的权限ID
-//     */
-//    void deletePermission(Long permissionId);
-//
+
+    /**
+     * 删除权限对象
+     *
+     * @param permissionId 要删除的权限ID
+     */
+    void deletePermission(Long permissionId);
+
 //    /**
 //     * 更新权限对象
 //     *
@@ -49,6 +49,7 @@ public interface PermissionService {
 //     */
 //    List<Long> getPermissionIdsOfRole(Long roleId);
 //
+
     /**
      * 条件查询权限分页
      *
@@ -77,10 +78,10 @@ public interface PermissionService {
      */
     List<String> getActivePermissionIdentifiers(Long userId);
 
-    //    /**
-//     * 更新PERMISSIONS_DB_REFRESHED时间戳
-//     */
-//    void setPermissionsDbRefreshed(Date timestamp);
+    /**
+     * 设置permissionsDbRefreshed时间戳
+     */
+    void setPermissionsDbRefreshed(Date timestamp);
 
     /**
      * 设置permissionsCacheOfUserRefreshed时间戳

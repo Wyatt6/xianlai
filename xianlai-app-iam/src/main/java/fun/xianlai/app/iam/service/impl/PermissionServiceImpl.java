@@ -5,6 +5,7 @@ import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import fun.xianlai.app.iam.model.entity.rbac.Permission;
 import fun.xianlai.app.iam.repository.PermissionRepository;
+import fun.xianlai.app.iam.repository.RolePermissionRepository;
 import fun.xianlai.app.iam.service.PermissionService;
 import fun.xianlai.basic.annotation.ServiceLog;
 import fun.xianlai.basic.annotation.SimpleServiceLog;
@@ -32,8 +33,8 @@ public class PermissionServiceImpl implements PermissionService {
     private RedisTemplate<String, Object> redis;
     @Autowired
     private PermissionRepository permissionRepository;
-//    @Autowired
-//    private RolePermissionRepository rolePermissionRepository;
+    @Autowired
+    private RolePermissionRepository rolePermissionRepository;
 
 //    @Override
 //    public Permission createPermission(Permission permission) {
@@ -55,20 +56,16 @@ public class PermissionServiceImpl implements PermissionService {
 //        }
 //    }
 
-//    @Override
-//    public void deletePermission(Long permissionId) {
-//        log.info("[[删除权限对象]]");
-//        Assert.notNull(permissionId, "权限ID为空");
-//        log.info("输入参数: permissionId=[{}]", permissionId);
-//
-//        log.info("删除与本权限相关的角色-权限关系");
-//        rolePermissionRepository.deleteByPermissionId(permissionId);
-//        log.info("数据库删除本权限数据");
-//        permissionRepository.deleteById(permissionId);
-//
-//        log.info("更新标记permissionsDbRefreshed（数据库的权限数据更新的时间），表示此时间后应当刷新缓存的权限数据");
-//        setPermissionsDbRefreshed(new Date());
-//    }
+    @Override
+    @ServiceLog("删除权限")
+    public void deletePermission(Long permissionId) {
+        log.info("删除与本权限相关的角色-权限关系");
+        rolePermissionRepository.deleteByPermissionId(permissionId);
+        log.info("数据库删除本权限数据");
+        permissionRepository.deleteById(permissionId);
+        log.info("更新标记permissionsDbRefreshed（数据库的权限数据更新的时间），表示此时间后应当刷新缓存的权限数据");
+        setPermissionsDbRefreshed(new Date());
+    }
 
 //    @Override
 //    public Permission updatePermission(Permission permission) {
@@ -208,11 +205,12 @@ public class PermissionServiceImpl implements PermissionService {
         return permissions;
     }
 
-//    @Override
-//    public void setPermissionsDbRefreshed(Date timestamp) {
-//        redis.opsForValue().set(permissionsDbRefreshed, timestamp);
-//        log.info("已更新permissionsDbRefreshed时间戳为: {}", DateUtil.commonFormat(timestamp));
-//    }
+    @Override
+    @SimpleServiceLog("设置permissionsDbRefreshed时间戳")
+    public void setPermissionsDbRefreshed(Date timestamp) {
+        redis.opsForValue().set("permissionsDbRefreshed", timestamp);
+        log.info("已更新permissionsDbRefreshed时间戳为: {}", DateUtil.commonFormat(timestamp));
+    }
 
     @Override
     @SimpleServiceLog("设置permissionsCacheOfUserRefreshed时间戳")
