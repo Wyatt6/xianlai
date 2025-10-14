@@ -5,13 +5,21 @@ import cn.dev33.satoken.stp.StpUtil;
 import fun.xianlai.app.iam.model.entity.rbac.Role;
 import fun.xianlai.app.iam.repository.RoleRepository;
 import fun.xianlai.app.iam.service.RoleService;
+import fun.xianlai.app.iam.support.PrimaryKeyGenerator;
 import fun.xianlai.basic.annotation.ServiceLog;
 import fun.xianlai.basic.annotation.SimpleServiceLog;
+import fun.xianlai.basic.exception.SysException;
 import fun.xianlai.basic.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +35,35 @@ public class RoleServiceImpl implements RoleService {
     private RedisTemplate<String, Object> redis;
     @Autowired
     private RoleRepository roleRepository;
+
+    @Override
+    @ServiceLog("创建角色")
+    public Role createRole(Role role) {
+        try {
+            log.info("插入记录");
+            role.setId(null);
+            role = roleRepository.save(role);
+            log.info("新角色成功保存到数据库: id=[{}]", role.getId());
+            return role;
+        } catch (DataIntegrityViolationException e) {
+            log.info(e.getMessage());
+            throw new SysException("角色标识符重复");
+        }
+    }
+
+    @Override
+    @SimpleServiceLog("条件查询角色分页")
+    public Page<Role> getRolesByPageConditionally(int pageNum, int pageSize, String identifier, String name, Boolean active, String permission) {
+        Sort sort = Sort.by(Sort.Order.asc("sortId"));
+        Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
+        return roleRepository.findConditionally(identifier, name, active, permission, pageable);
+    }
+
+    @Override
+    @SimpleServiceLog("查询某角色的排名")
+    public Long getRowNum(Long roleId) {
+        return roleRepository.findRowNumById(roleId);
+    }
 
     /**
      * 公共标记：rolesDbRefreshed          数据库的角色数据更新的时间戳
