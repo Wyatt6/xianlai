@@ -9,8 +9,8 @@ INSERT IGNORE INTO tb_common_sys_path(`name`, `path`, `sort_id`) VALUE
 ('INDEX_REDIRECT', '/homepage', 100006),
 ('HOMEPAGE', '/homepage', 100007),
 -- 错误页面 --
-('NOT_AUTHORIZED_EMBEDDED', '/401/embedded', 9000001),
-('NOT_AUTHORIZED', '/401', 9000002),
+('NOT_AUTHORIZED_EMBEDDED', '/403/embedded', 9000001),
+('NOT_AUTHORIZED', '/403', 9000002),
 ('NOT_FOUND', '/404', 9000003),
 ('NOT_CONNECTED', '/500', 9000004),
 -- 最终无匹配 --
@@ -29,8 +29,8 @@ INSERT IGNORE INTO tb_common_sys_route(`id`, `sort_id`, `name`, `path_name`, `re
 (100005, 100005, 'layout', 'INDEX', 'INDEX_REDIRECT', 'layout/index.vue', 1, 0, null, 0, null, 0),
 (100006, 100006, 'homepage', 'HOMEPAGE', null, 'homepage/index.vue', 1, 0, null, 0, null, 100005),
 -- 错误页面 --
-(9000001, 9000001, 'not_authorized_embedded', 'NOT_AUTHORIZED_EMBEDDED', null, 'errors/401.vue', 1, 0, null, 0, null, 100005),
-(9000002, 9000002, 'not_authorized', 'NOT_AUTHORIZED', null, 'errors/401.vue', 1, 0, null, 0, null, 0),
+(9000001, 9000001, 'not_authorized_embedded', 'NOT_AUTHORIZED_EMBEDDED', null, 'errors/403.vue', 1, 0, null, 0, null, 100005),
+(9000002, 9000002, 'not_authorized', 'NOT_AUTHORIZED', null, 'errors/403.vue', 1, 0, null, 0, null, 0),
 (9000003, 9000003, 'not_found', 'NOT_FOUND', null, 'errors/404.vue', 0, 0, null, 0, null, 0),
 (9000004, 9000004, 'not_connected', 'NOT_CONNECTED', null, 'errors/500.vue', 0, 0, null, 0, null, 0),
 -- 最终无匹配 --
