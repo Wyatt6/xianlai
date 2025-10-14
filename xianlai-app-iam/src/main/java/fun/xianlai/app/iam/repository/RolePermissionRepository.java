@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RolePermissionRepository extends JpaRepository<RolePermission, RolePermissionPK> {
     void deleteByPermissionId(Long permissionId);
+
+    void deleteByRoleId(Long roleId);
 }

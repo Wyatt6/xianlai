@@ -92,4 +92,20 @@ public class RoleController {
         log.info("请求参数: roleId=[{}]", roleId);
         return new RetResult().success().addData("rowNum", roleService.getRowNum(roleId));
     }
+
+    /**
+     * 删除角色
+     *
+     * @param roleId 要删除的角色ID
+     */
+    @ControllerLog("删除角色")
+    @SaCheckLogin
+    @SaCheckPermission("role:delete")
+    @GetMapping("/deleteRole")
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public RetResult deleteRole(@RequestParam Long roleId) {
+        log.info("请求参数: roleId=[{}]", roleId);
+        roleService.deleteRole(roleId);
+        return new RetResult().success();
+    }
 }

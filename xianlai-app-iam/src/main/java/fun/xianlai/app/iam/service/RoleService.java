@@ -19,6 +19,13 @@ public interface RoleService {
     Role createRole(Role role);
 
     /**
+     * 删除角色对象
+     *
+     * @param roleId 要删除的角色ID
+     */
+    void deleteRole(Long roleId);
+
+    /**
      * 条件查询角色分页
      *
      * @param pageNum    页码
@@ -52,6 +59,11 @@ public interface RoleService {
      * @return 角色标识符列表
      */
     List<String> getActiveRoleIdentifiers(Long userId);
+
+    /**
+     * 设置rolesDbRefreshed时间戳
+     */
+    void setRolesDbRefreshed(Date timestamp);
 
     /**
      * 设置rolesCacheOfUserRefreshed时间戳

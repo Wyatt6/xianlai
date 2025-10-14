@@ -3,9 +3,10 @@ package fun.xianlai.app.iam.service.impl;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import fun.xianlai.app.iam.model.entity.rbac.Role;
+import fun.xianlai.app.iam.repository.RolePermissionRepository;
 import fun.xianlai.app.iam.repository.RoleRepository;
+import fun.xianlai.app.iam.repository.UserRoleRepository;
 import fun.xianlai.app.iam.service.RoleService;
-import fun.xianlai.app.iam.support.PrimaryKeyGenerator;
 import fun.xianlai.basic.annotation.ServiceLog;
 import fun.xianlai.basic.annotation.SimpleServiceLog;
 import fun.xianlai.basic.exception.SysException;
@@ -19,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,6 +35,10 @@ public class RoleServiceImpl implements RoleService {
     private RedisTemplate<String, Object> redis;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private RolePermissionRepository rolePermissionRepository;
+    @Autowired
+    private UserRoleRepository userRoleRepository;
 
     @Override
     @ServiceLog("创建角色")
@@ -49,6 +53,19 @@ public class RoleServiceImpl implements RoleService {
             log.info(e.getMessage());
             throw new SysException("角色标识符重复");
         }
+    }
+
+    @Override
+    @ServiceLog("删除角色")
+    public void deleteRole(Long roleId) {
+        log.info("删除与本角色相关的用户-角色关系");
+        userRoleRepository.deleteByRoleId(roleId);
+        log.info("删除与本角色相关的角色-权限关系");
+        rolePermissionRepository.deleteByRoleId(roleId);
+        log.info("数据库删除本角色数据");
+        roleRepository.deleteById(roleId);
+        log.info("更新标记rolesDbRefreshed（数据库的角色数据更新的时间），表示此时间后应当刷新缓存的角色数据");
+        setRolesDbRefreshed(new Date());
     }
 
     @Override
@@ -112,6 +129,13 @@ public class RoleServiceImpl implements RoleService {
 
         log.info("用户生效中的角色标识列表: {}", roles);
         return roles;
+    }
+
+    @Override
+    @SimpleServiceLog("设置rolesDbRefreshed时间戳")
+    public void setRolesDbRefreshed(Date timestamp) {
+        redis.opsForValue().set("rolesDbRefreshed", timestamp);
+        log.info("已更新 rolesDbRefreshed 时间戳为: {}", DateUtil.commonFormat(timestamp));
     }
 
     @Override
