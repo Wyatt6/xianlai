@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author WyattLau
@@ -66,6 +67,48 @@ public class RoleServiceImpl implements RoleService {
         roleRepository.deleteById(roleId);
         log.info("更新标记rolesDbRefreshed（数据库的角色数据更新的时间），表示此时间后应当刷新缓存的角色数据");
         setRolesDbRefreshed(new Date());
+    }
+
+    @Override
+    @ServiceLog("更新角色")
+    public Role updateRole(Role role) {
+        String identifier = role.getIdentifier();
+        String name = role.getName();
+        Boolean active = role.getActive();
+        Long sortId = role.getSortId();
+        String description = role.getDescription();
+
+        log.info("查询是否存在该角色");
+        Optional<Role> oldRole = roleRepository.findById(role.getId());
+        if (oldRole.isPresent()) {
+            log.info("角色存在，组装用来更新的对象");
+            Role newRole = oldRole.get();
+            if (identifier != null) newRole.setIdentifier(identifier);
+            if (name != null) newRole.setName(name);
+            if (active != null) newRole.setActive(active);
+            if (sortId != null) newRole.setSortId(sortId);
+            if (description != null) newRole.setDescription(description);
+
+            try {
+                log.info("更新数据库");
+                newRole = roleRepository.save(newRole);
+            } catch (DataIntegrityViolationException e) {
+                log.info(e.getMessage());
+                throw new SysException("角色标识重复");
+            }
+
+            boolean critical = false;
+            if (identifier != null) critical = true;
+            if (active != null) critical = true;
+            if (critical) {
+                log.info("编辑此角色数据影响到用户权限控制，需要更新缓存");
+                log.info("更新标记rolesDbRefreshed（数据库的角色数据更新的时间）");
+                setRolesDbRefreshed(new Date());
+            }
+            return newRole;
+        } else {
+            throw new SysException("要修改的角色不存在");
+        }
     }
 
     @Override

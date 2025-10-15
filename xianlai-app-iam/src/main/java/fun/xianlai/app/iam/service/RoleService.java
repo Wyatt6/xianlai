@@ -19,6 +19,14 @@ public interface RoleService {
     Role createRole(Role role);
 
     /**
+     * 更新角色对象
+     *
+     * @param role 角色新数据（id非空）
+     * @return 角色的新对象
+     */
+    Role updateRole(Role role);
+
+    /**
      * 删除角色对象
      *
      * @param roleId 要删除的角色ID

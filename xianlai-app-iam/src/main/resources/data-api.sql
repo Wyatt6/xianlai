@@ -13,4 +13,5 @@ INSERT IGNORE INTO tb_common_sys_api(`id`, `call_path`, `description`, `request_
 (202001, 'iam.role.getRolesByPage', '条件查询角色分页', 'POST', '/api/iam/role/getRolesByPage'),
 (202002, 'iam.role.addRole', '新增角色', 'POST', '/api/iam/role/addRole'),
 (202003, 'iam.role.getRowNumStartFrom1', '查询角色的排名（从1开始）', 'GET', '/api/iam/role/getRowNumStartFrom1'),
-(202004, 'iam.role.deleteRole', '删除角色', 'GET', '/api/iam/role/deleteRole');
+(202004, 'iam.role.deleteRole', '删除角色', 'GET', '/api/iam/role/deleteRole'),
+(202005, 'iam.role.editRole', '修改角色', 'POST', '/api/iam/role/editRole');

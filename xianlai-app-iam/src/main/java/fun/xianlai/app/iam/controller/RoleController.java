@@ -108,4 +108,19 @@ public class RoleController {
         roleService.deleteRole(roleId);
         return new RetResult().success();
     }
+
+    /**
+     * 修改角色
+     *
+     * @param input 要修改的角色数据
+     * @return role 新角色对象
+     */
+    @ControllerLog("修改角色")
+    @SaCheckLogin
+    @SaCheckPermission("role:edit")
+    @PostMapping("/editRole")
+    public RetResult editRole(@RequestBody RoleForm input) {
+        log.info("请求参数: {}", input);
+        return new RetResult().success().addData("role", roleService.updateRole(input.convert()));
+    }
 }
