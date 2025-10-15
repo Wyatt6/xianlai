@@ -14,7 +14,12 @@ INSERT IGNORE INTO tb_iam_permission(`id`, `identifier`, `name`, `description`, 
 (202001, 'role:add', '添加角色', null, 202001),
 (202002, 'role:delete', '删除角色', null, 202002),
 (202003, 'role:edit', '修改角色', null, 202003),
-(202004, 'role:query', '查询角色', null, 202004);
+(202004, 'role:query', '查询角色', null, 202004),
+-- 用户 --
+(203001, 'user:add', '添加用户', null, 203001),
+(203002, 'user:delete', '删除用户', null, 203002),
+(203003, 'user:edit', '修改用户', null, 203003),
+(203004, 'user:query', '查询用户', null, 203004);
 
 -- 系统初始角色 --
 INSERT IGNORE INTO tb_iam_role(`id`, `identifier`, `name`, `description`, `active`, `sort_id`) VALUE
@@ -34,7 +39,12 @@ INSERT IGNORE INTO tb_iam_role_permission(`role_id`, `permission_id`) VALUE
 (200001, 202001),
 (200001, 202002),
 (200001, 202003),
-(200001, 202004);
+(200001, 202004),
+-- 用户 --
+(200001, 203001),
+(200001, 203002),
+(200001, 204003),
+(200001, 203004);
 
 -- 系统初始用户 --
 INSERT IGNORE INTO tb_iam_user(`id`, `username`, `password`, `salt`, `register_time`, `active`) VALUE

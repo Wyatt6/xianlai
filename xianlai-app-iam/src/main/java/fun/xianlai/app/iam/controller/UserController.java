@@ -70,7 +70,7 @@ public class UserController {
             throw new SysException("密码格式错误");
         }
         User newUser = userService.createUser(username, password);
-        profileService.createProfile(newUser.getId());
+//        profileService.createProfile(newUser.getId());
 
         return new RetResult().success();
     }
@@ -115,34 +115,34 @@ public class UserController {
         log.info("获取权限标识符（Service中已缓存）");
         List<String> permissions = permissionService.getActivePermissionIdentifiers(user.getId());
 
-        log.info("获取Profile并缓存");
-        Profile profile = profileService.getProfile(user.getId());
-        session.set("profile", profile);
+//        log.info("获取Profile并缓存");
+//        Profile profile = profileService.getProfile(user.getId());
+//        session.set("profile", profile);
 
-        Department department = null;
-        Position position = null;
-        if (profile != null) {
-            if (profile.getMainDepartmentId() != null) {
-                log.info("获取Department并缓存");
-                department = departmentService.getDepartment(profile.getMainDepartmentId());
-                session.set("department", department);
-            }
-            if (profile.getMainPositionId() != null) {
-                log.info("获取Position并缓存");
-                position = positionService.getPosition(profile.getMainPositionId());
-                session.set("position", position);
-            }
-        }
+//        Department department = null;
+//        Position position = null;
+//        if (profile != null) {
+//            if (profile.getMainDepartmentId() != null) {
+//                log.info("获取Department并缓存");
+//                department = departmentService.getDepartment(profile.getMainDepartmentId());
+//                session.set("department", department);
+//            }
+//            if (profile.getMainPositionId() != null) {
+//                log.info("获取Position并缓存");
+//                position = positionService.getPosition(profile.getMainPositionId());
+//                session.set("position", position);
+//            }
+//        }
 
         return new RetResult().success()
                 .addData("token", StpUtil.getTokenValue())
                 .addData("tokenExpireTime", System.currentTimeMillis() + StpUtil.getTokenTimeout() * 1000)
                 .addData("user", user)
                 .addData("roles", roles)
-                .addData("permissions", permissions)
-                .addData("profile", profile)
-                .addData("department", department)
-                .addData("position", position);
+                .addData("permissions", permissions);
+//                .addData("profile", profile)
+//                .addData("department", department)
+//                .addData("position", position);
     }
 
     @ControllerLog("退出登录")
