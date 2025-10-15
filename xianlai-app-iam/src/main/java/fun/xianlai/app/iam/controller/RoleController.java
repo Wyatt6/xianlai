@@ -3,6 +3,7 @@ package fun.xianlai.app.iam.controller;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import fun.xianlai.app.iam.model.entity.rbac.Role;
+import fun.xianlai.app.iam.model.form.GrantForm;
 import fun.xianlai.app.iam.model.form.RoleCondition;
 import fun.xianlai.app.iam.model.form.RoleForm;
 import fun.xianlai.app.iam.service.RoleService;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author WyattLau
@@ -122,5 +125,36 @@ public class RoleController {
     public RetResult editRole(@RequestBody RoleForm input) {
         log.info("请求参数: {}", input);
         return new RetResult().success().addData("role", roleService.updateRole(input.convert()));
+    }
+
+    /**
+     * 更新角色的授权
+     *
+     * @param input { roleId 角色ID, grant 授权ID列表, cancel 取消授权ID列表 }
+     * @return { failGrant 授权失败ID列表, failCancel 取消授权失败ID列表 }
+     */
+    @ControllerLog("更新角色的授权")
+    @SaCheckLogin
+    @SaCheckPermission("role:edit")
+    @PostMapping("/updateGrants")
+    public RetResult updateGrants(@RequestBody GrantForm input) {
+        log.info("请求参数: {}", input);
+        List<Long> failGrant = null;
+        List<Long> failCancel = null;
+        try {
+            log.info("授权");
+            failGrant = roleService.grant(input.getRoleId(), input.getGrant());
+        } catch (IllegalArgumentException e) {
+            log.info("无须授权");
+        }
+        try {
+            log.info("解除授权");
+            failCancel = roleService.cancelGrant(input.getRoleId(), input.getCancel());
+        } catch (IllegalArgumentException e) {
+            log.info("无须解除授权");
+        }
+        return new RetResult().success()
+                .addData("failGrant", failGrant)
+                .addData("failCancel", failCancel);
     }
 }

@@ -77,4 +77,22 @@ public interface RoleService {
      * 设置rolesCacheOfUserRefreshed时间戳
      */
     void setRolesCacheOfUserRefreshed(Long userId, Date timestamp);
+
+    /**
+     * 授权（绑定roleId和permissionIds）
+     *
+     * @param roleId        角色ID
+     * @param permissionIds 该角色要绑定的权限ID
+     * @return 授权失败的权限ID列表
+     */
+    List<Long> grant(Long roleId, List<Long> permissionIds);
+
+    /**
+     * 解除授权（取消绑定roleId和permissionIds）
+     *
+     * @param roleId        角色ID
+     * @param permissionIds 该角色要解除绑定的权限ID列表
+     * @return 解除授权失败的权限ID列表
+     */
+    List<Long> cancelGrant(Long roleId, List<Long> permissionIds);
 }

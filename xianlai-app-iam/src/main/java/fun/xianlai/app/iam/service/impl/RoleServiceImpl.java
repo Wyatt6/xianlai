@@ -3,9 +3,11 @@ package fun.xianlai.app.iam.service.impl;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import fun.xianlai.app.iam.model.entity.rbac.Role;
+import fun.xianlai.app.iam.model.entity.rbac.RolePermission;
 import fun.xianlai.app.iam.repository.RolePermissionRepository;
 import fun.xianlai.app.iam.repository.RoleRepository;
 import fun.xianlai.app.iam.repository.UserRoleRepository;
+import fun.xianlai.app.iam.service.PermissionService;
 import fun.xianlai.app.iam.service.RoleService;
 import fun.xianlai.basic.annotation.ServiceLog;
 import fun.xianlai.basic.annotation.SimpleServiceLog;
@@ -40,6 +42,8 @@ public class RoleServiceImpl implements RoleService {
     private RolePermissionRepository rolePermissionRepository;
     @Autowired
     private UserRoleRepository userRoleRepository;
+    @Autowired
+    private PermissionService permissionService;
 
     @Override
     @ServiceLog("创建角色")
@@ -123,6 +127,52 @@ public class RoleServiceImpl implements RoleService {
     @SimpleServiceLog("查询某角色的排名")
     public Long getRowNum(Long roleId) {
         return roleRepository.findRowNumById(roleId);
+    }
+
+    @Override
+    @ServiceLog("授权")
+    public List<Long> grant(Long roleId, List<Long> permissionIds) {
+        List<Long> failList = new ArrayList<>();
+        for (Long permissionId : permissionIds) {
+            try {
+                RolePermission rp = new RolePermission();
+                rp.setRoleId(roleId);
+                rp.setPermissionId(permissionId);
+                rolePermissionRepository.save(rp);
+                log.info("授权成功: (roleId=[{}], permissionId=[{}])", roleId, permissionId);
+            } catch (Exception e) {
+                failList.add(permissionId);
+            }
+        }
+        if (failList.size() < permissionIds.size()) {
+            log.info("有授权成功，要更新PERMISSIONS_DB_REFRESHED时间戳，以动态更新用户权限缓存");
+            permissionService.setPermissionsDbRefreshed(new Date());
+        }
+        log.info("授权失败的权限ID：{}", failList);
+        return failList;
+    }
+
+    @Override
+    @ServiceLog("解除授权")
+    public List<Long> cancelGrant(Long roleId, List<Long> permissionIds) {
+        List<Long> failList = new ArrayList<>();
+        for (Long permissionId : permissionIds) {
+            try {
+                RolePermission rp = new RolePermission();
+                rp.setRoleId(roleId);
+                rp.setPermissionId(permissionId);
+                rolePermissionRepository.delete(rp);
+                log.info("解除授权成功: (roleId=[{}], permissionId=[{}])", roleId, permissionId);
+            } catch (Exception e) {
+                failList.add(permissionId);
+            }
+        }
+        if (failList.size() < permissionIds.size()) {
+            log.info("有解除授权成功，要更新PERMISSIONS_DB_REFRESHED时间戳，以动态更新用户权限缓存");
+            permissionService.setPermissionsDbRefreshed(new Date());
+        }
+        log.info("解除授权失败的权限ID：{}", failList);
+        return failList;
     }
 
     /**
