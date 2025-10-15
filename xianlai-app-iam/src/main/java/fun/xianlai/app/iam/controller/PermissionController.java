@@ -13,12 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author WyattLau
@@ -58,6 +61,34 @@ public class PermissionController {
                 .addData("totalPages", permissions.getTotalPages())
                 .addData("totalElements", permissions.getTotalElements())
                 .addData("permissions", permissions.getContent());
+    }
+
+    /**
+     * 获取所有权限数据
+     *
+     * @return 全量权限数据
+     */
+    @ControllerLog("获取所有权限数据")
+    @SaCheckLogin
+    @SaCheckPermission("permission:query")
+    @GetMapping("/getAllPermissions")
+    public RetResult getAllPermissions() {
+        return new RetResult().success().addData("permissions", permissionService.listAllPermissions());
+    }
+
+    /**
+     * 查询某角色所具有的权限ID列表
+     *
+     * @param roleId 角色ID
+     * @return 该角色所具有的权限ID列表
+     */
+    @ControllerLog("查询某角色所具有的权限ID列表")
+    @SaCheckLogin
+    @SaCheckPermission("permission:query")
+    @GetMapping("/getPermissionIdsOfRole")
+    public RetResult getPermissionIdsOfRole(@RequestParam Long roleId) {
+        List<Long> permissionIds = permissionService.getPermissionIdsOfRole(roleId);
+        return new RetResult().success().addData("permissionIds", permissionIds);
     }
 
     /**

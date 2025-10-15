@@ -34,21 +34,20 @@ public interface PermissionService {
      */
     Permission updatePermission(Permission permission);
 
-//    /**
-//     * 获取全量权限数据
-//     *
-//     * @return 全量权限数据
-//     */
-//    List<Permission> listPermissions();
-//
-//    /**
-//     * 获取某角色的权限
-//     *
-//     * @param roleId 角色ID
-//     * @return 某角色的权限ID列表
-//     */
-//    List<Long> getPermissionIdsOfRole(Long roleId);
-//
+    /**
+     * 获取全量权限数据
+     *
+     * @return 全量权限数据
+     */
+    List<Permission> listAllPermissions();
+
+    /**
+     * 获取某角色的权限ID列表
+     *
+     * @param roleId 角色ID
+     * @return 某角色的权限ID列表
+     */
+    List<Long> getPermissionIdsOfRole(Long roleId);
 
     /**
      * 条件查询权限分页

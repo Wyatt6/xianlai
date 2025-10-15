@@ -9,6 +9,8 @@ INSERT IGNORE INTO tb_common_sys_api(`id`, `call_path`, `description`, `request_
 (201003, 'iam.permission.addPermission', '新增权限', 'POST', '/api/iam/permission/addPermission'),
 (201004, 'iam.permission.getRowNumStartFrom1', '查询权限的排名（从1开始）', 'GET', '/api/iam/permission/getRowNumStartFrom1'),
 (201005, 'iam.permission.editPermission', '修改权限', 'POST', '/api/iam/permission/editPermission'),
+(201006, 'iam.permission.getAllPermissions', '获取所有权限数据', 'GET', '/api/iam/permission/getAllPermissions'),
+(201007, 'iam.permission.getPermissionIdsOfRole', '查询某角色所具有的权限ID列表', 'GET', '/api/iam/permission/getPermissionIdsOfRole'),
 -- Role --
 (202001, 'iam.role.getRolesByPage', '条件查询角色分页', 'POST', '/api/iam/role/getRolesByPage'),
 (202002, 'iam.role.addRole', '新增角色', 'POST', '/api/iam/role/addRole'),

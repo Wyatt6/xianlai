@@ -35,4 +35,9 @@ public interface PermissionRepository extends JpaRepository<Permission, Long> {
             " where t.id = ?1", nativeQuery = true)
     Long findRowNumById(Long id);
 
+    @Query("select p.id " +
+            " from RolePermission rp " +
+            "      inner join Permission p on rp.permissionId = p.id" +
+            " where rp.roleId = ?1")
+    List<Long> findIdsByRoleId(Long roleId);
 }

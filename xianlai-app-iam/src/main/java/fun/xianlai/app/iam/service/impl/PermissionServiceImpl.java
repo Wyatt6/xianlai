@@ -103,24 +103,18 @@ public class PermissionServiceImpl implements PermissionService {
         }
     }
 
-//    @Override
-//    public List<Permission> listPermissions() {
-//        log.info("[[获取全量权限数据]]");
-//        Sort sort = Sort.by(
-//                Sort.Order.asc("module"),
-//                Sort.Order.asc("identifier")
-//        );
-//        return permissionRepository.findAll(sort);
-//    }
-//
-//    @Override
-//    public List<Long> getPermissionIdsOfRole(Long roleId) {
-//        log.info("[[获取某角色的权限]]");
-//        Assert.notNull(roleId, "角色ID为空");
-//        log.info("输入参数: roleId=[{}]", roleId);
-//
-//        return permissionRepository.findIdsByRoleId(roleId);
-//    }
+    @Override
+    @SimpleServiceLog("获取全量权限数据")
+    public List<Permission> listAllPermissions() {
+        Sort sort = Sort.by(Sort.Order.asc("sortId"), Sort.Order.asc("identifier"));
+        return permissionRepository.findAll(sort);
+    }
+
+    @Override
+    @SimpleServiceLog("获取某角色的权限ID列表")
+    public List<Long> getPermissionIdsOfRole(Long roleId) {
+        return permissionRepository.findIdsByRoleId(roleId);
+    }
 
     @Override
     @SimpleServiceLog("条件查询权限分页")
