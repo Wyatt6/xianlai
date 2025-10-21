@@ -26,20 +26,20 @@ public class FeignProducerAspect {
     @Around("pointcut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         long startTimestamp = System.currentTimeMillis();
-        log.info("--->>> Feign Call [{}] in [{}] ", joinPoint.getSignature().getName(), joinPoint.getSignature().getDeclaringTypeName());
+        log.info("-->> Feign Call [{}] in [{}] ", joinPoint.getSignature().getName(), joinPoint.getSignature().getDeclaringTypeName());
         try {
             Object result = joinPoint.proceed();
             log.info("处理耗时: {}ms", System.currentTimeMillis() - startTimestamp);
-            log.info("<<<--- Finish Feign Call [{}]", joinPoint.getSignature().getName());
+            log.info("<<-- Finish Feign Call [{}]", joinPoint.getSignature().getName());
             return result;
         } catch (Throwable e) {
             if (e instanceof SysException) {
                 log.info("处理耗时: {}ms", System.currentTimeMillis() - startTimestamp);
-                log.info("<<<--- Finish Feign Call [{}] with SysException", joinPoint.getSignature().getName());
+                log.info("<<-- Finish Feign Call [{}] with SysException", joinPoint.getSignature().getName());
                 return new RetResult().writeFeignSysException((SysException) e).setTraceId(MDC.get("traceId"));
             } else {
                 log.info("处理耗时: {}ms", System.currentTimeMillis() - startTimestamp);
-                log.info("<<<--- Finish Feign Call [{}] with Unknown Exception", joinPoint.getSignature().getName());
+                log.info("<<-- Finish Feign Call [{}] with Unknown Exception", joinPoint.getSignature().getName());
                 throw e;
             }
         }
