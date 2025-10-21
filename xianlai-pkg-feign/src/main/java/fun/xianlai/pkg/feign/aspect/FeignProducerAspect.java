@@ -1,8 +1,7 @@
 package fun.xianlai.pkg.feign.aspect;
 
-import com.alibaba.fastjson2.JSON;
 import fun.xianlai.core.exception.SysException;
-import fun.xianlai.core.support.RetResult;
+import fun.xianlai.core.response.RetResult;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -25,29 +24,29 @@ public class FeignProducerAspect {
     }
 
     @Around("pointcut()")
-    public Object doAroundFeignController(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         long startTimestamp = System.currentTimeMillis();
-        log.info(">>> Feign Producer [{}] in [{}] ", joinPoint.getSignature().getName(), joinPoint.getSignature().getDeclaringTypeName());
+        log.info("--->>> Feign Call [{}] in [{}] ", joinPoint.getSignature().getName(), joinPoint.getSignature().getDeclaringTypeName());
         try {
             Object result = joinPoint.proceed();
             log.info("处理耗时: {}ms", System.currentTimeMillis() - startTimestamp);
-            log.info("<<< Finish Feign Producer [{}]", joinPoint.getSignature().getName());
+            log.info("<<<--- Finish Feign Call [{}]", joinPoint.getSignature().getName());
             return result;
         } catch (Throwable e) {
             if (e instanceof SysException) {
                 log.info("处理耗时: {}ms", System.currentTimeMillis() - startTimestamp);
-                log.info("<<< Finish Feign Producer [{}] with SysException", joinPoint.getSignature().getName());
+                log.info("<<<--- Finish Feign Call [{}] with SysException", joinPoint.getSignature().getName());
                 return new RetResult().writeFeignSysException((SysException) e).setTraceId(MDC.get("traceId"));
             } else {
                 log.info("处理耗时: {}ms", System.currentTimeMillis() - startTimestamp);
-                log.info("<<< Finish Feign Producer [{}] with Unknown Exception", joinPoint.getSignature().getName());
+                log.info("<<<--- Finish Feign Call [{}] with Unknown Exception", joinPoint.getSignature().getName());
                 throw e;
             }
         }
     }
 
     @AfterReturning(pointcut = "pointcut()", returning = "result")
-    public void afterReturningFeignController(JoinPoint joinPoint, RetResult result) {
+    public void afterReturning(JoinPoint joinPoint, RetResult result) {
         result.setTraceId(MDC.get("traceId"));
     }
 }
