@@ -8,7 +8,7 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>xianlai-infra-mysql</artifactId>
+    <artifactId>xianlai-pkg-mysql</artifactId>
     <version>${xianlai.version}</version>
     <packaging>jar</packaging>
 
