@@ -9,26 +9,28 @@
     </parent>
 
     <artifactId>xianlai-app-common</artifactId>
-    <version>${xianlai.version}</version>
+    <version>${xianlai-app-common.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>
+        <!-- 内部依赖 -->
+        <dependency>
+            <groupId>fun.xianlai</groupId>
+            <artifactId>xianlai-pkg-mysql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>fun.xianlai</groupId>
+            <artifactId>xianlai-pkg-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>fun.xianlai</groupId>
+            <artifactId>xianlai-pkg-feign</artifactId>
+        </dependency>
         <dependency>
             <groupId>fun.xianlai</groupId>
             <artifactId>xianlai-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>fun.xianlai</groupId>
-            <artifactId>xianlai-infra-mysql</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>fun.xianlai</groupId>
-            <artifactId>xianlai-infra-redis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>fun.xianlai</groupId>
-            <artifactId>xianlai-infra-feign</artifactId>
-        </dependency>
+        <!-- 外部依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

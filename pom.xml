@@ -11,6 +11,8 @@
         <xianlai-pkg-feign.version>1.0.0</xianlai-pkg-feign.version>
         <xianlai-core.version>1.0.0</xianlai-core.version>
         <xianlai-app-gateway.version>1.0.0</xianlai-app-gateway.version>
+        <xianlai-app-common.version>1.0.0</xianlai-app-common.version>
+        <xianlai-app-iam.version>1.0.0</xianlai-app-iam.version>
 
         <!-- 替换成你的Nexus构件库地址 -->
         <distribution.releases.url>http://192.168.1.100:8081/repository/maven-releases/</distribution.releases.url>
