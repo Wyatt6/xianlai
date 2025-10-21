@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>xianlai-app-gateway</artifactId>
-    <version>${xianlai.version}</version>
+    <version>${xianlai-gateway.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>
