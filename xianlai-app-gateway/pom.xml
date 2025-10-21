@@ -16,7 +16,7 @@
         <!-- 内部依赖 -->
         <dependency>
             <groupId>fun.xianlai</groupId>
-            <artifactId>xianlai-infra-logging</artifactId>
+            <artifactId>xianlai-pkg-log4j</artifactId>
         </dependency>
         <!-- 外部依赖 -->
         <dependency>
