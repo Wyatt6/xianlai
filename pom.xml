@@ -6,7 +6,9 @@
         <!-- TODO CBR: 每次发版前检查模块版本号 -->
         <xianlai.version>0.0.0</xianlai.version>
         <xianlai-pkg-log4j.version>1.0.0</xianlai-pkg-log4j.version>
+        <xianlai-core.version>1.0.0</xianlai-core.version>
         <xianlai-app-gateway.version>1.0.0</xianlai-app-gateway.version>
+
         <!-- 替换成你的Nexus构件库地址 -->
         <distribution.releases.url>http://192.168.1.100:8081/repository/maven-releases/</distribution.releases.url>
         <distribution.snapshots.url>http://192.168.1.100:8081/repository/maven-snapshots/</distribution.snapshots.url>
@@ -33,12 +35,16 @@
 
     <modules>
         <module>xianlai-pkg-log4j</module>
-        <module>xianlai-basic</module>
+        <!-- 核心程序 -->
+        <module>xianlai-core</module>
         <module>xianlai-infra-mysql</module>
         <module>xianlai-infra-redis</module>
         <module>xianlai-infra-feign</module>
+        <!-- 应用：技术网关 -->
         <module>xianlai-app-gateway</module>
+        <!-- 应用：公共功能 -->
         <module>xianlai-app-common</module>
+        <!-- 应用：IAM（身份识别和访问管理）模块 -->
         <module>xianlai-app-iam</module>
     </modules>
 
@@ -52,8 +58,8 @@
             </dependency>
             <dependency>
                 <groupId>fun.xianlai</groupId>
-                <artifactId>xianlai-basic</artifactId>
-                <version>${xianlai.version}</version>
+                <artifactId>xianlai-core</artifactId>
+                <version>${xianlai-core.version}</version>
             </dependency>
             <dependency>
                 <groupId>fun.xianlai</groupId>

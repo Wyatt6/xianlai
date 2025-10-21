@@ -1,4 +1,4 @@
-package fun.xianlai.basic.exception;
+package fun.xianlai.core.exception;
 
 /**
  * @author WyattLau
