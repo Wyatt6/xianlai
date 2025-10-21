@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>xianlai-pkg-redis</artifactId>
-    <version>${xianlai.version}</version>
+    <version>${xianlai-pkg-redis.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>

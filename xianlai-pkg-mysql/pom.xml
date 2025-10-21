@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>xianlai-pkg-mysql</artifactId>
-    <version>${xianlai.version}</version>
+    <version>${xianlai-pkg-mysql.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>

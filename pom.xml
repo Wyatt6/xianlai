@@ -69,7 +69,7 @@
             <dependency>
                 <groupId>fun.xianlai</groupId>
                 <artifactId>xianlai-pkg-redis</artifactId>
-                <version>${xianlai.version}</version>
+                <version>${xianlai-pkg-redis.version}</version>
             </dependency>
             <dependency>
                 <groupId>fun.xianlai</groupId>
