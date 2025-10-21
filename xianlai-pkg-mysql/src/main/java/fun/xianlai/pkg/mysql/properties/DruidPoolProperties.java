@@ -1,4 +1,4 @@
-package fun.xianlai.infra.mysql.properties;
+package fun.xianlai.pkg.mysql.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

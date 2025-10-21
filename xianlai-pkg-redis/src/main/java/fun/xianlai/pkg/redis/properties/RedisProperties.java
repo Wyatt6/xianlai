@@ -1,4 +1,4 @@
-package fun.xianlai.infra.mysql.properties;
+package fun.xianlai.pkg.redis.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -9,12 +9,10 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
-@ConfigurationProperties("datasource.mysql")
-public class MysqlProperties {
+@ConfigurationProperties("datasource.redis")
+public class RedisProperties {
     private String host;
-    private String port;
-    private String db;
-    private String username;
+    private int port;
     private String password;
-    private String publicKey;
+    private int database;
 }

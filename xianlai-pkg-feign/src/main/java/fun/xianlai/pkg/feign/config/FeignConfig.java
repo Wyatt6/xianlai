@@ -1,4 +1,4 @@
-package fun.xianlai.infra.feign.config;
+package fun.xianlai.pkg.feign.config;
 
 import com.alibaba.fastjson2.JSON;
 import feign.Feign;

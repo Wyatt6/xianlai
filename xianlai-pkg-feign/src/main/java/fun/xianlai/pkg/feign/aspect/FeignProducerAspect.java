@@ -1,4 +1,4 @@
-package fun.xianlai.infra.feign.aspect;
+package fun.xianlai.pkg.feign.aspect;
 
 import com.alibaba.fastjson2.JSON;
 import fun.xianlai.core.exception.SysException;

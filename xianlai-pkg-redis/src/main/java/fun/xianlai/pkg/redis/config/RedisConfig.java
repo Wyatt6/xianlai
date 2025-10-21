@@ -1,7 +1,7 @@
-package fun.xianlai.infra.redis.config;
+package fun.xianlai.pkg.redis.config;
 
-import fun.xianlai.infra.redis.properties.LettucePoolProperties;
-import fun.xianlai.infra.redis.properties.RedisProperties;
+import fun.xianlai.pkg.redis.properties.LettucePoolProperties;
+import fun.xianlai.pkg.redis.properties.RedisProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
