@@ -1,6 +1,6 @@
-package fun.xianlai.basic.support;
+package fun.xianlai.core.response;
 
-import fun.xianlai.basic.exception.SysException;
+import fun.xianlai.core.exception.SysException;
 import lombok.Data;
 
 import java.util.HashMap;

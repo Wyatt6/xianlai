@@ -1,4 +1,4 @@
-package fun.xianlai.basic.support;
+package fun.xianlai.core.response;
 
 import java.util.HashMap;
 
