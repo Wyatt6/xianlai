@@ -4,8 +4,8 @@
 
     <properties>
         <!-- TODO CBR: 每次发版前检查模块版本号 -->
-        <xianlai.version>0.1.0</xianlai.version>
-        <xianlai-infra-logging.version>0.1.0</xianlai-infra-logging.version>
+        <xianlai.version>0.0.0</xianlai.version>
+        <xianlai-pkg-log4j.version>1.0.0</xianlai-pkg-log4j.version>
         <xianlai-app-gateway.version>1.0.0</xianlai-app-gateway.version>
         <!-- 替换成你的Nexus构件库地址 -->
         <distribution.releases.url>http://192.168.1.100:8081/repository/maven-releases/</distribution.releases.url>
@@ -32,7 +32,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>xianlai-infra-logging</module>
+        <module>xianlai-pkg-log4j</module>
         <module>xianlai-basic</module>
         <module>xianlai-infra-mysql</module>
         <module>xianlai-infra-redis</module>
@@ -47,8 +47,8 @@
             <!-- 内部依赖 -->
             <dependency>
                 <groupId>fun.xianlai</groupId>
-                <artifactId>xianlai-infra-logging</artifactId>
-                <version>${xianlai-infra-logging.version}</version>
+                <artifactId>xianlai-pkg-log4j</artifactId>
+                <version>${xianlai-pkg-log4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>fun.xianlai</groupId>
