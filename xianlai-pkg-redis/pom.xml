@@ -8,7 +8,7 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>xianlai-infra-redis</artifactId>
+    <artifactId>xianlai-pkg-redis</artifactId>
     <version>${xianlai.version}</version>
     <packaging>jar</packaging>
 
