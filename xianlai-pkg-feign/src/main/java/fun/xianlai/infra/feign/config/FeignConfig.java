@@ -10,7 +10,7 @@ import feign.Util;
 import feign.codec.DecodeException;
 import feign.codec.Decoder;
 import feign.optionals.OptionalDecoder;
-import fun.xianlai.basic.support.RetResult;
+import fun.xianlai.core.support.RetResult;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.ObjectFactory;

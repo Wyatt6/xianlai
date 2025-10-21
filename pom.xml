@@ -8,6 +8,7 @@
         <xianlai-pkg-log4j.version>1.0.0</xianlai-pkg-log4j.version>
         <xianlai-pkg-mysql.version>1.0.0</xianlai-pkg-mysql.version>
         <xianlai-pkg-redis.version>1.0.0</xianlai-pkg-redis.version>
+        <xianlai-pkg-feign.version>1.0.0</xianlai-pkg-feign.version>
         <xianlai-core.version>1.0.0</xianlai-core.version>
         <xianlai-app-gateway.version>1.0.0</xianlai-app-gateway.version>
 
@@ -42,9 +43,10 @@
         <module>xianlai-pkg-mysql</module>
         <!-- 依赖包：封装后的Redis缓存访问依赖包 -->
         <module>xianlai-pkg-redis</module>
+        <!-- 依赖包：封装后的Feign远程访问依赖包 -->
+        <module>xianlai-pkg-feign</module>
         <!-- 核心程序 -->
         <module>xianlai-core</module>
-        <module>xianlai-infra-feign</module>
         <!-- 应用：技术网关 -->
         <module>xianlai-app-gateway</module>
         <!-- 应用：公共功能 -->
@@ -73,13 +75,13 @@
             </dependency>
             <dependency>
                 <groupId>fun.xianlai</groupId>
-                <artifactId>xianlai-core</artifactId>
-                <version>${xianlai-core.version}</version>
+                <artifactId>xianlai-pkg-feign</artifactId>
+                <version>${xianlai-pkg-feign.version}</version>
             </dependency>
             <dependency>
                 <groupId>fun.xianlai</groupId>
-                <artifactId>xianlai-infra-feign</artifactId>
-                <version>${xianlai.version}</version>
+                <artifactId>xianlai-core</artifactId>
+                <version>${xianlai-core.version}</version>
             </dependency>
 
             <!-- 第三方依赖 -->

@@ -8,15 +8,11 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>xianlai-infra-feign</artifactId>
+    <artifactId>xianlai-pkg-feign</artifactId>
     <version>${xianlai.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>
-        <dependency>
-            <groupId>fun.xianlai</groupId>
-            <artifactId>xianlai-basic</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>

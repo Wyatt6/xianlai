@@ -1,8 +1,8 @@
 package fun.xianlai.infra.feign.aspect;
 
 import com.alibaba.fastjson2.JSON;
-import fun.xianlai.basic.exception.SysException;
-import fun.xianlai.basic.support.RetResult;
+import fun.xianlai.core.exception.SysException;
+import fun.xianlai.core.support.RetResult;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
