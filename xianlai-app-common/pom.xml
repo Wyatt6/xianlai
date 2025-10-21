@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>fun.xianlai</groupId>
-            <artifactId>xianlai-basic</artifactId>
+            <artifactId>xianlai-core</artifactId>
         </dependency>
         <dependency>
             <groupId>fun.xianlai</groupId>
