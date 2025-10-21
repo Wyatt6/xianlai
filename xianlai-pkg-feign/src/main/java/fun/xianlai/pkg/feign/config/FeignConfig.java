@@ -10,7 +10,7 @@ import feign.Util;
 import feign.codec.DecodeException;
 import feign.codec.Decoder;
 import feign.optionals.OptionalDecoder;
-import fun.xianlai.core.support.RetResult;
+import fun.xianlai.core.response.RetResult;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.ObjectFactory;
@@ -34,6 +34,7 @@ public class FeignConfig {
 
     @Bean
     public Feign.Builder feignBuilder(Decoder decoder) {
+        // 对于声明为void的方法也依旧执行decode过程，从RetResult中提取可能返回的异常
         return Feign.builder().decoder(decoder).decodeVoid();
     }
 
