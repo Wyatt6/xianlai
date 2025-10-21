@@ -6,7 +6,7 @@
         <!-- TODO CBR: 每次发版前检查模块版本号 -->
         <xianlai.version>0.1.0</xianlai.version>
         <xianlai-infra-logging.version>0.1.0</xianlai-infra-logging.version>
-        <xianlai-gateway.version>1.0.0</xianlai-gateway.version>
+        <xianlai-app-gateway.version>1.0.0</xianlai-app-gateway.version>
         <!-- 替换成你的Nexus构件库地址 -->
         <distribution.releases.url>http://192.168.1.100:8081/repository/maven-releases/</distribution.releases.url>
         <distribution.snapshots.url>http://192.168.1.100:8081/repository/maven-snapshots/</distribution.snapshots.url>
