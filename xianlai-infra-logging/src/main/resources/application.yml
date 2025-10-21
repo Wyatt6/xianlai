@@ -1,0 +1,9 @@
+logging:
+  config: classpath:logback-spring.xml
+  # 日志级别 FATAL > ERROR > WARN > INFO > DEBUG > TRACE
+  level:
+    root: INFO
+    org.springframework: WARN
+    org.springframework.boot.web.embedded: INFO
+    org.apache: WARN
+    fun.xianlai: INFO

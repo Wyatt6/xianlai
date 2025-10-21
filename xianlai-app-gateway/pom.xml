@@ -13,10 +13,12 @@
     <packaging>jar</packaging>
 
     <dependencies>
+        <!-- 内部依赖 -->
         <dependency>
             <groupId>fun.xianlai</groupId>
-            <artifactId>xianlai-basic</artifactId>
+            <artifactId>xianlai-infra-logging</artifactId>
         </dependency>
+        <!-- 外部依赖 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
