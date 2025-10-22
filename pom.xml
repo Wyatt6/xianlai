@@ -51,7 +51,7 @@
         <!-- 应用：公共功能 -->
         <module>xianlai-app-common</module>
         <!-- 应用：IAM（身份识别和访问管理）模块 -->
-        <module>xianlai-app-iam</module>
+<!--        <module>xianlai-app-iam</module>-->
     </modules>
 
     <dependencyManagement>
