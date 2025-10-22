@@ -1,7 +1,7 @@
 package fun.xianlai.app.common.feign.producer;
 
 import fun.xianlai.app.common.service.CaptchaService;
-import fun.xianlai.basic.support.RetResult;
+import fun.xianlai.core.response.RetResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

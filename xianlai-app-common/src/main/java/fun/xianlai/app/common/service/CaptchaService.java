@@ -1,7 +1,7 @@
 package fun.xianlai.app.common.service;
 
 
-import fun.xianlai.basic.support.DataMap;
+import fun.xianlai.core.response.DataMap;
 
 /**
  * @author WyattLau

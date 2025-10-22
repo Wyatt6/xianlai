@@ -3,12 +3,13 @@ package fun.xianlai.app.common.service.impl;
 import com.google.code.kaptcha.Producer;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
-import fun.xianlai.basic.annotation.ServiceLog;
-import fun.xianlai.basic.exception.SysException;
-import fun.xianlai.basic.support.DataMap;
-import fun.xianlai.basic.utils.ImageUtil;
 import fun.xianlai.app.common.service.CaptchaService;
 import fun.xianlai.app.common.service.OptionService;
+import fun.xianlai.core.annotation.ServiceLog;
+import fun.xianlai.core.annotation.SimpleServiceLog;
+import fun.xianlai.core.exception.SysException;
+import fun.xianlai.core.response.DataMap;
+import fun.xianlai.core.utils.ImageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -97,15 +98,13 @@ public class CaptchaServiceImpl implements CaptchaService {
     }
 
     @Override
-    @ServiceLog("校验验证码")
+    @SimpleServiceLog("校验验证码")
     public void verifyCaptcha(String captchaKey, String captcha) {
         Object captchaText = redis.opsForValue().get("captcha:" + captchaKey);
         if (captchaText == null) {
             throw new SysException("验证码已失效");
         } else {
-            log.info("缓存的验证码: captchaText=[{}]", captchaText);
             if (captcha.equalsIgnoreCase(String.valueOf(captchaText))) {
-                log.info("通过验证，删除缓存的验证码");
                 redis.delete("captcha:" + captchaKey);
             } else {
                 throw new SysException("验证码错误");
