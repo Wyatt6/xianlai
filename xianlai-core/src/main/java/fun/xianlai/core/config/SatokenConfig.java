@@ -1,4 +1,4 @@
-package fun.xianlai.app.iam.config;
+package fun.xianlai.core.config;
 
 import cn.dev33.satoken.config.SaTokenConfig;
 import cn.dev33.satoken.interceptor.SaInterceptor;

@@ -1,10 +1,10 @@
-package fun.xianlai.app.iam.config;
+package fun.xianlai.core.aspect;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
 import cn.dev33.satoken.exception.NotRoleException;
 import com.alibaba.fastjson2.JSONObject;
-import fun.xianlai.basic.support.RetResult;
+import fun.xianlai.core.response.RetResult;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.web.bind.annotation.ControllerAdvice;
