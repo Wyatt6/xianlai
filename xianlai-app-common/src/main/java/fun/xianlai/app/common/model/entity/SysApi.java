@@ -1,6 +1,6 @@
 package fun.xianlai.app.common.model.entity;
 
-import fun.xianlai.app.common.support.PrimaryKeyGenerator;
+import fun.xianlai.core.supprt.PrimaryKeyGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -30,7 +30,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "tb_common_sys_api", indexes = {
-        @Index(columnList = "callPath", unique = true)
+        @Index(columnList = "callPath", unique = true),
+        @Index(columnList = "description")
 })
 public class SysApi {
     @Id
@@ -38,16 +39,16 @@ public class SysApi {
     @GenericGenerator(name = "PK_generator", type = PrimaryKeyGenerator.class)
     private Long id;
 
-    @Column(length = 1024)
+    @Column(length = 1000)
     private String callPath;
 
-    @Column(length = 1024)
+    @Column(length = 1000)
     private String description;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private RequestMethod requestMethod;
 
-    @Column(length = 10240)
+    @Column(length = 10000)
     private String url;
 }

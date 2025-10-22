@@ -4,8 +4,8 @@ import com.alibaba.fastjson2.JSONObject;
 import fun.xianlai.app.common.model.entity.SysApi;
 import fun.xianlai.app.common.repository.SysApiRepository;
 import fun.xianlai.app.common.service.ApiService;
-import fun.xianlai.basic.annotation.SimpleServiceLog;
-import fun.xianlai.basic.utils.ChecksumUtil;
+import fun.xianlai.core.annotation.SimpleServiceLog;
+import fun.xianlai.core.utils.ChecksumUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author WyattLau
