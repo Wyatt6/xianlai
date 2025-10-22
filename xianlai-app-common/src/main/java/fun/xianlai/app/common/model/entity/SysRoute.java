@@ -1,6 +1,6 @@
 package fun.xianlai.app.common.model.entity;
 
-import fun.xianlai.app.common.support.PrimaryKeyGenerator;
+import fun.xianlai.core.supprt.PrimaryKeyGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,19 +27,21 @@ import org.hibernate.annotations.GenericGenerator;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "tb_common_sys_route", indexes = {
-        @Index(columnList = "sortId"),
-        @Index(columnList = "name", unique = true),
+        @Index(columnList = "name", unique = true)
 })
 public class SysRoute {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "PK_generator")
-    @GenericGenerator(name = "PK_generator", type = PrimaryKeyGenerator.class)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
+    @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)
     private Long id;
 
     @Column(columnDefinition = "bigint not null default 0")
     private Long sortId;
 
-    @Column
+    @Column(columnDefinition = "bigint not null default 0")
+    private Long parentId;
+
+    @Column(columnDefinition = "varchar(255) not null")
     private String name;
 
     @Column(columnDefinition = "varchar(255) not null")
@@ -48,8 +50,8 @@ public class SysRoute {
     @Column
     private String redirectPathName;    // SysPath的name
 
-    @Column(length = 1024)
-    private String componentPath;       // 相对路径
+    @Column(length = 1000)
+    private String componentPath;       // 组件（相对）路径
 
     @Column(columnDefinition = "bit not null default 1")
     private Boolean needLogin;          // 路由是否需要登录才允许访问
@@ -65,7 +67,4 @@ public class SysRoute {
 
     @Column
     private String tagTitle;            // showTag = true 时才有意义
-
-    @Column(columnDefinition = "bigint not null default 0")
-    private Long parentId;
 }

@@ -30,8 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "tb_common_sys_api", indexes = {
-        @Index(columnList = "callPath", unique = true),
-        @Index(columnList = "description")
+        @Index(columnList = "callPath", unique = true)
 })
 public class SysApi {
     @Id

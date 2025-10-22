@@ -1,12 +1,11 @@
 package fun.xianlai.app.common.service.impl;
 
 import com.alibaba.fastjson2.JSONObject;
-import fun.xianlai.app.common.model.entity.SysMenu;
 import fun.xianlai.app.common.model.entity.SysRoute;
 import fun.xianlai.app.common.repository.SysRouteRepository;
 import fun.xianlai.app.common.service.RouteService;
-import fun.xianlai.basic.annotation.SimpleServiceLog;
-import fun.xianlai.basic.utils.ChecksumUtil;
+import fun.xianlai.core.annotation.SimpleServiceLog;
+import fun.xianlai.core.utils.ChecksumUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
@@ -46,6 +45,8 @@ public class RouteServiceImpl implements RouteService {
             Map<Long, Map<String, Object>> finder = new HashMap<>();
             for (SysRoute route : routes) {
                 Map<String, Object> mapRoute = new HashMap<>();
+                mapRoute.put("id", route.getId());
+                mapRoute.put("sortId", route.getSortId());
                 mapRoute.put("name", route.getName());
                 mapRoute.put("pathName", route.getPathName());
                 mapRoute.put("redirectPathName", route.getRedirectPathName());
@@ -55,7 +56,7 @@ public class RouteServiceImpl implements RouteService {
                 mapRoute.put("permission", route.getPermission());
                 mapRoute.put("showTag", route.getShowTag());
                 mapRoute.put("tagTitle", route.getTagTitle());
-                mapRoute.put("children", new ArrayList<>());
+                mapRoute.put("children", new ArrayList<HashMap<String, Object>>());
                 finder.put(route.getId(), mapRoute);
             }
             for (SysRoute route : routes) {
@@ -63,7 +64,7 @@ public class RouteServiceImpl implements RouteService {
                     listRoutes.add(finder.get(route.getId()));
                 } else {
                     Map<String, Object> fatherRoute = finder.get(route.getParentId());
-                    ((List) fatherRoute.get("children")).add(finder.get(route.getId()));
+                    ((List<Map<String, Object>>) fatherRoute.get("children")).add(finder.get(route.getId()));
                 }
             }
         }
@@ -72,7 +73,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    @SimpleServiceLog("从缓存获取系统路由")
+    // @SimpleServiceLog("从缓存获取系统路由")
     public List<Map<String, Object>> getSysRoutesFromCache() {
         List<Map<String, Object>> routes = (List<Map<String, Object>>) redis.opsForValue().get("sysRoutes");
         if (routes == null) {

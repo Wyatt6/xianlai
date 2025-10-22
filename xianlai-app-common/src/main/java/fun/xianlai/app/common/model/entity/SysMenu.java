@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,11 +27,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "tb_common_sys_menu", indexes = {
-        @Index(columnList = "sortId"),
-        @Index(columnList = "parentId"),
-        @Index(columnList = "title"),
-})
+@Table(name = "tb_common_sys_menu")
 public class SysMenu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")

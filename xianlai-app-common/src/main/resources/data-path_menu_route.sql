@@ -22,19 +22,22 @@ INSERT IGNORE INTO tb_common_sys_menu(
 ) VALUE
 (10001, 10001, 0, 'ri-home-4-fill', '首页', 'HOMEPAGE', 0, null, 1);
 
-INSERT IGNORE INTO tb_common_sys_route(`id`, `sort_id`, `name`, `path_name`, `redirect_path_name`, `component_path`, `need_login`, `need_permission`, `permission`, `show_tag`, `tag_title`, `parent_id`) VALUE
+INSERT IGNORE INTO tb_common_sys_route(
+    `id`, `sort_id`, `parent_id`, `name`, `path_name`, `redirect_path_name`, `component_path`,
+    `need_login`, `need_permission`, `permission`, `show_tag`, `tag_title`
+) VALUE
 -- 门户 --
-(100001, 100001, 'portal', 'PORTAL', 'LOGIN', 'portal/index.vue', 0, 0, null, 0, null, 0),
-(100002, 100002, 'register', 'REGISTER', null, 'portal/register/index.vue', 0, 0, null, 0, null, 100001),
-(100003, 100003, 'login', 'LOGIN', null, 'portal/login/index.vue', 0, 0, null, 0, null, 100001),
-(100004, 100004, 'reset_password', 'RESET_PASSWORD', null, 'portal/reset_password/index.vue', 0, 0, null, 0, null, 100001),
+(10001, 10001, 0, 'portal', 'PORTAL', 'LOGIN', 'portal/index.vue', 0, 0, null, 0, null),
+(10002, 10002, 10001, 'register', 'REGISTER', null, 'portal/register/index.vue', 0, 0, null, 0, null),
+(10003, 10003, 10001, 'login', 'LOGIN', null, 'portal/login/index.vue', 0, 0, null, 0, null),
+(10004, 10004, 10001, 'reset_password', 'RESET_PASSWORD', null, 'portal/reset_password/index.vue', 0, 0, null, 0, null),
 -- 首页 --
-(100005, 100005, 'layout', 'INDEX', 'INDEX_REDIRECT', 'layout/index.vue', 1, 0, null, 0, null, 0),
-(100006, 100006, 'homepage', 'HOMEPAGE', null, 'homepage/index.vue', 1, 0, null, 0, null, 100005),
--- 错误页面 --
-(9000001, 9000001, 'not_authorized_embedded', 'NOT_AUTHORIZED_EMBEDDED', null, 'errors/403.vue', 1, 0, null, 0, null, 100005),
-(9000002, 9000002, 'not_authorized', 'NOT_AUTHORIZED', null, 'errors/403.vue', 1, 0, null, 0, null, 0),
-(9000003, 9000003, 'not_found', 'NOT_FOUND', null, 'errors/404.vue', 0, 0, null, 0, null, 0),
-(9000004, 9000004, 'not_connected', 'NOT_CONNECTED', null, 'errors/500.vue', 0, 0, null, 0, null, 0),
+(11001, 11001, 0, 'layout', 'INDEX', 'INDEX_REDIRECT', 'layout/index.vue', 1, 0, null, 0, null),
+(11002, 11002, 11001, 'homepage', 'HOMEPAGE', null, 'homepage/index.vue', 1, 0, null, 0, null),
+-- 错误 --
+(90001, 90001, 11001, 'not_authorized_embedded', 'NOT_AUTHORIZED_EMBEDDED', null, 'errors/403.vue', 1, 0, null, 0, null),
+(90002, 90002, 0, 'not_authorized', 'NOT_AUTHORIZED', null, 'errors/403.vue', 1, 0, null, 0, null),
+(90003, 90003, 0, 'not_found', 'NOT_FOUND', null, 'errors/404.vue', 0, 0, null, 0, null),
+(90004, 90004, 0, 'not_connected', 'NOT_CONNECTED', null, 'errors/500.vue', 0, 0, null, 0, null),
 -- 最终无匹配 --
-(9999999, 9999999, 'final_not_match', 'FINAL_NOT_MATCH', 'NOT_FOUND', null, 0, 0, null, 0, null, 0);
+(99999, 99999, 0, 'final_not_match', 'FINAL_NOT_MATCH', 'NOT_FOUND', null, 0, 0, null, 0, null);
