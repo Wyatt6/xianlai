@@ -1,6 +1,6 @@
-package fun.xianlai.basic.aspect;
+package fun.xianlai.core.aspect;
 
-import fun.xianlai.basic.annotation.ServiceLog;
+import fun.xianlai.core.annotation.ServiceLog;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 public class ServiceLogAspect {
-    @Pointcut("@annotation(fun.xianlai.basic.annotation.ServiceLog)")
+    @Pointcut("@annotation(fun.xianlai.core.annotation.ServiceLog)")
     public void pointcut() {
     }
 
@@ -31,7 +31,7 @@ public class ServiceLogAspect {
      * @return 方法return的值
      */
     @Around("pointcut()")
-    public Object doAroundService(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();   // 获取正在处理的方法对象
         ServiceLog annotation = method.getAnnotation(ServiceLog.class);             // 获取对该方法@ServiceLog注解的对象
         if (annotation == null) {
@@ -39,13 +39,13 @@ public class ServiceLogAspect {
         }
         String annotationValue = annotation.value();    // 获取@ServiceLog注解的值
 
-        log.info(">>>>>> Call Service {}[{}] in [{}]", annotationValue, joinPoint.getSignature().getName(), joinPoint.getSignature().getDeclaringTypeName());
+        log.info("---->>>> Call Service {}[{}] in [{}]", annotationValue, joinPoint.getSignature().getName(), joinPoint.getSignature().getDeclaringTypeName());
         try {
             Object serviceReturn = joinPoint.proceed();
-            log.info("<<<<<< Exit Service {}[{}]", annotationValue, joinPoint.getSignature().getName());
+            log.info("<<<<---- Exit Service {}[{}]", annotationValue, joinPoint.getSignature().getName());
             return serviceReturn;
         } catch (Throwable e) {
-            log.info("<<<<<< Exit Service {}[{}] with Exception", annotationValue, joinPoint.getSignature().getName());
+            log.info("<<<<---- Exit Service {}[{}] with Exception", annotationValue, joinPoint.getSignature().getName());
             throw e;    // 需要继续向调用该Service的上层Service或Controller抛出异常，不能拦截在这里形成无返回的情况
         }
     }
@@ -57,7 +57,7 @@ public class ServiceLogAspect {
      * @param e         Service抛出的异常
      */
     @AfterThrowing(pointcut = "pointcut()", throwing = "e")
-    public void afterThrowingAdvice(JoinPoint joinPoint, Exception e) {
+    public void afterThrowing(JoinPoint joinPoint, Exception e) {
         log.info("出现异常: {} {}", e.getMessage(), e.getClass().getName());
     }
 }
