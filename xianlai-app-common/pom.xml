@@ -16,6 +16,10 @@
         <!-- 内部依赖 -->
         <dependency>
             <groupId>fun.xianlai</groupId>
+            <artifactId>xianlai-pkg-log4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>fun.xianlai</groupId>
             <artifactId>xianlai-pkg-mysql</artifactId>
         </dependency>
         <dependency>
