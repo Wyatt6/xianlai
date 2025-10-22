@@ -11,7 +11,7 @@ import java.util.Optional;
  * @author WyattLau
  */
 @Repository
-public interface SysOptionRepository extends JpaRepository<SysOption, String> {
+public interface SysOptionRepository extends JpaRepository<SysOption, Long> {
     List<SysOption> findByFrontLoad(Boolean frontLoad);
 
     List<SysOption> findByBackLoad(Boolean backLoad);

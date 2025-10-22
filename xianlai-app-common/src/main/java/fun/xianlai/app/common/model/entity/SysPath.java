@@ -1,7 +1,10 @@
 package fun.xianlai.app.common.model.entity;
 
+import fun.xianlai.core.supprt.PrimaryKeyGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
@@ -10,6 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * 系统路径
@@ -29,16 +33,22 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "tb_common_sys_path", indexes = {
-        @Index(columnList = "path", unique = true),
-        @Index(columnList = "sortId")
+        @Index(columnList = "sortId"),
+        @Index(columnList = "name", unique = true),
+        @Index(columnList = "path", unique = true)
 })
 public class SysPath {
     @Id
-    private String name;
-
-    @Column(columnDefinition = "varchar(1024) not null")
-    private String path;
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
+    @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)
+    private Long id;
 
     @Column(columnDefinition = "bigint not null default 0")
     private Long sortId;
+
+    @Column(columnDefinition = "varchar(255) not null")
+    private String name;
+
+    @Column(columnDefinition = "varchar(1000) not null")
+    private String path;
 }

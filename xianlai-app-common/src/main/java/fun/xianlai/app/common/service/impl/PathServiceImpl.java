@@ -4,11 +4,10 @@ import com.alibaba.fastjson2.JSONObject;
 import fun.xianlai.app.common.model.entity.SysPath;
 import fun.xianlai.app.common.repository.SysPathRepository;
 import fun.xianlai.app.common.service.PathService;
-import fun.xianlai.basic.annotation.SimpleServiceLog;
-import fun.xianlai.basic.utils.ChecksumUtil;
+import fun.xianlai.core.annotation.SimpleServiceLog;
+import fun.xianlai.core.utils.ChecksumUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -44,11 +43,11 @@ public class PathServiceImpl implements PathService {
 
     @Override
     @SimpleServiceLog("从缓存获取系统路径")
-    public List<Map<String, String>> getSysPathsFromCache() {
-        List<Map<String, String>> paths = (List<Map<String, String>>) redis.opsForValue().get("sysPaths");
+    public List<SysPath> getSysPathsFromCache() {
+        List<SysPath> paths = (List<SysPath>) redis.opsForValue().get("sysPaths");
         if (paths == null) {
             self.cacheSysPaths();
-            paths = (List<Map<String, String>>) redis.opsForValue().get("sysPaths");
+            paths = (List<SysPath>) redis.opsForValue().get("sysPaths");
         }
         return paths;
     }

@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
  * @author WyattLau
  */
 @Repository
-public interface SysPathRepository extends JpaRepository<SysPath, String> {
+public interface SysPathRepository extends JpaRepository<SysPath, Long> {
 }

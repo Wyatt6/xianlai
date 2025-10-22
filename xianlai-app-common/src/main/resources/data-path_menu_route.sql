@@ -1,20 +1,20 @@
-INSERT IGNORE INTO tb_common_sys_path(`name`, `path`, `sort_id`) VALUE
+INSERT IGNORE INTO tb_common_sys_path(`id`, `sort_id`, `name`, `path`) VALUE
 -- 门户 --
-('PORTAL', '/portal', 100001),
-('LOGIN', '/portal/login', 100002),
-('REGISTER', '/portal/register', 100003),
-('RESET_PASSWORD', '/portal/reset-password', 100004),
+(10001, 10001, 'PORTAL', '/portal'),
+(10002, 10002, 'LOGIN', '/portal/login'),
+(10003, 10003, 'REGISTER', '/portal/register'),
+(10004, 10004, 'RESET_PASSWORD', '/portal/reset-password'),
 -- 首页 --
-('INDEX', '/', 100005),
-('INDEX_REDIRECT', '/homepage', 100006),
-('HOMEPAGE', '/homepage', 100007),
+(11001, 11001, 'INDEX', '/'),
+(11002, 11002, 'INDEX_REDIRECT', '/homepage'),
+(11003, 11003, 'HOMEPAGE', '/homepage'),
 -- 错误页面 --
-('NOT_AUTHORIZED_EMBEDDED', '/403/embedded', 9000001),
-('NOT_AUTHORIZED', '/403', 9000002),
-('NOT_FOUND', '/404', 9000003),
-('NOT_CONNECTED', '/500', 9000004),
+(12001, 12001, 'NOT_AUTHORIZED_EMBEDDED', '/403/embedded'),
+(12002, 12002, 'NOT_AUTHORIZED', '/403'),
+(12003, 12003, 'NOT_FOUND', '/404'),
+(12004, 12004, 'NOT_CONNECTED', '/500'),
 -- 最终无匹配 --
-('FINAL_NOT_MATCH', '/:catchAll(.*)', 9999999);
+(99999, 99999, 'FINAL_NOT_MATCH', '/:catchAll(.*)');
 
 INSERT IGNORE INTO tb_common_sys_menu(`id`, `sort_id`, `icon`, `title`, `path_name`, `need_permission`, `permission`, `active`, `parent_id`) VALUE
 (100001, 100001, 'ri-home-4-fill', '首页', 'HOMEPAGE', 0, null, 1, 0);
