@@ -4,8 +4,8 @@ import com.alibaba.fastjson2.JSONObject;
 import fun.xianlai.app.common.model.entity.SysOption;
 import fun.xianlai.app.common.repository.SysOptionRepository;
 import fun.xianlai.app.common.service.OptionService;
-import fun.xianlai.basic.annotation.SimpleServiceLog;
-import fun.xianlai.basic.utils.ChecksumUtil;
+import fun.xianlai.core.annotation.SimpleServiceLog;
+import fun.xianlai.core.utils.ChecksumUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -65,12 +65,6 @@ public class OptionServiceImpl implements OptionService {
     }
 
     @Override
-    @SimpleServiceLog("从缓存获取加载到前端的系统参数的checksum")
-    public String getFrontLoadSysOptionsChecksumFromCache() {
-        return (String) redis.opsForValue().get("sysOptionsChecksum");
-    }
-
-    @Override
     @SimpleServiceLog("缓存加载到后端的系统参数缓存")
     public void cacheBackLoadSysOptions() {
         List<SysOption> options = sysOptionRepository.findByBackLoad(true);
@@ -95,12 +89,11 @@ public class OptionServiceImpl implements OptionService {
     @SimpleServiceLog("从缓存获取某个加载到后端的系统参数值")
     public String getCertainBackLoadSysOptionValueFromCache(String key) {
         String value = (String) redis.opsForValue().get(CACHE_PREFIX + key);
-        if (value != null) {
-            return value;
-        } else {
+        if (value == null) {
             self.cacheCertainBackLoadSysOption(key);
-            return (String) redis.opsForValue().get(CACHE_PREFIX + key);
+            value = (String) redis.opsForValue().get(CACHE_PREFIX + key);
         }
+        return value;
     }
 
     @Override

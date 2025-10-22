@@ -1,6 +1,6 @@
-package fun.xianlai.basic.aspect;
+package fun.xianlai.core.aspect;
 
-import fun.xianlai.basic.support.RetResult;
+import fun.xianlai.core.response.RetResult;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;

@@ -1,4 +1,4 @@
-package fun.xianlai.basic.utils;
+package fun.xianlai.core.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

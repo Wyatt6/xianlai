@@ -18,11 +18,6 @@ public interface OptionService {
     Map<String, Map<String, String>> getFrontLoadSysOptionsFromCache();
 
     /**
-     * 从缓存获取加载到前端的系统参数的checksum
-     */
-    String getFrontLoadSysOptionsChecksumFromCache();
-
-    /**
      * 缓存加载到后端的系统参数缓存
      */
     void cacheBackLoadSysOptions();
