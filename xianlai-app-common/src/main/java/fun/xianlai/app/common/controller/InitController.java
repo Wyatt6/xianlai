@@ -5,8 +5,8 @@ import fun.xianlai.app.common.service.MenuService;
 import fun.xianlai.app.common.service.OptionService;
 import fun.xianlai.app.common.service.PathService;
 import fun.xianlai.app.common.service.RouteService;
-import fun.xianlai.basic.annotation.ControllerLog;
-import fun.xianlai.basic.support.RetResult;
+import fun.xianlai.core.annotation.ApiLog;
+import fun.xianlai.core.response.RetResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,14 +31,14 @@ public class InitController {
     @Autowired
     private RouteService routeService;
 
-    @ControllerLog("获取初始化数据")
+    @ApiLog("获取初始化数据")
     @GetMapping("/getInitData")
     public RetResult getInitData() {
         return new RetResult().success()
                 .addData("options", optionService.getFrontLoadSysOptionsFromCache())
                 .addData("paths", pathService.getSysPathsFromCache())
+                .addData("routes", routeService.getSysRoutesFromCache())
                 .addData("menus", menuService.getActiveSysMenusFromCache())
-                .addData("apis", apiService.getSysApisFromCache())
-                .addData("routes", routeService.getSysRoutesFromCache());
+                .addData("apis", apiService.getSysApisFromCache());
     }
 }
