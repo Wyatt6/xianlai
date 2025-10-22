@@ -1,6 +1,6 @@
-package fun.xianlai.basic.aspect;
+package fun.xianlai.core.aspect;
 
-import fun.xianlai.basic.annotation.SimpleServiceLog;
+import fun.xianlai.core.annotation.SimpleServiceLog;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 public class SimpleServiceLogAspect {
-    @Pointcut("@annotation(fun.xianlai.basic.annotation.SimpleServiceLog)")
+    @Pointcut("@annotation(fun.xianlai.core.annotation.SimpleServiceLog)")
     public void pointcut() {
     }
 
@@ -33,12 +33,12 @@ public class SimpleServiceLogAspect {
      * @return 方法return的值
      */
     @AfterReturning(pointcut = "pointcut()", returning = "result")
-    public Object afterReturningAdvice(JoinPoint joinPoint, Object result) throws Throwable {
+    public Object afterReturning(JoinPoint joinPoint, Object result) throws Throwable {
         String annotationValue = this.getAnnotationValue(joinPoint);
         if ("void".equals(((MethodSignature) joinPoint.getSignature()).getMethod().getReturnType().getName())) {
-            log.info("成功调用“{}”[{}]", annotationValue, joinPoint.getSignature().getName());
+            log.info("调用服务[{} {}]成功", annotationValue, joinPoint.getSignature().getName());
         } else {
-            log.info("成功调用“{}”[{}]，返回值: {}", annotationValue, joinPoint.getSignature().getName(), result);
+            log.info("调用服务[{} {}]成功，返回值: {}", annotationValue, joinPoint.getSignature().getName(), result);
         }
         return result;
     }
@@ -50,9 +50,9 @@ public class SimpleServiceLogAspect {
      * @param e         Service抛出的异常
      */
     @AfterThrowing(pointcut = "pointcut()", throwing = "e")
-    public void afterThrowingAdvice(JoinPoint joinPoint, Exception e) throws Throwable {
+    public void afterThrowing(JoinPoint joinPoint, Exception e) throws Throwable {
         String annotationValue = this.getAnnotationValue(joinPoint);
-        log.info("调用“{}”[{}]出现异常: {} {}", annotationValue, joinPoint.getSignature().getName(), e.getMessage(), e.getClass().getName());
+        log.info("调用服务[{} {}]异常: {} {}", annotationValue, joinPoint.getSignature().getName(), e.getMessage(), e.getClass().getName());
         throw e;    // 需要继续向调用该Service的上层Service或Controller抛出异常，不能拦截在这里形成无返回的情况
     }
 
