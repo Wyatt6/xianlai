@@ -36,6 +36,7 @@ import org.hibernate.annotations.GenericGenerator;
 @DynamicUpdate
 @Table(name = "tb_common_sys_option", indexes = {
         @Index(columnList = "sortId"),
+        @Index(columnList = "optionKey"),
         @Index(columnList = "name")
 })
 public class SysOption {
