@@ -1,6 +1,6 @@
-package fun.xianlai.app.common.support;
+package fun.xianlai.core.supprt;
 
-import fun.xianlai.basic.utils.FakeSnowflakeUtil;
+import fun.xianlai.core.utils.FakeSnowflakeUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.generator.EventType;
