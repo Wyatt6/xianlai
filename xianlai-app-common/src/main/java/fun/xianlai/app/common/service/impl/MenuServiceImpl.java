@@ -4,8 +4,8 @@ import com.alibaba.fastjson2.JSONObject;
 import fun.xianlai.app.common.model.entity.SysMenu;
 import fun.xianlai.app.common.repository.SysMenuRepository;
 import fun.xianlai.app.common.service.MenuService;
-import fun.xianlai.basic.annotation.SimpleServiceLog;
-import fun.xianlai.basic.utils.ChecksumUtil;
+import fun.xianlai.core.annotation.SimpleServiceLog;
+import fun.xianlai.core.utils.ChecksumUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
@@ -45,12 +45,14 @@ public class MenuServiceImpl implements MenuService {
             Map<Long, Map<String, Object>> finder = new HashMap<>();
             for (SysMenu menu : menus) {
                 Map<String, Object> mapMenu = new HashMap<>();
+                mapMenu.put("id", menu.getId());
+                mapMenu.put("sortId", menu.getSortId());
                 mapMenu.put("icon", menu.getIcon());
                 mapMenu.put("title", menu.getTitle());
                 mapMenu.put("pathName", menu.getPathName());
                 mapMenu.put("needPermission", menu.getNeedPermission());
                 mapMenu.put("permission", menu.getPermission());
-                mapMenu.put("children", new ArrayList<>());
+                mapMenu.put("children", new ArrayList<HashMap<String, Object>>());
                 finder.put(menu.getId(), mapMenu);
             }
             for (SysMenu menu : menus) {
@@ -58,7 +60,7 @@ public class MenuServiceImpl implements MenuService {
                     listMenus.add(finder.get(menu.getId()));
                 } else {
                     Map<String, Object> fatherMenu = finder.get(menu.getParentId());
-                    ((List) fatherMenu.get("children")).add(finder.get(menu.getId()));
+                    ((List<Map<String, Object>>) fatherMenu.get("children")).add(finder.get(menu.getId()));
                 }
             }
         }

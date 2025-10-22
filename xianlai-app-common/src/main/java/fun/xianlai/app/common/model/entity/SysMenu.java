@@ -1,6 +1,6 @@
 package fun.xianlai.app.common.model.entity;
 
-import fun.xianlai.app.common.support.PrimaryKeyGenerator;
+import fun.xianlai.core.supprt.PrimaryKeyGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,21 +29,26 @@ import org.hibernate.annotations.GenericGenerator;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "tb_common_sys_menu", indexes = {
-        @Index(columnList = "sortId")
+        @Index(columnList = "sortId"),
+        @Index(columnList = "parentId"),
+        @Index(columnList = "title"),
 })
 public class SysMenu {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "PK_generator")
-    @GenericGenerator(name = "PK_generator", type = PrimaryKeyGenerator.class)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
+    @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)
     private Long id;
 
     @Column(columnDefinition = "bigint not null default 0")
     private Long sortId;
 
+    @Column(columnDefinition = "bigint not null default 0")
+    private Long parentId;
+
     @Column
     private String icon;
 
-    @Column
+    @Column(columnDefinition = "varchar(255) not null")
     private String title;
 
     @Column(columnDefinition = "varchar(255) not null")
@@ -57,7 +62,4 @@ public class SysMenu {
 
     @Column(columnDefinition = "bit not null default 0")
     private Boolean active;
-
-    @Column(columnDefinition = "bigint not null default 0")
-    private Long parentId;
 }
