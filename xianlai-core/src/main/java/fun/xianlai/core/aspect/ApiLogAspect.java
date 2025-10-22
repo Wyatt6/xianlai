@@ -1,9 +1,9 @@
-package fun.xianlai.basic.aspect;
+package fun.xianlai.core.aspect;
 
 import com.alibaba.fastjson2.JSONObject;
-import fun.xianlai.basic.annotation.ControllerLog;
-import fun.xianlai.basic.exception.SysException;
-import fun.xianlai.basic.support.RetResult;
+import fun.xianlai.core.annotation.ApiLog;
+import fun.xianlai.core.exception.SysException;
+import fun.xianlai.core.response.RetResult;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -20,8 +20,7 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Method;
 
 /**
- * 基于Spring的AOP机制定义的Controller自动日志打印和响应数据封装操作，
- * 用于使用@ControllerLog注解的Controller方法
+ * 基于Spring的AOP机制定义的接口自动日志打印和响应数据封装操作，用于使用@ApiLog注解的Controller方法
  * <p>
  * Spring AOP框架定义的各种Advice执行顺序：
  * Around(前处理部份) --> Before --> 目标方法 --> After --> AfterReturning / AfterThrowing --> Around(后处理部份)
@@ -32,8 +31,8 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 @Order(1)
-public class ControllerLogAspect {
-    @Pointcut("@annotation(fun.xianlai.basic.annotation.ControllerLog)")
+public class ApiLogAspect {
+    @Pointcut("@annotation(fun.xianlai.core.annotation.ApiLog)")
     public void pointcut() {
     }
 
@@ -45,21 +44,21 @@ public class ControllerLogAspect {
      * @return Controller方法return的值
      */
     @Around("pointcut()")
-    public Object doAroundController(ProceedingJoinPoint joinPoint) {
-        Long startTimestamp = System.currentTimeMillis();
+    public Object around(ProceedingJoinPoint joinPoint) {
+        long startTimestamp = System.currentTimeMillis();
 
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();   // 获取正在处理的方法对象
-        ControllerLog annotation = method.getAnnotation(ControllerLog.class);       // 获取对该方法@ControllerLog注解的对象
+        ApiLog annotation = method.getAnnotation(ApiLog.class);                     // 获取对该方法@ApiLog注解的对象
         if (annotation == null) {
-            annotation = joinPoint.getTarget().getClass().getAnnotation(ControllerLog.class);
+            annotation = joinPoint.getTarget().getClass().getAnnotation(ApiLog.class);
         }
-        String annotationValue = annotation.value();    // 获取@ControllerLog注解的值
+        String annotationValue = annotation.value();    // 获取@ApiLog注解的值
 
-        log.info(">>> Run  Controller {}[{}] in [{}] ", annotationValue, joinPoint.getSignature().getName(), joinPoint.getSignature().getDeclaringTypeName());
+        log.info("-->> Run  Controller {}[{}] in [{}] ", annotationValue, joinPoint.getSignature().getName(), joinPoint.getSignature().getDeclaringTypeName());
         try {
             Object result = joinPoint.proceed();
             log.info("处理耗时: {}ms", System.currentTimeMillis() - startTimestamp);
-            log.info("<<< Exit Controller {}[{}]", annotationValue, joinPoint.getSignature().getName());
+            log.info("<<-- Exit Controller {}[{}]", annotationValue, joinPoint.getSignature().getName());
             return result;
         } catch (Throwable e) {
             // 当Controller不能正常执行完毕抛出异常时，封装成失败的响应信息
@@ -69,12 +68,12 @@ public class ControllerLogAspect {
             } else if (e instanceof IllegalArgumentException) {
                 result.setFailCode("400").setFailMessage("请求参数错误");
             } else {
-                result.setFailCode("500").setFailMessage("服务器内部错误");
+                result.setFailCode("500").setFailMessage("系统错误");
             }
             result.fail().setTraceId(MDC.get("traceId"));
             logResponseText(result);
             log.info("处理耗时: {}ms", System.currentTimeMillis() - startTimestamp);
-            log.info("<<< Exit Controller {}[{}] with Exception", annotationValue, joinPoint.getSignature().getName());
+            log.info("<<-- Exit Controller {}[{}] with Exception", annotationValue, joinPoint.getSignature().getName());
             return result;
         }
     }
@@ -87,7 +86,7 @@ public class ControllerLogAspect {
      * @param result    Controller方法的返回（即响应对象）
      */
     @AfterReturning(pointcut = "pointcut()", returning = "result")
-    public void controllerFinished(JoinPoint joinPoint, RetResult result) {
+    public void afterReturning(JoinPoint joinPoint, RetResult result) {
         result.setTraceId(MDC.get("traceId"));
         logResponseText(result);
     }
@@ -100,7 +99,7 @@ public class ControllerLogAspect {
      * @param e         异常
      */
     @AfterThrowing(pointcut = "pointcut()", throwing = "e")
-    public void controllerFinishedWithException(JoinPoint joinPoint, Exception e) {
+    public void afterThrowing(JoinPoint joinPoint, Exception e) {
         log.info("错误: {} {}", e.getMessage(), e.getClass().getName());
     }
 
