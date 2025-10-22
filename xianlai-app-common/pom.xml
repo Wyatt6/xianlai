@@ -24,10 +24,6 @@
         </dependency>
         <dependency>
             <groupId>fun.xianlai</groupId>
-            <artifactId>xianlai-pkg-feign</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>fun.xianlai</groupId>
             <artifactId>xianlai-core</artifactId>
         </dependency>
         <!-- 外部依赖 -->

@@ -1,4 +1,4 @@
-package fun.xianlai.pkg.feign.aspect;
+package fun.xianlai.core.aspect;
 
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.RetResult;
