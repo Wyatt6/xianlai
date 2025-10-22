@@ -7,13 +7,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 用于后端向前端返回响应数据，或服务生产者向服务消费者返回处理结果
+ *
  * @author WyattLau
  */
 @Data
 public class RetResult {
-    private boolean success;                // true - 成功 / false - 失败
-    private DataMap data = new DataMap();   // 返回数据
-    private String traceId;                 // 日志跟踪ID
+    private boolean success;                // 处理结果：true-成功 / false-失败
+    private DataMap data = new DataMap();   // 返回数据：以键值对形式存储
+    private String traceId;                 // 跟踪标记：网关接收请求就已经生成的全局ID，用于全链路跟踪交易
 
     public RetResult() {
         this.success = false;   // 出于安全考量，构造函数中默认设置success标记为false（失败）
