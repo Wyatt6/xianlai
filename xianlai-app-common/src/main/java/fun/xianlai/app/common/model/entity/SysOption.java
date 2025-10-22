@@ -1,10 +1,13 @@
 package fun.xianlai.app.common.model.entity;
 
 import fun.xianlai.app.common.model.enums.JsType;
+import fun.xianlai.core.supprt.PrimaryKeyGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
@@ -13,6 +16,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * 系统参数
@@ -36,6 +40,14 @@ import org.hibernate.annotations.DynamicUpdate;
 })
 public class SysOption {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
+    @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)
+    private Long id;
+
+    @Column(columnDefinition = "bigint not null default 0")
+    private Long sortId;
+
+    @Column(columnDefinition = "varchar(255) not null")
     private String optionKey;           // 参数键
 
     @Column(columnDefinition = "varchar(7000) not null")
@@ -44,13 +56,10 @@ public class SysOption {
     @Column(length = 7000)
     private String defaultValue;        // 默认参数值
 
-    @Column(columnDefinition = "bigint not null default 0")
-    private Long sortId;
-
     @Column
     private String name;
 
-    @Column(length = 1024)
+    @Column(length = 1000)
     private String description;
 
     @Column(columnDefinition = "bit not null default 0")
