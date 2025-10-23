@@ -13,6 +13,7 @@ import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.feign.consumer.FeignOptionService;
+import fun.xianlai.core.utils.DateUtil;
 import fun.xianlai.core.utils.PasswordUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,15 +44,15 @@ public class UserServiceImpl implements UserService {
     private PermissionRepository permissionRepository;
 
     @Override
-    @SimpleServiceLog("检查用户名格式服务")
-    public boolean checkUsernameFormat(String username) {
+    @SimpleServiceLog("检查用户名格式")
+    public boolean matchUsernameFormat(String username) {
         String USERNAME_REGEXP = optionService.readValueInString("user.username.regexp").orElse("^[a-zA-Z][a-zA-Z_0-9]{4,19}$");
         return username.matches(USERNAME_REGEXP);
     }
 
     @Override
-    @SimpleServiceLog("检查密码格式服务")
-    public boolean checkPasswordFormat(String password) {
+    @SimpleServiceLog("检查密码格式")
+    public boolean matchPasswordFormat(String password) {
         String PASSWORD_REGEXP = optionService.readValueInString("user.password.regexp").orElse("^[a-zA-Z_0-9.~!@#$%^&*?]{6,30}$");
         return password.matches(PASSWORD_REGEXP);
     }
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService {
     @ServiceLog("创建新用户")
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public User createUser(String username, String password) {
-        log.info("检查用户名是否已被注册");
+        log.info("检查用户名是否已被使用");
         if (userRepository.findByUsername(username) != null) {
             throw new SysException("用户名已被使用");
         }
@@ -73,7 +74,7 @@ public class UserServiceImpl implements UserService {
         newUser.setUsername(username);
         newUser.setPassword(encryptedPassword);
         newUser.setSalt(salt);
-        newUser.setRegisterTime(new Date());
+        newUser.setRegisterTime(DateUtil.now());
         newUser.setActive(true);
         User savedUser = userRepository.save(newUser);
         log.info("成功创建新用户: id=[{}]", savedUser.getId());

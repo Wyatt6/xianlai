@@ -9,12 +9,12 @@ import java.util.List;
  * @author WyattLau
  */
 public interface UserService {
-    boolean checkUsernameFormat(String username);
+    boolean matchUsernameFormat(String username);
 
-    boolean checkPasswordFormat(String password);
+    boolean matchPasswordFormat(String password);
 
     /**
-     * 创建新用户
+     * 创建用户
      *
      * @param username 用户名
      * @param password 密码
