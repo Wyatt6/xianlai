@@ -1,3 +1,4 @@
+-- ###### SysPath ##### --
 INSERT IGNORE INTO tb_common_sys_path(`id`, `sort_id`, `name`, `path`) VALUE
 -- 门户 --
 (10001, 10001, 'PORTAL', '/portal'),
@@ -16,12 +17,16 @@ INSERT IGNORE INTO tb_common_sys_path(`id`, `sort_id`, `name`, `path`) VALUE
 -- 最终无匹配 --
 (99999, 99999, 'FINAL_NOT_MATCH', '/:catchAll(.*)');
 
+
+-- ###### SysMenu ##### --
 INSERT IGNORE INTO tb_common_sys_menu(
     `id`, `sort_id`, `parent_id`, `icon`, `title`,
     `path_name`, `need_permission`, `permission`, `active`
 ) VALUE
 (10001, 10001, 0, 'ri-home-4-fill', '首页', 'HOMEPAGE', 0, null, 1);
 
+
+-- ###### SysRoute ##### --
 INSERT IGNORE INTO tb_common_sys_route(
     `id`, `sort_id`, `parent_id`, `name`, `path_name`, `redirect_path_name`, `component_path`,
     `need_login`, `need_permission`, `permission`, `show_tag`, `tag_title`
