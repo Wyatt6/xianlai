@@ -4,11 +4,11 @@ INSERT IGNORE INTO tb_common_sys_api(`id`, `call_path`, `description`, `request_
 (20002, 'iam.user.login', '用户登录', 'POST', '/api/iam/user/login'),
 (20003, 'iam.user.logout', '退出登录', 'GET', '/api/iam/user/logout'),
 -- Permission --
-(21001, 'iam.permission.getPermissionsByPage', '条件查询权限分页', 'POST', '/api/iam/permission/getPermissionsByPage'),
-(21002, 'iam.permission.deletePermission', '删除权限', 'GET', '/api/iam/permission/deletePermission'),
-(21003, 'iam.permission.addPermission', '新增权限', 'POST', '/api/iam/permission/addPermission'),
+(21001, 'iam.permission.add', '新增权限', 'POST', '/api/iam/permission/add'),
+(21002, 'iam.permission.delete', '删除权限', 'GET', '/api/iam/permission/delete'),
+(21003, 'iam.permission.edit', '修改权限', 'POST', '/api/iam/permission/edit'),
+(21004, 'iam.permission.getPageConditionally', '条件查询权限分页', 'POST', '/api/iam/permission/getPageConditionally'),
 (21004, 'iam.permission.getRowNumStartFrom1', '查询权限的排名（从1开始）', 'GET', '/api/iam/permission/getRowNumStartFrom1'),
-(21005, 'iam.permission.editPermission', '修改权限', 'POST', '/api/iam/permission/editPermission'),
 (21006, 'iam.permission.getAllPermissions', '获取所有权限数据', 'GET', '/api/iam/permission/getAllPermissions'),
 (21007, 'iam.permission.getPermissionIdsOfRole', '查询某角色所具有的权限ID列表', 'GET', '/api/iam/permission/getPermissionIdsOfRole'),
 -- Role --
