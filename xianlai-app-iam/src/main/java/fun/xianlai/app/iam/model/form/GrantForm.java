@@ -10,6 +10,6 @@ import java.util.List;
 @Data
 public class GrantForm {
     private Long roleId;
-    private List<Long> grant;
-    private List<Long> cancel;
+    private List<Long> grant;       // 授权ID列表
+    private List<Long> cancel;      // 取消授权ID列表
 }

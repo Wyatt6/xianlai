@@ -11,9 +11,10 @@ INSERT IGNORE INTO tb_common_sys_api(`id`, `call_path`, `description`, `request_
 (21005, 'iam.permission.getRowNumStartFrom1', '查询权限的排名（从1开始）', 'GET', '/api/iam/permission/getRowNumStartFrom1'),
 (21006, 'iam.permission.getPermissionIdsOfRole', '查询某角色所具有的权限ID列表', 'GET', '/api/iam/permission/getPermissionIdsOfRole'),
 -- Role --
-(22001, 'iam.role.getRolesByPage', '条件查询角色分页', 'POST', '/api/iam/role/getRolesByPage'),
-(22002, 'iam.role.addRole', '新增角色', 'POST', '/api/iam/role/addRole'),
-(22003, 'iam.role.getRowNumStartFrom1', '查询角色的排名（从1开始）', 'GET', '/api/iam/role/getRowNumStartFrom1'),
-(22004, 'iam.role.deleteRole', '删除角色', 'GET', '/api/iam/role/deleteRole'),
-(22005, 'iam.role.editRole', '修改角色', 'POST', '/api/iam/role/editRole'),
-(22006, 'iam.role.updateGrants', '更新角色的授权', 'POST', '/api/iam/role/updateGrants');
+(22001, 'iam.role.add', '新增角色', 'POST', '/api/iam/role/add'),
+(22002, 'iam.role.delete', '删除角色', 'GET', '/api/iam/role/delete'),
+(22003, 'iam.role.edit', '修改角色', 'POST', '/api/iam/role/edit'),
+(22004, 'iam.role.getPageConditionally', '条件查询角色分页', 'POST', '/api/iam/role/getPageConditionally'),
+(22005, 'iam.role.getRowNumStartFrom1', '查询角色的排名（从1开始）', 'GET', '/api/iam/role/getRowNumStartFrom1'),
+(22006, 'iam.role.getRoleIdsOfUser', '查询某用户所具有的角色ID列表', 'GET', '/api/iam/role/getRoleIdsOfUser'),
+(22007, 'iam.role.updateGrants', '更新角色的授权', 'POST', '/api/iam/role/updateGrants');

@@ -2,6 +2,7 @@ package fun.xianlai.app.iam.service.impl;
 
 import fun.xianlai.app.iam.model.entity.rbac.Role;
 import fun.xianlai.app.iam.model.entity.rbac.RolePermission;
+import fun.xianlai.app.iam.model.form.RoleCondition;
 import fun.xianlai.app.iam.repository.RolePermissionRepository;
 import fun.xianlai.app.iam.repository.RoleRepository;
 import fun.xianlai.app.iam.repository.UserRoleRepository;
@@ -35,25 +36,21 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private RedisTemplate<String, Object> redis;
     @Autowired
+    private UserRoleRepository userRoleRepository;
+    @Autowired
     private RoleRepository roleRepository;
     @Autowired
     private RolePermissionRepository rolePermissionRepository;
     @Autowired
-    private UserRoleRepository userRoleRepository;
-    @Autowired
     private PermissionService permissionService;
 
     @Override
-    @ServiceLog("创建角色")
+    @SimpleServiceLog("创建角色")
     public Role createRole(Role role) {
         try {
-            log.info("插入记录");
             role.setId(null);
-            role = roleRepository.save(role);
-            log.info("新角色成功保存到数据库: id=[{}]", role.getId());
-            return role;
+            return roleRepository.save(role);
         } catch (DataIntegrityViolationException e) {
-            log.info(e.getMessage());
             throw new SysException("角色标识符重复");
         }
     }
@@ -74,22 +71,22 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @ServiceLog("更新角色")
     public Role updateRole(Role role) {
+        Long sortId = role.getSortId();
         String identifier = role.getIdentifier();
         String name = role.getName();
-        Boolean active = role.getActive();
-        Long sortId = role.getSortId();
         String description = role.getDescription();
+        Boolean active = role.getActive();
 
         log.info("查询是否存在该角色");
         Optional<Role> oldRole = roleRepository.findById(role.getId());
         if (oldRole.isPresent()) {
             log.info("角色存在，组装用来更新的对象");
             Role newRole = oldRole.get();
+            if (sortId != null) newRole.setSortId(sortId);
             if (identifier != null) newRole.setIdentifier(identifier);
             if (name != null) newRole.setName(name);
-            if (active != null) newRole.setActive(active);
-            if (sortId != null) newRole.setSortId(sortId);
             if (description != null) newRole.setDescription(description);
+            if (active != null) newRole.setActive(active);
 
             try {
                 log.info("更新数据库");
@@ -114,17 +111,40 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    @SimpleServiceLog("条件查询角色分页")
-    public Page<Role> getRolesByPageConditionally(int pageNum, int pageSize, String identifier, String name, Boolean active, String permission) {
-        Sort sort = Sort.by(Sort.Order.asc("sortId"));
-        Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
-        return roleRepository.findConditionally(identifier, name, active, permission, pageable);
+    @ServiceLog("条件查询角色分页")
+    public Page<Role> getRolesByPageConditionally(int pageNum, int pageSize, RoleCondition condition) {
+        String identifier = (condition == null || condition.getIdentifier() == null) ? null : condition.getIdentifier();
+        String name = (condition == null || condition.getName() == null) ? null : condition.getName();
+        String description = (condition == null || condition.getDescription() == null) ? null : condition.getDescription();
+        Boolean active = (condition == null || condition.getActive() == null) ? null : condition.getActive();
+        String permission = (condition == null || condition.getPermission() == null) ? null : condition.getPermission();
+
+        Sort sort = Sort.by(Sort.Order.asc("sortId"), Sort.Order.asc("identifier"));
+        if (pageNum >= 0 && pageSize > 0) {
+            log.info("分页查询");
+            Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
+            return roleRepository.findConditionally(identifier, name, description, active, permission, pageable);
+        } else {
+            log.info("全表查询");
+            return roleRepository.findConditionally(identifier, name, description, active, permission, Pageable.unpaged(sort));
+        }
     }
 
     @Override
     @SimpleServiceLog("查询某角色的排名")
     public Long getRowNum(Long roleId) {
         return roleRepository.findRowNumById(roleId);
+    }
+
+    @Override
+    @SimpleServiceLog("获取某用户的角色ID列表")
+    public List<Long> getRoleIdsOfUser(Long userId) {
+        return roleRepository.findIdsByUserId(userId);
+    }
+
+    @Override
+    public void setRoleDbRefreshTime(Date timestamp) {
+        redis.opsForValue().set("roleDbRefreshTime", timestamp);
     }
 
     @Override
@@ -143,10 +163,9 @@ public class RoleServiceImpl implements RoleService {
             }
         }
         if (failList.size() < permissionIds.size()) {
-            log.info("有授权成功，要更新PERMISSIONS_DB_REFRESHED时间戳，以动态更新用户权限缓存");
+            log.info("有授权成功，要更新permissionDbRefreshTime时间戳，以动态更新用户权限缓存");
             permissionService.setPermissionDbRefreshTime(DateUtil.now());
         }
-        log.info("授权失败的权限ID：{}", failList);
         return failList;
     }
 
@@ -166,17 +185,9 @@ public class RoleServiceImpl implements RoleService {
             }
         }
         if (failList.size() < permissionIds.size()) {
-            log.info("有解除授权成功，要更新PERMISSIONS_DB_REFRESHED时间戳，以动态更新用户权限缓存");
+            log.info("有解除授权成功，要更新permissionDbRefreshTime时间戳，以动态更新用户权限缓存");
             permissionService.setPermissionDbRefreshTime(DateUtil.now());
         }
-        log.info("解除授权失败的权限ID：{}", failList);
         return failList;
-    }
-
-    @Override
-    @SimpleServiceLog("设置roleDbRefreshTime时间戳")
-    public void setRoleDbRefreshTime(Date timestamp) {
-        redis.opsForValue().set("roleDbRefreshTime", timestamp);
-        log.info("已更新 roleDbRefreshTime 时间戳为: {}", DateUtil.commonFormat(timestamp));
     }
 }
