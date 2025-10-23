@@ -15,11 +15,13 @@ INSERT IGNORE INTO tb_iam_permission(`id`, `sort_id`, `identifier`, `name`, `des
 (22002, 22002, 'role:delete', '删除角色', null),
 (22003, 22003, 'role:edit', '修改角色', null),
 (22004, 22004, 'role:query', '查询角色', null),
+(22005, 22005, 'role:grant', '角色授权', null),
 -- 用户 --
 (23001, 23001, 'user:add', '添加用户', null),
 (23002, 23002, 'user:delete', '删除用户', null),
 (23003, 23003, 'user:edit', '修改用户', null),
-(23004, 23004, 'user:query', '查询用户', null);
+(23004, 23004, 'user:query', '查询用户', null),
+(23005, 23005, 'user:bind', '查询用户', null);
 
 
 -- ##### Role ##### --
@@ -41,11 +43,13 @@ INSERT IGNORE INTO tb_iam_role_permission(`role_id`, `permission_id`) VALUE
 (20001, 22002),
 (20001, 22003),
 (20001, 22004),
+(20001, 22005),
 -- 用户 --
 (20001, 23001),
 (20001, 23002),
 (20001, 24003),
-(20001, 23004);
+(20001, 23004),
+(20001, 23005);
 
 
 -- ##### User ##### --
