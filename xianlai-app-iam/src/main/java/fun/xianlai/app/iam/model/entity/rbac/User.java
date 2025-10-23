@@ -30,22 +30,21 @@ import java.util.Date;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "tb_iam_user", indexes = {
-        @Index(columnList = "username", unique = true),
-        @Index(columnList = "registerTime")
+        @Index(columnList = "username", unique = true)
 })
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "PK_generator")
-    @GenericGenerator(name = "PK_generator", type = PrimaryKeyGenerator.class)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
+    @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)
     private Long id;
 
-    @Column(columnDefinition = "varchar(255) not null")
+    @Column(columnDefinition = "varchar(100) not null")
     private String username;
 
-    @Column(columnDefinition = "varchar(1024) not null")
+    @Column(columnDefinition = "varchar(1000) not null")
     private String password;
 
-    @Column(columnDefinition = "varchar(255) not null")
+    @Column(columnDefinition = "varchar(100) not null")
     private String salt;                // 加密盐
 
     @Column

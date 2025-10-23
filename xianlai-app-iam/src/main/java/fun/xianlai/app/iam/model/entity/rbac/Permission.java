@@ -28,15 +28,16 @@ import org.hibernate.annotations.GenericGenerator;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "tb_iam_permission", indexes = {
-        @Index(columnList = "identifier", unique = true),
-        @Index(columnList = "name"),
-        @Index(columnList = "sortId")
+        @Index(columnList = "identifier", unique = true)
 })
 public class Permission {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "PK_generator")
-    @GenericGenerator(name = "PK_generator", type = PrimaryKeyGenerator.class)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
+    @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)
     private Long id;
+
+    @Column(columnDefinition = "bigint not null default 0")
+    private Long sortId;
 
     @Column(columnDefinition = "varchar(255) not null")
     private String identifier;
@@ -44,9 +45,6 @@ public class Permission {
     @Column
     private String name;
 
-    @Column(length = 1024)
+    @Column(length = 1000)
     private String description;
-
-    @Column(columnDefinition = "bigint not null default 0")
-    private Long sortId;
 }
