@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author WyattLau
@@ -83,13 +84,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @SimpleServiceLog("身份验证")
+    @SimpleServiceLog("身份验证（用户名+密码）")
     public User authentication(String username, String password) {
         User user = userRepository.findByUsername(username);
         if (user == null || !user.getPassword().equals(PasswordUtil.encode(password, user.getSalt()))) {
             throw new SysException("用户名或密码错误");
         }
         return user;
+    }
+
+    @Override
+    @SimpleServiceLog("身份验证（用户ID+密码）")
+    public User authentication(Long userId, String password) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty() || !user.get().getPassword().equals(PasswordUtil.encode(password, user.get().getSalt()))) {
+            throw new SysException("用户名或密码错误");
+        }
+        return user.get();
     }
 
     /**
@@ -194,5 +205,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public void setPermissionListCacheTime(Long userId, Date timestamp) {
         StpUtil.getSessionByLoginId(userId).set("permissionListCacheTime", timestamp);
+    }
+
+    @Override
+    @SimpleServiceLog("修改密码")
+    public void changePassword(Long userId, String password) {
+        String salt = PasswordUtil.generateSalt();
+        String encryptedPassword = PasswordUtil.encode(password, salt);
+        Optional<User> oldUser = userRepository.findById(userId);
+        if (oldUser.isPresent()) {
+            User newUser = oldUser.get();
+            newUser.setPassword(encryptedPassword);
+            newUser.setSalt(salt);
+            userRepository.save(newUser);
+        } else {
+            throw new SysException("用户不存在");
+        }
     }
 }

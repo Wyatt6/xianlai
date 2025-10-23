@@ -23,7 +23,7 @@ public interface UserService {
     User createUser(String username, String password);
 
     /**
-     * 身份验证
+     * 身份验证（用户名+密码）
      * 若验证成功则返回用户对象
      *
      * @param username 用户名
@@ -31,6 +31,16 @@ public interface UserService {
      * @return 用户对象
      */
     User authentication(String username, String password);
+
+    /**
+     * 身份验证（用户ID+密码）
+     * 若验证成功则返回用户对象
+     *
+     * @param userId   用户ID
+     * @param password 密码（明文）
+     * @return 用户对象
+     */
+    User authentication(Long userId, String password);
 
     /**
      * 从缓存或数据库获取用户角色
@@ -57,4 +67,9 @@ public interface UserService {
      * 设置permissionListCacheTime时间戳
      */
     void setPermissionListCacheTime(Long userId, Date timestamp);
+
+    /**
+     * 修改密码
+     */
+    void changePassword(Long id, String password);
 }

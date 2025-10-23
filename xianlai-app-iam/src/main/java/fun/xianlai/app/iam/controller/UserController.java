@@ -1,10 +1,12 @@
 package fun.xianlai.app.iam.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.stp.parameter.SaLoginParameter;
 import fun.xianlai.app.iam.model.entity.rbac.User;
+import fun.xianlai.app.iam.model.form.ChangePasswordForm;
 import fun.xianlai.app.iam.service.PermissionService;
 import fun.xianlai.app.iam.service.RoleService;
 import fun.xianlai.app.iam.service.UserService;
@@ -122,6 +124,24 @@ public class UserController {
             StpUtil.logout();
         }
         log.info("退出登录成功");
+        return new RetResult().success();
+    }
+
+    @ApiLog("修改密码")
+    @SaCheckLogin
+    @PostMapping("/changePassword")
+    public RetResult changePassword(@RequestBody ChangePasswordForm form) {
+        log.info("请求参数: {}", form);
+        if (!userService.matchPasswordFormat(form.getOldPassword())) {
+            throw new SysException("旧密码格式错误");
+        }
+        if (!userService.matchPasswordFormat(form.getNewPassword())) {
+            throw new SysException("新密码格式错误");
+        }
+        Long userId = StpUtil.getLoginIdAsLong();
+        log.info("userId=[{}]", userId);
+        userService.authentication(userId, form.getOldPassword());
+        userService.changePassword(userId, form.getNewPassword());
         return new RetResult().success();
     }
 }
