@@ -115,11 +115,6 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public void setPermissionDbRefreshTime(Date timestamp) {
-        redis.opsForValue().set("permissionDbRefreshTime", timestamp);
-    }
-
-    @Override
     public Long getRowNum(Long permissionId) {
         return permissionRepository.findRowNumById(permissionId);
     }
@@ -128,5 +123,10 @@ public class PermissionServiceImpl implements PermissionService {
     @SimpleServiceLog("获取某角色的权限ID列表")
     public List<Long> getPermissionIdsOfRole(Long roleId) {
         return permissionRepository.findIdsByRoleId(roleId);
+    }
+
+    @Override
+    public void setPermissionDbRefreshTime(Date timestamp) {
+        redis.opsForValue().set("permissionDbRefreshTime", timestamp);
     }
 }

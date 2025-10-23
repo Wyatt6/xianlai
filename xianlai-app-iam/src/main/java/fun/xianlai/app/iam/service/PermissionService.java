@@ -40,11 +40,6 @@ public interface PermissionService {
     Page<Permission> getPermissionsByPageConditionally(int pageNum, int pageSize, PermissionCondition condition);
 
     /**
-     * 设置permissionDbRefreshTime时间戳
-     */
-    void setPermissionDbRefreshTime(Date timestamp);
-
-    /**
      * 查询某权限的排名（从1开始）
      */
     Long getRowNum(Long permissionId);
@@ -53,4 +48,9 @@ public interface PermissionService {
      * 获取某角色的权限ID列表
      */
     List<Long> getPermissionIdsOfRole(Long roleId);
+
+    /**
+     * 设置permissionDbRefreshTime时间戳
+     */
+    void setPermissionDbRefreshTime(Date timestamp);
 }
