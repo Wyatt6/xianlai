@@ -17,7 +17,7 @@ public interface UserService {
      * 创建用户
      *
      * @param username 用户名
-     * @param password 密码
+     * @param password 密码（明文）
      * @return 用户对象
      */
     User createUser(String username, String password);
