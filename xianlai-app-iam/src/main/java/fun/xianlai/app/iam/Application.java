@@ -12,7 +12,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @Slf4j
 @SpringBootApplication(scanBasePackages = "fun.xianlai")
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = {"fun.xianlai"})
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
