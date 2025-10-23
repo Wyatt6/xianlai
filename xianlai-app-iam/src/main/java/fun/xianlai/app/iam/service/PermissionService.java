@@ -2,6 +2,7 @@ package fun.xianlai.app.iam.service;
 
 
 import fun.xianlai.app.iam.model.entity.rbac.Permission;
+import fun.xianlai.app.iam.model.form.PermissionCondition;
 import org.springframework.data.domain.Page;
 
 import java.util.Date;
@@ -13,24 +14,16 @@ import java.util.List;
 public interface PermissionService {
     /**
      * 创建权限
-     *
-     * @param permission 新权限信息
-     * @return 新权限对象
      */
     Permission createPermission(Permission permission);
 
     /**
      * 删除权限
-     *
-     * @param permissionId 要删除的权限ID
      */
     void deletePermission(Long permissionId);
 
     /**
      * 更新权限
-     *
-     * @param permission 新权限数据
-     * @return 权限对象
      */
     Permission updatePermission(Permission permission);
 
@@ -51,14 +44,15 @@ public interface PermissionService {
 
     /**
      * 条件查询权限分页
+     * 查询条件为空时查询全量数据
+     * 页码<0或页大小<=0时不分页
      *
-     * @param pageNum    页码
-     * @param pageSize   页大小
-     * @param identifier 权限标识（模糊）
-     * @param name       权限名称（模糊）
+     * @param pageNum   页码
+     * @param pageSize  页大小
+     * @param condition 查询条件
      * @return 权限分页数据
      */
-    Page<Permission> getPermissionsByPageConditionally(int pageNum, int pageSize, String identifier, String name);
+    Page<Permission> getPermissionsByPageConditionally(int pageNum, int pageSize, PermissionCondition condition);
 
     /**
      * 查询某权限的排名

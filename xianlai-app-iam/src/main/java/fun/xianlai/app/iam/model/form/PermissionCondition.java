@@ -9,4 +9,5 @@ import lombok.Data;
 public class PermissionCondition {
     private String identifier;
     private String name;
+    private String description;
 }

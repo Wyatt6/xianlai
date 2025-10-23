@@ -1,9 +1,8 @@
 package fun.xianlai.app.iam.service.impl;
 
 
-import cn.dev33.satoken.session.SaSession;
-import cn.dev33.satoken.stp.StpUtil;
 import fun.xianlai.app.iam.model.entity.rbac.Permission;
+import fun.xianlai.app.iam.model.form.PermissionCondition;
 import fun.xianlai.app.iam.repository.PermissionRepository;
 import fun.xianlai.app.iam.repository.RolePermissionRepository;
 import fun.xianlai.app.iam.service.PermissionService;
@@ -21,7 +20,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -40,16 +38,12 @@ public class PermissionServiceImpl implements PermissionService {
     private RolePermissionRepository rolePermissionRepository;
 
     @Override
-    @ServiceLog("创建权限")
+    @SimpleServiceLog("创建权限")
     public Permission createPermission(Permission permission) {
         try {
-            log.info("插入记录");
             permission.setId(null);
-            permission = permissionRepository.save(permission);
-            log.info("新权限成功保存到数据库: id=[{}]", permission.getId());
-            return permission;
+            return permissionRepository.save(permission);
         } catch (DataIntegrityViolationException e) {
-            log.info(e.getMessage());
             throw new SysException("权限标识符重复");
         }
     }
@@ -62,27 +56,26 @@ public class PermissionServiceImpl implements PermissionService {
         log.info("数据库删除本权限数据");
         permissionRepository.deleteById(permissionId);
         log.info("更新标记permissionDbRefreshTime（数据库的权限数据更新的时间），表示此时间后应当刷新缓存的权限数据");
-        setpermissionDbRefreshTime(DateUtil.now());
+        setPermissionDbRefreshTime(DateUtil.now());
     }
 
     @Override
     @ServiceLog("更新权限")
     public Permission updatePermission(Permission permission) {
-        log.info("{}", permission);
+        Long sortId = permission.getSortId();
         String identifier = permission.getIdentifier();
         String name = permission.getName();
         String description = permission.getDescription();
-        Long sortId = permission.getSortId();
 
         log.info("查询是否存在该权限");
         Optional<Permission> oldPermission = permissionRepository.findById(permission.getId());
         if (oldPermission.isPresent()) {
             log.info("权限存在，组装用来更新的对象");
             Permission newPermission = oldPermission.get();
+            if (sortId != null) newPermission.setSortId(sortId);
             if (identifier != null) newPermission.setIdentifier(identifier);
             if (name != null) newPermission.setName(name);
             if (description != null) newPermission.setDescription(description);
-            if (sortId != null) newPermission.setSortId(sortId);
 
             try {
                 log.info("更新数据库");
@@ -95,7 +88,7 @@ public class PermissionServiceImpl implements PermissionService {
             if (identifier != null) {
                 log.info("编辑此权限数据影响到用户权限控制，需要更新缓存");
                 log.info("更新标记permissionDbRefreshTime（数据库的权限数据更新的时间）");
-                setpermissionDbRefreshTime(DateUtil.now());
+                setPermissionDbRefreshTime(DateUtil.now());
             }
             return newPermission;
         } else {
@@ -117,11 +110,21 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    @SimpleServiceLog("条件查询权限分页")
-    public Page<Permission> getPermissionsByPageConditionally(int pageNum, int pageSize, String identifier, String name) {
+    @ServiceLog("条件查询权限分页")
+    public Page<Permission> getPermissionsByPageConditionally(int pageNum, int pageSize, PermissionCondition condition) {
+        String identifier = (condition == null || condition.getIdentifier() == null) ? null : condition.getIdentifier();
+        String name = (condition == null || condition.getName() == null) ? null : condition.getName();
+        String description = (condition == null || condition.getDescription() == null) ? null : condition.getDescription();
+
         Sort sort = Sort.by(Sort.Order.asc("sortId"), Sort.Order.asc("identifier"));
-        Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
-        return permissionRepository.findConditionally(identifier, name, pageable);
+        if (pageNum >= 0 && pageSize > 0) {
+            log.info("分页查询");
+            Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
+            return permissionRepository.findConditionally(identifier, name, description, pageable);
+        } else {
+            log.info("全表查询");
+            return permissionRepository.findConditionally(identifier, name, description, Pageable.unpaged(sort));
+        }
     }
 
     @Override
@@ -130,11 +133,7 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    @SimpleServiceLog("设置permissionDbRefreshTime时间戳")
     public void setPermissionDbRefreshTime(Date timestamp) {
         redis.opsForValue().set("permissionDbRefreshTime", timestamp);
-        log.info("已更新permissionDbRefreshTime时间戳为: {}", DateUtil.commonFormat(timestamp));
     }
-
-
 }

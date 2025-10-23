@@ -22,11 +22,12 @@ public interface PermissionRepository extends JpaRepository<Permission, Long> {
             " where ur.userId = ?1")
     List<Permission> findActivePermissionsByUserId(Long userId);
 
-    @Query("select distinct new Permission(p.id, p.identifier, p.name, p.description, p.sortId) " +
+    @Query("select distinct new Permission(p.id, p.sortId, p.identifier, p.name, p.description) " +
             " from Permission p " +
             " where (?1 is null or p.identifier like %?1%) " +
-            "      and (?2 is null or p.name like %?2%)")
-    Page<Permission> findConditionally(String identifier, String name, Pageable pageable);
+            "      and (?2 is null or p.name like %?2%) " +
+            "      and (?3 is null or p.description like %?3%)")
+    Page<Permission> findConditionally(String identifier, String name, String description, Pageable pageable);
 
     @Query(value = "select num " +
             " from (select @rownum \\:= @rownum + 1 as num, p.id as id, p.identifier, p.sort_id " +
