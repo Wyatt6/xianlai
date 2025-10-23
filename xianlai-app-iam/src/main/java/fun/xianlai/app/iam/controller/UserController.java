@@ -4,21 +4,15 @@ import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.stp.parameter.SaLoginParameter;
-import fun.xianlai.app.iam.feign.consumer.FeignCaptchaService;
-import fun.xianlai.app.iam.feign.consumer.FeignOptionService;
-import fun.xianlai.app.iam.model.entity.other.Department;
-import fun.xianlai.app.iam.model.entity.other.Position;
-import fun.xianlai.app.iam.model.entity.other.Profile;
 import fun.xianlai.app.iam.model.entity.rbac.User;
-import fun.xianlai.app.iam.service.DepartmentService;
 import fun.xianlai.app.iam.service.PermissionService;
-import fun.xianlai.app.iam.service.PositionService;
-import fun.xianlai.app.iam.service.ProfileService;
 import fun.xianlai.app.iam.service.RoleService;
 import fun.xianlai.app.iam.service.UserService;
-import fun.xianlai.basic.annotation.ControllerLog;
-import fun.xianlai.basic.exception.SysException;
-import fun.xianlai.basic.support.RetResult;
+import fun.xianlai.core.annotation.ApiLog;
+import fun.xianlai.core.exception.SysException;
+import fun.xianlai.core.feign.consumer.FeignCaptchaService;
+import fun.xianlai.core.feign.consumer.FeignOptionService;
+import fun.xianlai.core.response.RetResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,14 +40,8 @@ public class UserController {
     private RoleService roleService;
     @Autowired
     private PermissionService permissionService;
-    @Autowired
-    private ProfileService profileService;
-    @Autowired
-    private DepartmentService departmentService;
-    @Autowired
-    private PositionService positionService;
 
-    @ControllerLog("注册新用户")
+//    @ApiLog("注册新用户")
     @PostMapping("/register")
     public RetResult register(@RequestBody User input) {
         String captchaKey = input.getCaptchaKey().trim();
@@ -70,12 +58,11 @@ public class UserController {
             throw new SysException("密码格式错误");
         }
         User newUser = userService.createUser(username, password);
-//        profileService.createProfile(newUser.getId());
 
         return new RetResult().success();
     }
 
-    @ControllerLog("用户登录")
+    @ApiLog("用户登录")
     @PostMapping("/login")
     public RetResult login(@RequestBody User input) {
         String captchaKey = input.getCaptchaKey().trim();
@@ -102,37 +89,14 @@ public class UserController {
         log.info("sessionId=[{}]", StpUtil.getSession().getId());
         SaSession session = StpUtil.getSession();
 
-        // TODO 登录日志
-
         log.info("User脱敏并缓存");
         user.setPassword(null);
         user.setSalt(null);
         session.set("user", user);
 
-        log.info("获取角色标识符（Service中已缓存）");
-        List<String> roles = roleService.getActiveRoleIdentifiers(user.getId());
-
-        log.info("获取权限标识符（Service中已缓存）");
-        List<String> permissions = permissionService.getActivePermissionIdentifiers(user.getId());
-
-//        log.info("获取Profile并缓存");
-//        Profile profile = profileService.getProfile(user.getId());
-//        session.set("profile", profile);
-
-//        Department department = null;
-//        Position position = null;
-//        if (profile != null) {
-//            if (profile.getMainDepartmentId() != null) {
-//                log.info("获取Department并缓存");
-//                department = departmentService.getDepartment(profile.getMainDepartmentId());
-//                session.set("department", department);
-//            }
-//            if (profile.getMainPositionId() != null) {
-//                log.info("获取Position并缓存");
-//                position = positionService.getPosition(profile.getMainPositionId());
-//                session.set("position", position);
-//            }
-//        }
+        log.info("获取角色和权限");
+        List<String> roles = userService.getRoleList(user.getId());
+        List<String> permissions = userService.getPermissionList(user.getId());
 
         return new RetResult().success()
                 .addData("token", StpUtil.getTokenValue())
@@ -140,12 +104,9 @@ public class UserController {
                 .addData("user", user)
                 .addData("roles", roles)
                 .addData("permissions", permissions);
-//                .addData("profile", profile)
-//                .addData("department", department)
-//                .addData("position", position);
     }
 
-    @ControllerLog("退出登录")
+    @ApiLog("退出登录")
     @GetMapping("/logout")
     public RetResult logout() {
         try {
