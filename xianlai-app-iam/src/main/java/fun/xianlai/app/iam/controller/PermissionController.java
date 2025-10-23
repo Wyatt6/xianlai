@@ -89,21 +89,6 @@ public class PermissionController {
                 .addData("content", permissions.getContent());
     }
 
-    /**
-     * 查询某角色所具有的权限ID列表
-     *
-     * @param roleId 角色ID
-     * @return 该角色所具有的权限ID列表
-     */
-    @ApiLog("查询某角色所具有的权限ID列表")
-    @SaCheckLogin
-    @SaCheckPermission("permission:query")
-    @GetMapping("/getPermissionIdsOfRole")
-    public RetResult getPermissionIdsOfRole(@RequestParam Long roleId) {
-        List<Long> permissionIds = permissionService.getPermissionIdsOfRole(roleId);
-        return new RetResult().success().addData("permissionIds", permissionIds);
-    }
-
     @ApiLog("查询权限的排名（从1开始）")
     @SaCheckLogin
     @SaCheckPermission("permission:query")
@@ -111,5 +96,14 @@ public class PermissionController {
     public RetResult getRowNumStartFrom1(@RequestParam Long permissionId) {
         log.info("请求参数: permissionId=[{}]", permissionId);
         return new RetResult().success().addData("rowNum", permissionService.getRowNum(permissionId));
+    }
+
+    @ApiLog("查询某角色所拥有的权限ID列表")
+    @SaCheckLogin
+    @SaCheckPermission("permission:query")
+    @GetMapping("/getPermissionIdsOfRole")
+    public RetResult getPermissionIdsOfRole(@RequestParam Long roleId) {
+        List<Long> permissionIds = permissionService.getPermissionIdsOfRole(roleId);
+        return new RetResult().success().addData("permissionIds", permissionIds);
     }
 }

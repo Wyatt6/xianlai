@@ -28,21 +28,6 @@ public interface PermissionService {
     Permission updatePermission(Permission permission);
 
     /**
-     * 获取全量权限数据
-     *
-     * @return 全量权限数据
-     */
-    List<Permission> listAllPermissions();
-
-    /**
-     * 获取某角色的权限ID列表
-     *
-     * @param roleId 角色ID
-     * @return 某角色的权限ID列表
-     */
-    List<Long> getPermissionIdsOfRole(Long roleId);
-
-    /**
      * 条件查询权限分页
      * 查询条件为空时查询全量数据
      * 页码<0或页大小<=0时不分页
@@ -55,15 +40,17 @@ public interface PermissionService {
     Page<Permission> getPermissionsByPageConditionally(int pageNum, int pageSize, PermissionCondition condition);
 
     /**
-     * 查询某权限的排名
-     *
-     * @param permissionId 权限ID
-     * @return 排名（从1开始）
+     * 设置permissionDbRefreshTime时间戳
+     */
+    void setPermissionDbRefreshTime(Date timestamp);
+
+    /**
+     * 查询某权限的排名（从1开始）
      */
     Long getRowNum(Long permissionId);
 
     /**
-     * 设置permissionDbRefreshTime时间戳
+     * 获取某角色的权限ID列表
      */
-    void setPermissionDbRefreshTime(Date timestamp);
+    List<Long> getPermissionIdsOfRole(Long roleId);
 }

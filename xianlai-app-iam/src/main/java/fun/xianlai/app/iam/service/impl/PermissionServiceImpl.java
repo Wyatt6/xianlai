@@ -97,19 +97,6 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    @SimpleServiceLog("获取全量权限数据")
-    public List<Permission> listAllPermissions() {
-        Sort sort = Sort.by(Sort.Order.asc("sortId"), Sort.Order.asc("identifier"));
-        return permissionRepository.findAll(sort);
-    }
-
-    @Override
-    @SimpleServiceLog("获取某角色的权限ID列表")
-    public List<Long> getPermissionIdsOfRole(Long roleId) {
-        return permissionRepository.findIdsByRoleId(roleId);
-    }
-
-    @Override
     @ServiceLog("条件查询权限分页")
     public Page<Permission> getPermissionsByPageConditionally(int pageNum, int pageSize, PermissionCondition condition) {
         String identifier = (condition == null || condition.getIdentifier() == null) ? null : condition.getIdentifier();
@@ -128,12 +115,18 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
+    public void setPermissionDbRefreshTime(Date timestamp) {
+        redis.opsForValue().set("permissionDbRefreshTime", timestamp);
+    }
+
+    @Override
     public Long getRowNum(Long permissionId) {
         return permissionRepository.findRowNumById(permissionId);
     }
 
     @Override
-    public void setPermissionDbRefreshTime(Date timestamp) {
-        redis.opsForValue().set("permissionDbRefreshTime", timestamp);
+    @SimpleServiceLog("获取某角色的权限ID列表")
+    public List<Long> getPermissionIdsOfRole(Long roleId) {
+        return permissionRepository.findIdsByRoleId(roleId);
     }
 }
