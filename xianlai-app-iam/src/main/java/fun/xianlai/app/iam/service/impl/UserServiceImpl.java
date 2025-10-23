@@ -128,7 +128,7 @@ public class UserServiceImpl implements UserService {
             }
             // 更新本用户缓存的角色数据
             session.set("roleList", roles);
-            setRoleListCacheTime(userId, new Date());
+            setRoleListCacheTime(userId, DateUtil.now());
         }
 
         return roles;
@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserService {
             }
             // 更新本用户缓存的权限数据
             session.set("permissionList", permissions);
-            setPermissionListCacheTime(userId, new Date());
+            setPermissionListCacheTime(userId, DateUtil.now());
         }
 
         return permissions;

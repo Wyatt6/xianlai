@@ -68,7 +68,7 @@ public class RoleServiceImpl implements RoleService {
         log.info("数据库删除本角色数据");
         roleRepository.deleteById(roleId);
         log.info("更新标记roleDbRefreshTime（数据库的角色数据更新的时间），表示此时间后应当刷新缓存的角色数据");
-        setRoleDbRefreshTime(new Date());
+        setRoleDbRefreshTime(DateUtil.now());
     }
 
     @Override
@@ -105,7 +105,7 @@ public class RoleServiceImpl implements RoleService {
             if (critical) {
                 log.info("编辑此角色数据影响到用户权限控制，需要更新缓存");
                 log.info("更新标记roleDbRefreshTime（数据库的角色数据更新的时间）");
-                setRoleDbRefreshTime(new Date());
+                setRoleDbRefreshTime(DateUtil.now());
             }
             return newRole;
         } else {
@@ -144,7 +144,7 @@ public class RoleServiceImpl implements RoleService {
         }
         if (failList.size() < permissionIds.size()) {
             log.info("有授权成功，要更新PERMISSIONS_DB_REFRESHED时间戳，以动态更新用户权限缓存");
-            permissionService.setPermissionDbRefreshTime(new Date());
+            permissionService.setPermissionDbRefreshTime(DateUtil.now());
         }
         log.info("授权失败的权限ID：{}", failList);
         return failList;
@@ -167,7 +167,7 @@ public class RoleServiceImpl implements RoleService {
         }
         if (failList.size() < permissionIds.size()) {
             log.info("有解除授权成功，要更新PERMISSIONS_DB_REFRESHED时间戳，以动态更新用户权限缓存");
-            permissionService.setPermissionDbRefreshTime(new Date());
+            permissionService.setPermissionDbRefreshTime(DateUtil.now());
         }
         log.info("解除授权失败的权限ID：{}", failList);
         return failList;

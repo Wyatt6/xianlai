@@ -62,7 +62,7 @@ public class PermissionServiceImpl implements PermissionService {
         log.info("数据库删除本权限数据");
         permissionRepository.deleteById(permissionId);
         log.info("更新标记permissionDbRefreshTime（数据库的权限数据更新的时间），表示此时间后应当刷新缓存的权限数据");
-        setpermissionDbRefreshTime(new Date());
+        setpermissionDbRefreshTime(DateUtil.now());
     }
 
     @Override
@@ -95,7 +95,7 @@ public class PermissionServiceImpl implements PermissionService {
             if (identifier != null) {
                 log.info("编辑此权限数据影响到用户权限控制，需要更新缓存");
                 log.info("更新标记permissionDbRefreshTime（数据库的权限数据更新的时间）");
-                setpermissionDbRefreshTime(new Date());
+                setpermissionDbRefreshTime(DateUtil.now());
             }
             return newPermission;
         } else {
