@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 /**
  * @author WyattLau
  */
@@ -103,7 +101,7 @@ public class PermissionController {
     @SaCheckPermission("permission:query")
     @GetMapping("/getPermissionIdsOfRole")
     public RetResult getPermissionIdsOfRole(@RequestParam Long roleId) {
-        List<Long> permissionIds = permissionService.getPermissionIdsOfRole(roleId);
-        return new RetResult().success().addData("permissionIds", permissionIds);
+        log.info("请求参数: roleId=[{}]", roleId);
+        return new RetResult().success().addData("permissionIds", permissionService.getPermissionIdsOfRole(roleId));
     }
 }
