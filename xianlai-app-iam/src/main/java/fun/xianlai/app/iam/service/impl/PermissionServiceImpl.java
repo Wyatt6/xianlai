@@ -7,10 +7,10 @@ import fun.xianlai.app.iam.model.entity.rbac.Permission;
 import fun.xianlai.app.iam.repository.PermissionRepository;
 import fun.xianlai.app.iam.repository.RolePermissionRepository;
 import fun.xianlai.app.iam.service.PermissionService;
-import fun.xianlai.basic.annotation.ServiceLog;
-import fun.xianlai.basic.annotation.SimpleServiceLog;
-import fun.xianlai.basic.exception.SysException;
-import fun.xianlai.basic.utils.DateUtil;
+import fun.xianlai.core.annotation.ServiceLog;
+import fun.xianlai.core.annotation.SimpleServiceLog;
+import fun.xianlai.core.exception.SysException;
+import fun.xianlai.core.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -61,8 +61,8 @@ public class PermissionServiceImpl implements PermissionService {
         rolePermissionRepository.deleteByPermissionId(permissionId);
         log.info("数据库删除本权限数据");
         permissionRepository.deleteById(permissionId);
-        log.info("更新标记permissionsDbRefreshed（数据库的权限数据更新的时间），表示此时间后应当刷新缓存的权限数据");
-        setPermissionsDbRefreshed(new Date());
+        log.info("更新标记permissionDbRefreshTime（数据库的权限数据更新的时间），表示此时间后应当刷新缓存的权限数据");
+        setpermissionDbRefreshTime(new Date());
     }
 
     @Override
@@ -94,8 +94,8 @@ public class PermissionServiceImpl implements PermissionService {
 
             if (identifier != null) {
                 log.info("编辑此权限数据影响到用户权限控制，需要更新缓存");
-                log.info("更新标记permissionsDbRefreshed（数据库的权限数据更新的时间）");
-                setPermissionsDbRefreshed(new Date());
+                log.info("更新标记permissionDbRefreshTime（数据库的权限数据更新的时间）");
+                setpermissionDbRefreshTime(new Date());
             }
             return newPermission;
         } else {
@@ -129,75 +129,12 @@ public class PermissionServiceImpl implements PermissionService {
         return permissionRepository.findRowNumById(permissionId);
     }
 
-    /**
-     * 公共标记：rolesDbRefreshed                  数据库的角色数据更新的时间
-     * 公共标记：permissionsDbRefreshed            数据库的权限数据更新的时间
-     * 用户标记：permissionsCacheOfUserRefreshed    本用户权限数据缓存更新时间
-     * <p>
-     * 一、由于角色、权限的数据库变更造成的需要大范围用户刷新权限缓存的场景
-     * 1、角色的identifier、active变更时，更新rolesDbRefreshed；其他字段变更不打紧。
-     * 权限的identifier、active变更时或角色与权限映射关系变更时，更新permissionsDbRefreshed；其他字段变更不打紧。
-     * 2、若permissionsCacheOfUserRefreshed >= rolesDbRefreshed
-     * 且permissionsCacheOfUserRefreshed >= permissionsDbRefreshed，
-     * 则先查询缓存的权限数据作为结果，查不到缓存再查数据库更新缓存。
-     * 3、若不满足上述条件则查数据库更新缓存。
-     * 4、刷新缓存后更新permissionsCacheOfUserRefreshed。
-     * <p>
-     * 二、由于用户自身变更造成的自己需要刷新权限缓存的场景
-     * 1、用户自身变更时，置用户标记permissionsCacheOfUserRefreshed为0。
-     * 2、若permissionsCacheOfUserRefreshed >= rolesDbRefreshed
-     * 且permissionsCacheOfUserRefreshed >= permissionsDbRefreshed，
-     * 则先查询缓存的权限数据作为结果，查不到缓存再查数据库更新缓存。
-     * 3、若不满足上述条件则查数据库更新缓存。
-     * 4、刷新缓存后更新permissionsCacheOfUserRefreshed。
-     */
     @Override
-    @ServiceLog("从缓存或数据库获取用户生效中的权限标识符")
-    public List<String> getActivePermissionIdentifiers(Long userId) {
-        log.info("userId=[{}]", userId);
-        List<String> permissions = null;
-        SaSession session = StpUtil.getSessionByLoginId(userId);
-
-        Date t1 = (Date) redis.opsForValue().get("rolesDbRefreshed");
-        Date t2 = (Date) redis.opsForValue().get("permissionsDbRefreshed");
-        Date t3 = (Date) session.get("permissionsCacheOfUserRefreshed");
-        log.info("本用户角色数据缓存更新时间 rolesDbRefreshed=[{}]", t1 == null ? null : DateUtil.commonFormat(t1));
-        log.info("本用户权限数据缓存更新时间 permissionsDbRefreshed=[{}]", t2 == null ? null : DateUtil.commonFormat(t2));
-        log.info("数据库的权限数据更新的时间 permissionsCacheOfUserRefreshed:=[{}]", t3 == null ? null : DateUtil.commonFormat(t3));
-
-        if ((t1 == null || (t3 != null && t3.compareTo(t1) >= 0)) && (t2 == null || (t3 != null && t3.compareTo(t2) >= 0))) {
-            log.info("先查询Session缓存的权限数据");
-            permissions = (List<String>) session.get("permissions");
-        }
-
-        if (permissions == null) {
-            log.info("无缓存或缓存不是最新，查询数据库，并更新缓存");
-            List<Permission> activePermissions = permissionRepository.findActivePermissionsByUserId(userId);
-            log.info("提取标识符字符串列表");
-            permissions = new ArrayList<>();
-            for (Permission item : activePermissions) {
-                permissions.add(item.getIdentifier());
-            }
-            log.info("更新缓存的权限数据");
-            session.set("permissions", permissions);
-            setPermissionsCacheOfUserRefreshed(userId, new Date());
-        }
-
-        log.info("用户生效中的权限标识列表: {}", permissions);
-        return permissions;
+    @SimpleServiceLog("设置permissionDbRefreshTime时间戳")
+    public void setPermissionDbRefreshTime(Date timestamp) {
+        redis.opsForValue().set("permissionDbRefreshTime", timestamp);
+        log.info("已更新permissionDbRefreshTime时间戳为: {}", DateUtil.commonFormat(timestamp));
     }
 
-    @Override
-    @SimpleServiceLog("设置permissionsDbRefreshed时间戳")
-    public void setPermissionsDbRefreshed(Date timestamp) {
-        redis.opsForValue().set("permissionsDbRefreshed", timestamp);
-        log.info("已更新permissionsDbRefreshed时间戳为: {}", DateUtil.commonFormat(timestamp));
-    }
 
-    @Override
-    @SimpleServiceLog("设置permissionsCacheOfUserRefreshed时间戳")
-    public void setPermissionsCacheOfUserRefreshed(Long userId, Date timestamp) {
-        StpUtil.getSessionByLoginId(userId).set("permissionsCacheOfUserRefreshed", timestamp);
-        log.info("已更新permissionsCacheOfUserRefreshed时间戳为: {}", DateUtil.commonFormat(timestamp));
-    }
 }

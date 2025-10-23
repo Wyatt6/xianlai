@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Repository
 public interface PermissionRepository extends JpaRepository<Permission, Long> {
-    @Query("select distinct new Permission(p.id, p.identifier, p.name, p.description, p.sortId) " +
+    @Query("select distinct new Permission(p.id, p.sortId, p.identifier, p.name, p.description) " +
             " from UserRole ur " +
             "      inner join Role r on ur.roleId = r.id and r.active = true " +
             "      inner join RolePermission rp on ur.roleId = rp.roleId " +

@@ -1,8 +1,7 @@
 package fun.xianlai.app.iam.service.impl;
 
 import cn.dev33.satoken.stp.StpInterface;
-import fun.xianlai.app.iam.service.PermissionService;
-import fun.xianlai.app.iam.service.RoleService;
+import fun.xianlai.app.iam.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +15,7 @@ import java.util.List;
 @Service
 public class StpInterfaceImpl implements StpInterface {
     @Autowired
-    private PermissionService permissionService;
-    @Autowired
-    private RoleService roleService;
+    private UserService userService;
 
     /**
      * @param loginId   账号id
@@ -27,7 +24,7 @@ public class StpInterfaceImpl implements StpInterface {
      */
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        return permissionService.getActivePermissionIdentifiers(Long.valueOf(String.valueOf(loginId)));
+        return userService.getPermissionList(Long.valueOf(String.valueOf(loginId)));
     }
 
     /**
@@ -37,6 +34,6 @@ public class StpInterfaceImpl implements StpInterface {
      */
     @Override
     public List<String> getRoleList(Object loginId, String loginType) {
-        return roleService.getActiveRoleIdentifiers(Long.valueOf(String.valueOf(loginId)));
+        return userService.getRoleList(Long.valueOf(String.valueOf(loginId)));
     }
 }

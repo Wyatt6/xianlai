@@ -61,22 +61,9 @@ public interface RoleService {
     Long getRowNum(Long roleId);
 
     /**
-     * 从缓存或数据库获取用户生效中的角色标识符
-     *
-     * @param userId 用户ID
-     * @return 角色标识符列表
+     * 设置roleDbRefreshTime时间戳
      */
-    List<String> getActiveRoleIdentifiers(Long userId);
-
-    /**
-     * 设置rolesDbRefreshed时间戳
-     */
-    void setRolesDbRefreshed(Date timestamp);
-
-    /**
-     * 设置rolesCacheOfUserRefreshed时间戳
-     */
-    void setRolesCacheOfUserRefreshed(Long userId, Date timestamp);
+    void setRoleDbRefreshTime(Date timestamp);
 
     /**
      * 授权（绑定roleId和permissionIds）

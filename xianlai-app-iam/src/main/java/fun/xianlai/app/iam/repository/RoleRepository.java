@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
-    @Query("select distinct new Role(r.id, r.identifier, r.name, r.description, r.active, r.sortId) " +
+    @Query("select distinct new Role(r.id, r.sortId, r.identifier, r.name, r.description, r.active) " +
             " from UserRole ur " +
             "      inner join Role r on ur.roleId = r.id and r.active = true " +
             " where ur.userId = ?1")

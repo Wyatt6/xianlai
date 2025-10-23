@@ -69,20 +69,7 @@ public interface PermissionService {
     Long getRowNum(Long permissionId);
 
     /**
-     * 从缓存或数据库获取用户生效中的权限标识符
-     *
-     * @param userId 用户ID
-     * @return 权限标识符列表
+     * 设置permissionDbRefreshTime时间戳
      */
-    List<String> getActivePermissionIdentifiers(Long userId);
-
-    /**
-     * 设置permissionsDbRefreshed时间戳
-     */
-    void setPermissionsDbRefreshed(Date timestamp);
-
-    /**
-     * 设置permissionsCacheOfUserRefreshed时间戳
-     */
-    void setPermissionsCacheOfUserRefreshed(Long userId, Date timestamp);
+    void setPermissionDbRefreshTime(Date timestamp);
 }
