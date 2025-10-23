@@ -1,4 +1,4 @@
-package fun.xianlai.app.iam.feign.consumer;
+package fun.xianlai.core.feign.consumer;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +13,9 @@ import java.util.Optional;
 public interface FeignOptionService {
     @GetMapping("/readValueInString")
     Optional<String> readValueInString(@RequestParam String key);
+
+    @GetMapping("/readValueInInteger")
+    Optional<String> readValueInInteger(@RequestParam String key);
 
     @GetMapping("/readValueInLong")
     Optional<Long> readValueInLong(@RequestParam String key);
