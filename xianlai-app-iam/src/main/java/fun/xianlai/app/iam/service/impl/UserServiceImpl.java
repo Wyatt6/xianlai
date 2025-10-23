@@ -82,13 +82,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @ServiceLog("身份验证服务")
+    @SimpleServiceLog("身份验证")
     public User authentication(String username, String password) {
         User user = userRepository.findByUsername(username);
         if (user == null || !user.getPassword().equals(PasswordUtil.encode(password, user.getSalt()))) {
             throw new SysException("用户名或密码错误");
         }
-        log.info("身份验证通过");
         return user;
     }
 
