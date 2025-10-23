@@ -90,19 +90,6 @@ public class PermissionController {
     }
 
     /**
-     * 获取所有权限数据
-     *
-     * @return 全量权限数据
-     */
-    @ApiLog("获取所有权限数据")
-    @SaCheckLogin
-    @SaCheckPermission("permission:query")
-    @GetMapping("/getAllPermissions")
-    public RetResult getAllPermissions() {
-        return new RetResult().success().addData("permissions", permissionService.listAllPermissions());
-    }
-
-    /**
      * 查询某角色所具有的权限ID列表
      *
      * @param roleId 角色ID
@@ -117,11 +104,6 @@ public class PermissionController {
         return new RetResult().success().addData("permissionIds", permissionIds);
     }
 
-    /**
-     * 查询权限的排名（从1开始）
-     *
-     * @param permissionId 权限ID
-     */
     @ApiLog("查询权限的排名（从1开始）")
     @SaCheckLogin
     @SaCheckPermission("permission:query")
