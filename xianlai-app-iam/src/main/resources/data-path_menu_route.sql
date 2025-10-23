@@ -12,9 +12,9 @@ INSERT IGNORE INTO tb_common_sys_menu(
     `id`, `sort_id`, `parent_id`, `icon`, `title`,
     `path_name`, `need_permission`, `permission`, `active`
 ) VALUE
-(20001, 20001, 0, 'ri-group-fill', '身份认证和访问管理', 'IAM', 1, 'menu:iam', 1);
-(20002, 20002, 20001, 'ri-user-settings-fill', '用户管理', 'IAM_USER_MANAGE', 1, 'menu:iam_user_manage', 1);
-(20003, 20003, 20001, 'ri-account-box-fill', '角色管理', 'IAM_ROLE_MANAGE', 1, 'menu:iam_role_manage', 1);
+(20001, 20001, 0, 'ri-group-fill', '身份认证和访问管理', 'IAM', 1, 'menu:iam', 1),
+(20002, 20002, 20001, 'ri-user-settings-fill', '用户管理', 'IAM_USER_MANAGE', 1, 'menu:iam_user_manage', 1),
+(20003, 20003, 20001, 'ri-account-box-fill', '角色管理', 'IAM_ROLE_MANAGE', 1, 'menu:iam_role_manage', 1),
 (20004, 20004, 20001, 'ri-shield-keyhole-fill', '权限管理', 'IAM_PERMISSION_MANAGE', 1, 'menu:iam_permission_manage', 1);
 
 
