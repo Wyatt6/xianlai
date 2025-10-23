@@ -121,7 +121,6 @@ public class UserController {
         } finally {
             StpUtil.logout();
         }
-
         log.info("退出登录成功");
         return new RetResult().success();
     }
