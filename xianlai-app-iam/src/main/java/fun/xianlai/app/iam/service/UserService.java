@@ -1,6 +1,8 @@
 package fun.xianlai.app.iam.service;
 
 import fun.xianlai.app.iam.model.entity.rbac.User;
+import fun.xianlai.app.iam.model.form.UserCondition;
+import org.springframework.data.domain.Page;
 
 import java.util.Date;
 import java.util.List;
@@ -72,4 +74,16 @@ public interface UserService {
      * 修改密码
      */
     void changePassword(Long id, String password);
+
+    /**
+     * 条件查询用户分页
+     * 查询条件为空时查询全量数据
+     * 页码<0或页大小<=0时不分页
+     *
+     * @param pageNum   页码
+     * @param pageSize  页大小
+     * @param condition 查询条件
+     * @return 用户分页数据
+     */
+    Page<User> getUsersByPageConditionally(int pageNum, int pageSize, UserCondition condition);
 }

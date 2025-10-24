@@ -5,6 +5,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import fun.xianlai.app.iam.model.entity.rbac.Permission;
 import fun.xianlai.app.iam.model.entity.rbac.Role;
 import fun.xianlai.app.iam.model.entity.rbac.User;
+import fun.xianlai.app.iam.model.form.UserCondition;
 import fun.xianlai.app.iam.repository.PermissionRepository;
 import fun.xianlai.app.iam.repository.RoleRepository;
 import fun.xianlai.app.iam.repository.UserRepository;
@@ -17,6 +18,10 @@ import fun.xianlai.core.utils.DateUtil;
 import fun.xianlai.core.utils.PasswordUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -220,6 +225,41 @@ public class UserServiceImpl implements UserService {
             userRepository.save(newUser);
         } else {
             throw new SysException("用户不存在");
+        }
+    }
+
+    @Override
+    @ServiceLog("条件查询用户分页")
+    public Page<User> getUsersByPageConditionally(int pageNum, int pageSize, UserCondition condition) {
+        String username = (condition == null || condition.getUsername() == null) ? null : condition.getUsername();
+        Date stRegistryTime = (condition == null || condition.getStRegistryTime() == null) ? null : condition.getStRegistryTime();
+        Date edRegistryTime = (condition == null || condition.getEdRegistryTime() == null) ? null : condition.getEdRegistryTime();
+        Boolean active = (condition == null || condition.getActive() == null) ? null : condition.getActive();
+        String role = (condition == null || condition.getRole() == null) ? null : condition.getRole();
+        String permission = (condition == null || condition.getPermission() == null) ? null : condition.getPermission();
+
+        Sort sort = Sort.by(Sort.Order.asc("registryTime"));
+        if (pageNum >= 0 && pageSize > 0) {
+            log.info("分页查询");
+            Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
+            return userRepository.findConditionally(
+                    username,
+                    stRegistryTime,
+                    edRegistryTime,
+                    active,
+                    role,
+                    permission,
+                    pageable);
+        } else {
+            log.info("全表查询");
+            return userRepository.findConditionally(
+                    username,
+                    stRegistryTime,
+                    edRegistryTime,
+                    active,
+                    role,
+                    permission,
+                    Pageable.unpaged(sort));
         }
     }
 }

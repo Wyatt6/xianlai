@@ -1,12 +1,14 @@
 package fun.xianlai.app.iam.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.stp.parameter.SaLoginParameter;
 import fun.xianlai.app.iam.model.entity.rbac.User;
 import fun.xianlai.app.iam.model.form.ChangePasswordForm;
+import fun.xianlai.app.iam.model.form.UserCondition;
 import fun.xianlai.app.iam.service.PermissionService;
 import fun.xianlai.app.iam.service.RoleService;
 import fun.xianlai.app.iam.service.UserService;
@@ -17,10 +19,12 @@ import fun.xianlai.core.feign.consumer.FeignOptionService;
 import fun.xianlai.core.response.RetResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -143,5 +147,37 @@ public class UserController {
         userService.authentication(userId, form.getOldPassword());
         userService.changePassword(userId, form.getNewPassword());
         return new RetResult().success();
+    }
+
+    /**
+     * 条件查询用户分页
+     * 查询条件为空时查询全量数据
+     * 页码<0或页大小<=0时不分页
+     *
+     * @param pageNum   页码
+     * @param pageSize  页大小
+     * @param condition 查询条件
+     * @return {pageNum 页码, pageSize 页大小, totalPages 页码总数, totalElements 总条数, content 分页数据}
+     */
+    @ApiLog("条件查询用户分页")
+    @SaCheckLogin
+    @SaCheckPermission("user:query")
+    @PostMapping("/getPageConditionally")
+    public RetResult getPageConditionally(@RequestParam("pageNum") int pageNum,
+                                          @RequestParam("pageSize") int pageSize,
+                                          @RequestBody(required = false) UserCondition condition) {
+        log.info("请求参数：pageNum=[{}], pageSize=[{}], condition=[{}]", pageNum, pageSize, condition);
+        Page<User> users = userService.getUsersByPageConditionally(pageNum, pageSize, condition);
+        log.info("数据脱敏");
+        for (int i = 0; i < users.getContent().size(); i++) {
+            users.getContent().get(i).setPassword(null);
+            users.getContent().get(i).setSalt(null);
+        }
+        return new RetResult().success()
+                .addData("pageNum", pageNum)
+                .addData("pageSize", pageSize)
+                .addData("totalPages", users.getTotalPages())
+                .addData("totalElements", users.getTotalElements())
+                .addData("content", users.getContent());
     }
 }
