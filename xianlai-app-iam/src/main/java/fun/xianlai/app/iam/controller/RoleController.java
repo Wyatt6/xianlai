@@ -110,7 +110,7 @@ public class RoleController {
 
     @ApiLog("为角色授权/解除授权")
     @SaCheckLogin
-    @SaCheckPermission("role:bind")
+    @SaCheckPermission("role:grant")
     @PostMapping("/grant")
     public RetResult grant(@RequestBody GrantForm form) {
         log.info("请求参数: {}", form);
