@@ -7,6 +7,7 @@ import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.stp.parameter.SaLoginParameter;
 import fun.xianlai.app.iam.model.entity.rbac.User;
+import fun.xianlai.app.iam.model.form.BindForm;
 import fun.xianlai.app.iam.model.form.ChangePasswordForm;
 import fun.xianlai.app.iam.model.form.UserCondition;
 import fun.xianlai.app.iam.service.PermissionService;
@@ -179,5 +180,29 @@ public class UserController {
                 .addData("totalPages", users.getTotalPages())
                 .addData("totalElements", users.getTotalElements())
                 .addData("content", users.getContent());
+    }
+
+    @ApiLog("为用户绑定/解除绑定角色")
+    @SaCheckLogin
+    @SaCheckPermission("user:bind")
+    @PostMapping("/bind")
+    public RetResult bind(@RequestBody BindForm input) {
+        List<Long> failBind = null;
+        List<Long> failCancel = null;
+        try {
+            log.info("绑定");
+            failBind = userService.bind(input.getUserId(), input.getBind());
+        } catch (IllegalArgumentException e) {
+            log.info("无须绑定");
+        }
+        try {
+            log.info("解除绑定");
+            failCancel = userService.cancelBind(input.getUserId(), input.getCancel());
+        } catch (IllegalArgumentException e) {
+            log.info("无须解除绑定");
+        }
+        return new RetResult().success()
+                .addData("failBind", failBind)
+                .addData("failCancel", failCancel);
     }
 }

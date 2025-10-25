@@ -47,4 +47,6 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 
     @Query("select ur.roleId from UserRole ur where ur.userId = ?1")
     List<Long> findIdsByUserId(Long userId);
+
+    List<Role> findByBindCheck(Boolean bindCheck);
 }

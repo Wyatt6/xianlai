@@ -24,4 +24,8 @@ public class DateUtil {
     public static Date now() {
         return new Date();
     }
+
+    public static Date zero() {
+        return new Date(0);
+    }
 }

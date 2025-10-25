@@ -21,7 +21,8 @@ INSERT IGNORE INTO tb_iam_permission(`id`, `sort_id`, `identifier`, `name`, `des
 (23002, 23002, 'user:delete', '删除用户', null),
 (23003, 23003, 'user:edit', '修改用户', null),
 (23004, 23004, 'user:query', '查询用户', null),
-(23005, 23005, 'user:bind', '查询用户', null);
+(23005, 23005, 'user:bind', '绑定角色', null),
+(23006, 23006, 'user:bind:super_admin', '绑定具体角色的权限：super_admin', null);
 
 
 -- ##### Role ##### --
@@ -49,7 +50,8 @@ INSERT IGNORE INTO tb_iam_role_permission(`role_id`, `permission_id`) VALUE
 (20001, 23002),
 (20001, 24003),
 (20001, 23004),
-(20001, 23005);
+(20001, 23005),
+(20001, 23006);
 
 
 -- ##### User ##### --

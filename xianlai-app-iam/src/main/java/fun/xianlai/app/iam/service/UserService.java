@@ -86,4 +86,22 @@ public interface UserService {
      * @return 用户分页数据
      */
     Page<User> getUsersByPageConditionally(int pageNum, int pageSize, UserCondition condition);
+
+    /**
+     * 绑定（绑定userId和roleIds）
+     *
+     * @param userId  用户ID
+     * @param roleIds 该用户要绑定的角色ID
+     * @return 绑定失败的角色ID列表
+     */
+    List<Long> bind(Long userId, List<Long> roleIds);
+
+    /**
+     * 解除绑定（取消绑定userId和roleIds）
+     *
+     * @param userId  用户ID
+     * @param roleIds 该用户要解除绑定的角色ID列表
+     * @return 解除绑定失败的角色ID列表
+     */
+    List<Long> cancelBind(Long userId, List<Long> roleIds);
 }

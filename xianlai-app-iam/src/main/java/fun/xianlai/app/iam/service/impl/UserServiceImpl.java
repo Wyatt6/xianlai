@@ -5,10 +5,14 @@ import cn.dev33.satoken.stp.StpUtil;
 import fun.xianlai.app.iam.model.entity.rbac.Permission;
 import fun.xianlai.app.iam.model.entity.rbac.Role;
 import fun.xianlai.app.iam.model.entity.rbac.User;
+import fun.xianlai.app.iam.model.entity.rbac.UserRole;
 import fun.xianlai.app.iam.model.form.UserCondition;
 import fun.xianlai.app.iam.repository.PermissionRepository;
 import fun.xianlai.app.iam.repository.RoleRepository;
 import fun.xianlai.app.iam.repository.UserRepository;
+import fun.xianlai.app.iam.repository.UserRoleRepository;
+import fun.xianlai.app.iam.service.PermissionService;
+import fun.xianlai.app.iam.service.RoleService;
 import fun.xianlai.app.iam.service.UserService;
 import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
@@ -27,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,7 +48,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private FeignOptionService optionService;
     @Autowired
+    private RoleService roleService;
+    @Autowired
+    private PermissionService permissionService;
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserRoleRepository userRoleRepository;
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
@@ -261,5 +272,71 @@ public class UserServiceImpl implements UserService {
                     permission,
                     Pageable.unpaged(sort));
         }
+    }
+
+    @Override
+    @ServiceLog("绑定")
+    public List<Long> bind(Long userId, List<Long> roleIds) {
+        List<Role> bindCheckList = roleRepository.findByBindCheck(true);
+        List<String> roleList = StpUtil.getRoleList(userId);
+        List<Long> failList = new ArrayList<>();
+        for (Long roleId : roleIds) {
+            try {
+                for (Role item : bindCheckList) {
+                    if (roleId.equals(item.getId())) {
+                        if (!roleList.contains(MessageFormat.format("user:bind:{0}", item.getIdentifier()))) {
+                            throw new SysException(MessageFormat.format("权限不足，无法为用户绑定角色[{0} {1}]", item.getId(), item.getIdentifier()));
+                        }
+                        break;
+                    }
+                }
+                UserRole ur = new UserRole();
+                ur.setUserId(userId);
+                ur.setRoleId(roleId);
+                userRoleRepository.save(ur);
+                log.info("绑定成功: (userId=[{}], roleId=[{}])", userId, roleId);
+            } catch (Exception e) {
+                failList.add(roleId);
+            }
+        }
+        if (failList.size() < roleIds.size()) {
+            log.info("有绑定成功，要更新roleListCacheTime和permissionListCacheTime时间戳，以动态更新用户权限缓存");
+            setRoleListCacheTime(userId, DateUtil.zero());
+            setPermissionListCacheTime(userId, DateUtil.zero());
+        }
+        return failList;
+    }
+
+    @Override
+    @ServiceLog("解除绑定")
+    public List<Long> cancelBind(Long userId, List<Long> roleIds) {
+        List<Role> bindCheckList = roleRepository.findByBindCheck(true);
+        List<String> roleList = StpUtil.getRoleList(userId);
+        List<Long> failList = new ArrayList<>();
+        for (Long roleId : roleIds) {
+            try {
+                for (Role item : bindCheckList) {
+                    if (roleId.equals(item.getId())) {
+                        if (!roleList.contains(MessageFormat.format("user:bind:{0}", item.getIdentifier()))) {
+                            throw new SysException(MessageFormat.format("权限不足，无法为用户解除绑定角色[{0} {1}]", item.getId(), item.getIdentifier()));
+                        }
+                        break;
+                    }
+                }
+                UserRole ur = new UserRole();
+                ur.setUserId(userId);
+                ur.setRoleId(roleId);
+                userRoleRepository.delete(ur);
+                log.info("解除绑定成功: (userId=[{}], roleId=[{}])", userId, roleId);
+            } catch (Exception e) {
+                failList.add(roleId);
+            }
+        }
+        if (failList.size() < roleIds.size()) {
+            log.info("有解除绑定成功，要更新roleListCacheTime和permissionListCacheTime时间戳，以动态更新用户权限缓存");
+            setRoleListCacheTime(userId, DateUtil.zero());
+            setPermissionListCacheTime(userId, DateUtil.zero());
+        }
+        return failList;
     }
 }

@@ -5,6 +5,7 @@ INSERT IGNORE INTO tb_common_sys_api(`id`, `call_path`, `description`, `request_
 (20003, 'iam.user.logout', '退出登录', 'GET', '/api/iam/user/logout'),
 (20004, 'iam.user.changePassword', '修改密码', 'POST', '/api/iam/user/changePassword'),
 (20005, 'iam.user.getPageConditionally', '条件查询用户分页', 'POST', '/api/iam/user/getPageConditionally'),
+(20006, 'iam.user.bind', '为用户绑定/解除绑定角色', 'POST', '/api/iam/user/bind'),
 -- Permission --
 (21001, 'iam.permission.add', '新增权限', 'POST', '/api/iam/permission/add'),
 (21002, 'iam.permission.delete', '删除权限', 'GET', '/api/iam/permission/delete'),
