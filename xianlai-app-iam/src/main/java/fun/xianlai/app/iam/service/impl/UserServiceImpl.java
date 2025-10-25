@@ -243,20 +243,20 @@ public class UserServiceImpl implements UserService {
     @ServiceLog("条件查询用户分页")
     public Page<User> getUsersByPageConditionally(int pageNum, int pageSize, UserCondition condition) {
         String username = (condition == null || condition.getUsername() == null) ? null : condition.getUsername();
-        Date stRegistryTime = (condition == null || condition.getStRegistryTime() == null) ? null : condition.getStRegistryTime();
-        Date edRegistryTime = (condition == null || condition.getEdRegistryTime() == null) ? null : condition.getEdRegistryTime();
+        Date stRegisterTime = (condition == null || condition.getStRegisterTime() == null) ? null : condition.getStRegisterTime();
+        Date edRegisterTime = (condition == null || condition.getEdRegisterTime() == null) ? null : condition.getEdRegisterTime();
         Boolean active = (condition == null || condition.getActive() == null) ? null : condition.getActive();
         String role = (condition == null || condition.getRole() == null) ? null : condition.getRole();
         String permission = (condition == null || condition.getPermission() == null) ? null : condition.getPermission();
 
-        Sort sort = Sort.by(Sort.Order.asc("registryTime"));
+        Sort sort = Sort.by(Sort.Order.asc("registerTime"));
         if (pageNum >= 0 && pageSize > 0) {
             log.info("分页查询");
             Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
             return userRepository.findConditionally(
                     username,
-                    stRegistryTime,
-                    edRegistryTime,
+                    stRegisterTime,
+                    edRegisterTime,
                     active,
                     role,
                     permission,
@@ -265,8 +265,8 @@ public class UserServiceImpl implements UserService {
             log.info("全表查询");
             return userRepository.findConditionally(
                     username,
-                    stRegistryTime,
-                    edRegistryTime,
+                    stRegisterTime,
+                    edRegisterTime,
                     active,
                     role,
                     permission,

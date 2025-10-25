@@ -29,8 +29,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "      and (?5 is null or r.identifier like %?5%) " +
             "      and (?6 is null or p.identifier like %?6%)")
     Page<User> findConditionally(String username,
-                                 Date stRegistryTime,
-                                 Date edRegistryTime,
+                                 Date stRegisterTime,
+                                 Date edRegisterTime,
                                  Boolean active,
                                  String role,
                                  String permission,
