@@ -48,7 +48,7 @@ INSERT IGNORE INTO tb_iam_role_permission(`role_id`, `permission_id`) VALUE
 -- 用户 --
 (20001, 23001),
 (20001, 23002),
-(20001, 24003),
+(20001, 23003),
 (20001, 23004),
 (20001, 23005),
 (20001, 23006);
