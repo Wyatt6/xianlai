@@ -23,7 +23,7 @@ INSERT IGNORE INTO tb_common_sys_route(
     `id`, `sort_id`, `parent_id`, `name`, `path_name`, `redirect_path_name`, `component_path`,
     `need_login`, `need_permission`, `permission`, `show_tag`, `tag_title`
 ) VALUE
-(20001, 20001, 0, 'iam', 'IAM', 'IAM_REDIRECT', 'layout/components/Placeholder/index.vue', 1, 1, 'menu:iam', 0, null),
+(20001, 20001, 11001, 'iam', 'IAM', 'IAM_REDIRECT', 'layout/components/Placeholder/index.vue', 1, 1, 'menu:iam', 0, null),
 (20002, 20002, 20001, 'iam_user_manage', 'IAM_USER_MANAGE', null, 'iam/user_manage/index.vue', 1, 1, 'menu:iam_user_manage', 1, '用户管理'),
 (20003, 20003, 20001, 'iam_role_manage', 'IAM_ROLE_MANAGE', null, 'iam/role_manage/index.vue', 1, 1, 'menu:iam_role_manage', 1, '角色管理'),
 (20004, 20004, 20001, 'iam_permission_manage', 'IAM_PERMISSION_MANAGE', null, 'iam/permission_manage/index.vue', 1, 1, 'menu:iam_permission_manage', 1, '权限管理');
