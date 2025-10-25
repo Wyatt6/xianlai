@@ -108,11 +108,11 @@ public class RoleController {
         return new RetResult().success().addData("roleIds", roleService.getRoleIdsOfUser(userId));
     }
 
-    @ApiLog("更新角色的授权")
+    @ApiLog("为角色授权/解除授权")
     @SaCheckLogin
     @SaCheckPermission("role:bind")
-    @PostMapping("/updateGrants")
-    public RetResult updateGrants(@RequestBody GrantForm form) {
+    @PostMapping("/grants")
+    public RetResult grants(@RequestBody GrantForm form) {
         log.info("请求参数: {}", form);
         List<Long> failGrant = null;
         List<Long> failCancel = null;

@@ -19,4 +19,4 @@ INSERT IGNORE INTO tb_common_sys_api(`id`, `call_path`, `description`, `request_
 (22004, 'iam.role.getPageConditionally', '条件查询角色分页', 'POST', '/api/iam/role/getPageConditionally'),
 (22005, 'iam.role.getRowNumStartFrom1', '查询角色的排名（从1开始）', 'GET', '/api/iam/role/getRowNumStartFrom1'),
 (22006, 'iam.role.getRoleIdsOfUser', '查询某用户所具有的角色ID列表', 'GET', '/api/iam/role/getRoleIdsOfUser'),
-(22007, 'iam.role.updateGrants', '更新角色的授权', 'POST', '/api/iam/role/updateGrants');
+(22007, 'iam.role.grants', '为角色授权/解除授权', 'POST', '/api/iam/role/grants');
