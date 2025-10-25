@@ -22,7 +22,7 @@ INSERT IGNORE INTO tb_iam_permission(`id`, `sort_id`, `identifier`, `name`, `des
 (23003, 23003, 'user:edit', '修改用户', null),
 (23004, 23004, 'user:query', '查询用户', null),
 (23005, 23005, 'user:bind', '绑定角色', null),
-(23006, 23006, 'user:bind:super_admin', '绑定具体角色的权限：super_admin', null);
+(23006, 23006, 'user:bind:super_admin', '角色绑定检查：super_admin', '具备此权限才能为用户绑定super_admin角色');
 
 
 -- ##### Role ##### --
