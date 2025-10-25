@@ -111,8 +111,8 @@ public class RoleController {
     @ApiLog("为角色授权/解除授权")
     @SaCheckLogin
     @SaCheckPermission("role:bind")
-    @PostMapping("/grants")
-    public RetResult grants(@RequestBody GrantForm form) {
+    @PostMapping("/grant")
+    public RetResult grant(@RequestBody GrantForm form) {
         log.info("请求参数: {}", form);
         List<Long> failGrant = null;
         List<Long> failCancel = null;
