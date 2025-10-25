@@ -49,4 +49,7 @@ public class Role {
 
     @Column(columnDefinition = "bit not null default 0")
     private Boolean active;
+
+    @Column(columnDefinition = "bit not null default 0")
+    private Boolean bindCheck;      // 用户绑定本角色时是否需要检查有无权限
 }

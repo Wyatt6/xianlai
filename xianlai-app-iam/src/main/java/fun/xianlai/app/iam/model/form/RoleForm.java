@@ -14,6 +14,7 @@ public class RoleForm {
     private String name;        // 名称
     private String description; // 说明
     private Boolean active;     // 启用/禁用
+    private Boolean bindCheck;  // 用户绑定本角色时是否需要检查有无权限
 
     public Role convert() {
         Role result = new Role();
@@ -23,6 +24,7 @@ public class RoleForm {
         result.setName(name != null ? name.trim() : null);
         result.setDescription(description != null ? description.trim() : null);
         result.setActive(active);
+        result.setBindCheck(bindCheck);
         return result;
     }
 }

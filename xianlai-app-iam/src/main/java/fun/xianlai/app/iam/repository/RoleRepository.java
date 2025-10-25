@@ -14,13 +14,13 @@ import java.util.List;
  */
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
-    @Query("select distinct new Role(r.id, r.sortId, r.identifier, r.name, r.description, r.active) " +
+    @Query("select distinct new Role(r.id, r.sortId, r.identifier, r.name, r.description, r.active, r.bindCheck) " +
             " from UserRole ur " +
             "      inner join Role r on ur.roleId = r.id and r.active = true " +
             " where ur.userId = ?1")
     List<Role> findActiveRolesByUserId(Long userId);
 
-    @Query("select distinct new Role(r.id, r.sortId, r.identifier, r.name, r.description, r.active) " +
+    @Query("select distinct new Role(r.id, r.sortId, r.identifier, r.name, r.description, r.active, r.bindCheck) " +
             " from Role r " +
             "      left join RolePermission rp on r.id = rp.roleId " +
             "      left join Permission p on rp.permissionId = p.id " +
@@ -28,11 +28,13 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
             "      and (?2 is null or r.name like %?2%) " +
             "      and (?3 is null or r.description like %?3%) " +
             "      and (?4 is null or r.active = ?4) " +
-            "      and (?5 is null or p.identifier like %?5%)")
+            "      and (?5 is null or r.bindCheck = ?5) " +
+            "      and (?6 is null or p.identifier like %?6%)")
     Page<Role> findConditionally(String identifier,
                                  String name,
                                  String description,
                                  Boolean active,
+                                 Boolean bindCheck,
                                  String permission,
                                  Pageable pageable);
 

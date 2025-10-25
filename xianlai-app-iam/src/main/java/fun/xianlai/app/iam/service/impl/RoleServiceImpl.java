@@ -76,6 +76,7 @@ public class RoleServiceImpl implements RoleService {
         String name = role.getName();
         String description = role.getDescription();
         Boolean active = role.getActive();
+        Boolean bindCheck = role.getBindCheck();
 
         log.info("查询是否存在该角色");
         Optional<Role> oldRole = roleRepository.findById(role.getId());
@@ -87,6 +88,7 @@ public class RoleServiceImpl implements RoleService {
             if (name != null) newRole.setName(name);
             if (description != null) newRole.setDescription(description);
             if (active != null) newRole.setActive(active);
+            if (bindCheck != null) newRole.setBindCheck(bindCheck);
 
             try {
                 log.info("更新数据库");
@@ -117,16 +119,17 @@ public class RoleServiceImpl implements RoleService {
         String name = (condition == null || condition.getName() == null) ? null : condition.getName();
         String description = (condition == null || condition.getDescription() == null) ? null : condition.getDescription();
         Boolean active = (condition == null || condition.getActive() == null) ? null : condition.getActive();
+        Boolean bindCheck = (condition == null || condition.getBindCheck() == null) ? null : condition.getBindCheck();
         String permission = (condition == null || condition.getPermission() == null) ? null : condition.getPermission();
 
         Sort sort = Sort.by(Sort.Order.asc("sortId"), Sort.Order.asc("identifier"));
         if (pageNum >= 0 && pageSize > 0) {
             log.info("分页查询");
             Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
-            return roleRepository.findConditionally(identifier, name, description, active, permission, pageable);
+            return roleRepository.findConditionally(identifier, name, description, active, bindCheck, permission, pageable);
         } else {
             log.info("全表查询");
-            return roleRepository.findConditionally(identifier, name, description, active, permission, Pageable.unpaged(sort));
+            return roleRepository.findConditionally(identifier, name, description, active, bindCheck, permission, Pageable.unpaged(sort));
         }
     }
 

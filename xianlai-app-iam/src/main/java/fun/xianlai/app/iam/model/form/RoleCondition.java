@@ -11,5 +11,6 @@ public class RoleCondition {
     private String name;            // 名称
     private String description;     // 说明
     private Boolean active;         // 启用/禁用
+    private Boolean bindCheck;      // 用户绑定本角色时是否需要检查有无权限
     private String permission;      // 包含权限
 }
