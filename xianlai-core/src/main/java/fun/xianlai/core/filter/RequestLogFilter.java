@@ -29,7 +29,7 @@ public class RequestLogFilter extends OncePerRequestFilter implements Filter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String url = request.getRequestURL().toString();
-            if (!url.matches(".*/actuator.*")) {
+            if (!url.matches(".*/actuator.*") && !url.matches(".*/druid.*")) {
                 // 从服务网关报文头获取traceId或者生成traceId
                 String traceId = request.getHeader("traceId");
                 if (traceId == null) {
