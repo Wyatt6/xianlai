@@ -187,6 +187,7 @@ public class UserController {
     @SaCheckPermission("user:bind")
     @PostMapping("/bind")
     public RetResult bind(@RequestBody BindForm form) {
+        log.info("请求参数: {}", form);
         List<Long> failBind = null;
         List<Long> failCancel = null;
         try {
