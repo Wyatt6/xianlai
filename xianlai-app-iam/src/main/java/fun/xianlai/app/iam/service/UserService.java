@@ -2,6 +2,7 @@ package fun.xianlai.app.iam.service;
 
 import fun.xianlai.app.iam.model.entity.rbac.User;
 import fun.xianlai.app.iam.model.form.UserCondition;
+import fun.xianlai.app.iam.model.form.UserForm;
 import org.springframework.data.domain.Page;
 
 import java.util.Date;
@@ -104,4 +105,9 @@ public interface UserService {
      * @return 解除绑定失败的角色ID列表
      */
     List<Long> cancelBind(Long userId, List<Long> roleIds);
+
+    /**
+     * 修改用户信息
+     */
+    UserForm editUserInfo(UserForm form);
 }

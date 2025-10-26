@@ -10,6 +10,7 @@ import fun.xianlai.app.iam.model.entity.rbac.User;
 import fun.xianlai.app.iam.model.form.BindForm;
 import fun.xianlai.app.iam.model.form.ChangePasswordForm;
 import fun.xianlai.app.iam.model.form.UserCondition;
+import fun.xianlai.app.iam.model.form.UserForm;
 import fun.xianlai.app.iam.service.PermissionService;
 import fun.xianlai.app.iam.service.RoleService;
 import fun.xianlai.app.iam.service.UserService;
@@ -205,5 +206,13 @@ public class UserController {
         return new RetResult().success()
                 .addData("failBind", failBind)
                 .addData("failCancel", failCancel);
+    }
+
+    @ApiLog("修改用户信息")
+    @SaCheckLogin
+    @PostMapping("/editUserInfo")
+    public RetResult editUserInfo(@RequestBody UserForm form) {
+        log.info("请求参数: {}", form);
+        return new RetResult().success().addData("userInfo", userService.editUserInfo(form));
     }
 }

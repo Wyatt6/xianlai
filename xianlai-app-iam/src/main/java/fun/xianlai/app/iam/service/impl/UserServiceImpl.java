@@ -7,6 +7,7 @@ import fun.xianlai.app.iam.model.entity.rbac.Role;
 import fun.xianlai.app.iam.model.entity.rbac.User;
 import fun.xianlai.app.iam.model.entity.rbac.UserRole;
 import fun.xianlai.app.iam.model.form.UserCondition;
+import fun.xianlai.app.iam.model.form.UserForm;
 import fun.xianlai.app.iam.repository.PermissionRepository;
 import fun.xianlai.app.iam.repository.RoleRepository;
 import fun.xianlai.app.iam.repository.UserRepository;
@@ -22,6 +23,7 @@ import fun.xianlai.core.utils.DateUtil;
 import fun.xianlai.core.utils.PasswordUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -183,7 +185,6 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<String> getPermissionList(Long userId) {
-        log.info("userId=[{}]", userId);
         List<String> permissions = null;
         SaSession session = StpUtil.getSessionByLoginId(userId);
 
@@ -338,5 +339,28 @@ public class UserServiceImpl implements UserService {
             setPermissionListCacheTime(userId, DateUtil.zero());
         }
         return failList;
+    }
+
+    @Override
+    @Transactional
+    public UserForm editUserInfo(UserForm form) {
+        User user = form.extractToUser();
+        Optional<User> oldUser = userRepository.findById(user.getId());
+        if (oldUser.isEmpty()) {
+            throw new SysException("要修改的用户不存在");
+        }
+        User newUser = oldUser.get();
+        if (user.getUsername() != null) newUser.setUsername(user.getUsername());
+        if (user.getActive() != null) newUser.setActive(user.getActive());
+
+        try {
+            log.info("更新数据库");
+            UserForm result = new UserForm();
+            result.importFromUser(userRepository.save(newUser));
+            return result;
+        } catch (DataIntegrityViolationException e) {
+            log.info(e.getMessage());
+            throw new SysException("用户名已存在");
+        }
     }
 }
