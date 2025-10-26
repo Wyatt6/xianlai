@@ -66,7 +66,7 @@ public class UserController {
         }
         User newUser = userService.createUser(username, password);
 
-        return new RetResult().success();
+        return new RetResult().success().addData("user", newUser);
     }
 
     @ApiLog("用户登录")
