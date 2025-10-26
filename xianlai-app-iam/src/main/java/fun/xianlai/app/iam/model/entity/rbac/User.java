@@ -59,4 +59,13 @@ public class User {
 
     @Transient
     private String captcha;     // 验证码
+
+    public User(Long id, String username, String password, String salt, Date registerTime, Boolean active) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.salt = salt;
+        this.registerTime = registerTime;
+        this.active = active;
+    }
 }
