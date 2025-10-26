@@ -27,7 +27,7 @@ INSERT IGNORE INTO tb_iam_permission(`id`, `sort_id`, `identifier`, `name`, `des
 
 -- ##### Role ##### --
 INSERT IGNORE INTO tb_iam_role(`id`, `sort_id`, `identifier`, `name`, `description`, `active`, `bind_check`) VALUE
-(20001, 20001, 'super_admin', '超级管理员', null, 1, 1);
+(20001, 20001, 'super_admin', '超级管理员', '具备user:bind:super_admin权限才能为用户绑定此角色', 1, 1);
 INSERT IGNORE INTO tb_iam_role_permission(`role_id`, `permission_id`) VALUE
 -- 菜单/路由权限 --
 (20001, 20001),
