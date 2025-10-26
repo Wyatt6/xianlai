@@ -50,11 +50,11 @@ public class UserController {
 
     @ApiLog("注册新用户")
     @PostMapping("/register")
-    public RetResult register(@RequestBody User input) {
-        String captchaKey = input.getCaptchaKey().trim();
-        String captcha = input.getCaptcha().trim();
-        String username = input.getUsername().trim();
-        String password = input.getPassword().trim();
+    public RetResult register(@RequestBody User form) {
+        String captchaKey = form.getCaptchaKey().trim();
+        String captcha = form.getCaptcha().trim();
+        String username = form.getUsername().trim();
+        String password = form.getPassword().trim();
         log.info("请求参数: captchaKey=[{}], captcha=[{}], username=[{}]", captchaKey, captcha, username);
 
         captchaService.verifyCaptcha(captchaKey, captcha);
@@ -71,11 +71,11 @@ public class UserController {
 
     @ApiLog("用户登录")
     @PostMapping("/login")
-    public RetResult login(@RequestBody User input) {
-        String captchaKey = input.getCaptchaKey().trim();
-        String captcha = input.getCaptcha().trim();
-        String username = input.getUsername();
-        String password = input.getPassword();
+    public RetResult login(@RequestBody User form) {
+        String captchaKey = form.getCaptchaKey().trim();
+        String captcha = form.getCaptcha().trim();
+        String username = form.getUsername();
+        String password = form.getPassword();
         log.info("请求参数: captchaKey=[{}], captcha=[{}], username=[{}]", captchaKey, captcha, username);
 
         captchaService.verifyCaptcha(captchaKey, captcha);
@@ -186,18 +186,18 @@ public class UserController {
     @SaCheckLogin
     @SaCheckPermission("user:bind")
     @PostMapping("/bind")
-    public RetResult bind(@RequestBody BindForm input) {
+    public RetResult bind(@RequestBody BindForm form) {
         List<Long> failBind = null;
         List<Long> failCancel = null;
         try {
             log.info("绑定");
-            failBind = userService.bind(input.getUserId(), input.getBind());
+            failBind = userService.bind(form.getUserId(), form.getBind());
         } catch (IllegalArgumentException e) {
             log.info("无须绑定");
         }
         try {
             log.info("解除绑定");
-            failCancel = userService.cancelBind(input.getUserId(), input.getCancel());
+            failCancel = userService.cancelBind(form.getUserId(), form.getCancel());
         } catch (IllegalArgumentException e) {
             log.info("无须解除绑定");
         }
