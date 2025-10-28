@@ -16,7 +16,7 @@ import java.util.Date;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String username);
 
-    @Query("select distinct new User(u.id, u.username, u.password, u.salt, u.registerTime, u.active) " +
+    @Query("select distinct new User(u.id, u.username, u.password, u.salt, u.registerTime, u.active, u.isDelete) " +
             " from User u " +
             "      left join UserRole ur on u.id = ur.userId " +
             "      left join Role r on ur.roleId = r.id " +
@@ -26,12 +26,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "      and (?2 is null or u.registerTime >= ?2) " +
             "      and (?3 is null or u.registerTime <= ?3) " +
             "      and (?4 is null or u.active = ?4) " +
-            "      and (?5 is null or r.identifier like %?5%) " +
-            "      and (?6 is null or p.identifier like %?6%)")
+            "      and (?5 is null or u.isDelete = ?5) " +
+            "      and (?6 is null or r.identifier like %?6%) " +
+            "      and (?7 is null or p.identifier like %?7%)")
     Page<User> findConditionally(String username,
                                  Date stRegisterTime,
                                  Date edRegisterTime,
                                  Boolean active,
+                                 Boolean isDelete,
                                  String role,
                                  String permission,
                                  Pageable pageable);

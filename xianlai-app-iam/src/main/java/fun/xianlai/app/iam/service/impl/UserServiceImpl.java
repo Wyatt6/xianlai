@@ -95,6 +95,7 @@ public class UserServiceImpl implements UserService {
         newUser.setSalt(salt);
         newUser.setRegisterTime(DateUtil.now());
         newUser.setActive(true);
+        newUser.setIsDelete(false);
         User savedUser = userRepository.save(newUser);
         log.info("成功创建新用户: id=[{}]", savedUser.getId());
 
@@ -105,7 +106,13 @@ public class UserServiceImpl implements UserService {
     @SimpleServiceLog("身份验证（用户名+密码）")
     public User authentication(String username, String password) {
         User user = userRepository.findByUsername(username);
-        if (user == null || !user.getPassword().equals(PasswordUtil.encode(password, user.getSalt()))) {
+        if (user == null) {
+            throw new SysException("用户未注册");
+        }
+        if (user.getIsDelete()) {
+            throw new SysException("用户已注销");
+        }
+        if (!user.getPassword().equals(PasswordUtil.encode(password, user.getSalt()))) {
             throw new SysException("用户名或密码错误");
         }
         return user;
@@ -115,7 +122,13 @@ public class UserServiceImpl implements UserService {
     @SimpleServiceLog("身份验证（用户ID+密码）")
     public User authentication(Long userId, String password) {
         Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty() || !user.get().getPassword().equals(PasswordUtil.encode(password, user.get().getSalt()))) {
+        if (user.isEmpty()) {
+            throw new SysException("用户未注册");
+        }
+        if (user.get().getIsDelete()) {
+            throw new SysException("用户已注销");
+        }
+        if (!user.get().getPassword().equals(PasswordUtil.encode(password, user.get().getSalt()))) {
             throw new SysException("用户名或密码错误");
         }
         return user.get();
@@ -247,6 +260,7 @@ public class UserServiceImpl implements UserService {
         Date stRegisterTime = (condition == null || condition.getStRegisterTime() == null) ? null : condition.getStRegisterTime();
         Date edRegisterTime = (condition == null || condition.getEdRegisterTime() == null) ? null : condition.getEdRegisterTime();
         Boolean active = (condition == null || condition.getActive() == null) ? null : condition.getActive();
+        Boolean isDelete = (condition == null || condition.getIsDelete() == null) ? null : condition.getIsDelete();
         String role = (condition == null || condition.getRole() == null) ? null : condition.getRole();
         String permission = (condition == null || condition.getPermission() == null) ? null : condition.getPermission();
 
@@ -259,6 +273,7 @@ public class UserServiceImpl implements UserService {
                     stRegisterTime,
                     edRegisterTime,
                     active,
+                    isDelete,
                     role,
                     permission,
                     pageable);
@@ -269,6 +284,7 @@ public class UserServiceImpl implements UserService {
                     stRegisterTime,
                     edRegisterTime,
                     active,
+                    isDelete,
                     role,
                     permission,
                     Pageable.unpaged(sort));
@@ -342,16 +358,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @ServiceLog("修改用户信息/注销用户")
     @Transactional
     public UserForm editUserInfo(UserForm form) {
         User user = form.extractToUser();
+
+        if (StpUtil.getLoginIdAsLong() == user.getId()) {
+            log.info("操作自己的用户，不需要权限");
+        } else {
+            log.info("操作别人的用户，需要user:edit或user:delete权限");
+            List<String> permissionList = StpUtil.getPermissionList();
+            if (user.getIsDelete() != null && !permissionList.contains("user:delete")) {
+                throw new SysException("用户权限不足");
+            }
+            if ((user.getUsername() != null || user.getActive() != null) && !permissionList.contains("user:edit")) {
+                throw new SysException("用户权限不足");
+            }
+
+        }
+
         Optional<User> oldUser = userRepository.findById(user.getId());
         if (oldUser.isEmpty()) {
-            throw new SysException("要修改的用户不存在");
+            throw new SysException("用户不存在");
+        }
+        if (oldUser.get().getIsDelete()) {
+            throw new SysException("用户已注销");
         }
         User newUser = oldUser.get();
         if (user.getUsername() != null) newUser.setUsername(user.getUsername());
         if (user.getActive() != null) newUser.setActive(user.getActive());
+        if (user.getIsDelete() != null) newUser.setIsDelete(user.getIsDelete());
 
         try {
             log.info("更新数据库");

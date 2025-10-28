@@ -53,6 +53,9 @@ public class User {
     @Column(columnDefinition = "bit not null default 0")
     private Boolean active;
 
+    @Column(columnDefinition = "bit not null default 0")
+    private Boolean isDelete;
+
     // ----- 非持久化属性 -----
     @Transient
     private String captchaKey;  // 验证码KEY
@@ -60,12 +63,13 @@ public class User {
     @Transient
     private String captcha;     // 验证码
 
-    public User(Long id, String username, String password, String salt, Date registerTime, Boolean active) {
+    public User(Long id, String username, String password, String salt, Date registerTime, Boolean active, Boolean isDelete) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.salt = salt;
         this.registerTime = registerTime;
-        this.active = active;
+        this. active = active;
+        this.isDelete = isDelete;
     }
 }

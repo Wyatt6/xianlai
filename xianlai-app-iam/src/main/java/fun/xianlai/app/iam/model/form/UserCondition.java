@@ -10,6 +10,7 @@ public class UserCondition {
     private Date stRegisterTime;    // 注册时间开始
     private Date edRegisterTime;    // 注册时间结束
     private Boolean active;         // 启用/禁用
+    private Boolean isDelete;       // 已删除
     private String role;            // 包含角色
     private String permission;      // 包含权限
 }

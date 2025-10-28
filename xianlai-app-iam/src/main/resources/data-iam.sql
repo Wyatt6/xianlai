@@ -55,9 +55,9 @@ INSERT IGNORE INTO tb_iam_role_permission(`role_id`, `permission_id`) VALUE
 
 
 -- ##### User ##### --
-INSERT IGNORE INTO tb_iam_user(`id`, `username`, `password`, `salt`, `register_time`, `active`) VALUE
+INSERT IGNORE INTO tb_iam_user(`id`, `username`, `password`, `salt`, `register_time`, `active`, `is_delete`) VALUE
 -- superadmin / superadmin
-(20001, 'superadmin', '8176126c91f53981449d7575bafa1253', '6386718be1b3', '2025-01-01 00:00:00', 1);
+(20001, 'superadmin', '8176126c91f53981449d7575bafa1253', '6386718be1b3', '2025-01-01 00:00:00', 1, 0);
 INSERT IGNORE INTO tb_iam_user_role(`user_id`, `role_id`) VALUE
 -- superadmin
 (20001, 20001);

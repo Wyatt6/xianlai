@@ -208,7 +208,7 @@ public class UserController {
                 .addData("failCancel", failCancel);
     }
 
-    @ApiLog("修改用户信息")
+    @ApiLog("修改用户信息/注销用户")
     @SaCheckLogin
     @PostMapping("/editUserInfo")
     public RetResult editUserInfo(@RequestBody UserForm form) {
