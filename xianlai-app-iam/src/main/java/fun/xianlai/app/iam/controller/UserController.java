@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author WyattLau
@@ -189,6 +190,10 @@ public class UserController {
     @PostMapping("/bind")
     public RetResult bind(@RequestBody BindForm form) {
         log.info("请求参数: {}", form);
+        Optional<User> user = userService.findByUserId(form.getUserId());
+        if (user.isEmpty()) {
+            throw new SysException("用户已注销");
+        }
         List<Long> failBind = null;
         List<Long> failCancel = null;
         try {

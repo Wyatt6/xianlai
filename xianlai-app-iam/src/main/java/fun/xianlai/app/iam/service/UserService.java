@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author WyattLau
@@ -87,6 +88,11 @@ public interface UserService {
      * @return 用户分页数据
      */
     Page<User> getUsersByPageConditionally(int pageNum, int pageSize, UserCondition condition);
+
+    /**
+     * 根据用户ID查询用户
+     */
+    Optional<User> findByUserId(Long userId);
 
     /**
      * 绑定（绑定userId和roleIds）
