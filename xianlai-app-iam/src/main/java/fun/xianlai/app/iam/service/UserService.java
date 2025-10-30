@@ -22,9 +22,10 @@ public interface UserService {
      *
      * @param username 用户名
      * @param password 密码（明文）
+     * @param active   状态
      * @return 用户对象
      */
-    User createUser(String username, String password);
+    User createUser(String username, String password, Boolean active);
 
     /**
      * 身份验证（用户名+密码）
@@ -88,6 +89,11 @@ public interface UserService {
      * @return 用户分页数据
      */
     Page<User> getUsersByPageConditionally(int pageNum, int pageSize, UserCondition condition);
+
+    /**
+     * 查询某用户的排名（从1开始）
+     */
+    Long getRowNum(Long userId);
 
     /**
      * 根据用户ID查询用户

@@ -50,6 +50,27 @@ public class UserController {
     @Autowired
     private PermissionService permissionService;
 
+    @ApiLog("创建新用户")
+    @SaCheckLogin
+    @SaCheckPermission("user:add")
+    @PostMapping("/createUser")
+    public RetResult createUser(@RequestBody User form) {
+        String username = form.getUsername().trim();
+        String password = form.getPassword().trim();
+        Boolean active = form.getActive();
+        log.info("请求参数: username=[{}], active=[{}]", username, active);
+
+        if (!userService.matchUsernameFormat(username)) {
+            throw new SysException("用户名格式错误");
+        }
+        if (!userService.matchPasswordFormat(password)) {
+            throw new SysException("密码格式错误");
+        }
+        User newUser = userService.createUser(username, password, active);
+
+        return new RetResult().success().addData("user", newUser);
+    }
+
     @ApiLog("注册新用户")
     @PostMapping("/register")
     public RetResult register(@RequestBody User form) {
@@ -66,7 +87,7 @@ public class UserController {
         if (!userService.matchPasswordFormat(password)) {
             throw new SysException("密码格式错误");
         }
-        User newUser = userService.createUser(username, password);
+        User newUser = userService.createUser(username, password, true);
 
         return new RetResult().success().addData("user", newUser);
     }
@@ -182,6 +203,15 @@ public class UserController {
                 .addData("totalPages", users.getTotalPages())
                 .addData("totalElements", users.getTotalElements())
                 .addData("content", users.getContent());
+    }
+
+    @ApiLog("查询用户的排名（从1开始）")
+    @SaCheckLogin
+    @SaCheckPermission("user:query")
+    @GetMapping("/getRowNumStartFrom1")
+    public RetResult getRowNumStartFrom1(@RequestParam Long userId) {
+        log.info("请求参数: userId=[{}]", userId);
+        return new RetResult().success().addData("rowNum", userService.getRowNum(userId));
     }
 
     @ApiLog("为用户绑定/解除绑定角色")

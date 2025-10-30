@@ -37,4 +37,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
                                  String role,
                                  String permission,
                                  Pageable pageable);
+
+    @Query(value = "select num " +
+            " from (select @rownum \\:= @rownum + 1 as num, u.id as id " +
+            "      from tb_iam_user u, (select @rownum \\:= 0) n " +
+            "      order by u.id) t " +
+            " where t.id = ?1", nativeQuery = true)
+    Long findRowNumById(Long id);
+
 }

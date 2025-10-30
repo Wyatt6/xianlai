@@ -1,12 +1,14 @@
 INSERT IGNORE INTO tb_common_sys_api(`id`, `call_path`, `description`, `request_method`, `url`) VALUE
 -- User --
-(20001, 'iam.user.register', '注册新用户', 'POST', '/api/iam/user/register'),
-(20002, 'iam.user.login', '用户登录', 'POST', '/api/iam/user/login'),
-(20003, 'iam.user.logout', '退出登录', 'GET', '/api/iam/user/logout'),
-(20004, 'iam.user.changePassword', '修改密码', 'POST', '/api/iam/user/changePassword'),
-(20005, 'iam.user.getPageConditionally', '条件查询用户分页', 'POST', '/api/iam/user/getPageConditionally'),
-(20006, 'iam.user.bind', '为用户绑定/解除绑定角色', 'POST', '/api/iam/user/bind'),
-(20007, 'iam.user.editUserInfo', '修改用户信息/注销用户', 'POST', '/api/iam/user/editUserInfo'),
+(20001, 'iam.user.createUser', '创建新用户', 'POST', '/api/iam/user/createUser'),
+(20002, 'iam.user.register', '注册新用户', 'POST', '/api/iam/user/register'),
+(20003, 'iam.user.login', '用户登录', 'POST', '/api/iam/user/login'),
+(20004, 'iam.user.logout', '退出登录', 'GET', '/api/iam/user/logout'),
+(20005, 'iam.user.changePassword', '修改密码', 'POST', '/api/iam/user/changePassword'),
+(20006, 'iam.user.getPageConditionally', '条件查询用户分页', 'POST', '/api/iam/user/getPageConditionally'),
+(20007, 'iam.user.getRowNumStartFrom1', '查询用户的排名（从1开始）', 'GET', '/api/iam/user/getRowNumStartFrom1'),
+(20008, 'iam.user.bind', '为用户绑定/解除绑定角色', 'POST', '/api/iam/user/bind'),
+(20009, 'iam.user.editUserInfo', '修改用户信息/注销用户', 'POST', '/api/iam/user/editUserInfo'),
 -- Permission --
 (21001, 'iam.permission.add', '新增权限', 'POST', '/api/iam/permission/add'),
 (21002, 'iam.permission.delete', '删除权限', 'GET', '/api/iam/permission/delete'),

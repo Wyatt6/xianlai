@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @ServiceLog("创建新用户")
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public User createUser(String username, String password) {
+    public User createUser(String username, String password, Boolean active) {
         log.info("检查用户名是否已被使用");
         if (userRepository.findByUsername(username) != null) {
             throw new SysException("用户名已被使用");
@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
         newUser.setPassword(encryptedPassword);
         newUser.setSalt(salt);
         newUser.setRegisterTime(DateUtil.now());
-        newUser.setActive(true);
+        newUser.setActive(active);
         newUser.setIsDelete(false);
         User savedUser = userRepository.save(newUser);
         log.info("成功创建新用户: id=[{}]", savedUser.getId());
@@ -289,6 +289,12 @@ public class UserServiceImpl implements UserService {
                     permission,
                     Pageable.unpaged(sort));
         }
+    }
+
+    @Override
+    @SimpleServiceLog("查询某用户的排名")
+    public Long getRowNum(Long userId) {
+        return userRepository.findRowNumById(userId);
     }
 
     @Override
