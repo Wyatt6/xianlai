@@ -28,7 +28,12 @@ INSERT IGNORE INTO tb_iam_permission(`id`, `sort_id`, `identifier`, `name`, `des
 (23003, 23003, 'user:edit', '修改用户', null),
 (23004, 23004, 'user:query', '查询用户', null),
 (23005, 23005, 'user:bind', '绑定角色', null),
-(23006, 23006, 'user:bind:super_admin', '角色绑定检查：super_admin', '具备此权限才能为用户绑定super_admin角色');
+(23006, 23006, 'user:bind:super_admin', '角色绑定检查：super_admin', '具备此权限才能为用户绑定super_admin角色'),
+-- 接口 --
+(24001, 24001, 'api:add', '添加接口', null),
+(24002, 24002, 'api:delete', '删除接口', null),
+(24003, 24003, 'api:edit', '修改接口', null),
+(24004, 24004, 'api:query', '查询接口', null);
 
 
 -- ##### Role ##### --
@@ -63,7 +68,12 @@ INSERT IGNORE INTO tb_iam_role_permission(`role_id`, `permission_id`) VALUE
 (20001, 23003),
 (20001, 23004),
 (20001, 23005),
-(20001, 23006);
+(20001, 23006),
+-- 接口 --
+(20001, 24001),
+(20001, 24002),
+(20001, 24003),
+(20001, 24004);
 
 
 -- ##### User ##### --
