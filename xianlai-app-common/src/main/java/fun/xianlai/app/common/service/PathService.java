@@ -2,6 +2,7 @@ package fun.xianlai.app.common.service;
 
 import fun.xianlai.app.common.model.entity.SysPath;
 import fun.xianlai.app.common.model.form.SysPathCondition;
+import fun.xianlai.core.response.DataMap;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -21,9 +22,9 @@ public interface PathService {
     List<SysPath> getSysPathsFromCache();
 
     /**
-     * 创建系统路径
+     * 新增路径
      */
-    SysPath createSysPath(SysPath path);
+    DataMap add(SysPath path);
 
     /**
      * 条件查询路径分页
@@ -36,9 +37,4 @@ public interface PathService {
      * @return 分页数据
      */
     Page<SysPath> getSysPathsByPageConditionally(int pageNum, int pageSize, SysPathCondition condition);
-
-    /**
-     * 查询某路径的排名（从1开始）
-     */
-    Long getRowNum(Long pathId);
 }

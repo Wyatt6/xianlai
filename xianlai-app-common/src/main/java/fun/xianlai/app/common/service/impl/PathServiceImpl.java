@@ -8,6 +8,7 @@ import fun.xianlai.app.common.service.PathService;
 import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
+import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.ChecksumUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,11 +63,17 @@ public class PathServiceImpl implements PathService {
     }
 
     @Override
-    @SimpleServiceLog("创建系统路径")
-    public SysPath createSysPath(SysPath path) {
+    @SimpleServiceLog("新增路径")
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public DataMap add(SysPath path) {
         try {
             path.setId(null);
-            return sysPathRepository.save(path);
+            SysPath savedPath = sysPathRepository.save(path);
+            Long rowNum = sysPathRepository.findRowNumById(savedPath.getId());
+            DataMap result = new DataMap();
+            result.put("path", savedPath);
+            result.put("rowNum", rowNum);
+            return result;
         } catch (DataIntegrityViolationException e) {
             throw new SysException("路径常量或路径URL已存在");
         }
@@ -87,10 +94,5 @@ public class PathServiceImpl implements PathService {
             log.info("全表查询");
             return sysPathRepository.findConditionally(name, path, Pageable.unpaged(sort));
         }
-    }
-
-    @Override
-    public Long getRowNum(Long pathId) {
-        return sysPathRepository.findRowNumById(pathId);
     }
 }

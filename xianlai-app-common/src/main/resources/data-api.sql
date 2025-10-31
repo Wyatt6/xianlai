@@ -9,7 +9,6 @@ INSERT IGNORE INTO tb_common_sys_api(`id`, `call_path`, `description`, `request_
 -- PathController
 (12001, 'common.path.add', '新增路径', 'POST', '/api/common/path/add'),
 (12002, 'common.path.getPageConditionally', '条件查询路径分页', 'POST', '/api/common/path/getPageConditionally'),
-(12003, 'common.path.getRowNumStartFrom1', '查询路径的排名（从1开始）', 'GET', '/api/common/path/getRowNumStartFrom1'),
 -- ApiController
 (13001, 'common.api.getPageConditionally', '条件查询接口分页', 'POST', '/api/common/api/getPageConditionally'),
 
