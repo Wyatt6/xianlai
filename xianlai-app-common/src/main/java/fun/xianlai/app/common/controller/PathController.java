@@ -48,6 +48,15 @@ public class PathController {
         return new RetResult().success();
     }
 
+    @ApiLog("重载路径缓存")
+    @SaCheckLogin
+    @SaCheckPermission("path:edit")
+    @GetMapping("/reloadCache")
+    public RetResult reloadCache() {
+        pathService.cacheSysPaths();
+        return new RetResult().success();
+    }
+
     /**
      * 条件查询路径分页
      * 查询条件为空时查询全量数据
