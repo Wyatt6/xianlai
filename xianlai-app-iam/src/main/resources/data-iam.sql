@@ -33,7 +33,12 @@ INSERT IGNORE INTO tb_iam_permission(`id`, `sort_id`, `identifier`, `name`, `des
 (24001, 24001, 'api:add', '添加接口', null),
 (24002, 24002, 'api:delete', '删除接口', null),
 (24003, 24003, 'api:edit', '修改接口', null),
-(24004, 24004, 'api:query', '查询接口', null);
+(24004, 24004, 'api:query', '查询接口', null),
+-- 路径 --
+(25001, 25001, 'path:add', '添加路径', null),
+(25002, 25002, 'path:delete', '删除路径', null),
+(25003, 25003, 'path:edit', '修改路径', null),
+(25004, 25004, 'path:query', '查询路径', null);
 
 
 -- ##### Role ##### --
@@ -73,7 +78,12 @@ INSERT IGNORE INTO tb_iam_role_permission(`role_id`, `permission_id`) VALUE
 (20001, 24001),
 (20001, 24002),
 (20001, 24003),
-(20001, 24004);
+(20001, 24004),
+-- 路径 --
+(20001, 25001),
+(20001, 25002),
+(20001, 25003),
+(20001, 25004);
 
 
 -- ##### User ##### --
