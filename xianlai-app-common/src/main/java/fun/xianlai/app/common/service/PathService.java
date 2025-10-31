@@ -21,6 +21,11 @@ public interface PathService {
     List<SysPath> getSysPathsFromCache();
 
     /**
+     * 创建系统路径
+     */
+    SysPath createSysPath(SysPath path);
+
+    /**
      * 条件查询路径分页
      * 查询条件为空时查询全量数据
      * 页码<0或页大小<=0时不分页
@@ -31,4 +36,9 @@ public interface PathService {
      * @return 分页数据
      */
     Page<SysPath> getSysPathsByPageConditionally(int pageNum, int pageSize, SysPathCondition condition);
+
+    /**
+     * 查询某路径的排名（从1开始）
+     */
+    Long getRowNum(Long pathId);
 }

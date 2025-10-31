@@ -10,6 +10,9 @@ import fun.xianlai.core.response.RetResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +28,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class PathController {
     @Autowired
     private PathService pathService;
+
+    @ApiLog("新增路径")
+    @SaCheckLogin
+    @SaCheckPermission("path:add")
+    @PostMapping("/add")
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public RetResult add(@RequestBody SysPath form) {
+        log.info("请求参数: {}", form);
+        return new RetResult().success().addData("path", pathService.createSysPath(form));
+    }
 
     /**
      * 条件查询路径分页
@@ -51,5 +64,14 @@ public class PathController {
                 .addData("totalPages", paths.getTotalPages())
                 .addData("totalElements", paths.getTotalElements())
                 .addData("content", paths.getContent());
+    }
+
+    @ApiLog("查询路径的排名（从1开始）")
+    @SaCheckLogin
+    @SaCheckPermission("path:query")
+    @GetMapping("/getRowNumStartFrom1")
+    public RetResult getRowNumStartFrom1(@RequestParam Long pathId) {
+        log.info("请求参数: pathId=[{}]", pathId);
+        return new RetResult().success().addData("rowNum", pathService.getRowNum(pathId));
     }
 }

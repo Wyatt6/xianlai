@@ -42,7 +42,7 @@ public class SysPath {
     @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)
     private Long id;
 
-    @Column(columnDefinition = "bigint not null default 0")
+    @Column(columnDefinition = "bigint not null default 1")
     private Long sortId;
 
     @Column(columnDefinition = "varchar(255) not null")

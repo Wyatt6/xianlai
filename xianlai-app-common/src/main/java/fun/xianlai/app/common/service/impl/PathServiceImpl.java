@@ -7,10 +7,12 @@ import fun.xianlai.app.common.repository.SysPathRepository;
 import fun.xianlai.app.common.service.PathService;
 import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
+import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.utils.ChecksumUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -60,12 +62,23 @@ public class PathServiceImpl implements PathService {
     }
 
     @Override
-    @ServiceLog("条件路径接口分页")
+    @SimpleServiceLog("创建系统路径")
+    public SysPath createSysPath(SysPath path) {
+        try {
+            path.setId(null);
+            return sysPathRepository.save(path);
+        } catch (DataIntegrityViolationException e) {
+            throw new SysException("路径常量或路径URL已存在");
+        }
+    }
+
+    @Override
+    @ServiceLog("条件查询路径分页")
     public Page<SysPath> getSysPathsByPageConditionally(int pageNum, int pageSize, SysPathCondition condition) {
         String name = (condition == null || condition.getName() == null) ? null : condition.getName();
         String path = (condition == null || condition.getPath() == null) ? null : condition.getPath();
 
-        Sort sort = Sort.by(Sort.Order.asc("sortId"));
+        Sort sort = Sort.by(Sort.Order.asc("sortId"), Sort.Order.asc("name"));
         if (pageNum >= 0 && pageSize > 0) {
             log.info("分页查询");
             Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
@@ -74,5 +87,10 @@ public class PathServiceImpl implements PathService {
             log.info("全表查询");
             return sysPathRepository.findConditionally(name, path, Pageable.unpaged(sort));
         }
+    }
+
+    @Override
+    public Long getRowNum(Long pathId) {
+        return sysPathRepository.findRowNumById(pathId);
     }
 }
