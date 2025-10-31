@@ -12,12 +12,12 @@ import java.util.List;
  */
 public interface PathService {
     /**
-     * 缓存系统路径
+     * 缓存路径
      */
     void cacheSysPaths();
 
     /**
-     * 从缓存获取系统路径
+     * 从缓存获取路径
      */
     List<SysPath> getSysPathsFromCache();
 
@@ -25,6 +25,11 @@ public interface PathService {
      * 新增路径
      */
     DataMap add(SysPath path);
+
+    /**
+     * 删除路径
+     */
+    void delete(Long pathId);
 
     /**
      * 条件查询路径分页

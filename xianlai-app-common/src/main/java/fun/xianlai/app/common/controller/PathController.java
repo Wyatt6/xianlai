@@ -10,6 +10,7 @@ import fun.xianlai.core.response.RetResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,16 @@ public class PathController {
     public RetResult add(@RequestBody SysPath form) {
         log.info("请求参数: {}", form);
         return new RetResult().success().setData(pathService.add(form));
+    }
+
+    @ApiLog("删除路径")
+    @SaCheckLogin
+    @SaCheckPermission("path:delete")
+    @GetMapping("/delete")
+    public RetResult delete(@RequestParam Long pathId) {
+        log.info("请求参数: pathId=[{}]", pathId);
+        pathService.delete(pathId);
+        return new RetResult().success();
     }
 
     /**

@@ -16,7 +16,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * 系统路径
+ * 路径
  * <p>
  * 用于注册各个页面访问URL的路径，例如：
  * PORTAL: '/portal',

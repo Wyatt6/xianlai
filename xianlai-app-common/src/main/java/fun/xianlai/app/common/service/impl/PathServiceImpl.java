@@ -43,7 +43,7 @@ public class PathServiceImpl implements PathService {
     private SysPathRepository sysPathRepository;
 
     @Override
-    @SimpleServiceLog("缓存系统路径")
+    @SimpleServiceLog("缓存路径")
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void cacheSysPaths() {
         List<SysPath> paths = sysPathRepository.findAll();
@@ -52,7 +52,7 @@ public class PathServiceImpl implements PathService {
     }
 
     @Override
-    @SimpleServiceLog("从缓存获取系统路径")
+    @SimpleServiceLog("从缓存获取路径")
     public List<SysPath> getSysPathsFromCache() {
         List<SysPath> paths = (List<SysPath>) redis.opsForValue().get("sysPaths");
         if (paths == null) {
@@ -70,6 +70,7 @@ public class PathServiceImpl implements PathService {
             path.setId(null);
             SysPath savedPath = sysPathRepository.save(path);
             Long rowNum = sysPathRepository.findRowNumById(savedPath.getId());
+            cacheSysPaths();
             DataMap result = new DataMap();
             result.put("path", savedPath);
             result.put("rowNum", rowNum);
@@ -77,6 +78,14 @@ public class PathServiceImpl implements PathService {
         } catch (DataIntegrityViolationException e) {
             throw new SysException("路径常量或路径URL已存在");
         }
+    }
+
+    @Override
+    @SimpleServiceLog("删除路径")
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void delete(Long pathId) {
+        sysPathRepository.deleteById(pathId);
+        cacheSysPaths();
     }
 
     @Override
