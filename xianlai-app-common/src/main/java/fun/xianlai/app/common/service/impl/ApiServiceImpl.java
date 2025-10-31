@@ -68,7 +68,7 @@ public class ApiServiceImpl implements ApiService {
         RequestMethod requestMethod = (condition == null || condition.getRequestMethod() == null) ? null : condition.getRequestMethod();
         String url = (condition == null || condition.getUrl() == null) ? null : condition.getUrl();
 
-        Sort sort = Sort.by(Sort.Order.asc("id"));
+        Sort sort = Sort.by(Sort.Order.asc("callPath"));
         if (pageNum >= 0 && pageSize > 0) {
             log.info("分页查询");
             Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
