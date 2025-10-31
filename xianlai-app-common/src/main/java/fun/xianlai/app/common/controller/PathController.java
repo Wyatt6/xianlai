@@ -33,6 +33,8 @@ public class PathController {
     @PostMapping("/add")
     public RetResult add(@RequestBody SysPath form) {
         log.info("请求参数: {}", form);
+        form.setName(form.getName().trim());
+        form.setPath(form.getPath().trim());
         return new RetResult().success().setData(pathService.add(form));
     }
 
