@@ -17,6 +17,7 @@ INSERT IGNORE INTO tb_common_sys_option(
 (12006, 12006, 'portal.coverSubTitle', '开源、轻量、配置式的多功能后台管理系统', '开源、轻量、配置式的多功能后台管理系统', '封面副标题', null, 0, 1, 'STRING'),
 (12007, 12007, 'portal.coverSubTitleSize', '2', '2', '封面副标题字体大小', null, 0, 1, 'NUMBER'),
 (12008, 12008, 'portal.coverSubTitleColor', '#ffffff', '#ffffff', '封面副标题字体颜色', '十六进制颜色值', 0, 1, 'STRING'),
-(12009, 12009, 'portal.footerCopyright', '', '', '门户页脚版权声明', null, 0, 1, 'STRING'),
-(12010, 12010, 'portal.footerBeianIcp', '', '', '门户页脚ICP备案号', null, 0, 1, 'STRING'),
-(12011, 12011, 'portal.footerBeianGongan', '', '', '门户页脚公网安备号', null, 0, 1, 'STRING');
+(12009, 12009, 'portal.allowRegister', 'true', 'true', '允许注册', 'true/false', 1, 1, 'BOOLEAN'),
+(12010, 12010, 'portal.footerCopyright', '', '', '门户页脚版权声明', null, 0, 1, 'STRING'),
+(12011, 12011, 'portal.footerBeianIcp', '', '', '门户页脚ICP备案号', null, 0, 1, 'STRING'),
+(12012, 12012, 'portal.footerBeianGongan', '', '', '门户页脚公网安备号', null, 0, 1, 'STRING');
