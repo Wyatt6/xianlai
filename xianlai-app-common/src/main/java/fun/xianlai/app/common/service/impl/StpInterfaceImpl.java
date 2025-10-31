@@ -1,7 +1,7 @@
 package fun.xianlai.app.common.service.impl;
 
 import cn.dev33.satoken.stp.StpInterface;
-import fun.xianlai.core.feign.consumer.FeignUserService;
+import fun.xianlai.core.feign.notlog.consumer.FeignUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
