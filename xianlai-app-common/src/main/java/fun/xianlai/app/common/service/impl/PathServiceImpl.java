@@ -71,7 +71,7 @@ public class PathServiceImpl implements PathService {
             path.setId(null);
             SysPath savedPath = sysPathRepository.save(path);
             Long rowNum = sysPathRepository.findRowNumById(savedPath.getId());
-            cachePaths();
+            self.cachePaths();
             DataMap result = new DataMap();
             result.put("path", savedPath);
             result.put("rowNum", rowNum);
@@ -86,7 +86,7 @@ public class PathServiceImpl implements PathService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void delete(Long pathId) {
         sysPathRepository.deleteById(pathId);
-        cachePaths();
+        self.cachePaths();
     }
 
     @Override
@@ -105,7 +105,7 @@ public class PathServiceImpl implements PathService {
                 log.info(e.getMessage());
                 throw new SysException("路径名称或路径URL已存在");
             }
-            cachePaths();
+            self.cachePaths();
             return new DataMap("path", newPath);
         } else {
             throw new SysException("要修改的路径不存在");

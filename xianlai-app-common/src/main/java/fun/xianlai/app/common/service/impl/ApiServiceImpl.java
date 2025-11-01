@@ -72,7 +72,7 @@ public class ApiServiceImpl implements ApiService {
             api.setId(null);
             SysApi savedApi = sysApiRepository.save(api);
             Long rowNum = sysApiRepository.findRowNumById(savedApi.getId());
-            cacheApis();
+            self.cacheApis();
             DataMap result = new DataMap();
             result.put("api", savedApi);
             result.put("rowNum", rowNum);
@@ -87,7 +87,7 @@ public class ApiServiceImpl implements ApiService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void delete(Long apiId) {
         sysApiRepository.deleteById(apiId);
-        cacheApis();
+        self.cacheApis();
     }
 
     @Override
@@ -107,7 +107,7 @@ public class ApiServiceImpl implements ApiService {
                 log.info(e.getMessage());
                 throw new SysException("接口调用路径已存在");
             }
-            cacheApis();
+            self.cacheApis();
             return new DataMap("api", newApi);
         } else {
             throw new SysException("要修改的接口不存在");
