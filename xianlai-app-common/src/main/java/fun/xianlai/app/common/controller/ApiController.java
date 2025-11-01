@@ -44,7 +44,7 @@ public class ApiController {
                                           @RequestParam int pageSize,
                                           @RequestBody(required = false) SysApiCondition condition) {
         log.info("请求参数：pageNum=[{}], pageSize=[{}], condition=[{}]", pageNum, pageSize, condition);
-        Page<SysApi> apis = apiService.getSysApisByPageConditionally(pageNum, pageSize, condition);
+        Page<SysApi> apis = apiService.getApisByPageConditionally(pageNum, pageSize, condition);
         return new RetResult().success()
                 .addData("pageNum", pageNum)
                 .addData("pageSize", pageSize)

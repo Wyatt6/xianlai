@@ -21,14 +21,13 @@ public interface ApiService {
     List<SysApi> getSysApisFromCache();
 
     /**
-     * 条件查询接口分页
      * 查询条件为空时查询全量数据
      * 页码<0或页大小<=0时不分页
      *
      * @param pageNum   页码
      * @param pageSize  页大小
      * @param condition 查询条件
-     * @return 接口分页数据
+     * @return 分页数据
      */
-    Page<SysApi> getSysApisByPageConditionally(int pageNum, int pageSize, SysApiCondition condition);
+    Page<SysApi> getApisByPageConditionally(int pageNum, int pageSize, SysApiCondition condition);
 }
