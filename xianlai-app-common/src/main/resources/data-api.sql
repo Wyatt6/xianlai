@@ -18,6 +18,12 @@ INSERT IGNORE INTO tb_common_sys_api(`id`, `call_path`, `description`, `request_
 (13003, 'common.api.edit', '修改接口', 'POST', '/api/common/api/edit'),
 (13004, 'common.api.reloadCache', '重载接口缓存', 'GET', '/api/common/api/reloadCache'),
 (13005, 'common.api.getPageConditionally', '条件查询接口分页', 'POST', '/api/common/api/getPageConditionally'),
+-- MenuController
+(14001, 'common.menu.add', '新增菜单', 'POST', '/api/common/menu/add'),
+(14002, 'common.menu.delete', '删除菜单', 'GET', '/api/common/menu/delete'),
+(14003, 'common.menu.edit', '修改菜单', 'POST', '/api/common/menu/edit'),
+(14004, 'common.menu.reloadCache', '重载菜单缓存', 'GET', '/api/common/menu/reloadCache'),
+(14005, 'common.menu.getForest', '查询菜单森林', 'GET', '/api/common/menu/getForest'),
 
 -- ---------- --
 -- IAM模块接口 --

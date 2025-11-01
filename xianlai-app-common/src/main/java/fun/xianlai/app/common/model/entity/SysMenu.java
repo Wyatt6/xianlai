@@ -6,13 +6,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 系统菜单
@@ -27,7 +32,9 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "tb_common_sys_menu")
+@Table(name = "tb_common_sys_menu", indexes = {
+        @Index(columnList = "sortId")
+})
 public class SysMenu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
@@ -57,4 +64,20 @@ public class SysMenu {
 
     @Column(columnDefinition = "bit not null default 0")
     private Boolean active;
+
+    // ----- 非持久化属性 -----
+    @Transient
+    private List<SysMenu> children = new ArrayList<>();
+
+    public SysMenu(Long id, Long sortId, Long parentId, String icon, String title, String pathName, Boolean needPermission, String permission, Boolean active) {
+        this.id = id;
+        this.sortId = sortId;
+        this.parentId = parentId;
+        this.icon = icon;
+        this.title = title;
+        this.pathName = pathName;
+        this.needPermission = needPermission;
+        this.permission = permission;
+        this.active = active;
+    }
 }

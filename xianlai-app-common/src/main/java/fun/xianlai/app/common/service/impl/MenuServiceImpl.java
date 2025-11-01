@@ -2,6 +2,7 @@ package fun.xianlai.app.common.service.impl;
 
 import com.alibaba.fastjson2.JSONObject;
 import fun.xianlai.app.common.model.entity.SysMenu;
+import fun.xianlai.app.common.model.form.MenuCondition;
 import fun.xianlai.app.common.repository.SysMenuRepository;
 import fun.xianlai.app.common.service.MenuService;
 import fun.xianlai.core.annotation.SimpleServiceLog;
@@ -77,5 +78,45 @@ public class MenuServiceImpl implements MenuService {
             menus = (List<Map<String, Object>>) redis.opsForValue().get("menus");
         }
         return menus;
+    }
+
+    @Override
+    @SimpleServiceLog("获取菜单森林")
+    public List<SysMenu> getMenuForest() {
+        List<SysMenu> menus = sysMenuRepository.findAll(Sort.by(Sort.Order.asc("sortId")));
+        List<SysMenu> forest = new ArrayList<>();
+        Map<Long, SysMenu> finder = new HashMap<>();
+        for (SysMenu menu : menus) {
+            finder.put(menu.getId(), menu);
+        }
+        for (SysMenu menu : menus) {
+            if (menu.getParentId() == 0) {
+                forest.add(finder.get(menu.getId()));
+            } else {
+                SysMenu fatherMenu = finder.get(menu.getParentId());
+                fatherMenu.getChildren().add(finder.get(menu.getId()));
+            }
+        }
+        return forest;
+    }
+
+    @Override
+    @SimpleServiceLog("获取生效中的菜单森林")
+    public List<SysMenu> getActiveMenuForest() {
+        List<SysMenu> menus = sysMenuRepository.findByActive(true, Sort.by(Sort.Order.asc("sortId")));
+        List<SysMenu> forest = new ArrayList<>();
+        Map<Long, SysMenu> finder = new HashMap<>();
+        for (SysMenu menu : menus) {
+            finder.put(menu.getId(), menu);
+        }
+        for (SysMenu menu : menus) {
+            if (menu.getParentId() == 0) {
+                forest.add(finder.get(menu.getId()));
+            } else {
+                SysMenu fatherMenu = finder.get(menu.getParentId());
+                fatherMenu.getChildren().add(finder.get(menu.getId()));
+            }
+        }
+        return forest;
     }
 }

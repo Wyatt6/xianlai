@@ -1,49 +1,7 @@
--- ##### Permission ##### --
-INSERT IGNORE INTO tb_iam_permission(`id`, `sort_id`, `identifier`, `name`, `description`) VALUE
--- 菜单/路由权限 --
-(20001, 20001, 'menu:iam', '“身份认证与访问管理”菜单', null),
-(20002, 20002, 'menu:iam_user_manage', '“用户管理”菜单', null),
-(20003, 20003, 'menu:iam_role_manage', '“角色管理”菜单', null),
-(20004, 20004, 'menu:iam_permission_manage', '“权限管理”菜单', null),
-(20101, 20101, 'menu:setting', '“系统设置”菜单', null),
-(20102, 20102, 'menu:setting_path', '“路径常量”菜单', null),
-(20103, 20103, 'menu:setting_menu', '“菜单管理”菜单', null),
-(20104, 20104, 'menu:setting_route', '“路由配置”菜单', null),
-(20105, 20105, 'menu:setting_option', '“参数选项”菜单', null),
-(20106, 20106, 'menu:setting_api', '“后端接口”菜单', null),
--- 权限 --
-(21001, 21001, 'permission:add', '添加权限', null),
-(21002, 21002, 'permission:delete', '删除权限', null),
-(21003, 21003, 'permission:edit', '修改权限', null),
-(21004, 21004, 'permission:query', '查询权限', null),
--- 角色 --
-(22001, 22001, 'role:add', '添加角色', null),
-(22002, 22002, 'role:delete', '删除角色', null),
-(22003, 22003, 'role:edit', '修改角色', null),
-(22004, 22004, 'role:query', '查询角色', null),
-(22005, 22005, 'role:grant', '角色授权', null),
--- 用户 --
-(23001, 23001, 'user:add', '添加用户', null),
-(23002, 23002, 'user:delete', '删除用户', null),
-(23003, 23003, 'user:edit', '修改用户', null),
-(23004, 23004, 'user:query', '查询用户', null),
-(23005, 23005, 'user:bind', '绑定角色', null),
-(23006, 23006, 'user:bind:super_admin', '角色绑定检查：super_admin', '具备此权限才能为用户绑定super_admin角色'),
--- 接口 --
-(24001, 24001, 'api:add', '添加接口', null),
-(24002, 24002, 'api:delete', '删除接口', null),
-(24003, 24003, 'api:edit', '修改接口', null),
-(24004, 24004, 'api:query', '查询接口', null),
--- 路径 --
-(25001, 25001, 'path:add', '添加路径', null),
-(25002, 25002, 'path:delete', '删除路径', null),
-(25003, 25003, 'path:edit', '修改路径', null),
-(25004, 25004, 'path:query', '查询路径', null);
-
-
--- ##### Role ##### --
 INSERT IGNORE INTO tb_iam_role(`id`, `sort_id`, `identifier`, `name`, `description`, `active`, `bind_check`) VALUE
 (20001, 20001, 'super_admin', '超级管理员', '具备user:bind:super_admin权限才能为用户绑定此角色', 1, 1);
+
+
 INSERT IGNORE INTO tb_iam_role_permission(`role_id`, `permission_id`) VALUE
 -- 菜单/路由权限 --
 (20001, 20001),
@@ -75,21 +33,26 @@ INSERT IGNORE INTO tb_iam_role_permission(`role_id`, `permission_id`) VALUE
 (20001, 23005),
 (20001, 23006),
 -- 接口 --
-(20001, 24001),
-(20001, 24002),
-(20001, 24003),
-(20001, 24004),
+(20001, 11001),
+(20001, 11002),
+(20001, 11003),
+(20001, 11004),
 -- 路径 --
-(20001, 25001),
-(20001, 25002),
-(20001, 25003),
-(20001, 25004);
+(20001, 10001),
+(20001, 10002),
+(20001, 10003),
+(20001, 10004),
+-- 菜单
+(20001, 12001),
+(20001, 12002),
+(20001, 12003),
+(20001, 12004);
 
 
 -- ##### User ##### --
 INSERT IGNORE INTO tb_iam_user(`id`, `username`, `password`, `salt`, `register_time`, `active`, `is_delete`) VALUE
 -- superadmin / superadmin
-(20001, 'superadmin', '8176126c91f53981449d7575bafa1253', '6386718be1b3', '2025-01-01 00:00:00', 1, 0);
+(20001, 'superadmin', '8176126c91f53981449d7575bafa1103', '6386718be1b3', '2010-01-01 00:00:00', 1, 0);
 INSERT IGNORE INTO tb_iam_user_role(`user_id`, `role_id`) VALUE
 -- superadmin
 (20001, 20001);
