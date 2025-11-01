@@ -1,12 +1,3 @@
--- ###### SysPath ##### --
-INSERT IGNORE INTO tb_common_sys_path(`id`, `sort_id`, `name`, `path`) VALUE
-(20001, 20001, 'IAM', '/iam'),
-(20002, 20002, 'IAM_REDIRECT', '/iam/user-manage'),
-(20003, 20003, 'IAM_USER_MANAGE', '/iam/user-manage'),
-(20004, 20004, 'IAM_ROLE_MANAGE', '/iam/role-manage'),
-(20005, 20005, 'IAM_PERMISSION_MANAGE', '/iam/permission-manage');
-
-
 -- ###### SysMenu ##### --
 INSERT IGNORE INTO tb_common_sys_menu(
     `id`, `sort_id`, `parent_id`, `icon`, `title`,
