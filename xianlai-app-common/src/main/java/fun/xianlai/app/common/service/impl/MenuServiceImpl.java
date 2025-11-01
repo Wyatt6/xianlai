@@ -5,6 +5,7 @@ import fun.xianlai.app.common.model.entity.SysMenu;
 import fun.xianlai.app.common.repository.SysMenuRepository;
 import fun.xianlai.app.common.service.MenuService;
 import fun.xianlai.core.annotation.SimpleServiceLog;
+import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.utils.ChecksumUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -53,6 +54,19 @@ public class MenuServiceImpl implements MenuService {
             menus = (List<Map<String, Object>>) redis.opsForValue().get("menus");
         }
         return menus;
+    }
+
+    @Override
+    @SimpleServiceLog("删除菜单")
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void delete(Long menuId) {
+        List<SysMenu> sonMenus = sysMenuRepository.findByParentId(menuId);
+        if (sonMenus == null || sonMenus.isEmpty()) {
+            sysMenuRepository.deleteById(menuId);
+            self.cacheActiveMenus();
+        } else {
+            throw new SysException("当前菜单仍然包含子菜单，无法删除");
+        }
     }
 
     @Override

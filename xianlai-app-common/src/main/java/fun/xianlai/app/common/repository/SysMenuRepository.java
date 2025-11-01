@@ -13,4 +13,6 @@ import java.util.List;
 @Repository
 public interface SysMenuRepository extends JpaRepository<SysMenu, Long> {
     List<SysMenu> findByActive(Boolean active, Sort sort);
+
+    List<SysMenu> findByParentId(Long parentId);
 }

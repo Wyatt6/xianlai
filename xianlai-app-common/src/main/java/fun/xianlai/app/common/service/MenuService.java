@@ -20,6 +20,11 @@ public interface MenuService {
     List<Map<String, Object>> getActiveMenusFromCache();
 
     /**
+     * 删除菜单
+     */
+    void delete(Long menuId);
+
+    /**
      * 获取菜单森林
      */
     List<SysMenu> getMenuForest();
