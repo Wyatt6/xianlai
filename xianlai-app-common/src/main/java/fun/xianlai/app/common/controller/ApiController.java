@@ -11,6 +11,7 @@ import fun.xianlai.core.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,15 @@ public class ApiController {
         form.setDescription(StringUtil.trim(form.getDescription()));
         form.setUrl(StringUtil.trim(form.getUrl()));
         return new RetResult().success().setData(apiService.add(form));
+    }
+
+    @ApiLog("重载接口缓存")
+    @SaCheckLogin
+    @SaCheckPermission("api:edit")
+    @GetMapping("/reloadCache")
+    public RetResult reloadCache() {
+        apiService.cacheApis();
+        return new RetResult().success();
     }
 
     /**
