@@ -34,7 +34,8 @@ import org.hibernate.annotations.GenericGenerator;
 @DynamicUpdate
 @Table(name = "tb_common_sys_path", indexes = {
         @Index(columnList = "name", unique = true),
-        @Index(columnList = "path", unique = true)
+        @Index(columnList = "path", unique = true),
+        @Index(columnList = "sortId, name")
 })
 public class SysPath {
     @Id

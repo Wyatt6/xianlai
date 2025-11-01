@@ -3,7 +3,6 @@ package fun.xianlai.app.common.controller;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import fun.xianlai.app.common.model.entity.SysPath;
-import fun.xianlai.app.common.model.form.PathForm;
 import fun.xianlai.app.common.model.form.SysPathCondition;
 import fun.xianlai.app.common.service.PathService;
 import fun.xianlai.core.annotation.ApiLog;
@@ -33,7 +32,7 @@ public class PathController {
     @SaCheckLogin
     @SaCheckPermission("path:add")
     @PostMapping("/add")
-    public RetResult add(@RequestBody PathForm form) {
+    public RetResult add(@RequestBody SysPath form) {
         log.info("请求参数: {}", form);
         form.setName(StringUtil.trim(form.getName()));
         form.setPath(StringUtil.trim(form.getPath()));
@@ -48,6 +47,17 @@ public class PathController {
         log.info("请求参数: pathId=[{}]", pathId);
         pathService.delete(pathId);
         return new RetResult().success();
+    }
+
+    @ApiLog("修改路径")
+    @SaCheckLogin
+    @SaCheckPermission("path:edit")
+    @PostMapping("/edit")
+    public RetResult edit(@RequestBody SysPath form) {
+        log.info("请求参数: {}", form);
+        form.setName(StringUtil.trim(form.getName()));
+        form.setPath(StringUtil.trim(form.getPath()));
+        return new RetResult().success().setData(pathService.edit(form));
     }
 
     @ApiLog("重载路径缓存")

@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author WyattLau
@@ -76,7 +77,7 @@ public class PathServiceImpl implements PathService {
             result.put("rowNum", rowNum);
             return result;
         } catch (DataIntegrityViolationException e) {
-            throw new SysException("路径常量或路径URL已存在");
+            throw new SysException("路径名称或路径URL已存在");
         }
     }
 
@@ -86,6 +87,29 @@ public class PathServiceImpl implements PathService {
     public void delete(Long pathId) {
         sysPathRepository.deleteById(pathId);
         cacheSysPaths();
+    }
+
+    @Override
+    @SimpleServiceLog("修改路径")
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public DataMap edit(SysPath path) {
+        Optional<SysPath> oldPath = sysPathRepository.findById(path.getId());
+        if (oldPath.isPresent()) {
+            SysPath newPath = oldPath.get();
+            if (path.getSortId() != null) newPath.setSortId(path.getSortId());
+            if (path.getName() != null) newPath.setName(path.getName());
+            if (path.getPath() != null) newPath.setPath(path.getPath());
+            try {
+                newPath = sysPathRepository.save(newPath);
+            } catch (DataIntegrityViolationException e) {
+                log.info(e.getMessage());
+                throw new SysException("路径名称或路径URL已存在");
+            }
+            cacheSysPaths();
+            return new DataMap("path", newPath);
+        } else {
+            throw new SysException("要修改的路径不存在");
+        }
     }
 
     @Override
