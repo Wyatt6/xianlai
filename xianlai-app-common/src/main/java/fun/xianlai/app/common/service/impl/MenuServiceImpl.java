@@ -36,9 +36,9 @@ public class MenuServiceImpl implements MenuService {
     private SysMenuRepository sysMenuRepository;
 
     @Override
-    @SimpleServiceLog("缓存生效的系统菜单")
+    @SimpleServiceLog("缓存生效的菜单")
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void cacheActiveSysMenus() {
+    public void cacheActiveMenus() {
         List<SysMenu> menus = sysMenuRepository.findByActive(true, Sort.by(Sort.Order.asc("sortId")));
         List<Map<String, Object>> listMenus = new ArrayList<>();
         if (menus != null) {
@@ -64,17 +64,17 @@ public class MenuServiceImpl implements MenuService {
                 }
             }
         }
-        redis.opsForValue().set("sysMenusChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(listMenus)), Duration.ofHours(CACHE_HOURS));
-        redis.opsForValue().set("sysMenus", listMenus, Duration.ofHours(CACHE_HOURS));
+        redis.opsForValue().set("menusChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(listMenus)), Duration.ofHours(CACHE_HOURS));
+        redis.opsForValue().set("menus", listMenus, Duration.ofHours(CACHE_HOURS));
     }
 
     @Override
-    @SimpleServiceLog("从缓存获取生效的系统菜单")
-    public List<Map<String, Object>> getActiveSysMenusFromCache() {
-        List<Map<String, Object>> menus = (List<Map<String, Object>>) redis.opsForValue().get("sysMenus");
+    @SimpleServiceLog("从缓存获取生效的菜单")
+    public List<Map<String, Object>> getActiveMenusFromCache() {
+        List<Map<String, Object>> menus = (List<Map<String, Object>>) redis.opsForValue().get("menus");
         if (menus == null) {
-            self.cacheActiveSysMenus();
-            menus = (List<Map<String, Object>>) redis.opsForValue().get("sysMenus");
+            self.cacheActiveMenus();
+            menus = (List<Map<String, Object>>) redis.opsForValue().get("menus");
         }
         return menus;
     }

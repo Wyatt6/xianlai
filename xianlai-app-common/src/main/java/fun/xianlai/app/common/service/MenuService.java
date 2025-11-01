@@ -8,12 +8,12 @@ import java.util.Map;
  */
 public interface MenuService {
     /**
-     * 缓存生效的系统菜单
+     * 缓存生效的菜单
      */
-    void cacheActiveSysMenus();
+    void cacheActiveMenus();
 
     /**
-     * 从缓存获取生效的系统菜单
+     * 从缓存获取生效的菜单
      */
-    List<Map<String, Object>> getActiveSysMenusFromCache();
+    List<Map<String, Object>> getActiveMenusFromCache();
 }
