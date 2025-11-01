@@ -114,7 +114,7 @@ public class PathServiceImpl implements PathService {
 
     @Override
     @ServiceLog("条件查询路径分页")
-    public Page<SysPath> getSysPathsByPageConditionally(int pageNum, int pageSize, SysPathCondition condition) {
+    public Page<SysPath> getPathsByPageConditionally(int pageNum, int pageSize, SysPathCondition condition) {
         String name = (condition == null || condition.getName() == null) ? null : condition.getName();
         String path = (condition == null || condition.getPath() == null) ? null : condition.getPath();
 
