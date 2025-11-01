@@ -14,12 +14,12 @@ public interface PathService {
     /**
      * 缓存路径
      */
-    void cacheSysPaths();
+    void cachePaths();
 
     /**
      * 从缓存获取路径
      */
-    List<SysPath> getSysPathsFromCache();
+    List<SysPath> getPathsFromCache();
 
     /**
      * 新增路径

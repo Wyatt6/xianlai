@@ -65,7 +65,7 @@ public class PathController {
     @SaCheckPermission("path:edit")
     @GetMapping("/reloadCache")
     public RetResult reloadCache() {
-        pathService.cacheSysPaths();
+        pathService.cachePaths();
         return new RetResult().success();
     }
 

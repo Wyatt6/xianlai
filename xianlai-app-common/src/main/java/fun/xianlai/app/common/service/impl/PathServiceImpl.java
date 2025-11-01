@@ -46,7 +46,7 @@ public class PathServiceImpl implements PathService {
     @Override
     @SimpleServiceLog("缓存路径")
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void cacheSysPaths() {
+    public void cachePaths() {
         List<SysPath> paths = sysPathRepository.findAll();
         redis.opsForValue().set("sysPathsChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(paths)), Duration.ofHours(CACHE_HOURS));
         redis.opsForValue().set("sysPaths", paths, Duration.ofHours(CACHE_HOURS));
@@ -54,10 +54,10 @@ public class PathServiceImpl implements PathService {
 
     @Override
     @SimpleServiceLog("从缓存获取路径")
-    public List<SysPath> getSysPathsFromCache() {
+    public List<SysPath> getPathsFromCache() {
         List<SysPath> paths = (List<SysPath>) redis.opsForValue().get("sysPaths");
         if (paths == null) {
-            self.cacheSysPaths();
+            self.cachePaths();
             paths = (List<SysPath>) redis.opsForValue().get("sysPaths");
         }
         return paths;
@@ -71,7 +71,7 @@ public class PathServiceImpl implements PathService {
             path.setId(null);
             SysPath savedPath = sysPathRepository.save(path);
             Long rowNum = sysPathRepository.findRowNumById(savedPath.getId());
-            cacheSysPaths();
+            cachePaths();
             DataMap result = new DataMap();
             result.put("path", savedPath);
             result.put("rowNum", rowNum);
@@ -86,7 +86,7 @@ public class PathServiceImpl implements PathService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void delete(Long pathId) {
         sysPathRepository.deleteById(pathId);
-        cacheSysPaths();
+        cachePaths();
     }
 
     @Override
@@ -105,7 +105,7 @@ public class PathServiceImpl implements PathService {
                 log.info(e.getMessage());
                 throw new SysException("路径名称或路径URL已存在");
             }
-            cacheSysPaths();
+            cachePaths();
             return new DataMap("path", newPath);
         } else {
             throw new SysException("要修改的路径不存在");
