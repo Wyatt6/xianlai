@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author WyattLau
@@ -78,6 +79,38 @@ public class ApiServiceImpl implements ApiService {
             return result;
         } catch (DataIntegrityViolationException e) {
             throw new SysException("接口已存在");
+        }
+    }
+
+    @Override
+    @SimpleServiceLog("删除接口")
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void delete(Long apiId) {
+        sysApiRepository.deleteById(apiId);
+        cacheApis();
+    }
+
+    @Override
+    @SimpleServiceLog("修改接口")
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public DataMap edit(SysApi api) {
+        Optional<SysApi> oldApi = sysApiRepository.findById(api.getId());
+        if (oldApi.isPresent()) {
+            SysApi newApi = oldApi.get();
+            if (api.getCallPath() != null) newApi.setCallPath(api.getCallPath());
+            if (api.getDescription() != null) newApi.setDescription(api.getDescription());
+            if (api.getRequestMethod() != null) newApi.setRequestMethod(api.getRequestMethod());
+            if (api.getUrl() != null) newApi.setUrl(api.getUrl());
+            try {
+                newApi = sysApiRepository.save(newApi);
+            } catch (DataIntegrityViolationException e) {
+                log.info(e.getMessage());
+                throw new SysException("接口调用路径已存在");
+            }
+            cacheApis();
+            return new DataMap("api", newApi);
+        } else {
+            throw new SysException("要修改的接口不存在");
         }
     }
 

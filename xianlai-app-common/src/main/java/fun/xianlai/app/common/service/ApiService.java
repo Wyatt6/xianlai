@@ -27,6 +27,16 @@ public interface ApiService {
     DataMap add(SysApi api);
 
     /**
+     * 删除接口
+     */
+    void delete(Long apiId);
+
+    /**
+     * 修改接口
+     */
+    DataMap edit(SysApi api);
+
+    /**
      * 查询条件为空时查询全量数据
      * 页码<0或页大小<=0时不分页
      *

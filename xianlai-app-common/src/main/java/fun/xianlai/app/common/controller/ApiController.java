@@ -40,6 +40,28 @@ public class ApiController {
         return new RetResult().success().setData(apiService.add(form));
     }
 
+    @ApiLog("删除接口")
+    @SaCheckLogin
+    @SaCheckPermission("api:delete")
+    @GetMapping("/delete")
+    public RetResult delete(@RequestParam Long apiId) {
+        log.info("请求参数: apiId=[{}]", apiId);
+        apiService.delete(apiId);
+        return new RetResult().success();
+    }
+
+    @ApiLog("修改接口")
+    @SaCheckLogin
+    @SaCheckPermission("api:edit")
+    @PostMapping("/edit")
+    public RetResult edit(@RequestBody SysApi form) {
+        log.info("请求参数: {}", form);
+        form.setCallPath(StringUtil.trim(form.getCallPath()));
+        form.setDescription(StringUtil.trim(form.getDescription()));
+        form.setUrl(StringUtil.trim(form.getUrl()));
+        return new RetResult().success().setData(apiService.edit(form));
+    }
+
     @ApiLog("重载接口缓存")
     @SaCheckLogin
     @SaCheckPermission("api:edit")
