@@ -2,7 +2,6 @@ package fun.xianlai.app.common.service.impl;
 
 import com.alibaba.fastjson2.JSONObject;
 import fun.xianlai.app.common.model.entity.SysMenu;
-import fun.xianlai.app.common.model.form.MenuCondition;
 import fun.xianlai.app.common.repository.SysMenuRepository;
 import fun.xianlai.app.common.service.MenuService;
 import fun.xianlai.core.annotation.SimpleServiceLog;
@@ -40,33 +39,9 @@ public class MenuServiceImpl implements MenuService {
     @SimpleServiceLog("缓存生效的菜单")
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void cacheActiveMenus() {
-        List<SysMenu> menus = sysMenuRepository.findByActive(true, Sort.by(Sort.Order.asc("sortId")));
-        List<Map<String, Object>> listMenus = new ArrayList<>();
-        if (menus != null) {
-            Map<Long, Map<String, Object>> finder = new HashMap<>();
-            for (SysMenu menu : menus) {
-                Map<String, Object> mapMenu = new HashMap<>();
-                mapMenu.put("id", menu.getId());
-                mapMenu.put("sortId", menu.getSortId());
-                mapMenu.put("icon", menu.getIcon());
-                mapMenu.put("title", menu.getTitle());
-                mapMenu.put("pathName", menu.getPathName());
-                mapMenu.put("needPermission", menu.getNeedPermission());
-                mapMenu.put("permission", menu.getPermission());
-                mapMenu.put("children", new ArrayList<HashMap<String, Object>>());
-                finder.put(menu.getId(), mapMenu);
-            }
-            for (SysMenu menu : menus) {
-                if (menu.getParentId() == 0) {
-                    listMenus.add(finder.get(menu.getId()));
-                } else {
-                    Map<String, Object> fatherMenu = finder.get(menu.getParentId());
-                    ((List<Map<String, Object>>) fatherMenu.get("children")).add(finder.get(menu.getId()));
-                }
-            }
-        }
-        redis.opsForValue().set("menusChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(listMenus)), Duration.ofHours(CACHE_HOURS));
-        redis.opsForValue().set("menus", listMenus, Duration.ofHours(CACHE_HOURS));
+        List<SysMenu> menus = getActiveMenuForest();
+        redis.opsForValue().set("menusChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(menus)), Duration.ofHours(CACHE_HOURS));
+        redis.opsForValue().set("menus", menus, Duration.ofHours(CACHE_HOURS));
     }
 
     @Override
