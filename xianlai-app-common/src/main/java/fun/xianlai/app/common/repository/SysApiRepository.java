@@ -24,4 +24,11 @@ public interface SysApiRepository extends JpaRepository<SysApi, Long> {
                                    RequestMethod requestMethod,
                                    String url,
                                    Pageable pageable);
+
+    @Query(value = "select num " +
+            " from (select @rownum \\:= @rownum + 1 as num, a.id as id, a.call_path " +
+            "      from tb_common_sys_api a, (select @rownum \\:= 0) n " +
+            "      order by a.call_path asc) t " +
+            " where t.id = ?1", nativeQuery = true)
+    Long findRowNumById(Long id);
 }

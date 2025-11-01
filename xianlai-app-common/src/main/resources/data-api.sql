@@ -13,7 +13,11 @@ INSERT IGNORE INTO tb_common_sys_api(`id`, `call_path`, `description`, `request_
 (12004, 'common.path.reloadCache', '重载路径缓存', 'GET', '/api/common/path/reloadCache'),
 (12005, 'common.path.getPageConditionally', '条件查询路径分页', 'POST', '/api/common/path/getPageConditionally'),
 -- ApiController
-(13001, 'common.api.getPageConditionally', '条件查询接口分页', 'POST', '/api/common/api/getPageConditionally'),
+(13001, 'common.api.add', '新增接口', 'POST', '/api/common/api/add'),
+(13002, 'common.api.delete', '删除接口', 'POST', '/api/common/api/delete'),
+(13003, 'common.api.edit', '修改接口', 'POST', '/api/common/api/edit'),
+(13004, 'common.api.reloadCache', '重载接口缓存', 'POST', '/api/common/api/reloadCache'),
+(13005, 'common.api.getPageConditionally', '条件查询接口分页', 'POST', '/api/common/api/getPageConditionally'),
 
 -- ---------- --
 -- IAM模块接口 --

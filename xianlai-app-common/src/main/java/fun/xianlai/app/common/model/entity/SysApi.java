@@ -38,16 +38,16 @@ public class SysApi {
     @GenericGenerator(name = "PK_generator", type = PrimaryKeyGenerator.class)
     private Long id;
 
-    @Column(length = 1000)
+    @Column(columnDefinition = "varchar(1000) not null")
     private String callPath;
 
     @Column(length = 1000)
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)
+    @Column(columnDefinition = "varchar(20) not null")
     private RequestMethod requestMethod;
 
-    @Column(length = 10000)
+    @Column(columnDefinition = "varchar(1000) not null")
     private String url;
 }

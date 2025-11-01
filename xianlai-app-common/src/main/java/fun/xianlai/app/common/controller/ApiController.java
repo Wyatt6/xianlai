@@ -7,6 +7,7 @@ import fun.xianlai.app.common.model.form.SysApiCondition;
 import fun.xianlai.app.common.service.ApiService;
 import fun.xianlai.core.annotation.ApiLog;
 import fun.xianlai.core.response.RetResult;
+import fun.xianlai.core.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,8 +27,19 @@ public class ApiController {
     @Autowired
     private ApiService apiService;
 
+    @ApiLog("新增接口")
+    @SaCheckLogin
+    @SaCheckPermission("api:add")
+    @PostMapping("/add")
+    public RetResult add(@RequestBody SysApi form) {
+        log.info("请求参数: {}", form);
+        form.setCallPath(StringUtil.trim(form.getCallPath()));
+        form.setDescription(StringUtil.trim(form.getDescription()));
+        form.setUrl(StringUtil.trim(form.getUrl()));
+        return new RetResult().success().setData(apiService.add(form));
+    }
+
     /**
-     * 条件查询接口分页
      * 查询条件为空时查询全量数据
      * 页码<0或页大小<=0时不分页
      *

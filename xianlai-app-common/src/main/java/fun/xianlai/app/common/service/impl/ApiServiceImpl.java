@@ -7,11 +7,13 @@ import fun.xianlai.app.common.repository.SysApiRepository;
 import fun.xianlai.app.common.service.ApiService;
 import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
+import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.ChecksumUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -59,6 +61,24 @@ public class ApiServiceImpl implements ApiService {
             apis = (List<SysApi>) redis.opsForValue().get("apis");
         }
         return apis;
+    }
+
+    @Override
+    @SimpleServiceLog("新增接口")
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public DataMap add(SysApi api) {
+        try {
+            api.setId(null);
+            SysApi savedApi = sysApiRepository.save(api);
+            Long rowNum = sysApiRepository.findRowNumById(savedApi.getId());
+            cacheApis();
+            DataMap result = new DataMap();
+            result.put("api", savedApi);
+            result.put("rowNum", rowNum);
+            return result;
+        } catch (DataIntegrityViolationException e) {
+            throw new SysException("接口已存在");
+        }
     }
 
     @Override

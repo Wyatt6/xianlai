@@ -22,6 +22,11 @@ public interface ApiService {
     List<SysApi> getApisFromCache();
 
     /**
+     * 新增接口
+     */
+    DataMap add(SysApi api);
+
+    /**
      * 查询条件为空时查询全量数据
      * 页码<0或页大小<=0时不分页
      *
