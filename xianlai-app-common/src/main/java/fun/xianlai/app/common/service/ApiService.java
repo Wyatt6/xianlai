@@ -2,6 +2,7 @@ package fun.xianlai.app.common.service;
 
 import fun.xianlai.app.common.model.entity.SysApi;
 import fun.xianlai.app.common.model.form.SysApiCondition;
+import fun.xianlai.core.response.DataMap;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -11,14 +12,14 @@ import java.util.List;
  */
 public interface ApiService {
     /**
-     * 缓存系统接口
+     * 缓存接口
      */
-    void cacheSysApis();
+    void cacheApis();
 
     /**
-     * 从缓存获取系统接口
+     * 从缓存获取接口
      */
-    List<SysApi> getSysApisFromCache();
+    List<SysApi> getApisFromCache();
 
     /**
      * 查询条件为空时查询全量数据

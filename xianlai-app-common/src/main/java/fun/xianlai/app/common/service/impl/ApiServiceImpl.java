@@ -7,6 +7,7 @@ import fun.xianlai.app.common.repository.SysApiRepository;
 import fun.xianlai.app.common.service.ApiService;
 import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
+import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.ChecksumUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,21 +42,21 @@ public class ApiServiceImpl implements ApiService {
     private SysApiRepository sysApiRepository;
 
     @Override
-    @SimpleServiceLog("缓存系统接口")
+    @SimpleServiceLog("缓存接口")
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void cacheSysApis() {
+    public void cacheApis() {
         List<SysApi> apis = sysApiRepository.findAll();
-        redis.opsForValue().set("sysApisChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(apis)), Duration.ofHours(CACHE_HOURS));
-        redis.opsForValue().set("sysApis", apis, Duration.ofHours(CACHE_HOURS));
+        redis.opsForValue().set("apisChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(apis)), Duration.ofHours(CACHE_HOURS));
+        redis.opsForValue().set("apis", apis, Duration.ofHours(CACHE_HOURS));
     }
 
     @Override
-    @SimpleServiceLog("从缓存获取系统接口")
-    public List<SysApi> getSysApisFromCache() {
-        List<SysApi> apis = (List<SysApi>) redis.opsForValue().get("sysApis");
+    @SimpleServiceLog("从缓存获取接口")
+    public List<SysApi> getApisFromCache() {
+        List<SysApi> apis = (List<SysApi>) redis.opsForValue().get("apis");
         if (apis == null) {
-            self.cacheSysApis();
-            apis = (List<SysApi>) redis.opsForValue().get("sysApis");
+            self.cacheApis();
+            apis = (List<SysApi>) redis.opsForValue().get("apis");
         }
         return apis;
     }
