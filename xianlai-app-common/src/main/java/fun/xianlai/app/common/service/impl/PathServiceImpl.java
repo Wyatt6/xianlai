@@ -48,17 +48,17 @@ public class PathServiceImpl implements PathService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void cachePaths() {
         List<SysPath> paths = sysPathRepository.findAll();
-        redis.opsForValue().set("sysPathsChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(paths)), Duration.ofHours(CACHE_HOURS));
-        redis.opsForValue().set("sysPaths", paths, Duration.ofHours(CACHE_HOURS));
+        redis.opsForValue().set("pathsChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(paths)), Duration.ofHours(CACHE_HOURS));
+        redis.opsForValue().set("paths", paths, Duration.ofHours(CACHE_HOURS));
     }
 
     @Override
     @SimpleServiceLog("从缓存获取路径")
     public List<SysPath> getPathsFromCache() {
-        List<SysPath> paths = (List<SysPath>) redis.opsForValue().get("sysPaths");
+        List<SysPath> paths = (List<SysPath>) redis.opsForValue().get("paths");
         if (paths == null) {
             self.cachePaths();
-            paths = (List<SysPath>) redis.opsForValue().get("sysPaths");
+            paths = (List<SysPath>) redis.opsForValue().get("paths");
         }
         return paths;
     }
