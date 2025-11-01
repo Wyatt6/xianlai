@@ -21,6 +21,15 @@ public class MenuController {
     @Autowired
     private MenuService menuService;
 
+    @ApiLog("重载菜单缓存")
+    @SaCheckLogin
+    @SaCheckPermission("menu:edit")
+    @GetMapping("/reloadCache")
+    public RetResult reloadCache() {
+        menuService.cacheActiveMenus();
+        return new RetResult().success();
+    }
+
     @ApiLog("查询菜单森林")
     @SaCheckLogin
     @SaCheckPermission("menu:query")
