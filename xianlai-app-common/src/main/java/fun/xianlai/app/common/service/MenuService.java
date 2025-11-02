@@ -1,6 +1,7 @@
 package fun.xianlai.app.common.service;
 
 import fun.xianlai.app.common.model.entity.SysMenu;
+import fun.xianlai.core.response.DataMap;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,11 @@ public interface MenuService {
      * 从缓存获取生效的菜单
      */
     List<Map<String, Object>> getActiveMenusFromCache();
+
+    /**
+     * 新增菜单
+     */
+    DataMap add(SysMenu menu);
 
     /**
      * 删除菜单

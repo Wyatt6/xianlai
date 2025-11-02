@@ -4,11 +4,14 @@ import com.alibaba.fastjson2.JSONObject;
 import fun.xianlai.app.common.model.entity.SysMenu;
 import fun.xianlai.app.common.repository.SysMenuRepository;
 import fun.xianlai.app.common.service.MenuService;
+import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
+import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.ChecksumUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -57,7 +60,23 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @SimpleServiceLog("删除菜单")
+    @ServiceLog("新增菜单")
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public DataMap add(SysMenu menu) {
+        try {
+            menu.setId(null);
+            SysMenu savedMenu = sysMenuRepository.save(menu);
+            self.cacheActiveMenus();
+            DataMap result = new DataMap();
+            result.put("menu", savedMenu);
+            return result;
+        } catch (DataIntegrityViolationException e) {
+            throw new SysException("菜单已存在");
+        }
+    }
+
+    @Override
+    @ServiceLog("删除菜单")
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void delete(Long menuId) {
         List<SysMenu> sonMenus = sysMenuRepository.findByParentId(menuId);
