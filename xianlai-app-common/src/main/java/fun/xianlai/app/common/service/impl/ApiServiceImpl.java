@@ -65,7 +65,7 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    @SimpleServiceLog("新增接口")
+    @ServiceLog("新增接口")
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public DataMap add(SysApi api) {
         try {
@@ -83,7 +83,7 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    @SimpleServiceLog("删除接口")
+    @ServiceLog("删除接口")
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void delete(Long apiId) {
         sysApiRepository.deleteById(apiId);
@@ -91,7 +91,7 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    @SimpleServiceLog("修改接口")
+    @ServiceLog("修改接口")
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public DataMap edit(SysApi api) {
         Optional<SysApi> oldApi = sysApiRepository.findById(api.getId());

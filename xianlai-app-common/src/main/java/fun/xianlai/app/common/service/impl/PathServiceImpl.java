@@ -64,7 +64,7 @@ public class PathServiceImpl implements PathService {
     }
 
     @Override
-    @SimpleServiceLog("新增路径")
+    @ServiceLog("新增路径")
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public DataMap add(SysPath path) {
         try {
@@ -82,7 +82,7 @@ public class PathServiceImpl implements PathService {
     }
 
     @Override
-    @SimpleServiceLog("删除路径")
+    @ServiceLog("删除路径")
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void delete(Long pathId) {
         sysPathRepository.deleteById(pathId);
@@ -90,7 +90,7 @@ public class PathServiceImpl implements PathService {
     }
 
     @Override
-    @SimpleServiceLog("修改路径")
+    @ServiceLog("修改路径")
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public DataMap edit(SysPath path) {
         Optional<SysPath> oldPath = sysPathRepository.findById(path.getId());
