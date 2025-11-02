@@ -31,6 +31,11 @@ public interface MenuService {
     void delete(Long menuId);
 
     /**
+     * 修改菜单
+     */
+    DataMap edit(SysMenu menu);
+
+    /**
      * 获取菜单森林
      */
     List<SysMenu> getMenuForest();

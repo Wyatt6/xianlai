@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
+import static cn.dev33.satoken.SaManager.log;
 
 /**
  * @author WyattLau
@@ -85,6 +88,37 @@ public class MenuServiceImpl implements MenuService {
             self.cacheActiveMenus();
         } else {
             throw new SysException("当前菜单仍然包含子菜单，无法删除");
+        }
+    }
+
+    @Override
+    @ServiceLog("修改菜单")
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public DataMap edit(SysMenu menu) {
+        Optional<SysMenu> oldMenu = sysMenuRepository.findById(menu.getId());
+        if (oldMenu.isPresent()) {
+            SysMenu newMenu = oldMenu.get();
+            if (menu.getSortId() != null) newMenu.setSortId(menu.getSortId());
+            if (menu.getParentId() != null) newMenu.setParentId(menu.getParentId());
+            if (menu.getIcon() != null) newMenu.setIcon(menu.getIcon());
+            if (menu.getTitle() != null) newMenu.setTitle(menu.getTitle());
+            if (menu.getPathName() != null) newMenu.setPathName(menu.getPathName());
+            if (menu.getNeedPermission() != null) newMenu.setNeedPermission(menu.getNeedPermission());
+            if (menu.getPermission() != null) newMenu.setPermission(menu.getPermission());
+            if (menu.getActive() != null) newMenu.setActive(menu.getActive());
+            if (newMenu.getParentId().equals(newMenu.getId())) {
+                throw new SysException("上级菜单不能设置为自己");
+            }
+            try {
+                newMenu = sysMenuRepository.save(newMenu);
+            } catch (DataIntegrityViolationException e) {
+                log.info(e.getMessage());
+                throw new SysException("菜单已存在");
+            }
+            self.cacheActiveMenus();
+            return new DataMap("menu", newMenu);
+        } else  {
+            throw new SysException("要修改的菜单不存在");
         }
     }
 

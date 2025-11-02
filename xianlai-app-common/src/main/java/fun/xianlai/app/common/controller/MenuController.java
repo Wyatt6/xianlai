@@ -49,6 +49,19 @@ public class MenuController {
         return new RetResult().success();
     }
 
+    @ApiLog("修改菜单")
+    @SaCheckLogin
+    @SaCheckPermission("menu:edit")
+    @PostMapping("/edit")
+    public RetResult edit(@RequestBody SysMenu form) {
+        log.info("请求参数: {}", form);
+        form.setIcon(StringUtil.trim(form.getIcon()));
+        form.setTitle(StringUtil.trim(form.getTitle()));
+        form.setPathName(StringUtil.trim(form.getPathName()));
+        form.setPermission(StringUtil.trim(form.getPermission()));
+        return new RetResult().success().setData(menuService.edit(form));
+    }
+
     @ApiLog("重载菜单缓存")
     @SaCheckLogin
     @SaCheckPermission("menu:edit")
