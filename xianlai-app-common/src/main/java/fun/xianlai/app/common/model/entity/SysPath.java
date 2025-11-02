@@ -8,9 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
@@ -26,9 +23,6 @@ import org.hibernate.annotations.GenericGenerator;
  *
  * @author WyattLau
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @DynamicInsert
 @DynamicUpdate
@@ -51,4 +45,45 @@ public class SysPath {
 
     @Column(columnDefinition = "varchar(1000) not null")
     private String path;
+
+    public SysPath() {}
+
+    public SysPath(Long id, Long sortId, String name, String path) {
+        this.id = id;
+        this.sortId = sortId;
+        this.name = name;
+        this.path = path;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getSortId() {
+        return sortId;
+    }
+
+    public void setSortId(Long sortId) {
+        this.sortId = sortId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 }
