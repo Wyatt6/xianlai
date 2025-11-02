@@ -9,6 +9,7 @@ import fun.xianlai.app.iam.service.PermissionService;
 import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
+import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -38,11 +41,17 @@ public class PermissionServiceImpl implements PermissionService {
     private RolePermissionRepository rolePermissionRepository;
 
     @Override
-    @SimpleServiceLog("创建权限")
-    public Permission createPermission(Permission permission) {
+    @SimpleServiceLog("新增权限")
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public DataMap add(Permission permission) {
         try {
             permission.setId(null);
-            return permissionRepository.save(permission);
+            Permission savedPermission = permissionRepository.save(permission);
+            Long rowNum = permissionRepository.findRowNumById(savedPermission.getId());
+            DataMap result = new DataMap();
+            result.put("permission", savedPermission);
+            result.put("rowNum", rowNum);
+            return result;
         } catch (DataIntegrityViolationException e) {
             throw new SysException("权限标识符重复");
         }
@@ -98,7 +107,8 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     @ServiceLog("条件查询权限分页")
-    public Page<Permission> getPermissionsByPageConditionally(int pageNum, int pageSize, PermissionCondition condition) {
+    @Transactional
+    public Page<Permission> getByPageConditionally(int pageNum, int pageSize, PermissionCondition condition) {
         String identifier = (condition == null || condition.getIdentifier() == null) ? null : condition.getIdentifier();
         String name = (condition == null || condition.getName() == null) ? null : condition.getName();
         String description = (condition == null || condition.getDescription() == null) ? null : condition.getDescription();
@@ -112,11 +122,6 @@ public class PermissionServiceImpl implements PermissionService {
             log.info("全表查询");
             return permissionRepository.findConditionally(identifier, name, description, Pageable.unpaged(sort));
         }
-    }
-
-    @Override
-    public Long getRowNum(Long permissionId) {
-        return permissionRepository.findRowNumById(permissionId);
     }
 
     @Override

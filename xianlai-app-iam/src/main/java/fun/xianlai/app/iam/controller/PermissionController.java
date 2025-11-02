@@ -37,7 +37,7 @@ public class PermissionController {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public RetResult add(@RequestBody PermissionForm form) {
         log.info("请求参数: {}", form);
-        return new RetResult().success().addData("permission", permissionService.createPermission(form.convert()));
+        return new RetResult().success().setData(permissionService.add(form.convert()));
     }
 
     @ApiLog("删除权限")
@@ -78,22 +78,13 @@ public class PermissionController {
                                           @RequestParam int pageSize,
                                           @RequestBody(required = false) PermissionCondition condition) {
         log.info("请求参数: pageNum=[{}], pageSize=[{}], condition=[{}]", pageNum, pageSize, condition);
-        Page<Permission> permissions = permissionService.getPermissionsByPageConditionally(pageNum, pageSize, condition);
+        Page<Permission> permissions = permissionService.getByPageConditionally(pageNum, pageSize, condition);
         return new RetResult().success()
                 .addData("pageNum", pageNum)
                 .addData("pageSize", pageSize)
                 .addData("totalPages", permissions.getTotalPages())
                 .addData("totalElements", permissions.getTotalElements())
                 .addData("content", permissions.getContent());
-    }
-
-    @ApiLog("查询权限的排名（从1开始）")
-    @SaCheckLogin
-    @SaCheckPermission("permission:query")
-    @GetMapping("/getRowNumStartFrom1")
-    public RetResult getRowNumStartFrom1(@RequestParam Long permissionId) {
-        log.info("请求参数: permissionId=[{}]", permissionId);
-        return new RetResult().success().addData("rowNum", permissionService.getRowNum(permissionId));
     }
 
     @ApiLog("查询某角色所拥有的权限ID列表")
