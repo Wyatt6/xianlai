@@ -3,16 +3,13 @@ package fun.xianlai.app.iam.controller;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import fun.xianlai.app.iam.model.entity.rbac.Permission;
-import fun.xianlai.app.iam.model.form.PermissionCondition;
-import fun.xianlai.app.iam.model.form.PermissionForm;
 import fun.xianlai.app.iam.service.PermissionService;
 import fun.xianlai.core.annotation.ApiLog;
 import fun.xianlai.core.response.RetResult;
+import fun.xianlai.core.utils.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,20 +31,19 @@ public class PermissionController {
     @SaCheckLogin
     @SaCheckPermission("permission:add")
     @PostMapping("/add")
-    @Transactional(isolation = Isolation.SERIALIZABLE)
-    public RetResult add(@RequestBody PermissionForm form) {
+    public RetResult add(@RequestBody Permission form) {
         log.info("请求参数: {}", form);
-        return new RetResult().success().setData(permissionService.add(form.convert()));
+        EntityUtil.trimString(form);
+        return new RetResult().success().setData(permissionService.add(form));
     }
 
     @ApiLog("删除权限")
     @SaCheckLogin
     @SaCheckPermission("permission:delete")
     @GetMapping("/delete")
-    @Transactional(isolation = Isolation.SERIALIZABLE)
     public RetResult delete(@RequestParam Long permissionId) {
         log.info("请求参数: permissionId=[{}]", permissionId);
-        permissionService.deletePermission(permissionId);
+        permissionService.delete(permissionId);
         return new RetResult().success();
     }
 
@@ -55,9 +51,10 @@ public class PermissionController {
     @SaCheckLogin
     @SaCheckPermission("permission:edit")
     @PostMapping("/edit")
-    public RetResult edit(@RequestBody PermissionForm form) {
+    public RetResult edit(@RequestBody Permission form) {
         log.info("请求参数: {}", form);
-        return new RetResult().success().addData("permission", permissionService.updatePermission(form.convert()));
+        EntityUtil.trimString(form);
+        return new RetResult().success().setData(permissionService.edit(form));
     }
 
     /**
@@ -76,7 +73,7 @@ public class PermissionController {
     @PostMapping("/getPageConditionally")
     public RetResult getPageConditionally(@RequestParam int pageNum,
                                           @RequestParam int pageSize,
-                                          @RequestBody(required = false) PermissionCondition condition) {
+                                          @RequestBody(required = false) Permission condition) {
         log.info("请求参数: pageNum=[{}], pageSize=[{}], condition=[{}]", pageNum, pageSize, condition);
         Page<Permission> permissions = permissionService.getByPageConditionally(pageNum, pageSize, condition);
         return new RetResult().success()

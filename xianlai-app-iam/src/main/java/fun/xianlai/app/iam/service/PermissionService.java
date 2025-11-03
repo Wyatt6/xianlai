@@ -2,7 +2,6 @@ package fun.xianlai.app.iam.service;
 
 
 import fun.xianlai.app.iam.model.entity.rbac.Permission;
-import fun.xianlai.app.iam.model.form.PermissionCondition;
 import fun.xianlai.core.response.DataMap;
 import org.springframework.data.domain.Page;
 
@@ -21,12 +20,12 @@ public interface PermissionService {
     /**
      * 删除权限
      */
-    void deletePermission(Long permissionId);
+    void delete(Long permissionId);
 
     /**
-     * 更新权限
+     * 修改权限
      */
-    Permission updatePermission(Permission permission);
+    DataMap edit(Permission permission);
 
     /**
      * 查询条件为空时查询全量数据
@@ -37,7 +36,7 @@ public interface PermissionService {
      * @param condition 查询条件
      * @return 分页数据
      */
-    Page<Permission> getByPageConditionally(int pageNum, int pageSize, PermissionCondition condition);
+    Page<Permission> getByPageConditionally(int pageNum, int pageSize, Permission condition);
 
     /**
      * 获取某角色的权限ID列表
