@@ -111,7 +111,7 @@ public class MenuServiceImpl implements MenuService {
             }
             self.cacheActiveMenus();
             return new DataMap("menu", newMenu);
-        } else  {
+        } else {
             throw new SysException("要修改的菜单不存在");
         }
     }
