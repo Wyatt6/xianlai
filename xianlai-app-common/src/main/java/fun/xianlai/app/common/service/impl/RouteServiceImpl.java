@@ -4,10 +4,14 @@ import com.alibaba.fastjson2.JSONObject;
 import fun.xianlai.app.common.model.entity.SysRoute;
 import fun.xianlai.app.common.repository.SysRouteRepository;
 import fun.xianlai.app.common.service.RouteService;
+import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
+import fun.xianlai.core.exception.SysException;
+import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.ChecksumUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -39,37 +43,37 @@ public class RouteServiceImpl implements RouteService {
     @SimpleServiceLog("缓存路由")
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void cacheRoutes() {
-        List<SysRoute> routes = sysRouteRepository.findAll(Sort.by(Sort.Order.asc("sortId")));
-        List<Map<String, Object>> listRoutes = new ArrayList<>();
-        if (routes != null) {
-            Map<Long, Map<String, Object>> finder = new HashMap<>();
-            for (SysRoute route : routes) {
-                Map<String, Object> mapRoute = new HashMap<>();
-                mapRoute.put("id", route.getId());
-                mapRoute.put("sortId", route.getSortId());
-                mapRoute.put("name", route.getName());
-                mapRoute.put("pathName", route.getPathName());
-                mapRoute.put("redirectPathName", route.getRedirectPathName());
-                mapRoute.put("componentPath", route.getComponentPath());
-                mapRoute.put("needLogin", route.getNeedLogin());
-                mapRoute.put("needPermission", route.getNeedPermission());
-                mapRoute.put("permission", route.getPermission());
-                mapRoute.put("showTag", route.getShowTag());
-                mapRoute.put("tagTitle", route.getTagTitle());
-                mapRoute.put("children", new ArrayList<HashMap<String, Object>>());
-                finder.put(route.getId(), mapRoute);
-            }
-            for (SysRoute route : routes) {
-                if (route.getParentId() == 0) {
-                    listRoutes.add(finder.get(route.getId()));
-                } else {
-                    Map<String, Object> fatherRoute = finder.get(route.getParentId());
-                    ((List<Map<String, Object>>) fatherRoute.get("children")).add(finder.get(route.getId()));
-                }
-            }
-        }
-        redis.opsForValue().set("routesChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(listRoutes)), Duration.ofHours(CACHE_HOURS));
-        redis.opsForValue().set("routes", listRoutes, Duration.ofHours(CACHE_HOURS));
+        List<SysRoute> routes = self.getRouteForest();
+//        List<Map<String, Object>> listRoutes = new ArrayList<>();
+//        if (routes != null) {
+//            Map<Long, Map<String, Object>> finder = new HashMap<>();
+//            for (SysRoute route : routes) {
+//                Map<String, Object> mapRoute = new HashMap<>();
+//                mapRoute.put("id", route.getId());
+//                mapRoute.put("sortId", route.getSortId());
+//                mapRoute.put("name", route.getName());
+//                mapRoute.put("pathName", route.getPathName());
+//                mapRoute.put("redirectPathName", route.getRedirectPathName());
+//                mapRoute.put("componentPath", route.getComponentPath());
+//                mapRoute.put("needLogin", route.getNeedLogin());
+//                mapRoute.put("needPermission", route.getNeedPermission());
+//                mapRoute.put("permission", route.getPermission());
+//                mapRoute.put("showTag", route.getShowTag());
+//                mapRoute.put("tagTitle", route.getTagTitle());
+//                mapRoute.put("children", new ArrayList<HashMap<String, Object>>());
+//                finder.put(route.getId(), mapRoute);
+//            }
+//            for (SysRoute route : routes) {
+//                if (route.getParentId() == 0) {
+//                    listRoutes.add(finder.get(route.getId()));
+//                } else {
+//                    Map<String, Object> fatherRoute = finder.get(route.getParentId());
+//                    ((List<Map<String, Object>>) fatherRoute.get("children")).add(finder.get(route.getId()));
+//                }
+//            }
+//        }
+        redis.opsForValue().set("routesChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(routes)), Duration.ofHours(CACHE_HOURS));
+        redis.opsForValue().set("routes", routes, Duration.ofHours(CACHE_HOURS));
     }
 
     @Override
@@ -81,6 +85,22 @@ public class RouteServiceImpl implements RouteService {
             routes = (List<Map<String, Object>>) redis.opsForValue().get("routes");
         }
         return routes;
+    }
+
+    @Override
+    @ServiceLog("新增路由")
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public DataMap add(SysRoute route) {
+        try {
+            route.setId(null);
+            SysRoute savedRoute = sysRouteRepository.save(route);
+            self.cacheRoutes();
+            DataMap result = new DataMap();
+            result.put("route", savedRoute);
+            return result;
+        } catch (DataIntegrityViolationException e) {
+            throw new SysException("路由名称已存在");
+        }
     }
 
     @Override
