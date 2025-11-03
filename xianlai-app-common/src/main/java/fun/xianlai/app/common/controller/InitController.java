@@ -37,7 +37,7 @@ public class InitController {
         return new RetResult().success()
                 .addData("options", optionService.getFrontLoadSysOptionsFromCache())
                 .addData("paths", pathService.getPathsFromCache())
-                .addData("routes", routeService.getSysRoutesFromCache())
+                .addData("routes", routeService.getRoutesFromCache())
                 .addData("menus", menuService.getActiveMenusFromCache())
                 .addData("apis", apiService.getApisFromCache());
     }

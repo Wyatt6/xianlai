@@ -8,12 +8,12 @@ import java.util.Map;
  */
 public interface RouteService {
     /**
-     * 缓存系统路由
+     * 缓存路由
      */
-    void cacheSysRoutes();
+    void cacheRoutes();
 
     /**
-     * 从缓存获取系统路由
+     * 从缓存获取路由
      */
-    List<Map<String, Object>> getSysRoutesFromCache();
+    List<Map<String, Object>> getRoutesFromCache();
 }

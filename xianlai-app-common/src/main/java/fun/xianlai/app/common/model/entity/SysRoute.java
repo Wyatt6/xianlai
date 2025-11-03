@@ -16,7 +16,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * 系统路由
+ * 路由
  *
  * @author WyattLau
  */

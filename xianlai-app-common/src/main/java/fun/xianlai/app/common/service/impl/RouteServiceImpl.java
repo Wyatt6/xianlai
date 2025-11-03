@@ -36,9 +36,9 @@ public class RouteServiceImpl implements RouteService {
     private SysRouteRepository sysRouteRepository;
 
     @Override
-    @SimpleServiceLog("缓存系统路由")
+    @SimpleServiceLog("缓存路由")
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void cacheSysRoutes() {
+    public void cacheRoutes() {
         List<SysRoute> routes = sysRouteRepository.findAll(Sort.by(Sort.Order.asc("sortId")));
         List<Map<String, Object>> listRoutes = new ArrayList<>();
         if (routes != null) {
@@ -68,17 +68,17 @@ public class RouteServiceImpl implements RouteService {
                 }
             }
         }
-        redis.opsForValue().set("sysRoutesChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(listRoutes)), Duration.ofHours(CACHE_HOURS));
-        redis.opsForValue().set("sysRoutes", listRoutes, Duration.ofHours(CACHE_HOURS));
+        redis.opsForValue().set("routesChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(listRoutes)), Duration.ofHours(CACHE_HOURS));
+        redis.opsForValue().set("routes", listRoutes, Duration.ofHours(CACHE_HOURS));
     }
 
     @Override
-    // @SimpleServiceLog("从缓存获取系统路由")
-    public List<Map<String, Object>> getSysRoutesFromCache() {
-        List<Map<String, Object>> routes = (List<Map<String, Object>>) redis.opsForValue().get("sysRoutes");
+    // @SimpleServiceLog("从缓存获取路由")
+    public List<Map<String, Object>> getRoutesFromCache() {
+        List<Map<String, Object>> routes = (List<Map<String, Object>>) redis.opsForValue().get("routes");
         if (routes == null) {
-            self.cacheSysRoutes();
-            routes = (List<Map<String, Object>>) redis.opsForValue().get("sysRoutes");
+            self.cacheRoutes();
+            routes = (List<Map<String, Object>>) redis.opsForValue().get("routes");
         }
         return routes;
     }
