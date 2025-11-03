@@ -9,6 +9,7 @@ import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.ChecksumUtil;
+import fun.xianlai.core.utils.EntityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -98,14 +99,7 @@ public class MenuServiceImpl implements MenuService {
         Optional<SysMenu> oldMenu = sysMenuRepository.findById(menu.getId());
         if (oldMenu.isPresent()) {
             SysMenu newMenu = oldMenu.get();
-            if (menu.getSortId() != null) newMenu.setSortId(menu.getSortId());
-            if (menu.getParentId() != null) newMenu.setParentId(menu.getParentId());
-            if (menu.getIcon() != null) newMenu.setIcon(menu.getIcon());
-            if (menu.getTitle() != null) newMenu.setTitle(menu.getTitle());
-            if (menu.getPathName() != null) newMenu.setPathName(menu.getPathName());
-            if (menu.getNeedPermission() != null) newMenu.setNeedPermission(menu.getNeedPermission());
-            if (menu.getPermission() != null) newMenu.setPermission(menu.getPermission());
-            if (menu.getActive() != null) newMenu.setActive(menu.getActive());
+            EntityUtil.convertNotNull(menu, newMenu);
             if (newMenu.getParentId().equals(newMenu.getId())) {
                 throw new SysException("上级菜单不能设置为自己");
             }
