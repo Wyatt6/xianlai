@@ -2,7 +2,6 @@ package fun.xianlai.app.common.service.impl;
 
 import com.alibaba.fastjson2.JSONObject;
 import fun.xianlai.app.common.model.entity.SysPath;
-import fun.xianlai.app.common.model.form.SysPathCondition;
 import fun.xianlai.app.common.repository.SysPathRepository;
 import fun.xianlai.app.common.service.PathService;
 import fun.xianlai.core.annotation.ServiceLog;
@@ -10,6 +9,7 @@ import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.ChecksumUtil;
+import fun.xianlai.core.utils.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -96,9 +96,7 @@ public class PathServiceImpl implements PathService {
         Optional<SysPath> oldPath = sysPathRepository.findById(path.getId());
         if (oldPath.isPresent()) {
             SysPath newPath = oldPath.get();
-            if (path.getSortId() != null) newPath.setSortId(path.getSortId());
-            if (path.getName() != null) newPath.setName(path.getName());
-            if (path.getPath() != null) newPath.setPath(path.getPath());
+            EntityUtil.convertNotNull(path, newPath);
             try {
                 newPath = sysPathRepository.save(newPath);
             } catch (DataIntegrityViolationException e) {
@@ -114,7 +112,7 @@ public class PathServiceImpl implements PathService {
 
     @Override
     @ServiceLog("条件查询路径分页")
-    public Page<SysPath> getPathsByPageConditionally(int pageNum, int pageSize, SysPathCondition condition) {
+    public Page<SysPath> getPathsByPageConditionally(int pageNum, int pageSize, SysPath condition) {
         String name = (condition == null || condition.getName() == null) ? null : condition.getName();
         String path = (condition == null || condition.getPath() == null) ? null : condition.getPath();
 

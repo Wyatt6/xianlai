@@ -3,12 +3,10 @@ package fun.xianlai.app.common.controller;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import fun.xianlai.app.common.model.entity.SysPath;
-import fun.xianlai.app.common.model.form.SysPathCondition;
-import fun.xianlai.app.common.model.form.PathForm;
 import fun.xianlai.app.common.service.PathService;
 import fun.xianlai.core.annotation.ApiLog;
 import fun.xianlai.core.response.RetResult;
-import fun.xianlai.core.utils.StringUtil;
+import fun.xianlai.core.utils.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,9 +31,10 @@ public class PathController {
     @SaCheckLogin
     @SaCheckPermission("path:add")
     @PostMapping("/add")
-    public RetResult add(@RequestBody PathForm form) {
+    public RetResult add(@RequestBody SysPath form) {
         log.info("请求参数: {}", form);
-        return new RetResult().success().setData(pathService.add(form.convert()));
+        EntityUtil.trimString(form);
+        return new RetResult().success().setData(pathService.add(form));
     }
 
     @ApiLog("删除路径")
@@ -52,9 +51,10 @@ public class PathController {
     @SaCheckLogin
     @SaCheckPermission("path:edit")
     @PostMapping("/edit")
-    public RetResult edit(@RequestBody PathForm form) {
+    public RetResult edit(@RequestBody SysPath form) {
         log.info("请求参数: {}", form);
-        return new RetResult().success().setData(pathService.edit(form.convert()));
+        EntityUtil.trimString(form);
+        return new RetResult().success().setData(pathService.edit(form));
     }
 
     @ApiLog("重载路径缓存")
@@ -81,7 +81,7 @@ public class PathController {
     @PostMapping("/getPageConditionally")
     public RetResult getPageConditionally(@RequestParam int pageNum,
                                           @RequestParam int pageSize,
-                                          @RequestBody(required = false) SysPathCondition condition) {
+                                          @RequestBody(required = false) SysPath condition) {
         log.info("请求参数：pageNum=[{}], pageSize=[{}], condition=[{}]", pageNum, pageSize, condition);
         Page<SysPath> paths = pathService.getPathsByPageConditionally(pageNum, pageSize, condition);
         return new RetResult().success()

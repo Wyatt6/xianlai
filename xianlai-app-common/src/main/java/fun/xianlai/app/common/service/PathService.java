@@ -1,7 +1,6 @@
 package fun.xianlai.app.common.service;
 
 import fun.xianlai.app.common.model.entity.SysPath;
-import fun.xianlai.app.common.model.form.SysPathCondition;
 import fun.xianlai.core.response.DataMap;
 import org.springframework.data.domain.Page;
 
@@ -45,5 +44,5 @@ public interface PathService {
      * @param condition 查询条件
      * @return 分页数据
      */
-    Page<SysPath> getPathsByPageConditionally(int pageNum, int pageSize, SysPathCondition condition);
+    Page<SysPath> getPathsByPageConditionally(int pageNum, int pageSize, SysPath condition);
 }
