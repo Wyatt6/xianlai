@@ -58,7 +58,6 @@ public class PermissionController {
     }
 
     /**
-     * 条件查询权限分页
      * 查询条件为空时查询全量数据
      * 页码<0或页大小<=0时不分页
      *
