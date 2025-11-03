@@ -46,6 +46,16 @@ public class RouteController {
         return new RetResult().success();
     }
 
+    @ApiLog("修改路由")
+    @SaCheckLogin
+    @SaCheckPermission("route:edit")
+    @PostMapping("/edit")
+    public RetResult edit(@RequestBody SysRoute form) {
+        log.info("请求参数: {}", form);
+        EntityUtil.trimString(form);
+        return new RetResult().success().setData(routeService.edit(form));
+    }
+
     @ApiLog("重载路由缓存")
     @SaCheckLogin
     @SaCheckPermission("route:edit")

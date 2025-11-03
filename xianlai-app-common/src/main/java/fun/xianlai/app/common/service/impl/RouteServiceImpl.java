@@ -9,6 +9,7 @@ import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.ChecksumUtil;
+import fun.xianlai.core.utils.EntityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -23,6 +24,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
+import static cn.dev33.satoken.SaManager.log;
 
 /**
  * @author WyattLau
@@ -85,6 +89,33 @@ public class RouteServiceImpl implements RouteService {
             self.cacheRoutes();
         } else {
             throw new SysException("当前路由仍然包含子路由，无法删除");
+        }
+    }
+
+    @Override
+    @ServiceLog("修改路由")
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public DataMap edit(SysRoute route) {
+        Optional<SysRoute> oldRoute = sysRouteRepository.findById(route.getId());
+        if (oldRoute.isPresent()) {
+            SysRoute newRoute = oldRoute.get();
+            EntityUtil.convertNotNull(route, newRoute);
+            if (newRoute.getParentId().equals(newRoute.getId())) {
+                throw new SysException("上级路由不能设置为自己");
+            }
+            if (newRoute.getRedirectPathName().equals(newRoute.getPathName())) {
+                throw new SysException("路由重定向不能和路由路径相同");
+            }
+            try {
+                newRoute = sysRouteRepository.save(newRoute);
+            } catch (DataIntegrityViolationException e) {
+                log.info(e.getMessage());
+                throw new SysException("路由名称已存在");
+            }
+            self.cacheRoutes();
+            return new DataMap("route", newRoute);
+        } else {
+            throw new SysException("要修改的路由不存在");
         }
     }
 
