@@ -26,6 +26,11 @@ public interface RouteService {
     DataMap add(SysRoute route);
 
     /**
+     * 删除路由
+     */
+    void delete(Long routeId);
+
+    /**
      * 获取路由森林
      */
     List<SysRoute> getRouteForest();

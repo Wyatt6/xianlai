@@ -76,6 +76,19 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
+    @ServiceLog("删除路由")
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void delete(Long routeId) {
+        List<SysRoute> sonRoutes = sysRouteRepository.findByParentId(routeId);
+        if (sonRoutes == null || sonRoutes.isEmpty()) {
+            sysRouteRepository.deleteById(routeId);
+            self.cacheRoutes();
+        } else {
+            throw new SysException("当前路由仍然包含子路由，无法删除");
+        }
+    }
+
+    @Override
     @SimpleServiceLog("获取路由森林")
     public List<SysRoute> getRouteForest() {
         List<SysRoute> routes = sysRouteRepository.findAll(Sort.by(Sort.Order.asc("sortId")));

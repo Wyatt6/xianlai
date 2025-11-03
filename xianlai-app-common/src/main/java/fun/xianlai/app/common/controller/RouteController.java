@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -33,6 +34,16 @@ public class RouteController {
         log.info("请求参数: {}", form);
         EntityUtil.trimString(form);
         return new RetResult().success().setData(routeService.add(form));
+    }
+
+    @ApiLog("删除路由")
+    @SaCheckLogin
+    @SaCheckPermission("route:delete")
+    @GetMapping("/delete")
+    public RetResult delete(@RequestParam Long routeId) {
+        log.info("请求参数: routeId=[{}]", routeId);
+        routeService.delete(routeId);
+        return new RetResult().success();
     }
 
     @ApiLog("重载路由缓存")
