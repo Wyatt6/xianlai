@@ -1,7 +1,7 @@
 package fun.xianlai.app.iam.service;
 
 import fun.xianlai.app.iam.model.entity.rbac.Role;
-import fun.xianlai.app.iam.model.form.RoleCondition;
+import fun.xianlai.core.response.DataMap;
 import org.springframework.data.domain.Page;
 
 import java.util.Date;
@@ -14,7 +14,7 @@ public interface RoleService {
     /**
      * 创建角色
      */
-    Role createRole(Role role);
+    DataMap add(Role role);
 
     /**
      * 删除角色
@@ -24,24 +24,18 @@ public interface RoleService {
     /**
      * 更新角色
      */
-    Role updateRole(Role role);
+    DataMap edit(Role role);
 
     /**
-     * 条件查询角色分页
      * 查询条件为空时查询全量数据
      * 页码<0或页大小<=0时不分页
      *
      * @param pageNum   页码
      * @param pageSize  页大小
      * @param condition 查询条件
-     * @return 角色分页数据
+     * @return 分页数据
      */
-    Page<Role> getRolesByPageConditionally(int pageNum, int pageSize, RoleCondition condition);
-
-    /**
-     * 查询某角色的排名（从1开始）
-     */
-    Long getRowNum(Long roleId);
+    Page<Role> getRolesByPageConditionally(int pageNum, int pageSize, Role condition);
 
     /**
      * 获取某用户的角色ID列表

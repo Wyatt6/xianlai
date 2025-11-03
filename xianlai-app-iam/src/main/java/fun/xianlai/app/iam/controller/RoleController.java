@@ -4,16 +4,13 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import fun.xianlai.app.iam.model.entity.rbac.Role;
 import fun.xianlai.app.iam.model.form.GrantForm;
-import fun.xianlai.app.iam.model.form.RoleCondition;
-import fun.xianlai.app.iam.model.form.RoleForm;
 import fun.xianlai.app.iam.service.RoleService;
 import fun.xianlai.core.annotation.ApiLog;
 import fun.xianlai.core.response.RetResult;
+import fun.xianlai.core.utils.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,17 +34,16 @@ public class RoleController {
     @SaCheckLogin
     @SaCheckPermission("role:add")
     @PostMapping("/add")
-    @Transactional(isolation = Isolation.SERIALIZABLE)
-    public RetResult add(@RequestBody RoleForm form) {
+    public RetResult add(@RequestBody Role form) {
         log.info("请求参数: {}", form);
-        return new RetResult().success().addData("role", roleService.createRole(form.convert()));
+        EntityUtil.trimString(form);
+        return new RetResult().success().setData(roleService.add(form));
     }
 
     @ApiLog("删除角色")
     @SaCheckLogin
     @SaCheckPermission("role:delete")
     @GetMapping("/delete")
-    @Transactional(isolation = Isolation.SERIALIZABLE)
     public RetResult delete(@RequestParam Long roleId) {
         log.info("请求参数: roleId=[{}]", roleId);
         roleService.deleteRole(roleId);
@@ -58,13 +54,13 @@ public class RoleController {
     @SaCheckLogin
     @SaCheckPermission("role:edit")
     @PostMapping("/edit")
-    public RetResult edit(@RequestBody RoleForm form) {
+    public RetResult edit(@RequestBody Role form) {
         log.info("请求参数: {}", form);
-        return new RetResult().success().addData("role", roleService.updateRole(form.convert()));
+        EntityUtil.trimString(form);
+        return new RetResult().success().setData(roleService.edit(form));
     }
 
     /**
-     * 条件查询角色分页
      * 查询条件为空时查询全量数据
      * 页码<0或页大小<=0时不分页
      *
@@ -79,7 +75,7 @@ public class RoleController {
     @PostMapping("/getPageConditionally")
     public RetResult getPageConditionally(@RequestParam int pageNum,
                                           @RequestParam int pageSize,
-                                          @RequestBody(required = false) RoleCondition condition) {
+                                          @RequestBody(required = false) Role condition) {
         log.info("请求参数：pageNum=[{}], pageSize=[{}], condition=[{}]", pageNum, pageSize, condition);
         Page<Role> roles = roleService.getRolesByPageConditionally(pageNum, pageSize, condition);
         return new RetResult().success()
@@ -88,15 +84,6 @@ public class RoleController {
                 .addData("totalPages", roles.getTotalPages())
                 .addData("totalElements", roles.getTotalElements())
                 .addData("content", roles.getContent());
-    }
-
-    @ApiLog("查询角色的排名（从1开始）")
-    @SaCheckLogin
-    @SaCheckPermission("role:query")
-    @GetMapping("/getRowNumStartFrom1")
-    public RetResult getRowNumStartFrom1(@RequestParam Long roleId) {
-        log.info("请求参数: roleId=[{}]", roleId);
-        return new RetResult().success().addData("rowNum", roleService.getRowNum(roleId));
     }
 
     @ApiLog("查询某用户所具有的角色ID列表")

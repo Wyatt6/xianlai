@@ -2,7 +2,6 @@ package fun.xianlai.app.iam.service.impl;
 
 import fun.xianlai.app.iam.model.entity.rbac.Role;
 import fun.xianlai.app.iam.model.entity.rbac.RolePermission;
-import fun.xianlai.app.iam.model.form.RoleCondition;
 import fun.xianlai.app.iam.repository.RolePermissionRepository;
 import fun.xianlai.app.iam.repository.RoleRepository;
 import fun.xianlai.app.iam.repository.UserRoleRepository;
@@ -11,7 +10,9 @@ import fun.xianlai.app.iam.service.RoleService;
 import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
+import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.DateUtil;
+import fun.xianlai.core.utils.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -21,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,10 +49,16 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @SimpleServiceLog("创建角色")
-    public Role createRole(Role role) {
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public DataMap add(Role role) {
         try {
             role.setId(null);
-            return roleRepository.save(role);
+            Role savedRole =  roleRepository.save(role);
+            Long rowNum = roleRepository.findRowNumById(savedRole.getId());
+            DataMap result = new DataMap();
+            result.put("role", savedRole);
+            result.put("rowNum", rowNum);
+            return result;
         } catch (DataIntegrityViolationException e) {
             throw new SysException("角色标识符重复");
         }
@@ -57,6 +66,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @ServiceLog("删除角色")
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void deleteRole(Long roleId) {
         log.info("删除与本角色相关的用户-角色关系");
         userRoleRepository.deleteByRoleId(roleId);
@@ -70,25 +80,12 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @ServiceLog("更新角色")
-    public Role updateRole(Role role) {
-        Long sortId = role.getSortId();
-        String identifier = role.getIdentifier();
-        String name = role.getName();
-        String description = role.getDescription();
-        Boolean active = role.getActive();
-        Boolean bindCheck = role.getBindCheck();
-
-        log.info("查询是否存在该角色");
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public DataMap edit(Role role) {
         Optional<Role> oldRole = roleRepository.findById(role.getId());
         if (oldRole.isPresent()) {
-            log.info("角色存在，组装用来更新的对象");
             Role newRole = oldRole.get();
-            if (sortId != null) newRole.setSortId(sortId);
-            if (identifier != null) newRole.setIdentifier(identifier);
-            if (name != null) newRole.setName(name);
-            if (description != null) newRole.setDescription(description);
-            if (active != null) newRole.setActive(active);
-            if (bindCheck != null) newRole.setBindCheck(bindCheck);
+            EntityUtil.convertNotNull(role, newRole);
 
             try {
                 log.info("更新数据库");
@@ -99,14 +96,14 @@ public class RoleServiceImpl implements RoleService {
             }
 
             boolean critical = false;
-            if (identifier != null) critical = true;
-            if (active != null) critical = true;
+            if (role.getIdentifier() != null) critical = true;
+            if (role.getActive() != null) critical = true;
             if (critical) {
                 log.info("编辑此角色数据影响到用户权限控制，需要更新缓存");
                 log.info("更新标记roleDbRefreshTime（数据库的角色数据更新的时间）");
                 setRoleDbRefreshTime(DateUtil.now());
             }
-            return newRole;
+            return new DataMap("role", newRole);
         } else {
             throw new SysException("要修改的角色不存在");
         }
@@ -114,7 +111,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @ServiceLog("条件查询角色分页")
-    public Page<Role> getRolesByPageConditionally(int pageNum, int pageSize, RoleCondition condition) {
+    public Page<Role> getRolesByPageConditionally(int pageNum, int pageSize, Role condition) {
         String identifier = (condition == null || condition.getIdentifier() == null) ? null : condition.getIdentifier();
         String name = (condition == null || condition.getName() == null) ? null : condition.getName();
         String description = (condition == null || condition.getDescription() == null) ? null : condition.getDescription();
@@ -131,12 +128,6 @@ public class RoleServiceImpl implements RoleService {
             log.info("全表查询");
             return roleRepository.findConditionally(identifier, name, description, active, bindCheck, permission, Pageable.unpaged(sort));
         }
-    }
-
-    @Override
-    @SimpleServiceLog("查询某角色的排名")
-    public Long getRowNum(Long roleId) {
-        return roleRepository.findRowNumById(roleId);
     }
 
     @Override

@@ -39,7 +39,7 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
                                  Pageable pageable);
 
     @Query(value = "select num " +
-            " from (select @rownum \\:= @rownum + 1 as num, r.id as id, r.sort_id " +
+            " from (select @rownum \\:= @rownum + 1 as num, r.id as id, r.sort_id, r.identifier " +
             "      from tb_iam_role r, (select @rownum \\:= 0) n " +
             "      order by r.sort_id asc, r.identifier asc) t " +
             " where t.id = ?1", nativeQuery = true)

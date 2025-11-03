@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -52,4 +53,18 @@ public class Role {
 
     @Column(columnDefinition = "bit not null default 0")
     private Boolean bindCheck;      // 用户绑定本角色时是否需要检查有无权限
+
+    // ----- 非持久化属性 -----
+    @Transient
+    private String permission;
+
+    public Role(Long id, Long sortId, String identifier, String name, String description, Boolean active, Boolean bindCheck) {
+        this.id = id;
+        this.sortId = sortId;
+        this.identifier = identifier;
+        this.name = name;
+        this.description = description;
+        this.active = active;
+        this.bindCheck = bindCheck;
+    }
 }
