@@ -47,7 +47,7 @@ public class MenuServiceImpl implements MenuService {
     @SimpleServiceLog("缓存生效的菜单")
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void cacheActiveMenus() {
-        List<SysMenu> menus = getActiveMenuForest();
+        List<SysMenu> menus = self.getActiveMenuForest();
         redis.opsForValue().set("menusChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(menus)), Duration.ofHours(CACHE_HOURS));
         redis.opsForValue().set("menus", menus, Duration.ofHours(CACHE_HOURS));
     }
