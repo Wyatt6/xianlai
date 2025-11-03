@@ -73,7 +73,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    // @SimpleServiceLog("从缓存获取路由")
+    @SimpleServiceLog("从缓存获取路由")
     public List<Map<String, Object>> getRoutesFromCache() {
         List<Map<String, Object>> routes = (List<Map<String, Object>>) redis.opsForValue().get("routes");
         if (routes == null) {
@@ -81,5 +81,25 @@ public class RouteServiceImpl implements RouteService {
             routes = (List<Map<String, Object>>) redis.opsForValue().get("routes");
         }
         return routes;
+    }
+
+    @Override
+    @SimpleServiceLog("获取路由森林")
+    public List<SysRoute> getRouteForest() {
+        List<SysRoute> routes = sysRouteRepository.findAll(Sort.by(Sort.Order.asc("sortId")));
+        List<SysRoute> forest = new ArrayList<>();
+        Map<Long, SysRoute> finder = new HashMap<>();
+        for (SysRoute route : routes) {
+            finder.put(route.getId(), route);
+        }
+        for (SysRoute route : routes) {
+            if (route.getParentId() == 0) {
+                forest.add(finder.get(route.getId()));
+            } else {
+                SysRoute fatherRoute = finder.get(route.getParentId());
+                fatherRoute.getChildren().add(finder.get(route.getId()));
+            }
+        }
+        return forest;
     }
 }

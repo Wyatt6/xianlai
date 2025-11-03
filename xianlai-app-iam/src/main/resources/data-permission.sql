@@ -28,6 +28,11 @@ INSERT IGNORE INTO tb_iam_permission(`id`, `sort_id`, `identifier`, `name`, `des
 (13002, 13002, 'menu:delete', '删除菜单', null),
 (13003, 13003, 'menu:edit', '修改菜单', null),
 (13004, 13004, 'menu:query', '查询菜单', null),
+-- 路由 Route
+(14001, 14001, 'route:add', '添加路由', null),
+(14002, 14002, 'route:delete', '删除路由', null),
+(14003, 14003, 'route:edit', '修改路由', null),
+(14004, 14004, 'route:query', '查询路由', null),
 
 -- ---------- --
 -- IAM模块权限 --

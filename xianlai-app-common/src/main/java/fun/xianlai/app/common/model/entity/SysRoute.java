@@ -8,12 +8,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 路由
@@ -27,7 +31,8 @@ import org.hibernate.annotations.GenericGenerator;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "tb_common_sys_route", indexes = {
-        @Index(columnList = "name", unique = true)
+        @Index(columnList = "name", unique = true),
+        @Index(columnList = "sortId")
 })
 public class SysRoute {
     @Id
@@ -67,4 +72,25 @@ public class SysRoute {
 
     @Column
     private String tagTitle;            // showTag = true 时才有意义
+
+    // ----- 非持久化属性 -----
+    @Transient
+    private List<SysRoute> children = new ArrayList<>();
+
+    public SysRoute(Long id, Long sortId, Long parentId, String name, String pathName,
+                    String redirectPathName, String componentPath, Boolean needLogin,
+                    Boolean needPermission, String permission, Boolean showTag, String tagTitle) {
+        this.id = id;
+        this.sortId = sortId;
+        this.parentId = parentId;
+        this.name = name;
+        this.pathName = pathName;
+        this.redirectPathName = redirectPathName;
+        this.componentPath = componentPath;
+        this.needLogin = needLogin;
+        this.needPermission = needPermission;
+        this.permission = permission;
+        this.showTag = showTag;
+        this.tagTitle = tagTitle;
+    }
 }
