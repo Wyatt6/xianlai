@@ -2,7 +2,6 @@ package fun.xianlai.app.common.service.impl;
 
 import com.alibaba.fastjson2.JSONObject;
 import fun.xianlai.app.common.model.entity.SysApi;
-import fun.xianlai.app.common.model.form.SysApiCondition;
 import fun.xianlai.app.common.repository.SysApiRepository;
 import fun.xianlai.app.common.service.ApiService;
 import fun.xianlai.core.annotation.ServiceLog;
@@ -10,6 +9,7 @@ import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.ChecksumUtil;
+import fun.xianlai.core.utils.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -97,10 +97,7 @@ public class ApiServiceImpl implements ApiService {
         Optional<SysApi> oldApi = sysApiRepository.findById(api.getId());
         if (oldApi.isPresent()) {
             SysApi newApi = oldApi.get();
-            if (api.getCallPath() != null) newApi.setCallPath(api.getCallPath());
-            if (api.getDescription() != null) newApi.setDescription(api.getDescription());
-            if (api.getRequestMethod() != null) newApi.setRequestMethod(api.getRequestMethod());
-            if (api.getUrl() != null) newApi.setUrl(api.getUrl());
+            EntityUtil.convertNotNull(api, newApi);
             try {
                 newApi = sysApiRepository.save(newApi);
             } catch (DataIntegrityViolationException e) {
@@ -116,7 +113,7 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     @ServiceLog("条件查询接口分页")
-    public Page<SysApi> getApisByPageConditionally(int pageNum, int pageSize, SysApiCondition condition) {
+    public Page<SysApi> getApisByPageConditionally(int pageNum, int pageSize, SysApi condition) {
         String callPath = (condition == null || condition.getCallPath() == null) ? null : condition.getCallPath();
         String description = (condition == null || condition.getDescription() == null) ? null : condition.getDescription();
         RequestMethod requestMethod = (condition == null || condition.getRequestMethod() == null) ? null : condition.getRequestMethod();

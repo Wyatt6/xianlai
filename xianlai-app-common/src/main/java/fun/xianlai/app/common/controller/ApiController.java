@@ -3,11 +3,10 @@ package fun.xianlai.app.common.controller;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import fun.xianlai.app.common.model.entity.SysApi;
-import fun.xianlai.app.common.model.form.SysApiCondition;
 import fun.xianlai.app.common.service.ApiService;
 import fun.xianlai.core.annotation.ApiLog;
 import fun.xianlai.core.response.RetResult;
-import fun.xianlai.core.utils.StringUtil;
+import fun.xianlai.core.utils.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,9 +33,7 @@ public class ApiController {
     @PostMapping("/add")
     public RetResult add(@RequestBody SysApi form) {
         log.info("请求参数: {}", form);
-        form.setCallPath(StringUtil.trim(form.getCallPath()));
-        form.setDescription(StringUtil.trim(form.getDescription()));
-        form.setUrl(StringUtil.trim(form.getUrl()));
+        EntityUtil.trimString(form);
         return new RetResult().success().setData(apiService.add(form));
     }
 
@@ -56,9 +53,7 @@ public class ApiController {
     @PostMapping("/edit")
     public RetResult edit(@RequestBody SysApi form) {
         log.info("请求参数: {}", form);
-        form.setCallPath(StringUtil.trim(form.getCallPath()));
-        form.setDescription(StringUtil.trim(form.getDescription()));
-        form.setUrl(StringUtil.trim(form.getUrl()));
+        EntityUtil.trimString(form);
         return new RetResult().success().setData(apiService.edit(form));
     }
 
@@ -86,7 +81,7 @@ public class ApiController {
     @PostMapping("/getPageConditionally")
     public RetResult getPageConditionally(@RequestParam int pageNum,
                                           @RequestParam int pageSize,
-                                          @RequestBody(required = false) SysApiCondition condition) {
+                                          @RequestBody(required = false) SysApi condition) {
         log.info("请求参数：pageNum=[{}], pageSize=[{}], condition=[{}]", pageNum, pageSize, condition);
         Page<SysApi> apis = apiService.getApisByPageConditionally(pageNum, pageSize, condition);
         return new RetResult().success()

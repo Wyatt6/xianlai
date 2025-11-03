@@ -1,7 +1,6 @@
 package fun.xianlai.app.common.service;
 
 import fun.xianlai.app.common.model.entity.SysApi;
-import fun.xianlai.app.common.model.form.SysApiCondition;
 import fun.xianlai.core.response.DataMap;
 import org.springframework.data.domain.Page;
 
@@ -45,5 +44,5 @@ public interface ApiService {
      * @param condition 查询条件
      * @return 分页数据
      */
-    Page<SysApi> getApisByPageConditionally(int pageNum, int pageSize, SysApiCondition condition);
+    Page<SysApi> getApisByPageConditionally(int pageNum, int pageSize, SysApi condition);
 }
