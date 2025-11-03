@@ -25,7 +25,7 @@ import java.util.Optional;
 @Service
 public class OptionServiceImpl implements OptionService {
     private static final long CACHE_HOURS = 720L;   // 30天
-    private static final String CACHE_PREFIX = "backSysOption:";
+    private static final String CACHE_PREFIX = "backOption:";
 
     @Autowired
     private RedisTemplate<String, Object> redis;
@@ -36,9 +36,9 @@ public class OptionServiceImpl implements OptionService {
     private OptionService self;
 
     @Override
-    @SimpleServiceLog("缓存加载到前端的系统参数")
+    @SimpleServiceLog("缓存加载到前端的参数")
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void cacheFrontLoadSysOptions() {
+    public void cacheFrontLoadOptions() {
         List<SysOption> options = sysOptionRepository.findByFrontLoad(true);
         Map<String, Map<String, String>> mapOptions = new HashMap<>();
         if (options != null) {
@@ -49,24 +49,24 @@ public class OptionServiceImpl implements OptionService {
                 mapOptions.put(option.getOptionKey(), valueObject);
             }
         }
-        redis.opsForValue().set("sysOptionsChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(mapOptions)), Duration.ofHours(CACHE_HOURS));
-        redis.opsForValue().set("sysOptions", mapOptions, Duration.ofHours(CACHE_HOURS));
+        redis.opsForValue().set("optionsChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(mapOptions)), Duration.ofHours(CACHE_HOURS));
+        redis.opsForValue().set("options", mapOptions, Duration.ofHours(CACHE_HOURS));
     }
 
     @Override
-    @SimpleServiceLog("从缓存获取加载到前端的系统参数")
-    public Map<String, Map<String, String>> getFrontLoadSysOptionsFromCache() {
-        Map<String, Map<String, String>> options = (Map<String, Map<String, String>>) redis.opsForValue().get("sysOptions");
+    @SimpleServiceLog("从缓存获取加载到前端的参数")
+    public Map<String, Map<String, String>> getFrontLoadOptionsFromCache() {
+        Map<String, Map<String, String>> options = (Map<String, Map<String, String>>) redis.opsForValue().get("options");
         if (options == null) {
-            self.cacheFrontLoadSysOptions();
-            options = (Map<String, Map<String, String>>) redis.opsForValue().get("sysOptions");
+            self.cacheFrontLoadOptions();
+            options = (Map<String, Map<String, String>>) redis.opsForValue().get("options");
         }
         return options;
     }
 
     @Override
-    @SimpleServiceLog("缓存加载到后端的系统参数缓存")
-    public void cacheBackLoadSysOptions() {
+    @SimpleServiceLog("缓存加载到后端的参数缓存")
+    public void cacheBackLoadOptions() {
         List<SysOption> options = sysOptionRepository.findByBackLoad(true);
         if (options != null) {
             for (SysOption option : options) {
@@ -76,8 +76,8 @@ public class OptionServiceImpl implements OptionService {
     }
 
     @Override
-    @SimpleServiceLog("缓存某个加载到后端的系统参数")
-    public void cacheCertainBackLoadSysOption(String key) {
+    @SimpleServiceLog("缓存某个加载到后端的参数")
+    public void cacheCertainBackLoadOption(String key) {
         Optional<SysOption> option = sysOptionRepository.findByOptionKeyAndBackLoad(key, true);
         redis.delete(CACHE_PREFIX + key);
         if (option.isPresent()) {
@@ -86,11 +86,11 @@ public class OptionServiceImpl implements OptionService {
     }
 
     @Override
-    @SimpleServiceLog("从缓存获取某个加载到后端的系统参数值")
-    public String getCertainBackLoadSysOptionValueFromCache(String key) {
+    @SimpleServiceLog("从缓存获取某个加载到后端的参数值")
+    public String getCertainBackLoadOptionValueFromCache(String key) {
         String value = (String) redis.opsForValue().get(CACHE_PREFIX + key);
         if (value == null) {
-            self.cacheCertainBackLoadSysOption(key);
+            self.cacheCertainBackLoadOption(key);
             value = (String) redis.opsForValue().get(CACHE_PREFIX + key);
         }
         return value;
@@ -99,21 +99,21 @@ public class OptionServiceImpl implements OptionService {
     @Override
     @SimpleServiceLog("以String类型读取参数值")
     public Optional<String> readValueInString(String key) {
-        String value = self.getCertainBackLoadSysOptionValueFromCache(key);
+        String value = self.getCertainBackLoadOptionValueFromCache(key);
         return value != null ? value.describeConstable() : Optional.empty();
     }
 
     @Override
     @SimpleServiceLog("以Integer类型读取参数值")
     public Optional<Integer> readValueInInteger(String key) {
-        String value = self.getCertainBackLoadSysOptionValueFromCache(key);
+        String value = self.getCertainBackLoadOptionValueFromCache(key);
         return value != null ? ((Integer) Integer.parseInt(value)).describeConstable() : Optional.empty();
     }
 
     @Override
     @SimpleServiceLog("以Long类型读取参数值")
     public Optional<Long> readValueInLong(String key) {
-        String value = self.getCertainBackLoadSysOptionValueFromCache(key);
+        String value = self.getCertainBackLoadOptionValueFromCache(key);
         return value != null ? ((Long) Long.parseLong(value)).describeConstable() : Optional.empty();
     }
 }

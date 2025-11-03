@@ -19,7 +19,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * 系统参数
+ * 参数
  * <p>
  * 影响系统整体运行的参数，以键值对的形式存储
  * 通常由系统在初始化时自动生成，并由管理员管理

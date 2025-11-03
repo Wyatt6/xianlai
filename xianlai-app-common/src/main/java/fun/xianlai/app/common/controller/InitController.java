@@ -35,7 +35,7 @@ public class InitController {
     @GetMapping("/getInitData")
     public RetResult getInitData() {
         return new RetResult().success()
-                .addData("options", optionService.getFrontLoadSysOptionsFromCache())
+                .addData("options", optionService.getFrontLoadOptionsFromCache())
                 .addData("paths", pathService.getPathsFromCache())
                 .addData("routes", routeService.getRoutesFromCache())
                 .addData("menus", menuService.getActiveMenusFromCache())

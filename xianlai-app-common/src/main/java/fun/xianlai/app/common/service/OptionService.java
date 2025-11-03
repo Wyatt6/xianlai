@@ -8,29 +8,29 @@ import java.util.Optional;
  */
 public interface OptionService {
     /**
-     * 缓存加载到前端的系统参数
+     * 缓存加载到前端的参数
      */
-    void cacheFrontLoadSysOptions();
+    void cacheFrontLoadOptions();
 
     /**
-     * 从缓存获取加载到前端的系统参数
+     * 从缓存获取加载到前端的参数
      */
-    Map<String, Map<String, String>> getFrontLoadSysOptionsFromCache();
+    Map<String, Map<String, String>> getFrontLoadOptionsFromCache();
 
     /**
-     * 缓存加载到后端的系统参数缓存
+     * 缓存加载到后端的参数缓存
      */
-    void cacheBackLoadSysOptions();
+    void cacheBackLoadOptions();
 
     /**
-     * 缓存某个加载到后端的系统参数
+     * 缓存某个加载到后端的参数
      */
-    void cacheCertainBackLoadSysOption(String key);
+    void cacheCertainBackLoadOption(String key);
 
     /**
-     * 从缓存获取某个加载到后端的系统参数值
+     * 从缓存获取某个加载到后端的参数值
      */
-    String getCertainBackLoadSysOptionValueFromCache(String key);
+    String getCertainBackLoadOptionValueFromCache(String key);
 
     /**
      * 以String类型读取参数值
