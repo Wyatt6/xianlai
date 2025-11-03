@@ -44,34 +44,6 @@ public class RouteServiceImpl implements RouteService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void cacheRoutes() {
         List<SysRoute> routes = self.getRouteForest();
-//        List<Map<String, Object>> listRoutes = new ArrayList<>();
-//        if (routes != null) {
-//            Map<Long, Map<String, Object>> finder = new HashMap<>();
-//            for (SysRoute route : routes) {
-//                Map<String, Object> mapRoute = new HashMap<>();
-//                mapRoute.put("id", route.getId());
-//                mapRoute.put("sortId", route.getSortId());
-//                mapRoute.put("name", route.getName());
-//                mapRoute.put("pathName", route.getPathName());
-//                mapRoute.put("redirectPathName", route.getRedirectPathName());
-//                mapRoute.put("componentPath", route.getComponentPath());
-//                mapRoute.put("needLogin", route.getNeedLogin());
-//                mapRoute.put("needPermission", route.getNeedPermission());
-//                mapRoute.put("permission", route.getPermission());
-//                mapRoute.put("showTag", route.getShowTag());
-//                mapRoute.put("tagTitle", route.getTagTitle());
-//                mapRoute.put("children", new ArrayList<HashMap<String, Object>>());
-//                finder.put(route.getId(), mapRoute);
-//            }
-//            for (SysRoute route : routes) {
-//                if (route.getParentId() == 0) {
-//                    listRoutes.add(finder.get(route.getId()));
-//                } else {
-//                    Map<String, Object> fatherRoute = finder.get(route.getParentId());
-//                    ((List<Map<String, Object>>) fatherRoute.get("children")).add(finder.get(route.getId()));
-//                }
-//            }
-//        }
         redis.opsForValue().set("routesChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(routes)), Duration.ofHours(CACHE_HOURS));
         redis.opsForValue().set("routes", routes, Duration.ofHours(CACHE_HOURS));
     }
