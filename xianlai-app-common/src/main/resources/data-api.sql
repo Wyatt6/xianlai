@@ -24,6 +24,12 @@ INSERT IGNORE INTO tb_common_sys_api(`id`, `call_path`, `description`, `request_
 (14003, 'common.menu.edit', '修改菜单', 'POST', '/api/common/menu/edit'),
 (14004, 'common.menu.reloadCache', '重载菜单缓存', 'GET', '/api/common/menu/reloadCache'),
 (14005, 'common.menu.getForest', '查询菜单森林', 'GET', '/api/common/menu/getForest'),
+-- RouteController
+(15001, 'common.route.add', '新增路由', 'POST', '/api/common/route/add'),
+(15002, 'common.route.delete', '删除路由', 'GET', '/api/common/route/delete'),
+(15003, 'common.route.edit', '修改路由', 'POST', '/api/common/route/edit'),
+(15004, 'common.route.reloadCache', '重载路由缓存', 'GET', '/api/common/route/reloadCache'),
+(15005, 'common.route.getForest', '查询路由森林', 'GET', '/api/common/route/getForest'),
 
 -- ---------- --
 -- IAM模块接口 --
