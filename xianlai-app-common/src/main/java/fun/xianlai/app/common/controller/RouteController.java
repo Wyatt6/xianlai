@@ -21,6 +21,15 @@ public class RouteController {
     @Autowired
     private RouteService routeService;
 
+    @ApiLog("重载路由缓存")
+    @SaCheckLogin
+    @SaCheckPermission("route:edit")
+    @GetMapping("/reloadCache")
+    public RetResult reloadCache() {
+        routeService.cacheRoutes();
+        return new RetResult().success();
+    }
+
     @ApiLog("查询路由森林")
     @SaCheckLogin
     @SaCheckPermission("route:query")
