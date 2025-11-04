@@ -46,7 +46,7 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     @SimpleServiceLog("缓存接口")
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional
     public void cacheApis() {
         List<SysApi> apis = sysApiRepository.findAll();
         redis.opsForValue().set("apisChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(apis)), Duration.ofHours(CACHE_HOURS));
@@ -66,7 +66,7 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     @ServiceLog("新增接口")
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional
     public DataMap add(SysApi api) {
         try {
             api.setId(null);
@@ -84,7 +84,7 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     @ServiceLog("删除接口")
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional
     public void delete(Long apiId) {
         sysApiRepository.deleteById(apiId);
         self.cacheApis();
@@ -92,7 +92,7 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     @ServiceLog("修改接口")
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional
     public DataMap edit(SysApi api) {
         Optional<SysApi> oldApi = sysApiRepository.findById(api.getId());
         if (oldApi.isPresent()) {

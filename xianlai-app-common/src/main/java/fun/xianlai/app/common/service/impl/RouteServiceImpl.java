@@ -16,7 +16,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
@@ -45,7 +44,7 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     @SimpleServiceLog("缓存路由")
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional
     public void cacheRoutes() {
         List<SysRoute> routes = self.getRouteForest();
         redis.opsForValue().set("routesChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(routes)), Duration.ofHours(CACHE_HOURS));
@@ -65,7 +64,7 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     @ServiceLog("新增路由")
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional
     public DataMap add(SysRoute route) {
         try {
             route.setId(null);
@@ -81,7 +80,7 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     @ServiceLog("删除路由")
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional
     public void delete(Long routeId) {
         List<SysRoute> sonRoutes = sysRouteRepository.findByParentId(routeId);
         if (sonRoutes == null || sonRoutes.isEmpty()) {
@@ -94,7 +93,7 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     @ServiceLog("修改路由")
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional
     public DataMap edit(SysRoute route) {
         Optional<SysRoute> oldRoute = sysRouteRepository.findById(route.getId());
         if (oldRoute.isPresent()) {

@@ -45,7 +45,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     @SimpleServiceLog("缓存生效的菜单")
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional
     public void cacheActiveMenus() {
         List<SysMenu> menus = self.getActiveMenuForest();
         redis.opsForValue().set("menusChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(menus)), Duration.ofHours(CACHE_HOURS));
@@ -65,7 +65,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     @ServiceLog("新增菜单")
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional
     public DataMap add(SysMenu menu) {
         try {
             menu.setId(null);
@@ -81,7 +81,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     @ServiceLog("删除菜单")
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional
     public void delete(Long menuId) {
         List<SysMenu> sonMenus = sysMenuRepository.findByParentId(menuId);
         if (sonMenus == null || sonMenus.isEmpty()) {
@@ -94,7 +94,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     @ServiceLog("修改菜单")
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional
     public DataMap edit(SysMenu menu) {
         Optional<SysMenu> oldMenu = sysMenuRepository.findById(menu.getId());
         if (oldMenu.isPresent()) {
