@@ -14,7 +14,7 @@ INSERT IGNORE INTO tb_common_sys_route(
 (11001, 11001, 0, 'layout', 'INDEX', 'INDEX_REDIRECT', 'layout/index.vue', 1, 0, null, 0, null),
 (11002, 11002, 11001, 'homepage', 'HOMEPAGE', null, 'homepage/index.vue', 1, 0, null, 0, null),
 -- 系统设置
-(90001, 90001, 91001, 'setting', 'SETTING', 'SETTING_REDIRECT', 'layout/components/Placeholder/index.vue', 1, 1, "menu:setting", 0, null),
+(90001, 90001, 11001, 'setting', 'SETTING', 'SETTING_REDIRECT', 'layout/components/Placeholder/index.vue', 1, 1, "menu:setting", 0, null),
 (90002, 90002, 90001, 'setting_path', 'SETTING_PATH', null, 'setting/path_manage/index.vue', 1, 1, "menu:setting_path", 1, "路径常量"),
 (90003, 90003, 90001, 'setting_menu', 'SETTING_MENU', null, 'setting/menu_manage/index.vue', 1, 1, "menu:setting_menu", 1, "菜单管理"),
 (90004, 90004, 90001, 'setting_route', 'SETTING_ROUTE', null, 'setting/route_manage/index.vue', 1, 1, "menu:setting_route", 1, "路由配置"),
