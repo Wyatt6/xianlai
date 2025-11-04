@@ -42,7 +42,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     @SimpleServiceLog("新增权限")
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public DataMap add(Permission permission) {
         try {
             permission.setId(null);
@@ -59,7 +59,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     @ServiceLog("删除权限")
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void delete(Long permissionId) {
         log.info("删除与本权限相关的角色-权限关系");
         rolePermissionRepository.deleteByPermissionId(permissionId);

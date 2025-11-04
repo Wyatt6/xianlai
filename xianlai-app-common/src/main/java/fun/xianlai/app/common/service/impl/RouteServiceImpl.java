@@ -45,7 +45,7 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     @SimpleServiceLog("缓存路由")
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void cacheRoutes() {
         List<SysRoute> routes = self.getRouteForest();
         redis.opsForValue().set("routesChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(routes)), Duration.ofHours(CACHE_HOURS));
@@ -65,7 +65,7 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     @ServiceLog("新增路由")
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public DataMap add(SysRoute route) {
         try {
             route.setId(null);
@@ -81,7 +81,7 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     @ServiceLog("删除路由")
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void delete(Long routeId) {
         List<SysRoute> sonRoutes = sysRouteRepository.findByParentId(routeId);
         if (sonRoutes == null || sonRoutes.isEmpty()) {

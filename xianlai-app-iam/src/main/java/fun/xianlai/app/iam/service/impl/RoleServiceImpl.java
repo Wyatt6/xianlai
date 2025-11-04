@@ -49,7 +49,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @SimpleServiceLog("创建角色")
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public DataMap add(Role role) {
         try {
             role.setId(null);
@@ -66,7 +66,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @ServiceLog("删除角色")
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void deleteRole(Long roleId) {
         log.info("删除与本角色相关的用户-角色关系");
         userRoleRepository.deleteByRoleId(roleId);

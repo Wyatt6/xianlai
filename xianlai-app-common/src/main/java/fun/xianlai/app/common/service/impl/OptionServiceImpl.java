@@ -37,7 +37,7 @@ public class OptionServiceImpl implements OptionService {
 
     @Override
     @SimpleServiceLog("缓存加载到前端的参数")
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void cacheFrontLoadOptions() {
         List<SysOption> options = sysOptionRepository.findByFrontLoad(true);
         Map<String, Map<String, String>> mapOptions = new HashMap<>();

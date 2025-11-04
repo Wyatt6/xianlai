@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @ServiceLog("创建新用户")
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public DataMap createUser(String username, String password, Boolean active) {
         log.info("检查用户名是否已被使用");
         if (userRepository.findByUsername(username) != null) {

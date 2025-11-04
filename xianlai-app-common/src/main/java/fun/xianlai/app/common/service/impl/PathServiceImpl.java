@@ -45,7 +45,7 @@ public class PathServiceImpl implements PathService {
 
     @Override
     @SimpleServiceLog("缓存路径")
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void cachePaths() {
         List<SysPath> paths = sysPathRepository.findAll();
         redis.opsForValue().set("pathsChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(paths)), Duration.ofHours(CACHE_HOURS));
@@ -65,7 +65,7 @@ public class PathServiceImpl implements PathService {
 
     @Override
     @ServiceLog("新增路径")
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public DataMap add(SysPath path) {
         try {
             path.setId(null);
@@ -83,7 +83,7 @@ public class PathServiceImpl implements PathService {
 
     @Override
     @ServiceLog("删除路径")
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void delete(Long pathId) {
         sysPathRepository.deleteById(pathId);
         self.cachePaths();
