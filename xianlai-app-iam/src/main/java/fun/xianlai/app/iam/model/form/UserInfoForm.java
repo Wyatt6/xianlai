@@ -8,7 +8,7 @@ import lombok.Data;
  * @author WyattLau
  */
 @Data
-public class UserForm {
+public class UserInfoForm {
     private Long id;
     private String username;
     private Boolean active;

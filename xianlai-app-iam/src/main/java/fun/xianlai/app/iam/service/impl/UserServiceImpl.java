@@ -7,7 +7,7 @@ import fun.xianlai.app.iam.model.entity.rbac.Role;
 import fun.xianlai.app.iam.model.entity.rbac.User;
 import fun.xianlai.app.iam.model.entity.rbac.UserRole;
 import fun.xianlai.app.iam.model.form.UserCondition;
-import fun.xianlai.app.iam.model.form.UserForm;
+import fun.xianlai.app.iam.model.form.UserInfoForm;
 import fun.xianlai.app.iam.repository.PermissionRepository;
 import fun.xianlai.app.iam.repository.RoleRepository;
 import fun.xianlai.app.iam.repository.UserRepository;
@@ -19,6 +19,7 @@ import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.feign.consumer.FeignOptionService;
+import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.DateUtil;
 import fun.xianlai.core.utils.PasswordUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -79,7 +80,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @ServiceLog("创建新用户")
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public User createUser(String username, String password, Boolean active) {
+    public DataMap createUser(String username, String password, Boolean active) {
         log.info("检查用户名是否已被使用");
         if (userRepository.findByUsername(username) != null) {
             throw new SysException("用户名已被使用");
@@ -97,9 +98,12 @@ public class UserServiceImpl implements UserService {
         newUser.setActive(active);
         newUser.setIsDelete(false);
         User savedUser = userRepository.save(newUser);
-        log.info("成功创建新用户: id=[{}]", savedUser.getId());
+        Long rowNum = userRepository.findRowNumById(savedUser.getId());
 
-        return savedUser;
+        DataMap result = new DataMap();
+        result.put("user", savedUser);
+        result.put("rowNum", rowNum);
+        return result;
     }
 
     @Override
@@ -292,12 +296,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @SimpleServiceLog("查询某用户的排名")
-    public Long getRowNum(Long userId) {
-        return userRepository.findRowNumById(userId);
-    }
-
-    @Override
     @SimpleServiceLog("根据用户ID查询用户")
     public Optional<User> findByUserId(Long userId) {
         return userRepository.findById(userId);
@@ -372,7 +370,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @ServiceLog("修改用户信息/注销用户")
     @Transactional
-    public UserForm editUserInfo(UserForm form) {
+    public DataMap editUserInfo(UserInfoForm form) {
         User user = form.extractToUser();
 
         if (StpUtil.getLoginIdAsLong() == user.getId()) {
@@ -403,9 +401,9 @@ public class UserServiceImpl implements UserService {
 
         try {
             log.info("更新数据库");
-            UserForm result = new UserForm();
+            UserInfoForm result = new UserInfoForm();
             result.importFromUser(userRepository.save(newUser));
-            return result;
+            return new DataMap("userInfo", result);
         } catch (DataIntegrityViolationException e) {
             log.info(e.getMessage());
             throw new SysException("用户名已存在");

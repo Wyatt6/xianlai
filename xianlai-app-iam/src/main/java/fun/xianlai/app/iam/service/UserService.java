@@ -2,7 +2,8 @@ package fun.xianlai.app.iam.service;
 
 import fun.xianlai.app.iam.model.entity.rbac.User;
 import fun.xianlai.app.iam.model.form.UserCondition;
-import fun.xianlai.app.iam.model.form.UserForm;
+import fun.xianlai.app.iam.model.form.UserInfoForm;
+import fun.xianlai.core.response.DataMap;
 import org.springframework.data.domain.Page;
 
 import java.util.Date;
@@ -25,7 +26,7 @@ public interface UserService {
      * @param active   状态
      * @return 用户对象
      */
-    User createUser(String username, String password, Boolean active);
+    DataMap createUser(String username, String password, Boolean active);
 
     /**
      * 身份验证（用户名+密码）
@@ -91,11 +92,6 @@ public interface UserService {
     Page<User> getUsersByPageConditionally(int pageNum, int pageSize, UserCondition condition);
 
     /**
-     * 查询某用户的排名（从1开始）
-     */
-    Long getRowNum(Long userId);
-
-    /**
      * 根据用户ID查询用户
      */
     Optional<User> findByUserId(Long userId);
@@ -121,5 +117,5 @@ public interface UserService {
     /**
      * 修改用户信息
      */
-    UserForm editUserInfo(UserForm form);
+    DataMap editUserInfo(UserInfoForm form);
 }

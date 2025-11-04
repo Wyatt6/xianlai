@@ -10,7 +10,7 @@ import fun.xianlai.app.iam.model.entity.rbac.User;
 import fun.xianlai.app.iam.model.form.BindForm;
 import fun.xianlai.app.iam.model.form.ChangePasswordForm;
 import fun.xianlai.app.iam.model.form.UserCondition;
-import fun.xianlai.app.iam.model.form.UserForm;
+import fun.xianlai.app.iam.model.form.UserInfoForm;
 import fun.xianlai.app.iam.service.PermissionService;
 import fun.xianlai.app.iam.service.RoleService;
 import fun.xianlai.app.iam.service.UserService;
@@ -19,6 +19,7 @@ import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.feign.consumer.FeignCaptchaService;
 import fun.xianlai.core.feign.consumer.FeignOptionService;
 import fun.xianlai.core.response.RetResult;
+import fun.xianlai.core.utils.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -55,48 +56,42 @@ public class UserController {
     @SaCheckPermission("user:add")
     @PostMapping("/createUser")
     public RetResult createUser(@RequestBody User form) {
-        String username = form.getUsername().trim();
-        String password = form.getPassword().trim();
-        Boolean active = form.getActive();
-        log.info("请求参数: username=[{}], active=[{}]", username, active);
-
-        if (!userService.matchUsernameFormat(username)) {
+        EntityUtil.trimString(form);
+        log.info("请求参数: username=[{}], active=[{}]", form.getUsername(), form.getActive());
+        if (!userService.matchUsernameFormat(form.getUsername())) {
             throw new SysException("用户名格式错误");
         }
-        if (!userService.matchPasswordFormat(password)) {
+        if (!userService.matchPasswordFormat(form.getPassword())) {
             throw new SysException("密码格式错误");
         }
-        User newUser = userService.createUser(username, password, active);
-
-        return new RetResult().success().addData("user", newUser);
+        return new RetResult().success().setData(userService.createUser(form.getUsername(), form.getPassword(), form.getActive()));
     }
 
     @ApiLog("注册新用户")
     @PostMapping("/register")
     public RetResult register(@RequestBody User form) {
-        String captchaKey = form.getCaptchaKey().trim();
-        String captcha = form.getCaptcha().trim();
-        String username = form.getUsername().trim();
-        String password = form.getPassword().trim();
+        EntityUtil.trimString(form);
+        String captchaKey = form.getCaptchaKey();
+        String captcha = form.getCaptcha();
+        String username = form.getUsername();
+        String password = form.getPassword();
         log.info("请求参数: captchaKey=[{}], captcha=[{}], username=[{}]", captchaKey, captcha, username);
-
         captchaService.verifyCaptcha(captchaKey, captcha);
-        if (!userService.matchUsernameFormat(username)) {
+        if (!userService.matchUsernameFormat(form.getUsername())) {
             throw new SysException("用户名格式错误");
         }
-        if (!userService.matchPasswordFormat(password)) {
+        if (!userService.matchPasswordFormat(form.getPassword())) {
             throw new SysException("密码格式错误");
         }
-        User newUser = userService.createUser(username, password, true);
-
-        return new RetResult().success().addData("user", newUser);
+        return new RetResult().success().setData(userService.createUser(username, password, true));
     }
 
     @ApiLog("用户登录")
     @PostMapping("/login")
     public RetResult login(@RequestBody User form) {
-        String captchaKey = form.getCaptchaKey().trim();
-        String captcha = form.getCaptcha().trim();
+        EntityUtil.trimString(form);
+        String captchaKey = form.getCaptchaKey();
+        String captcha = form.getCaptcha();
         String username = form.getUsername();
         String password = form.getPassword();
         log.info("请求参数: captchaKey=[{}], captcha=[{}], username=[{}]", captchaKey, captcha, username);
@@ -159,6 +154,7 @@ public class UserController {
     @SaCheckLogin
     @PostMapping("/changePassword")
     public RetResult changePassword(@RequestBody ChangePasswordForm form) {
+        EntityUtil.trimString(form);
         log.info("请求参数: {}", form);
         if (!userService.matchPasswordFormat(form.getOldPassword())) {
             throw new SysException("旧密码格式错误");
@@ -174,7 +170,6 @@ public class UserController {
     }
 
     /**
-     * 条件查询用户分页
      * 查询条件为空时查询全量数据
      * 页码<0或页大小<=0时不分页
      *
@@ -203,15 +198,6 @@ public class UserController {
                 .addData("totalPages", users.getTotalPages())
                 .addData("totalElements", users.getTotalElements())
                 .addData("content", users.getContent());
-    }
-
-    @ApiLog("查询用户的排名（从1开始）")
-    @SaCheckLogin
-    @SaCheckPermission("user:query")
-    @GetMapping("/getRowNumStartFrom1")
-    public RetResult getRowNumStartFrom1(@RequestParam Long userId) {
-        log.info("请求参数: userId=[{}]", userId);
-        return new RetResult().success().addData("rowNum", userService.getRowNum(userId));
     }
 
     @ApiLog("为用户绑定/解除绑定角色")
@@ -246,8 +232,8 @@ public class UserController {
     @ApiLog("修改用户信息/注销用户")
     @SaCheckLogin
     @PostMapping("/editUserInfo")
-    public RetResult editUserInfo(@RequestBody UserForm form) {
+    public RetResult editUserInfo(@RequestBody UserInfoForm form) {
         log.info("请求参数: {}", form);
-        return new RetResult().success().addData("userInfo", userService.editUserInfo(form));
+        return new RetResult().success().setData(userService.editUserInfo(form));
     }
 }
