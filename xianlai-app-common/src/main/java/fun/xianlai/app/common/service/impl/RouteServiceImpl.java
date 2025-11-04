@@ -10,6 +10,7 @@ import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.ChecksumUtil;
 import fun.xianlai.core.utils.EntityUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -25,11 +26,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static cn.dev33.satoken.SaManager.log;
-
 /**
  * @author WyattLau
  */
+@Slf4j
 @Service
 public class RouteServiceImpl implements RouteService {
     private static final long CACHE_HOURS = 720L;   // 30天
@@ -119,7 +119,6 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    @SimpleServiceLog("获取路由森林")
     public List<SysRoute> getRouteForest() {
         List<SysRoute> routes = sysRouteRepository.findAll(Sort.by(Sort.Order.asc("sortId")));
         List<SysRoute> forest = new ArrayList<>();

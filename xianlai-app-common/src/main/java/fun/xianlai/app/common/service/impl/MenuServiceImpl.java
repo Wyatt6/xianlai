@@ -117,7 +117,6 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @SimpleServiceLog("获取菜单森林")
     public List<SysMenu> getMenuForest() {
         List<SysMenu> menus = sysMenuRepository.findAll(Sort.by(Sort.Order.asc("sortId")));
         List<SysMenu> forest = new ArrayList<>();
@@ -137,7 +136,6 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @SimpleServiceLog("获取生效中的菜单森林")
     public List<SysMenu> getActiveMenuForest() {
         List<SysMenu> menus = sysMenuRepository.findByActive(true, Sort.by(Sort.Order.asc("sortId")));
         List<SysMenu> forest = new ArrayList<>();
