@@ -21,6 +21,16 @@ public class OptionController {
     @Autowired
     private OptionService optionService;
 
+    @ApiLog("重载参数缓存")
+    @SaCheckLogin
+    @SaCheckPermission("option:edit")
+    @GetMapping("/reloadCache")
+    public RetResult reloadCache() {
+        optionService.cacheFrontLoadOptions();
+        optionService.cacheFrontLoadOptions();
+        return new RetResult().success();
+    }
+
     @ApiLog("获取分类后的参数列表")
     @SaCheckLogin
     @SaCheckPermission("option:query")
