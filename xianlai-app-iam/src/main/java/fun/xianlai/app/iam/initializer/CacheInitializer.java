@@ -21,8 +21,8 @@ public class CacheInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        permissionService.setPermissionDbRefreshTime(DateUtil.zero());
         log.info("开始初始化IAM模块缓存");
+        permissionService.setPermissionDbRefreshTime(DateUtil.zero());
         roleService.setRoleDbRefreshTime(DateUtil.zero());
         log.info("已完成IAM模块缓存初始化");
     }
