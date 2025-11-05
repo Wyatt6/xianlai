@@ -1,5 +1,7 @@
 package fun.xianlai.app.common.service;
 
+import fun.xianlai.core.response.DataMap;
+
 import java.util.Map;
 import java.util.Optional;
 
@@ -26,6 +28,11 @@ public interface OptionService {
      * 缓存某个加载到后端的参数
      */
     void cacheCertainBackLoadOption(String key);
+
+    /**
+     * 获取分类后的参数列表
+     */
+    DataMap getClassifiedList();
 
     /**
      * 从缓存获取某个加载到后端的参数值

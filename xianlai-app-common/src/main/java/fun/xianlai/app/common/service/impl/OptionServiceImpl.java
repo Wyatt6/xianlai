@@ -5,15 +5,17 @@ import fun.xianlai.app.common.model.entity.SysOption;
 import fun.xianlai.app.common.repository.SysOptionRepository;
 import fun.xianlai.app.common.service.OptionService;
 import fun.xianlai.core.annotation.SimpleServiceLog;
+import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.ChecksumUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,6 +96,21 @@ public class OptionServiceImpl implements OptionService {
             value = (String) redis.opsForValue().get(CACHE_PREFIX + key);
         }
         return value;
+    }
+
+    @Override
+    @SimpleServiceLog("获取分类后的参数列表")
+    public DataMap getClassifiedList() {
+        Sort sort = Sort.by(Sort.Order.asc("category"), Sort.Order.asc("sortId"));
+        List<SysOption> options = sysOptionRepository.findAll(sort);
+        Map<String, List<SysOption>> mapOptions = new HashMap<>();
+        for (SysOption option : options) {
+            if (!mapOptions.containsKey(option.getCategory())) {
+                mapOptions.put(option.getCategory(), new ArrayList<>());
+            }
+            mapOptions.get(option.getCategory()).add(option);
+        }
+        return new DataMap("options", mapOptions);
     }
 
     @Override
