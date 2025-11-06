@@ -1,5 +1,6 @@
 package fun.xianlai.app.common.service;
 
+import fun.xianlai.app.common.model.entity.SysOption;
 import fun.xianlai.core.response.DataMap;
 
 import java.util.Map;
@@ -30,14 +31,24 @@ public interface OptionService {
     void cacheCertainBackLoadOption(String key);
 
     /**
-     * 获取分类后的参数列表
-     */
-    DataMap getClassifiedList();
-
-    /**
      * 从缓存获取某个加载到后端的参数值
      */
     String getCertainBackLoadOptionValueFromCache(String key);
+
+    /**
+     * 新增参数
+     */
+    DataMap add(SysOption option);
+
+    /**
+     * 删除参数
+     */
+    void delete(Long optionId);
+
+    /**
+     * 获取分类后的参数列表
+     */
+    DataMap getClassifiedList();
 
     /**
      * 以String类型读取参数值

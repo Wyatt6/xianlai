@@ -1,11 +1,8 @@
 package fun.xianlai.app.common.model.entity;
 
-import fun.xianlai.app.common.model.enums.JsType;
 import fun.xianlai.core.supprt.PrimaryKeyGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -59,7 +56,7 @@ public class SysOption {
     @Column(length = 7000)
     private String defaultValue;        // 默认参数值
 
-    @Column
+    @Column(columnDefinition = "varchar(255) not null")
     private String name;
 
     @Column(length = 1000)
@@ -71,7 +68,6 @@ public class SysOption {
     @Column(columnDefinition = "bit not null default 0")
     private Boolean frontLoad;          // 是否加载到前端
 
-    @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private JsType jsType;              // 参数值的js数据类型（frontLoad = true才有意义）
+    private String jsType;              // 参数值的js数据类型（frontLoad = true才有意义）
 }

@@ -5,6 +5,7 @@ import fun.xianlai.app.common.model.entity.SysOption;
 import fun.xianlai.app.common.repository.SysOptionRepository;
 import fun.xianlai.app.common.service.OptionService;
 import fun.xianlai.core.annotation.SimpleServiceLog;
+import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.ChecksumUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,6 +97,32 @@ public class OptionServiceImpl implements OptionService {
             value = (String) redis.opsForValue().get(CACHE_PREFIX + key);
         }
         return value;
+    }
+
+    @Override
+    @SimpleServiceLog("新增参数")
+    @Transactional
+    public DataMap add(SysOption option) {
+        try {
+            option.setId(null);
+            SysOption savedOption = sysOptionRepository.save(option);
+            if (savedOption.getFrontLoad()) self.cacheFrontLoadOptions();
+            if (savedOption.getBackLoad()) self.cacheBackLoadOptions();
+            DataMap result = new DataMap();
+            result.put("option", savedOption);
+            return result;
+        } catch (Exception e) {
+            throw new SysException("参数Key已存在");
+        }
+    }
+
+    @Override
+    @SimpleServiceLog("删除参数")
+    @Transactional
+    public void delete(Long optionId) {
+        sysOptionRepository.deleteById(optionId);
+        self.cacheFrontLoadOptions();
+        self.cacheBackLoadOptions();
     }
 
     @Override
