@@ -8,6 +8,7 @@ INSERT IGNORE INTO tb_common_sys_option(
 -- 其他
 (10001, 10001, 'other', 'console.openLog', 'true', 'true', '控制台日志打印开关', 'true/false', 0, 1, 'BOOLEAN'),
 (10002, 10002, 'other', 'request.timeout', '10000', '10000', '请求超时时长', '单位：毫秒', 0, 1, 'NUMBER'),
+(10003, 10003, 'other', 'option.categoryList', '[{"label":"门户页面版式","category":"portal"},{"label":"用户注册登陆","category":"user"},{"label":"其他控制","category":"other"}]', '[{"label":"门户页面版式","category":"portal"},{"label":"用户注册登陆","category":"user"},{"label":"其他控制","category":"other"}]', '参数类别列表', null, 0, 1, 'ARRAY'),
 -- 验证码
 (11001, 11001, 'other', 'captcha.length', '5', '5', '验证码长度', '建议4～6位', 1, 1, 'NUMBER'),
 (11002, 11002, 'other', 'captcha.expireSeconds', '60', '60', '验证码有效期', '单位：秒', 1, 0, null),
