@@ -46,6 +46,11 @@ public interface OptionService {
     void delete(Long optionId);
 
     /**
+     * 修改参数
+     */
+    DataMap edit(SysOption option);
+
+    /**
      * 获取分类后的参数列表
      */
     DataMap getClassifiedList();

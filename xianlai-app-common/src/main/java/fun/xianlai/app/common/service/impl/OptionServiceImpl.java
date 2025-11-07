@@ -8,8 +8,11 @@ import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.ChecksumUtil;
+import fun.xianlai.core.utils.EntityUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,7 @@ import java.util.Optional;
 /**
  * @author WyattLau
  */
+@Slf4j
 @Service
 public class OptionServiceImpl implements OptionService {
     private static final long CACHE_HOURS = 720L;   // 30天
@@ -123,6 +127,32 @@ public class OptionServiceImpl implements OptionService {
         sysOptionRepository.deleteById(optionId);
         self.cacheFrontLoadOptions();
         self.cacheBackLoadOptions();
+    }
+
+    @Override
+    @SimpleServiceLog("修改参数")
+    @Transactional
+    public DataMap edit(SysOption option) {
+        Optional<SysOption> oldOption = sysOptionRepository.findById(option.getId());
+        if (oldOption.isPresent()) {
+            SysOption newOption = oldOption.get();
+            EntityUtil.convertNotNull(option, newOption);
+            try {
+                newOption = sysOptionRepository.save(newOption);
+            } catch (DataIntegrityViolationException e) {
+                log.info(e.getMessage());
+                throw new SysException("参数Key已存在");
+            }
+            if (option.getFrontLoad() != null) {
+                self.cacheFrontLoadOptions();
+            }
+            if (option.getBackLoad() != null) {
+                self.cacheCertainBackLoadOption(newOption.getOptionKey());
+            }
+            return new DataMap("option", newOption);
+        } else {
+            throw new SysException("要修改的参数不存在");
+        }
     }
 
     @Override

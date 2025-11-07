@@ -46,6 +46,16 @@ public class OptionController {
         return new RetResult().success();
     }
 
+    @ApiLog("修改参数")
+    @SaCheckLogin
+    @SaCheckPermission("option:edit")
+    @PostMapping("/edit")
+    public RetResult edit(@RequestBody SysOption form) {
+        log.info("请求参数: {}", form);
+        EntityUtil.trimString(form);
+        return new RetResult().success().setData(optionService.edit(form));
+    }
+
     @ApiLog("重载参数缓存")
     @SaCheckLogin
     @SaCheckPermission("option:edit")
