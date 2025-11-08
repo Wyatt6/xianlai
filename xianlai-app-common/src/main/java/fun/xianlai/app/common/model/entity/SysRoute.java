@@ -59,6 +59,9 @@ public class SysRoute {
     private String componentPath;       // 组件（相对）路径
 
     @Column(columnDefinition = "bit not null default 1")
+    private Boolean keepAlive;          // 是否缓存组件
+
+    @Column(columnDefinition = "bit not null default 1")
     private Boolean needLogin;          // 路由是否需要登录才允许访问
 
     @Column(columnDefinition = "bit not null default 1")
@@ -78,7 +81,7 @@ public class SysRoute {
     private List<SysRoute> children = new ArrayList<>();
 
     public SysRoute(Long id, Long sortId, Long parentId, String name, String pathName,
-                    String redirectPathName, String componentPath, Boolean needLogin,
+                    String redirectPathName, String componentPath, Boolean keepAlive, Boolean needLogin,
                     Boolean needPermission, String permission, Boolean showTag, String tagTitle) {
         this.id = id;
         this.sortId = sortId;
@@ -87,6 +90,7 @@ public class SysRoute {
         this.pathName = pathName;
         this.redirectPathName = redirectPathName;
         this.componentPath = componentPath;
+        this.keepAlive = keepAlive;
         this.needLogin = needLogin;
         this.needPermission = needPermission;
         this.permission = permission;

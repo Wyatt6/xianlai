@@ -12,5 +12,4 @@ import java.util.List;
 @Repository
 public interface SysRouteRepository extends JpaRepository<SysRoute, Long> {
     List<SysRoute> findByParentId(Long parentId);
-
 }
