@@ -14,12 +14,12 @@ INSERT IGNORE INTO tb_common_sys_route(
 (11001, 11001, 0, 'layout', 'INDEX', 'INDEX_REDIRECT', 'layout/index.vue', 1, 0, null, 0, null),
 (11002, 11002, 11001, 'homepage', 'HOMEPAGE', null, 'homepage/index.vue', 1, 0, null, 0, null),
 -- 系统设置
-(90001, 90001, 11001, 'setting', 'SETTING', 'SETTING_REDIRECT', 'layout/components/Placeholder/index.vue', 1, 1, "menu:setting", 0, null),
-(90002, 90002, 90001, 'setting_path', 'SETTING_PATH', null, 'setting/path_manage/index.vue', 1, 1, "menu:setting_path", 1, "路径常量"),
-(90003, 90003, 90001, 'setting_menu', 'SETTING_MENU', null, 'setting/menu_manage/index.vue', 1, 1, "menu:setting_menu", 1, "菜单管理"),
-(90004, 90004, 90001, 'setting_route', 'SETTING_ROUTE', null, 'setting/route_manage/index.vue', 1, 1, "menu:setting_route", 1, "路由配置"),
-(90005, 90005, 90001, 'setting_option', 'SETTING_OPTION', null, 'setting/option_manage/index.vue', 1, 1, "menu:setting_option", 1, "参数选项"),
-(90006, 90006, 90001, 'setting_api', 'SETTING_API', null, 'setting/api_manage/index.vue', 1, 1, "menu:setting_api", 1, "后台接口"),
+(90001, 90001, 11001, 'setting', 'SETTING', 'SETTING_REDIRECT', null, 1, 1, "menu:setting", 0, null),
+(90002, 90002, 11001, 'setting_path', 'SETTING_PATH', null, 'setting/path_manage/index.vue', 1, 1, "menu:setting_path", 1, "路径常量"),
+(90003, 90003, 11001, 'setting_menu', 'SETTING_MENU', null, 'setting/menu_manage/index.vue', 1, 1, "menu:setting_menu", 1, "菜单管理"),
+(90004, 90004, 11001, 'setting_route', 'SETTING_ROUTE', null, 'setting/route_manage/index.vue', 1, 1, "menu:setting_route", 1, "路由配置"),
+(90005, 90005, 11001, 'setting_option', 'SETTING_OPTION', null, 'setting/option_manage/index.vue', 1, 1, "menu:setting_option", 1, "参数选项"),
+(90006, 90006, 11001, 'setting_api', 'SETTING_API', null, 'setting/api_manage/index.vue', 1, 1, "menu:setting_api", 1, "后台接口"),
 -- 错误
 (99001, 99001, 11001, 'not_authorized_embedded', 'NOT_AUTHORIZED_EMBEDDED', null, 'errors/403.vue', 1, 0, null, 0, null),
 (99002, 99002, 0, 'not_authorized', 'NOT_AUTHORIZED', null, 'errors/403.vue', 1, 0, null, 0, null),
@@ -31,7 +31,7 @@ INSERT IGNORE INTO tb_common_sys_route(
 -- ---------- --
 -- IAM模块路由 --
 -- ---------- --
-(20001, 20001, 11001, 'iam', 'IAM', 'IAM_REDIRECT', 'layout/components/Placeholder/index.vue', 1, 1, 'menu:iam', 0, null),
-(20002, 20002, 20001, 'iam_user_manage', 'IAM_USER_MANAGE', null, 'iam/user_manage/index.vue', 1, 1, 'menu:iam_user_manage', 1, '用户管理'),
-(20003, 20003, 20001, 'iam_role_manage', 'IAM_ROLE_MANAGE', null, 'iam/role_manage/index.vue', 1, 1, 'menu:iam_role_manage', 1, '角色管理'),
-(20004, 20004, 20001, 'iam_permission_manage', 'IAM_PERMISSION_MANAGE', null, 'iam/permission_manage/index.vue', 1, 1, 'menu:iam_permission_manage', 1, '权限管理');
+(20001, 20001, 11001, 'iam', 'IAM', 'IAM_REDIRECT', null, 1, 1, 'menu:iam', 0, null),
+(20002, 20002, 11001, 'iam_user_manage', 'IAM_USER_MANAGE', null, 'iam/user_manage/index.vue', 1, 1, 'menu:iam_user_manage', 1, '用户管理'),
+(20003, 20003, 11001, 'iam_role_manage', 'IAM_ROLE_MANAGE', null, 'iam/role_manage/index.vue', 1, 1, 'menu:iam_role_manage', 1, '角色管理'),
+(20004, 20004, 11001, 'iam_permission_manage', 'IAM_PERMISSION_MANAGE', null, 'iam/permission_manage/index.vue', 1, 1, 'menu:iam_permission_manage', 1, '权限管理');
