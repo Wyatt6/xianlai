@@ -62,7 +62,7 @@ public class OptionController {
     @GetMapping("/reloadCache")
     public RetResult reloadCache() {
         optionService.cacheFrontLoadOptions();
-        optionService.cacheFrontLoadOptions();
+        optionService.cacheBackLoadOptions();
         return new RetResult().success();
     }
 
