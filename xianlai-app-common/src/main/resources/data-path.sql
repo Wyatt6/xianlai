@@ -7,10 +7,11 @@ INSERT IGNORE INTO tb_common_sys_path(`id`, `sort_id`, `name`, `path`) VALUE
 (10002, 10002, 'LOGIN', '/portal/login'),
 (10003, 10003, 'REGISTER', '/portal/register'),
 (10004, 10004, 'RESET_PASSWORD', '/portal/reset-password'),
--- 首页
+-- 首页、个人中心
 (11001, 11001, 'INDEX', '/'),
 (11002, 11002, 'INDEX_REDIRECT', '/homepage'),
 (11003, 11003, 'HOMEPAGE', '/homepage'),
+(11004, 11004, 'PROFILE', '/profile'),
 -- 系统设置
 (12001, 12001, 'SETTING', '/setting'),
 (12002, 12002, 'SETTING_REDIRECT', '/setting/path'),
