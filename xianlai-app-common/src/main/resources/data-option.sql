@@ -6,9 +6,8 @@ INSERT IGNORE INTO tb_common_sys_option(
 -- 其他控制 --
 -- ------- --
 -- 其他
-(10001, 10001, 'other', 'console.openLog', 'true', 'true', '控制台日志开关', '用于控制浏览器控制台日志是否打印，true表示打印日志，false表示不打印日志。', 0, 1, 'BOOLEAN'),
-(10002, 10002, 'other', 'request.timeout', '10000', '10000', '请求超时时长', '用于设置前端往后台发送API请求时，等待多长时间，超过这个时间报请求超时错误。单位：毫秒。注意：此参数值建议设置10000毫秒（10秒）以上，不应设置太小。', 0, 1, 'NUMBER'),
-(10003, 10003, 'other', 'option.categoryList', '[{"label":"门户页面","category":"portal"},{"label":"注册登陆","category":"user"},{"label":"其他控制","category":"other"}]', '[{"label":"门户页面","category":"portal"},{"label":"注册登陆","category":"user"},{"label":"其他控制","category":"other"}]', '参数类别列表', '用于定义“系统设置-参数选项”页面有什么标签，以及每个标签所代表的参数分类标识符，在查询和新增参数时需要用该分类标识符进行区分。', 0, 1, 'ARRAY'),
+(10001, 10001, 'other', 'request.timeout', '10000', '10000', '请求超时时长', '用于设置前端往后台发送API请求时，等待多长时间，超过这个时间报请求超时错误。单位：毫秒。注意：此参数值建议设置10000毫秒（10秒）以上，不应设置太小。', 0, 1, 'NUMBER'),
+(10002, 10002, 'other', 'option.categoryList', '[{"label":"门户页面","category":"portal"},{"label":"注册登陆","category":"user"},{"label":"其他控制","category":"other"}]', '[{"label":"门户页面","category":"portal"},{"label":"注册登陆","category":"user"},{"label":"其他控制","category":"other"}]', '参数类别列表', '用于定义“系统设置-参数选项”页面有什么标签，以及每个标签所代表的参数分类标识符，在查询和新增参数时需要用该分类标识符进行区分。', 0, 1, 'ARRAY'),
 -- 验证码
 (11001, 11001, 'other', 'captcha.length', '5', '5', '验证码长度', '设置公用的验证码的长度，建议4～6位。', 1, 1, 'NUMBER'),
 (11002, 11002, 'other', 'captcha.expireSeconds', '120', '120', '验证码有效期', '设置公用的验证码的有效期，单位：秒。', 1, 0, null),
