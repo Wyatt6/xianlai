@@ -171,7 +171,11 @@ public class UserController {
         }
         Long userId = StpUtil.getLoginIdAsLong();
         log.info("userId=[{}]", userId);
-        userService.authentication(userId, form.getOldPassword());
+        try {
+            userService.authentication(userId, form.getOldPassword());
+        } catch (SysException e) {
+            throw new SysException("当前密码错误");
+        }
         userService.changePassword(userId, form.getNewPassword());
         return new RetResult().success();
     }
