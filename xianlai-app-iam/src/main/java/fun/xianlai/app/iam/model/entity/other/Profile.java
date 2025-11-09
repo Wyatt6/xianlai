@@ -1,6 +1,5 @@
 package fun.xianlai.app.iam.model.entity.other;
 
-import fun.xianlai.app.iam.model.enums.Gender;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -23,7 +22,6 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 @Table(name = "tb_iam_profile", indexes = {
         @Index(columnList = "nickname", unique = true),
-        @Index(columnList = "name"),
         @Index(columnList = "employeeNo", unique = true),
         @Index(columnList = "phone", unique = true),
         @Index(columnList = "email", unique = true)
@@ -45,7 +43,7 @@ public class Profile {
     private String name;                // 真名
 
     @Column
-    private Gender gender;              // 性别
+    private String gender;              // 性别
 
     @Column
     private String employeeNo;          // 工号
@@ -55,10 +53,4 @@ public class Profile {
 
     @Column
     private String email;
-
-    @Column
-    private Long mainDepartmentId;      // 主部门
-
-    @Column
-    private Long mainPositionId;        // 主职务/岗位
 }

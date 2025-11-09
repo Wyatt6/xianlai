@@ -2,6 +2,7 @@ package fun.xianlai.app.iam.service.impl;
 
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
+import fun.xianlai.app.iam.model.entity.other.Profile;
 import fun.xianlai.app.iam.model.entity.rbac.Permission;
 import fun.xianlai.app.iam.model.entity.rbac.Role;
 import fun.xianlai.app.iam.model.entity.rbac.User;
@@ -9,6 +10,7 @@ import fun.xianlai.app.iam.model.entity.rbac.UserRole;
 import fun.xianlai.app.iam.model.form.UserCondition;
 import fun.xianlai.app.iam.model.form.UserInfoForm;
 import fun.xianlai.app.iam.repository.PermissionRepository;
+import fun.xianlai.app.iam.repository.ProfileRepository;
 import fun.xianlai.app.iam.repository.RoleRepository;
 import fun.xianlai.app.iam.repository.UserRepository;
 import fun.xianlai.app.iam.repository.UserRoleRepository;
@@ -31,7 +33,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.MessageFormat;
@@ -62,6 +63,8 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
     @Autowired
     private PermissionRepository permissionRepository;
+    @Autowired
+    private ProfileRepository profileRepository;
 
     @Override
     @SimpleServiceLog("检查用户名格式")
@@ -99,6 +102,11 @@ public class UserServiceImpl implements UserService {
         newUser.setIsDelete(false);
         User savedUser = userRepository.save(newUser);
         Long rowNum = userRepository.findRowNumById(savedUser.getId());
+
+        log.info("创建用户的Profile");
+        Profile profile = new Profile();
+        profile.setUserId(savedUser.getId());
+        profileRepository.save(profile);
 
         DataMap result = new DataMap();
         result.put("user", savedUser);
@@ -408,5 +416,11 @@ public class UserServiceImpl implements UserService {
             log.info(e.getMessage());
             throw new SysException("用户名已存在");
         }
+    }
+
+    @Override
+    @SimpleServiceLog("获取用户的Profile信息")
+    public Profile getProfile(Long userId) {
+        return profileRepository.findById(userId).orElse(null);
     }
 }

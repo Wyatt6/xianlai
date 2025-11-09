@@ -1,5 +1,6 @@
 package fun.xianlai.app.iam.service;
 
+import fun.xianlai.app.iam.model.entity.other.Profile;
 import fun.xianlai.app.iam.model.entity.rbac.User;
 import fun.xianlai.app.iam.model.form.UserCondition;
 import fun.xianlai.app.iam.model.form.UserInfoForm;
@@ -118,4 +119,9 @@ public interface UserService {
      * 修改用户信息
      */
     DataMap editUserInfo(UserInfoForm form);
+
+    /**
+     * 获取用户的Profile信息
+     */
+    Profile getProfile(Long userId);
 }

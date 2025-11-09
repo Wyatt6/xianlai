@@ -6,6 +6,7 @@ import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.stp.parameter.SaLoginParameter;
+import fun.xianlai.app.iam.model.entity.other.Profile;
 import fun.xianlai.app.iam.model.entity.rbac.User;
 import fun.xianlai.app.iam.model.form.BindForm;
 import fun.xianlai.app.iam.model.form.ChangePasswordForm;
@@ -119,16 +120,22 @@ public class UserController {
         user.setSalt(null);
         session.set("user", user);
 
-        log.info("获取角色和权限");
+        log.info("获取角色和权限并缓存");
+        // 下方Service已包含缓存
         List<String> roles = userService.getRoleList(user.getId());
         List<String> permissions = userService.getPermissionList(user.getId());
+
+        log.info("获取Profile并缓存");
+        Profile profile = userService.getProfile(user.getId());
+        session.set("profile", profile);
 
         return new RetResult().success()
                 .addData("token", StpUtil.getTokenValue())
                 .addData("tokenExpireTime", System.currentTimeMillis() + StpUtil.getTokenTimeout() * 1000)
                 .addData("user", user)
                 .addData("roles", roles)
-                .addData("permissions", permissions);
+                .addData("permissions", permissions)
+                .addData("profile", profile);
     }
 
     @ApiLog("退出登录")
