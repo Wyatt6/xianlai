@@ -3,7 +3,7 @@ package fun.xianlai.app.iam.service;
 import fun.xianlai.app.iam.model.entity.other.Profile;
 import fun.xianlai.app.iam.model.entity.rbac.User;
 import fun.xianlai.app.iam.model.form.UserCondition;
-import fun.xianlai.app.iam.model.form.UserInfoForm;
+import fun.xianlai.app.iam.model.entity.other.UserInfo;
 import fun.xianlai.core.response.DataMap;
 import org.springframework.data.domain.Page;
 
@@ -90,7 +90,7 @@ public interface UserService {
      * @param condition 查询条件
      * @return 用户分页数据
      */
-    Page<User> getUsersByPageConditionally(int pageNum, int pageSize, UserCondition condition);
+    Page<UserInfo> getUsersByPageConditionally(int pageNum, int pageSize, UserCondition condition);
 
     /**
      * 根据用户ID查询用户
@@ -118,7 +118,7 @@ public interface UserService {
     /**
      * 修改用户信息
      */
-    DataMap editUserInfo(UserInfoForm form);
+    DataMap editUserInfo(UserInfo form);
 
     /**
      * 获取用户的Profile信息

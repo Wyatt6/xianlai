@@ -3,12 +3,12 @@ package fun.xianlai.app.iam.service.impl;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import fun.xianlai.app.iam.model.entity.other.Profile;
+import fun.xianlai.app.iam.model.entity.other.UserInfo;
 import fun.xianlai.app.iam.model.entity.rbac.Permission;
 import fun.xianlai.app.iam.model.entity.rbac.Role;
 import fun.xianlai.app.iam.model.entity.rbac.User;
 import fun.xianlai.app.iam.model.entity.rbac.UserRole;
 import fun.xianlai.app.iam.model.form.UserCondition;
-import fun.xianlai.app.iam.model.form.UserInfoForm;
 import fun.xianlai.app.iam.repository.PermissionRepository;
 import fun.xianlai.app.iam.repository.ProfileRepository;
 import fun.xianlai.app.iam.repository.RoleRepository;
@@ -23,6 +23,7 @@ import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.feign.consumer.FeignOptionService;
 import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.DateUtil;
+import fun.xianlai.core.utils.EntityUtil;
 import fun.xianlai.core.utils.PasswordUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -267,39 +268,41 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @ServiceLog("条件查询用户分页")
-    public Page<User> getUsersByPageConditionally(int pageNum, int pageSize, UserCondition condition) {
-        String username = (condition == null || condition.getUsername() == null) ? null : condition.getUsername();
-        Date stRegisterTime = (condition == null || condition.getStRegisterTime() == null) ? null : condition.getStRegisterTime();
-        Date edRegisterTime = (condition == null || condition.getEdRegisterTime() == null) ? null : condition.getEdRegisterTime();
-        Boolean active = (condition == null || condition.getActive() == null) ? null : condition.getActive();
-        Boolean isDelete = (condition == null || condition.getIsDelete() == null) ? null : condition.getIsDelete();
-        String role = (condition == null || condition.getRole() == null) ? null : condition.getRole();
-        String permission = (condition == null || condition.getPermission() == null) ? null : condition.getPermission();
-
+    public Page<UserInfo> getUsersByPageConditionally(int pageNum, int pageSize, UserCondition condition) {
         Sort sort = Sort.by(Sort.Order.asc("registerTime"));
         if (pageNum >= 0 && pageSize > 0) {
             log.info("分页查询");
             Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
             return userRepository.findConditionally(
-                    username,
-                    stRegisterTime,
-                    edRegisterTime,
-                    active,
-                    isDelete,
-                    role,
-                    permission,
+                    condition.getUsername(),
+                    condition.getStRegisterTime(),
+                    condition.getEdRegisterTime(),
+                    condition.getActive(),
+                    condition.getIsDelete(),
+                    condition.getNickname(),
+                    condition.getName(),
+                    condition.getGender(),
+                    condition.getEmployeeNo(),
+                    condition.getPhone(),
+                    condition.getEmail(),
+                    condition.getRole(),
+                    condition.getRole(),
                     pageable);
         } else {
             log.info("全表查询");
-            return userRepository.findConditionally(
-                    username,
-                    stRegisterTime,
-                    edRegisterTime,
-                    active,
-                    isDelete,
-                    role,
-                    permission,
-                    Pageable.unpaged(sort));
+            return userRepository.findConditionally(condition.getUsername(),
+                    condition.getStRegisterTime(),
+                    condition.getEdRegisterTime(),
+                    condition.getActive(),
+                    condition.getIsDelete(),
+                    condition.getNickname(),
+                    condition.getName(),
+                    condition.getGender(),
+                    condition.getEmployeeNo(),
+                    condition.getPhone(),
+                    condition.getEmail(),
+                    condition.getRole(),
+                    condition.getRole(), Pageable.unpaged(sort));
         }
     }
 
@@ -378,8 +381,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @ServiceLog("修改用户信息/注销用户")
     @Transactional
-    public DataMap editUserInfo(UserInfoForm form) {
+    public DataMap editUserInfo(UserInfo form) {
         User user = form.extractToUser();
+        Profile profile = form.extractToProfile();
+        EntityUtil.trimString(user);
+        EntityUtil.trimString(profile);
 
         if (StpUtil.getLoginIdAsLong() == user.getId()) {
             log.info("操作自己的用户，不需要权限");
@@ -403,14 +409,17 @@ public class UserServiceImpl implements UserService {
             throw new SysException("用户已注销");
         }
         User newUser = oldUser.get();
-        if (user.getUsername() != null) newUser.setUsername(user.getUsername());
-        if (user.getActive() != null) newUser.setActive(user.getActive());
-        if (user.getIsDelete() != null) newUser.setIsDelete(user.getIsDelete());
+        EntityUtil.convertNotNull(user, newUser);
+
+        Optional<Profile> oldProfile = profileRepository.findById(profile.getUserId());
+        Profile newProfile = oldProfile.get();
+        EntityUtil.convertNotNull(profile, newProfile);
 
         try {
             log.info("更新数据库");
-            UserInfoForm result = new UserInfoForm();
+            UserInfo result = new UserInfo();
             result.importFromUser(userRepository.save(newUser));
+            result.importFromProfile(profileRepository.save(newProfile));
             return new DataMap("userInfo", result);
         } catch (DataIntegrityViolationException e) {
             log.info(e.getMessage());

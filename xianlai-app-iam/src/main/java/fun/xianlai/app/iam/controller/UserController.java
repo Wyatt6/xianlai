@@ -7,11 +7,11 @@ import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.stp.parameter.SaLoginParameter;
 import fun.xianlai.app.iam.model.entity.other.Profile;
+import fun.xianlai.app.iam.model.entity.other.UserInfo;
 import fun.xianlai.app.iam.model.entity.rbac.User;
 import fun.xianlai.app.iam.model.form.BindForm;
 import fun.xianlai.app.iam.model.form.ChangePasswordForm;
 import fun.xianlai.app.iam.model.form.UserCondition;
-import fun.xianlai.app.iam.model.form.UserInfoForm;
 import fun.xianlai.app.iam.service.PermissionService;
 import fun.xianlai.app.iam.service.RoleService;
 import fun.xianlai.app.iam.service.UserService;
@@ -197,18 +197,13 @@ public class UserController {
                                           @RequestParam("pageSize") int pageSize,
                                           @RequestBody(required = false) UserCondition condition) {
         log.info("请求参数：pageNum=[{}], pageSize=[{}], condition=[{}]", pageNum, pageSize, condition);
-        Page<User> users = userService.getUsersByPageConditionally(pageNum, pageSize, condition);
-        log.info("数据脱敏");
-        for (int i = 0; i < users.getContent().size(); i++) {
-            users.getContent().get(i).setPassword(null);
-            users.getContent().get(i).setSalt(null);
-        }
+        Page<UserInfo> userInfoList = userService.getUsersByPageConditionally(pageNum, pageSize, condition);
         return new RetResult().success()
                 .addData("pageNum", pageNum)
                 .addData("pageSize", pageSize)
-                .addData("totalPages", users.getTotalPages())
-                .addData("totalElements", users.getTotalElements())
-                .addData("content", users.getContent());
+                .addData("totalPages", userInfoList.getTotalPages())
+                .addData("totalElements", userInfoList.getTotalElements())
+                .addData("content", userInfoList.getContent());
     }
 
     @ApiLog("为用户绑定/解除绑定角色")
@@ -243,7 +238,7 @@ public class UserController {
     @ApiLog("修改用户信息/注销用户")
     @SaCheckLogin
     @PostMapping("/editUserInfo")
-    public RetResult editUserInfo(@RequestBody UserInfoForm form) {
+    public RetResult editUserInfo(@RequestBody UserInfo form) {
         log.info("请求参数: {}", form);
         return new RetResult().success().setData(userService.editUserInfo(form));
     }
