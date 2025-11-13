@@ -2,7 +2,7 @@ package fun.xianlai.app.iam.initializer;
 
 import fun.xianlai.app.iam.service.PermissionService;
 import fun.xianlai.app.iam.service.RoleService;
-import fun.xianlai.core.utils.DateUtil;
+import fun.xianlai.core.utils.time.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -22,8 +22,8 @@ public class CacheInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("开始初始化IAM模块缓存");
-        permissionService.setPermissionDbRefreshTime(DateUtil.now());
-        roleService.setRoleDbRefreshTime(DateUtil.now());
+        permissionService.setPermissionDbRefreshTime(DateUtils.now());
+        roleService.setRoleDbRefreshTime(DateUtils.now());
         log.info("已完成IAM模块缓存初始化");
     }
 }
