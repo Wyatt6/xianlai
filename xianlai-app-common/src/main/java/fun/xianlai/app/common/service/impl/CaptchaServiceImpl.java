@@ -9,7 +9,7 @@ import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
-import fun.xianlai.core.utils.ImageUtil;
+import fun.xianlai.core.utils.file.ImageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -82,7 +82,7 @@ public class CaptchaServiceImpl implements CaptchaService {
             // 根据文本生成图片并转成Base64格式
             BufferedImage captchaImage = producer.createImage(captchaText);
             String captchaImageBase64 = null;
-            captchaImageBase64 = ImageUtil.bufferedImageToBase64(captchaImage, "jpeg");
+            captchaImageBase64 = ImageUtils.bufferedImageToBase64(captchaImage, "jpeg");
 
             log.info("验证码KEY: {}", captchaKey);
             log.info("验证码: {}", captchaText);

@@ -1,15 +1,16 @@
-package fun.xianlai.core.utils;
+package fun.xianlai.core.utils.file;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Base64;
 
 /**
  * @author WyattLau
  */
-public class ImageUtil {
+public class ImageUtils {
     /**
      * 图像转换为base64格式的字符串
      *
@@ -23,6 +24,6 @@ public class ImageUtil {
         }
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         ImageIO.write(image, imageType, stream);
-        return "data:image/" + imageType + ";base64," + Base64.getEncoder().encodeToString(stream.toByteArray());
+        return MessageFormat.format("data:image/{0};base64,{1}", imageType, Base64.getEncoder().encodeToString(stream.toByteArray()));
     }
 }
