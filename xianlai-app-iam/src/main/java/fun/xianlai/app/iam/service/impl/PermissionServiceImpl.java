@@ -9,7 +9,7 @@ import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
-import fun.xianlai.core.utils.DateUtil;
+import fun.xianlai.core.utils.time.DateUtils;
 import fun.xianlai.core.utils.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -66,7 +65,7 @@ public class PermissionServiceImpl implements PermissionService {
         log.info("数据库删除本权限数据");
         permissionRepository.deleteById(permissionId);
         log.info("更新标记permissionDbRefreshTime（数据库的权限数据更新的时间），表示此时间后应当刷新缓存的权限数据");
-        setPermissionDbRefreshTime(DateUtil.now());
+        setPermissionDbRefreshTime(DateUtils.now());
     }
 
     @Override
@@ -86,7 +85,7 @@ public class PermissionServiceImpl implements PermissionService {
             if (permission.getIdentifier() != null) {
                 log.info("编辑此权限数据影响到用户权限控制，需要更新缓存");
                 log.info("更新标记permissionDbRefreshTime（数据库的权限数据更新的时间）");
-                setPermissionDbRefreshTime(DateUtil.now());
+                setPermissionDbRefreshTime(DateUtils.now());
             }
             return new DataMap("permission", newPermission);
         } else {
