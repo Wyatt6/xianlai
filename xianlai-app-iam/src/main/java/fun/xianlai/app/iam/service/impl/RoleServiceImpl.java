@@ -11,7 +11,7 @@ import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
-import fun.xianlai.core.utils.DateUtil;
+import fun.xianlai.core.utils.time.DateUtils;
 import fun.xianlai.core.utils.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -75,7 +74,7 @@ public class RoleServiceImpl implements RoleService {
         log.info("数据库删除本角色数据");
         roleRepository.deleteById(roleId);
         log.info("更新标记roleDbRefreshTime（数据库的角色数据更新的时间），表示此时间后应当刷新缓存的角色数据");
-        setRoleDbRefreshTime(DateUtil.now());
+        setRoleDbRefreshTime(DateUtils.now());
     }
 
     @Override
@@ -101,7 +100,7 @@ public class RoleServiceImpl implements RoleService {
             if (critical) {
                 log.info("编辑此角色数据影响到用户权限控制，需要更新缓存");
                 log.info("更新标记roleDbRefreshTime（数据库的角色数据更新的时间）");
-                setRoleDbRefreshTime(DateUtil.now());
+                setRoleDbRefreshTime(DateUtils.now());
             }
             return new DataMap("role", newRole);
         } else {
@@ -158,7 +157,7 @@ public class RoleServiceImpl implements RoleService {
         }
         if (failList.size() < permissionIds.size()) {
             log.info("有授权成功，要更新permissionDbRefreshTime时间戳，以动态更新用户权限缓存");
-            permissionService.setPermissionDbRefreshTime(DateUtil.now());
+            permissionService.setPermissionDbRefreshTime(DateUtils.now());
         }
         return failList;
     }
@@ -180,7 +179,7 @@ public class RoleServiceImpl implements RoleService {
         }
         if (failList.size() < permissionIds.size()) {
             log.info("有解除授权成功，要更新permissionDbRefreshTime时间戳，以动态更新用户权限缓存");
-            permissionService.setPermissionDbRefreshTime(DateUtil.now());
+            permissionService.setPermissionDbRefreshTime(DateUtils.now());
         }
         return failList;
     }
