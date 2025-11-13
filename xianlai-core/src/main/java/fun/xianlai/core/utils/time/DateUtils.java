@@ -1,12 +1,13 @@
-package fun.xianlai.core.utils;
+package fun.xianlai.core.utils.time;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
+ * 复用org.apache.commons.lang3.StringUtils里的工具
  * @author WyattLau
  */
-public class DateUtil {
+public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     private static final String COMMON_PATTERN = "yyy-MM-dd HH:mm:ss.SSS";
 
     /**
