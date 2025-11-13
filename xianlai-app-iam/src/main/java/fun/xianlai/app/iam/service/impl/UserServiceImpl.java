@@ -22,7 +22,7 @@ import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.feign.consumer.FeignOptionService;
 import fun.xianlai.core.response.DataMap;
-import fun.xianlai.core.utils.DateUtil;
+import fun.xianlai.core.utils.time.DateUtils;
 import fun.xianlai.core.utils.EntityUtil;
 import fun.xianlai.core.utils.PasswordUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
         newUser.setUsername(username);
         newUser.setPassword(encryptedPassword);
         newUser.setSalt(salt);
-        newUser.setRegisterTime(DateUtil.now());
+        newUser.setRegisterTime(DateUtils.now());
         newUser.setActive(active);
         newUser.setIsDelete(false);
         User savedUser = userRepository.save(newUser);
@@ -183,7 +183,7 @@ public class UserServiceImpl implements UserService {
             }
             // 更新本用户缓存的角色数据
             session.set("roleList", roles);
-            setRoleListCacheTime(userId, DateUtil.now());
+            setRoleListCacheTime(userId, DateUtils.now());
         }
 
         return roles;
@@ -233,7 +233,7 @@ public class UserServiceImpl implements UserService {
             }
             // 更新本用户缓存的权限数据
             session.set("permissionList", permissions);
-            setPermissionListCacheTime(userId, DateUtil.now());
+            setPermissionListCacheTime(userId, DateUtils.now());
         }
 
         return permissions;
@@ -339,8 +339,8 @@ public class UserServiceImpl implements UserService {
         }
         if (failList.size() < roleIds.size()) {
             log.info("有绑定成功，要更新roleListCacheTime和permissionListCacheTime时间戳，以动态更新用户权限缓存");
-            setRoleListCacheTime(userId, DateUtil.zero());
-            setPermissionListCacheTime(userId, DateUtil.zero());
+            setRoleListCacheTime(userId, DateUtils.zero());
+            setPermissionListCacheTime(userId, DateUtils.zero());
         }
         return failList;
     }
@@ -372,8 +372,8 @@ public class UserServiceImpl implements UserService {
         }
         if (failList.size() < roleIds.size()) {
             log.info("有解除绑定成功，要更新roleListCacheTime和permissionListCacheTime时间戳，以动态更新用户权限缓存");
-            setRoleListCacheTime(userId, DateUtil.zero());
-            setPermissionListCacheTime(userId, DateUtil.zero());
+            setRoleListCacheTime(userId, DateUtils.zero());
+            setPermissionListCacheTime(userId, DateUtils.zero());
         }
         return failList;
     }
