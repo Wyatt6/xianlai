@@ -76,7 +76,7 @@ public class EntityUtil {
                     Method getter = obj.getClass().getMethod(getterName);
                     Method setter = obj.getClass().getMethod(setterName, field.getType());
                     String value = (String) getter.invoke(obj);
-                    setter.invoke(obj, StringUtil.trim(value));
+                    setter.invoke(obj, StringUtils.trim(value));
                 } catch (NoSuchMethodException e) {
                     throw new SysException("无法找到getter/setter");
                 } catch (InvocationTargetException | IllegalAccessException e) {
