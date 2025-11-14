@@ -123,5 +123,5 @@ public interface UserService {
     /**
      * 获取用户的Profile信息
      */
-    Profile getProfile(Long userId);
+    Profile exportProfile(Long userId);
 }

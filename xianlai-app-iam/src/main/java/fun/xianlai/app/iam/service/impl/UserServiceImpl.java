@@ -22,9 +22,9 @@ import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.feign.consumer.FeignOptionService;
 import fun.xianlai.core.response.DataMap;
-import fun.xianlai.core.utils.time.DateUtils;
 import fun.xianlai.core.utils.EntityUtil;
 import fun.xianlai.core.utils.PasswordUtil;
+import fun.xianlai.core.utils.time.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -252,6 +252,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @SimpleServiceLog("修改密码")
+    @Transactional
     public void changePassword(Long userId, String password) {
         String salt = PasswordUtil.generateSalt();
         String encryptedPassword = PasswordUtil.encode(password, salt);
@@ -382,8 +383,8 @@ public class UserServiceImpl implements UserService {
     @ServiceLog("修改用户信息/注销用户")
     @Transactional
     public DataMap editUserInfo(UserInfo form) {
-        User user = form.getUser();
-        Profile profile = form.getProfile();
+        User user = form.exportUser();
+        Profile profile = form.exportProfile();
         EntityUtil.trimString(user);
         EntityUtil.trimString(profile);
 
@@ -417,10 +418,24 @@ public class UserServiceImpl implements UserService {
 
         try {
             log.info("更新数据库");
-            UserInfo result = new UserInfo();
-            result.setUser(userRepository.save(newUser));
-            result.setProfile(profileRepository.save(newProfile));
-            return new DataMap("userInfo", result);
+            newUser = userRepository.save(newUser);
+            newProfile = profileRepository.save(newProfile);
+            log.info("更新缓存");
+            SaSession session = StpUtil.getSessionByLoginId(newUser.getId());
+            if (session != null) {
+                session.set("user", newUser);
+                session.set("profile", newProfile);
+            }
+
+            UserInfo userInfo = new UserInfo();
+            userInfo.importUser(newUser);
+            userInfo.importProfile(newProfile);
+
+            DataMap result = new DataMap();
+            result.put("user", newUser);
+            result.put("profile", newProfile);
+            result.put("userInfo", userInfo);
+            return result;
         } catch (DataIntegrityViolationException e) {
             log.info(e.getMessage());
             throw new SysException("用户名已存在");
@@ -429,7 +444,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @SimpleServiceLog("获取用户的Profile信息")
-    public Profile getProfile(Long userId) {
+    public Profile exportProfile(Long userId) {
         return profileRepository.findById(userId).orElse(null);
     }
 }
