@@ -2,7 +2,7 @@ package fun.xianlai.app.iam.model.entity.other;
 
 import fun.xianlai.app.iam.model.entity.rbac.User;
 import fun.xianlai.core.exception.SysException;
-import fun.xianlai.core.utils.EntityUtil;
+import fun.xianlai.core.utils.BeanUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +23,6 @@ public class UserInfo {
     private Boolean active;
     private Boolean isDelete;
     // Profile
-    private Long userId;
     private String avatar;
     private String nickname;
     private String photo;
@@ -33,29 +32,33 @@ public class UserInfo {
     private String phone;
     private String email;
 
-    public User extractToUser() {
+    public User getUser() {
         User user = new User();
-        EntityUtil.convert(this, user);
+        BeanUtils.copyProperties(this, user);
         return user;
     }
 
-    public void importFromUser(User user) {
-        EntityUtil.convert(user, this);
-        if (this.id != null && this.userId != null && !this.id.equals(this.userId)) {
+    public void setUser(User user) {
+        if (this.id != null && !this.id.equals(user.getId())) {
             throw new SysException("用户信息错误");
+        } else {
+            BeanUtils.copyProperties(user, this);
         }
     }
 
-    public Profile extractToProfile() {
+    public Profile getProfile() {
         Profile profile = new Profile();
-        EntityUtil.convert(this, profile);
+        BeanUtils.copyProperties(this, profile);
+        profile.setUserId(this.id);
         return profile;
     }
 
-    public void importFromProfile(Profile profile) {
-        EntityUtil.convert(profile, this);
-        if (this.id != null && this.userId != null && !this.id.equals(this.userId)) {
+    public void setProfile(Profile profile) {
+        if (this.id != null && !this.id.equals(profile.getUserId())) {
             throw new SysException("用户信息错误");
+        } else {
+            BeanUtils.copyProperties(profile, this);
+            this.id = profile.getUserId();
         }
     }
 }
