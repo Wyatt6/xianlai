@@ -32,13 +32,13 @@ public class UserInfo {
     private String phone;
     private String email;
 
-    public User getUser() {
+    public User exportUser() {
         User user = new User();
         BeanUtils.copyProperties(this, user);
         return user;
     }
 
-    public void setUser(User user) {
+    public void importUser(User user) {
         if (this.id != null && !this.id.equals(user.getId())) {
             throw new SysException("用户信息错误");
         } else {
@@ -46,14 +46,14 @@ public class UserInfo {
         }
     }
 
-    public Profile getProfile() {
+    public Profile exportProfile() {
         Profile profile = new Profile();
         BeanUtils.copyProperties(this, profile);
         profile.setUserId(this.id);
         return profile;
     }
 
-    public void setProfile(Profile profile) {
+    public void importProfile(Profile profile) {
         if (this.id != null && !this.id.equals(profile.getUserId())) {
             throw new SysException("用户信息错误");
         } else {
