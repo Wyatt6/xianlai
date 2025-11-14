@@ -27,10 +27,10 @@ public class MimeTypeUtils {
         switch (mimeType) {
             case IMAGE_PNG:
                 return "png";
-            case IMAGE_JPG:
+            case IMAGE_JPG, IMAGE_JPEG:
                 return "jpg";
-            case IMAGE_JPEG:
-                return "jpeg";
+//            case IMAGE_JPEG:
+//                return "jpeg";
             case IMAGE_BMP:
                 return "bmp";
             case IMAGE_GIF:
