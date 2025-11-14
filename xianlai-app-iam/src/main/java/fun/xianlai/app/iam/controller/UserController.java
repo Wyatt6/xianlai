@@ -126,7 +126,7 @@ public class UserController {
         List<String> permissions = userService.getPermissionList(user.getId());
 
         log.info("获取Profile并缓存");
-        Profile profile = userService.getProfile(user.getId());
+        Profile profile = userService.exportProfile(user.getId());
         session.set("profile", profile);
 
         return new RetResult().success()
