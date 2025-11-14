@@ -382,8 +382,8 @@ public class UserServiceImpl implements UserService {
     @ServiceLog("修改用户信息/注销用户")
     @Transactional
     public DataMap editUserInfo(UserInfo form) {
-        User user = form.extractToUser();
-        Profile profile = form.extractToProfile();
+        User user = form.getUser();
+        Profile profile = form.getProfile();
         EntityUtil.trimString(user);
         EntityUtil.trimString(profile);
 
@@ -418,8 +418,8 @@ public class UserServiceImpl implements UserService {
         try {
             log.info("更新数据库");
             UserInfo result = new UserInfo();
-            result.importFromUser(userRepository.save(newUser));
-            result.importFromProfile(profileRepository.save(newProfile));
+            result.setUser(userRepository.save(newUser));
+            result.setProfile(profileRepository.save(newProfile));
             return new DataMap("userInfo", result);
         } catch (DataIntegrityViolationException e) {
             log.info(e.getMessage());
