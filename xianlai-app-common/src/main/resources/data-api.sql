@@ -36,6 +36,8 @@ INSERT IGNORE INTO tb_common_sys_api(`id`, `call_path`, `description`, `request_
 (16003, 'common.option.edit', '修改参数', 'POST', '/api/common/option/edit'),
 (16004, 'common.option.reloadCache', '重载参数缓存', 'GET', '/api/common/option/reloadCache'),
 (16005, 'common.option.getClassifiedList', '查询分类后的参数列表', 'GET', '/api/common/option/getClassifiedList'),
+-- OptionController
+(17001, 'common.upload.avatar', '上传头像图片', 'POST', '/api/common/upload/avatar'),
 
 -- ---------- --
 -- IAM模块接口 --
