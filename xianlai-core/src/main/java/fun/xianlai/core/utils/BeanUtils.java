@@ -46,4 +46,29 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
             }
         }
     }
+
+    /**
+     * trim对象所有String类型的属性
+     * 注意：暂无法处理父类属性
+     */
+    public static void trimString(Object obj) {
+        Field[] fields = obj.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            if (String.class.getName().equals(field.getType().getName())) {
+                try {
+                    String fieldName = field.getName();
+                    String getterName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+                    String setterName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+                    Method getter = obj.getClass().getMethod(getterName);
+                    Method setter = obj.getClass().getMethod(setterName, field.getType());
+                    String value = (String) getter.invoke(obj);
+                    setter.invoke(obj, StringUtils.trim(value));
+                } catch (NoSuchMethodException e) {
+                    throw new SysException("无法找到getter/setter");
+                } catch (InvocationTargetException | IllegalAccessException e) {
+                    throw new SysException("调用失败");
+                }
+            }
+        }
+    }
 }

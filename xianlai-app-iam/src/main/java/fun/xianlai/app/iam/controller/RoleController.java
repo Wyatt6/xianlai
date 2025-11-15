@@ -7,7 +7,7 @@ import fun.xianlai.app.iam.model.form.GrantForm;
 import fun.xianlai.app.iam.service.RoleService;
 import fun.xianlai.core.annotation.ApiLog;
 import fun.xianlai.core.response.RetResult;
-import fun.xianlai.core.utils.EntityUtil;
+import fun.xianlai.core.utils.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,7 +36,7 @@ public class RoleController {
     @PostMapping("/add")
     public RetResult add(@RequestBody Role form) {
         log.info("请求参数: {}", form);
-        EntityUtil.trimString(form);
+        BeanUtils.trimString(form);
         return new RetResult().success().setData(roleService.add(form));
     }
 
@@ -56,7 +56,7 @@ public class RoleController {
     @PostMapping("/edit")
     public RetResult edit(@RequestBody Role form) {
         log.info("请求参数: {}", form);
-        EntityUtil.trimString(form);
+        BeanUtils.trimString(form);
         return new RetResult().success().setData(roleService.edit(form));
     }
 

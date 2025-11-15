@@ -23,7 +23,6 @@ import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.feign.consumer.FeignOptionService;
 import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.BeanUtils;
-import fun.xianlai.core.utils.EntityUtil;
 import fun.xianlai.core.utils.PasswordUtil;
 import fun.xianlai.core.utils.time.DateUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -386,8 +385,8 @@ public class UserServiceImpl implements UserService {
     public DataMap editUserInfo(UserInfo form) {
         User user = form.exportUser();
         Profile profile = form.exportProfile();
-        EntityUtil.trimString(user);
-        EntityUtil.trimString(profile);
+        BeanUtils.trimString(user);
+        BeanUtils.trimString(profile);
 
         if (StpUtil.getLoginIdAsLong() == user.getId()) {
             log.info("操作自己的用户，不需要权限");

@@ -20,7 +20,7 @@ import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.feign.consumer.FeignCaptchaService;
 import fun.xianlai.core.feign.consumer.FeignOptionService;
 import fun.xianlai.core.response.RetResult;
-import fun.xianlai.core.utils.EntityUtil;
+import fun.xianlai.core.utils.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -57,7 +57,7 @@ public class UserController {
     @SaCheckPermission("user:add")
     @PostMapping("/createUser")
     public RetResult createUser(@RequestBody User form) {
-        EntityUtil.trimString(form);
+        BeanUtils.trimString(form);
         log.info("请求参数: username=[{}], active=[{}]", form.getUsername(), form.getActive());
         if (!userService.matchUsernameFormat(form.getUsername())) {
             throw new SysException("用户名格式错误");
@@ -71,7 +71,7 @@ public class UserController {
     @ApiLog("注册新用户")
     @PostMapping("/register")
     public RetResult register(@RequestBody User form) {
-        EntityUtil.trimString(form);
+        BeanUtils.trimString(form);
         String captchaKey = form.getCaptchaKey();
         String captcha = form.getCaptcha();
         String username = form.getUsername();
@@ -90,7 +90,7 @@ public class UserController {
     @ApiLog("用户登录")
     @PostMapping("/login")
     public RetResult login(@RequestBody User form) {
-        EntityUtil.trimString(form);
+        BeanUtils.trimString(form);
         String captchaKey = form.getCaptchaKey();
         String captcha = form.getCaptcha();
         String username = form.getUsername();
@@ -161,7 +161,7 @@ public class UserController {
     @SaCheckLogin
     @PostMapping("/changePassword")
     public RetResult changePassword(@RequestBody ChangePasswordForm form) {
-        EntityUtil.trimString(form);
+        BeanUtils.trimString(form);
         log.info("请求参数: {}", form);
         if (!userService.matchPasswordFormat(form.getOldPassword())) {
             throw new SysException("旧密码格式错误");
