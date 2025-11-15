@@ -6,7 +6,7 @@ import fun.xianlai.app.common.model.entity.SysRoute;
 import fun.xianlai.app.common.service.RouteService;
 import fun.xianlai.core.annotation.ApiLog;
 import fun.xianlai.core.response.RetResult;
-import fun.xianlai.core.utils.EntityUtil;
+import fun.xianlai.core.utils.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +32,7 @@ public class RouteController {
     @PostMapping("/add")
     public RetResult add(@RequestBody SysRoute form) {
         log.info("请求参数: {}", form);
-        EntityUtil.trimString(form);
+        BeanUtils.trimString(form);
         return new RetResult().success().setData(routeService.add(form));
     }
 
@@ -52,7 +52,7 @@ public class RouteController {
     @PostMapping("/edit")
     public RetResult edit(@RequestBody SysRoute form) {
         log.info("请求参数: {}", form);
-        EntityUtil.trimString(form);
+        BeanUtils.trimString(form);
         return new RetResult().success().setData(routeService.edit(form));
     }
 

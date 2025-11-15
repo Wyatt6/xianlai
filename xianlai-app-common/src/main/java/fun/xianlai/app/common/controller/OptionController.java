@@ -6,7 +6,7 @@ import fun.xianlai.app.common.model.entity.SysOption;
 import fun.xianlai.app.common.service.OptionService;
 import fun.xianlai.core.annotation.ApiLog;
 import fun.xianlai.core.response.RetResult;
-import fun.xianlai.core.utils.EntityUtil;
+import fun.xianlai.core.utils.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +32,7 @@ public class OptionController {
     @PostMapping("/add")
     public RetResult add(@RequestBody SysOption form) {
         log.info("请求参数: {}", form);
-        EntityUtil.trimString(form);
+        BeanUtils.trimString(form);
         return new RetResult().success().setData(optionService.add(form));
     }
 
@@ -52,7 +52,7 @@ public class OptionController {
     @PostMapping("/edit")
     public RetResult edit(@RequestBody SysOption form) {
         log.info("请求参数: {}", form);
-        EntityUtil.trimString(form);
+        BeanUtils.trimString(form);
         return new RetResult().success().setData(optionService.edit(form));
     }
 

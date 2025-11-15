@@ -6,7 +6,7 @@ import fun.xianlai.app.common.model.entity.SysPath;
 import fun.xianlai.app.common.service.PathService;
 import fun.xianlai.core.annotation.ApiLog;
 import fun.xianlai.core.response.RetResult;
-import fun.xianlai.core.utils.EntityUtil;
+import fun.xianlai.core.utils.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,7 +33,7 @@ public class PathController {
     @PostMapping("/add")
     public RetResult add(@RequestBody SysPath form) {
         log.info("请求参数: {}", form);
-        EntityUtil.trimString(form);
+        BeanUtils.trimString(form);
         return new RetResult().success().setData(pathService.add(form));
     }
 
@@ -53,7 +53,7 @@ public class PathController {
     @PostMapping("/edit")
     public RetResult edit(@RequestBody SysPath form) {
         log.info("请求参数: {}", form);
-        EntityUtil.trimString(form);
+        BeanUtils.trimString(form);
         return new RetResult().success().setData(pathService.edit(form));
     }
 
