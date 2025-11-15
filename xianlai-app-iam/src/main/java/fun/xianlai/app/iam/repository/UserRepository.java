@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // UserInfo没用@Entity注解，所以这里要写全路径
     @Query("select distinct new fun.xianlai.app.iam.model.entity.other.UserInfo(u.id, u.username, u.registerTime, u.active, u.isDelete, " +
-            "      pf.userId, pf.avatar, pf.nickname, pf.photo, pf.name, pf.gender, pf.employeeNo, pf.phone, pf.email) " +
+            "      pf.avatar, pf.nickname, pf.photo, pf.name, pf.gender, pf.employeeNo, pf.phone, pf.email) " +
             " from User u " +
             "      inner join Profile pf on u.id = pf.userId " +
             "      left join UserRole ur on u.id = ur.userId " +
