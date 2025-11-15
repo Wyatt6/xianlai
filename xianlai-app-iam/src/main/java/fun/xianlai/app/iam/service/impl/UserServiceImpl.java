@@ -22,6 +22,7 @@ import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.feign.consumer.FeignOptionService;
 import fun.xianlai.core.response.DataMap;
+import fun.xianlai.core.utils.BeanUtils;
 import fun.xianlai.core.utils.EntityUtil;
 import fun.xianlai.core.utils.PasswordUtil;
 import fun.xianlai.core.utils.time.DateUtils;
@@ -410,11 +411,11 @@ public class UserServiceImpl implements UserService {
             throw new SysException("用户已注销");
         }
         User newUser = oldUser.get();
-        EntityUtil.convertNotNull(user, newUser);
+        BeanUtils.copyPropertiesNotNull(user, newUser);
 
         Optional<Profile> oldProfile = profileRepository.findById(profile.getUserId());
         Profile newProfile = oldProfile.get();
-        EntityUtil.convertNotNull(profile, newProfile);
+        BeanUtils.copyPropertiesNotNull(profile, newProfile);
 
         try {
             log.info("更新数据库");

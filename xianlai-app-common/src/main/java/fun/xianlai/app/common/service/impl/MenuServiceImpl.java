@@ -8,15 +8,14 @@ import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
+import fun.xianlai.core.utils.BeanUtils;
 import fun.xianlai.core.utils.ChecksumUtil;
-import fun.xianlai.core.utils.EntityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
@@ -99,7 +98,7 @@ public class MenuServiceImpl implements MenuService {
         Optional<SysMenu> oldMenu = sysMenuRepository.findById(menu.getId());
         if (oldMenu.isPresent()) {
             SysMenu newMenu = oldMenu.get();
-            EntityUtil.convertNotNull(menu, newMenu);
+            BeanUtils.copyPropertiesNotNull(menu, newMenu);
             if (newMenu.getParentId().equals(newMenu.getId())) {
                 throw new SysException("上级菜单不能设置为自己");
             }

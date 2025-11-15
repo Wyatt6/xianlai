@@ -11,8 +11,8 @@ import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
+import fun.xianlai.core.utils.BeanUtils;
 import fun.xianlai.core.utils.time.DateUtils;
-import fun.xianlai.core.utils.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -52,7 +52,7 @@ public class RoleServiceImpl implements RoleService {
     public DataMap add(Role role) {
         try {
             role.setId(null);
-            Role savedRole =  roleRepository.save(role);
+            Role savedRole = roleRepository.save(role);
             Long rowNum = roleRepository.findRowNumById(savedRole.getId());
             DataMap result = new DataMap();
             result.put("role", savedRole);
@@ -84,7 +84,7 @@ public class RoleServiceImpl implements RoleService {
         Optional<Role> oldRole = roleRepository.findById(role.getId());
         if (oldRole.isPresent()) {
             Role newRole = oldRole.get();
-            EntityUtil.convertNotNull(role, newRole);
+            BeanUtils.copyPropertiesNotNull(role, newRole);
 
             try {
                 log.info("更新数据库");

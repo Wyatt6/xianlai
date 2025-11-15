@@ -8,8 +8,8 @@ import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
+import fun.xianlai.core.utils.BeanUtils;
 import fun.xianlai.core.utils.ChecksumUtil;
-import fun.xianlai.core.utils.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -98,7 +98,7 @@ public class RouteServiceImpl implements RouteService {
         Optional<SysRoute> oldRoute = sysRouteRepository.findById(route.getId());
         if (oldRoute.isPresent()) {
             SysRoute newRoute = oldRoute.get();
-            EntityUtil.convertNotNull(route, newRoute);
+            BeanUtils.copyPropertiesNotNull(route, newRoute);
             if (newRoute.getParentId().equals(newRoute.getId())) {
                 throw new SysException("上级路由不能设置为自己");
             }

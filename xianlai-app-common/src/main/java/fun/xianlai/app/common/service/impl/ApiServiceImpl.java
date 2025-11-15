@@ -8,8 +8,8 @@ import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
+import fun.xianlai.core.utils.BeanUtils;
 import fun.xianlai.core.utils.ChecksumUtil;
-import fun.xianlai.core.utils.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -20,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -97,7 +96,7 @@ public class ApiServiceImpl implements ApiService {
         Optional<SysApi> oldApi = sysApiRepository.findById(api.getId());
         if (oldApi.isPresent()) {
             SysApi newApi = oldApi.get();
-            EntityUtil.convertNotNull(api, newApi);
+            BeanUtils.copyPropertiesNotNull(api, newApi);
             try {
                 newApi = sysApiRepository.save(newApi);
             } catch (DataIntegrityViolationException e) {

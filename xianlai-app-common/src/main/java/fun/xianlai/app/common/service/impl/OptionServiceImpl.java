@@ -7,8 +7,8 @@ import fun.xianlai.app.common.service.OptionService;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
+import fun.xianlai.core.utils.BeanUtils;
 import fun.xianlai.core.utils.ChecksumUtil;
-import fun.xianlai.core.utils.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -136,7 +136,7 @@ public class OptionServiceImpl implements OptionService {
         Optional<SysOption> oldOption = sysOptionRepository.findById(option.getId());
         if (oldOption.isPresent()) {
             SysOption newOption = oldOption.get();
-            EntityUtil.convertNotNull(option, newOption);
+            BeanUtils.copyPropertiesNotNull(option, newOption);
             try {
                 newOption = sysOptionRepository.save(newOption);
             } catch (DataIntegrityViolationException e) {

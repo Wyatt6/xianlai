@@ -9,8 +9,8 @@ import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
+import fun.xianlai.core.utils.BeanUtils;
 import fun.xianlai.core.utils.time.DateUtils;
-import fun.xianlai.core.utils.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -75,7 +75,7 @@ public class PermissionServiceImpl implements PermissionService {
         Optional<Permission> oldPermission = permissionRepository.findById(permission.getId());
         if (oldPermission.isPresent()) {
             Permission newPermission = oldPermission.get();
-            EntityUtil.convertNotNull(permission, newPermission);
+            BeanUtils.copyPropertiesNotNull(permission, newPermission);
             try {
                 newPermission = permissionRepository.save(newPermission);
             } catch (DataIntegrityViolationException e) {
