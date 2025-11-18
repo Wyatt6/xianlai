@@ -5,7 +5,9 @@ import fun.xianlai.app.iam.model.entity.rbac.User;
 import fun.xianlai.app.iam.model.form.UserCondition;
 import fun.xianlai.app.iam.model.entity.other.UserInfo;
 import fun.xianlai.core.response.DataMap;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
@@ -124,4 +126,14 @@ public interface UserService {
      * 获取用户的Profile信息
      */
     Profile exportProfile(Long userId);
+
+    /**
+     * 上传头像
+     */
+    void uploadAvatar(MultipartFile avatar);
+
+    /**
+     * 下载头像
+     */
+    void downloadAvatar(String filename, HttpServletResponse response);
 }

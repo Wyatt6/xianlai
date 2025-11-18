@@ -39,4 +39,21 @@ public class MimeTypeUtils {
                 return "";
         }
     }
+
+    public static String getMimeType(String extension) {
+        switch (extension.toLowerCase()) {
+            case "png":
+                return IMAGE_PNG;
+            case "jpg":
+                return IMAGE_JPG;
+            case "jpeg":
+                return IMAGE_JPEG;
+            case "bmp":
+                return IMAGE_BMP;
+            case "gif":
+                return IMAGE_GIF;
+            default:
+                return "";
+        }
+    }
 }

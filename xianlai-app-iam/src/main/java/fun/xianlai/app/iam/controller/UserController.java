@@ -21,6 +21,8 @@ import fun.xianlai.core.feign.consumer.FeignCaptchaService;
 import fun.xianlai.core.feign.consumer.FeignOptionService;
 import fun.xianlai.core.response.RetResult;
 import fun.xianlai.core.utils.BeanUtils;
+import fun.xianlai.core.utils.StringUtils;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -241,5 +244,23 @@ public class UserController {
     public RetResult editUserInfo(@RequestBody UserInfo form) {
         log.info("请求参数: {}", form);
         return new RetResult().success().setData(userService.editUserInfo(form));
+    }
+
+    @ApiLog("上传头像图片")
+    @SaCheckLogin
+    @PostMapping("/uploadAvatar")
+    public RetResult uploadAvatar(@RequestBody MultipartFile file) {
+        userService.uploadAvatar(file);
+        return new RetResult().success().addData("profile", userService.exportProfile(StpUtil.getLoginIdAsLong()));
+    }
+
+    @ApiLog("下载头像图片")
+    @GetMapping("/downloadAvatar")
+    public void downloadAvatar(@RequestParam String filename, HttpServletResponse response) {
+        log.info("请求参数: filename={}", filename);
+        if (StringUtils.isBlank((filename))) {
+            throw new SysException("请输入头像文件名");
+        }
+        userService.downloadAvatar(filename, response);
     }
 }

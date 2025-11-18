@@ -36,8 +36,6 @@ INSERT IGNORE INTO tb_common_sys_api(`id`, `call_path`, `description`, `request_
 (16003, 'common.option.edit', '修改参数', 'POST', '/api/common/option/edit'),
 (16004, 'common.option.reloadCache', '重载参数缓存', 'GET', '/api/common/option/reloadCache'),
 (16005, 'common.option.getClassifiedList', '查询分类后的参数列表', 'GET', '/api/common/option/getClassifiedList'),
--- OptionController
-(17001, 'common.upload.avatar', '上传头像图片', 'POST', '/api/common/upload/avatar'),
 
 -- ---------- --
 -- IAM模块接口 --
@@ -63,4 +61,6 @@ INSERT IGNORE INTO tb_common_sys_api(`id`, `call_path`, `description`, `request_
 (22005, 'iam.user.getPageConditionally', '条件查询用户分页', 'POST', '/api/iam/user/getPageConditionally'),
 (22006, 'iam.user.bind', '为用户绑定/解除绑定角色', 'POST', '/api/iam/user/bind'),
 (22007, 'iam.user.createUser', '创建新用户', 'POST', '/api/iam/user/createUser'),
-(22008, 'iam.user.editUserInfo', '修改用户信息/注销用户', 'POST', '/api/iam/user/editUserInfo');
+(22008, 'iam.user.editUserInfo', '修改用户信息/注销用户', 'POST', '/api/iam/user/editUserInfo'),
+(22009, 'iam.user.uploadAvatar', '上传头像图片', 'POST', '/api/iam/user/uploadAvatar'),
+(22010, 'iam.user.downloadAvatar', '下载头像图片', 'GET', '/api/iam/user/downloadAvatar');

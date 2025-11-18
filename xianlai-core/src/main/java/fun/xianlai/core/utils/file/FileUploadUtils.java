@@ -29,7 +29,7 @@ public class FileUploadUtils {
      * @param name             文件名（null时使用自动生成的文件名）
      * @param suffix           文件名（不含拓展名）
      * @param allowedExtension 允许的文件类型（拓展名）
-     * @return 返回上传成功的文件名
+     * @return 返回上传成功的文件名（不含前缀路径但含拓展名）
      */
     public static String uploadFile(MultipartFile file, Long fileMaxSize,
                                     String baseDir, String prefix, String name, String suffix, String[] allowedExtension) {

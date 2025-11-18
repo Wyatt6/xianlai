@@ -24,7 +24,12 @@ import fun.xianlai.core.feign.consumer.FeignOptionService;
 import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.BeanUtils;
 import fun.xianlai.core.utils.PasswordUtil;
+import fun.xianlai.core.utils.file.FileUploadUtils;
+import fun.xianlai.core.utils.file.FileUtils;
+import fun.xianlai.core.utils.file.FilenameUtils;
+import fun.xianlai.core.utils.file.MimeTypeUtils;
 import fun.xianlai.core.utils.time.DateUtils;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -35,7 +40,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,6 +56,8 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
+    private static final String AVATAR_SAVE_BASE_DIR = "./upload/avatar/";
+
     @Autowired
     private RedisTemplate<String, Object> redis;
     @Autowired
@@ -446,5 +456,51 @@ public class UserServiceImpl implements UserService {
     @SimpleServiceLog("获取用户的Profile信息")
     public Profile exportProfile(Long userId) {
         return profileRepository.findById(userId).orElse(null);
+    }
+
+    @Override
+    @ServiceLog("上传头像")
+    @Transactional
+    public void uploadAvatar(MultipartFile avatar) {
+        log.info("保存头像图片文件");
+        String filename = FileUploadUtils.uploadFile(avatar, 500 * FileUtils.ONE_KB,
+                AVATAR_SAVE_BASE_DIR, "avatar_", null, null, MimeTypeUtils.IMAGE_EXTENSION);
+        log.info("查询旧头像文件名");
+        Long userId = StpUtil.getLoginIdAsLong();
+        Optional<Profile> profile = profileRepository.findById(userId);
+        String oldFilename = null;
+        if (profile.isPresent()) {
+            oldFilename = profile.get().getAvatar();
+            try {
+                log.info("更新新头像文件名");
+                profile.get().setAvatar(filename);
+                Profile newProfile = profileRepository.save(profile.get());
+                log.info("更新用户缓存");
+                StpUtil.getSession().set("profile", newProfile);
+                log.info("删除旧的头像图片文件");
+                try {
+                    FileUtils.delete(new File(AVATAR_SAVE_BASE_DIR + oldFilename));
+                } catch (IOException ignored) {
+                }
+            } catch (Exception e) {
+                try {
+                    log.info("失败时删除新上传的头像图片文件");
+                    FileUtils.delete(new File(AVATAR_SAVE_BASE_DIR + filename));
+                } catch (IOException ignored) {
+                }
+                throw new SysException("上传头像失败");
+            }
+        }
+    }
+
+    @Override
+    @SimpleServiceLog("下载头像")
+    public void downloadAvatar(String filename, HttpServletResponse response) {
+        try {
+            response.setContentType(MimeTypeUtils.getMimeType(FilenameUtils.getExtension(filename)));
+            FileUtils.writeBytes(AVATAR_SAVE_BASE_DIR + filename, response.getOutputStream());
+        } catch (IOException e) {
+            throw new SysException("获取输出流异常");
+        }
     }
 }
