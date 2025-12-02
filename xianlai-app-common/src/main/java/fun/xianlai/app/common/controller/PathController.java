@@ -36,4 +36,14 @@ public class PathController {
         BeanUtils.trimString(form);
         return new RetResult().success().setData(pathService.add(form));
     }
+
+    @ApiLog("删除路径")
+    @SaCheckLogin
+    @SaCheckPermission("path:delete")
+    @GetMapping("/delete")
+    public RetResult delete(@RequestParam Long pathId) {
+        log.info("请求参数: pathId=[{}]", pathId);
+        pathService.delete(pathId);
+        return new RetResult().success();
+    }
 }
