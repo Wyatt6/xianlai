@@ -1,8 +1,0 @@
-nacos:
-  server-addr: ???
-  namespace: ???
-  username: ???
-  password: ???
-  group: DEFAULT_GROUP
-  data-id: gateway-dynamic-routes
-  timeout: 10000
