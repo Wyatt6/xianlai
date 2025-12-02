@@ -87,4 +87,25 @@ public class PathServiceImpl implements PathService {
         sysPathRepository.deleteById(pathId);
         self.cachePaths();
     }
+
+    @Override
+    @ServiceLog("修改路径")
+    @Transactional
+    public DataMap edit(SysPath path) {
+        Optional<SysPath> oldPath = sysPathRepository.findById(path.getId());
+        if (oldPath.isPresent()) {
+            SysPath newPath = oldPath.get();
+            BeanUtils.copyPropertiesNotNull(path, newPath);
+            try {
+                newPath = sysPathRepository.save(newPath);
+            } catch (DataIntegrityViolationException e) {
+                log.info(e.getMessage());
+                throw new SysException("路径名称或路径URL已存在");
+            }
+            self.cachePaths();
+            return new DataMap("path", newPath);
+        } else {
+            throw new SysException("要修改的路径不存在");
+        }
+    }
 }
