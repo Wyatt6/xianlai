@@ -46,4 +46,13 @@ public class PathController {
         pathService.delete(pathId);
         return new RetResult().success();
     }
+
+    @ApiLog("重载路径缓存")
+    @SaCheckLogin
+    @SaCheckPermission("path:edit")
+    @GetMapping("/reloadCache")
+    public RetResult reloadCache() {
+        pathService.cachePaths();
+        return new RetResult().success();
+    }
 }
