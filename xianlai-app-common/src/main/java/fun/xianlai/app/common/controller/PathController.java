@@ -55,4 +55,20 @@ public class PathController {
         pathService.cachePaths();
         return new RetResult().success();
     }
+    @ApiLog("条件查询路径分页")
+    @SaCheckLogin
+    @SaCheckPermission("path:query")
+    @PostMapping("/getPageConditionally")
+    public RetResult getPageConditionally(@RequestParam int pageNum,
+                                          @RequestParam int pageSize,
+                                          @RequestBody(required = false) SysPath condition) {
+        log.info("请求参数：pageNum=[{}], pageSize=[{}], condition=[{}]", pageNum, pageSize, condition);
+        Page<SysPath> paths = pathService.getPathsByPageConditionally(pageNum, pageSize, condition);
+        return new RetResult().success()
+                .addData("pageNum", pageNum)
+                .addData("pageSize", pageSize)
+                .addData("totalPages", paths.getTotalPages())
+                .addData("totalElements", paths.getTotalElements())
+                .addData("content", paths.getContent());
+    }
 }
