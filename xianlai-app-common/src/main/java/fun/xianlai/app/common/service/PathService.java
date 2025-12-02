@@ -10,4 +10,8 @@ import java.util.List;
  * @author WyattLau
  */
 public interface PathService {
+    /**
+     * 新增路径
+     */
+    DataMap add(SysPath path);
 }
