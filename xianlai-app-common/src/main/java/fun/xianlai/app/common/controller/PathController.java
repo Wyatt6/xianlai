@@ -47,6 +47,16 @@ public class PathController {
         return new RetResult().success();
     }
 
+    @ApiLog("修改路径")
+    @SaCheckLogin
+    @SaCheckPermission("path:edit")
+    @PostMapping("/edit")
+    public RetResult edit(@RequestBody SysPath form) {
+        log.info("请求参数: {}", form);
+        BeanUtils.trimString(form);
+        return new RetResult().success().setData(pathService.edit(form));
+    }
+
     @ApiLog("重载路径缓存")
     @SaCheckLogin
     @SaCheckPermission("path:edit")
