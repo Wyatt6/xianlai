@@ -35,4 +35,14 @@ public interface PathService {
      */
     DataMap edit(SysPath path);
 
+    /**
+     * 查询条件为空时查询全量数据
+     * 页码<0或页大小<=0时不分页
+     *
+     * @param pageNum   页码
+     * @param pageSize  页大小
+     * @param condition 查询条件
+     * @return 分页数据
+     */
+    Page<SysPath> getPathsByPageConditionally(int pageNum, int pageSize, SysPath condition);
 }
