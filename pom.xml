@@ -5,9 +5,8 @@
     <properties>
         <!-- TODO CBR: 每次发版前检查模块版本号 -->
         <xianlai.version>0.1.0</xianlai.version>
-        <xianlai-pkg-log4j.version>1.0.0</xianlai-pkg-log4j.version>
-        <xianlai-pkg-mysql.version>1.0.0</xianlai-pkg-mysql.version>
-        <xianlai-pkg-redis.version>1.0.0</xianlai-pkg-redis.version>
+        <xianlai-infra-mysql.version>1.0.0</xianlai-infra-mysql.version>
+        <xianlai-infra-redis.version>1.0.0</xianlai-infra-redis.version>
         <xianlai-core.version>1.0.0</xianlai-core.version>
         <xianlai-app-gateway.version>1.0.0</xianlai-app-gateway.version>
         <xianlai-app-common.version>1.0.0</xianlai-app-common.version>
@@ -39,12 +38,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <!-- 依赖包：基于Log4J日志框架按照自定义规则配置后的日志依赖包 -->
-        <module>xianlai-pkg-log4j</module>
-        <!-- 依赖包：封装后的MySQL数据库访问依赖包 -->
-        <module>xianlai-pkg-mysql</module>
-        <!-- 依赖包：封装后的Redis缓存访问依赖包 -->
-        <module>xianlai-pkg-redis</module>
+        <!-- 封装后的MySQL数据库访问依赖包 -->
+        <module>xianlai-infra-mysql</module>
+        <!-- 封装后的Redis缓存访问依赖包 -->
+        <module>xianlai-infra-redis</module>
         <!-- 核心程序 -->
         <module>xianlai-core</module>
         <!-- 应用：技术网关 -->
@@ -60,18 +57,13 @@
             <!-- 内部依赖 -->
             <dependency>
                 <groupId>fun.xianlai</groupId>
-                <artifactId>xianlai-pkg-log4j</artifactId>
-                <version>${xianlai-pkg-log4j.version}</version>
+                <artifactId>xianlai-infra-mysql</artifactId>
+                <version>${xianlai-infra-mysql.version}</version>
             </dependency>
             <dependency>
                 <groupId>fun.xianlai</groupId>
-                <artifactId>xianlai-pkg-mysql</artifactId>
-                <version>${xianlai-pkg-mysql.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>fun.xianlai</groupId>
-                <artifactId>xianlai-pkg-redis</artifactId>
-                <version>${xianlai-pkg-redis.version}</version>
+                <artifactId>xianlai-infra-redis</artifactId>
+                <version>${xianlai-infra-redis.version}</version>
             </dependency>
             <dependency>
                 <groupId>fun.xianlai</groupId>
