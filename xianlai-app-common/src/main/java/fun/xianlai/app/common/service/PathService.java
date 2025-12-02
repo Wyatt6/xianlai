@@ -11,6 +11,16 @@ import java.util.List;
  */
 public interface PathService {
     /**
+     * 缓存路径
+     */
+    void cachePaths();
+
+    /**
+     * 从缓存获取路径
+     */
+    List<SysPath> getPathsFromCache();
+
+    /**
      * 新增路径
      */
     DataMap add(SysPath path);
