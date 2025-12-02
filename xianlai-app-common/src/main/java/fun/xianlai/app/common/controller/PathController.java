@@ -55,6 +55,16 @@ public class PathController {
         pathService.cachePaths();
         return new RetResult().success();
     }
+
+    /**
+     * 查询条件为空时查询全量数据
+     * 页码<0或页大小<=0时不分页
+     *
+     * @param pageNum   页码
+     * @param pageSize  页大小
+     * @param condition 查询条件
+     * @return {pageNum 页码, pageSize 页大小, totalPages 页码总数, totalElements 总条数, content 分页数据}
+     */
     @ApiLog("条件查询路径分页")
     @SaCheckLogin
     @SaCheckPermission("path:query")
