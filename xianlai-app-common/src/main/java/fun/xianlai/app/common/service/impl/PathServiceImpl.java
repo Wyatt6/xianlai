@@ -79,4 +79,12 @@ public class PathServiceImpl implements PathService {
             throw new SysException("路径名称或路径URL已存在");
         }
     }
+
+    @Override
+    @ServiceLog("删除路径")
+    @Transactional
+    public void delete(Long pathId) {
+        sysPathRepository.deleteById(pathId);
+        self.cachePaths();
+    }
 }
