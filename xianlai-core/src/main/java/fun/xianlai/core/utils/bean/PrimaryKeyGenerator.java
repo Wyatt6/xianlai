@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 public class PrimaryKeyGenerator implements IdentifierGenerator {
     synchronized public long next() {
-        return FakeSnowflakeUtil.nextId();
+        return FakeSnowflakeUtils.nextId();
     }
 
     @Override

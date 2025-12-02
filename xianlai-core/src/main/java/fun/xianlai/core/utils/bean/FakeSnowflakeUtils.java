@@ -10,7 +10,7 @@ package fun.xianlai.core.utils.bean;
  *
  * @author WyattLau
  */
-public class FakeSnowflakeUtil {
+public class FakeSnowflakeUtils {
     private static final long SEQUENCE_BITS = 10L;                      // 序列号位数
     private static final long SEQUENCE_MASK = ~(-1L << SEQUENCE_BITS);  // 序列号掩码
     private static final long TIMESTAMP_LSHIFT = SEQUENCE_BITS;         // 时间戳左移位数
