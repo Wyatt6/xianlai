@@ -24,4 +24,14 @@ public interface PathService {
      * 新增路径
      */
     DataMap add(SysPath path);
+
+    /**
+     * 删除路径
+     */
+    void delete(Long pathId);
+
+    /**
+     * 修改路径
+     */
+    DataMap edit(SysPath path);
 }
