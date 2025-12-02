@@ -19,4 +19,19 @@ public interface ApiService {
      * 从缓存获取接口
      */
     List<SysApi> getApisFromCache();
+
+    /**
+     * 新增接口
+     */
+    DataMap add(SysApi api);
+
+    /**
+     * 删除接口
+     */
+    void delete(Long apiId);
+
+    /**
+     * 修改接口
+     */
+    DataMap edit(SysApi api);
 }
