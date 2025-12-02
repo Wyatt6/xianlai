@@ -26,4 +26,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class PathController {
     @Autowired
     private PathService pathService;
+
+    @ApiLog("新增路径")
+    @SaCheckLogin
+    @SaCheckPermission("path:add")
+    @PostMapping("/add")
+    public RetResult add(@RequestBody SysPath form) {
+        log.info("请求参数: {}", form);
+        BeanUtils.trimString(form);
+        return new RetResult().success().setData(pathService.add(form));
+    }
 }
