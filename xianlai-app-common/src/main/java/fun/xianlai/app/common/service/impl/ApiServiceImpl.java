@@ -8,8 +8,8 @@ import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
-import fun.xianlai.core.utils.bean.BeanUtils;
 import fun.xianlai.core.utils.ChecksumUtil;
+import fun.xianlai.core.utils.bean.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -110,4 +110,22 @@ public class ApiServiceImpl implements ApiService {
         }
     }
 
+    @Override
+    @ServiceLog("条件查询接口分页")
+    public Page<SysApi> getApisByPageConditionally(int pageNum, int pageSize, SysApi condition) {
+        String callPath = BeanUtils.getFieldValue(condition, "callPath", String.class);
+        String description = BeanUtils.getFieldValue(condition, "description", String.class);
+        RequestMethod requestMethod = BeanUtils.getFieldValue(condition, "requestMethod", RequestMethod.class);
+        String url = BeanUtils.getFieldValue(condition, "url", String.class);
+
+        Sort sort = Sort.by(Sort.Order.asc("callPath"));
+        if (pageNum >= 0 && pageSize > 0) {
+            log.info("分页查询");
+            Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
+            return sysApiRepository.findConditionally(callPath, description, requestMethod, url, pageable);
+        } else {
+            log.info("全表查询");
+            return sysApiRepository.findConditionally(callPath, description, requestMethod, url, Pageable.unpaged(sort));
+        }
+    }
 }
