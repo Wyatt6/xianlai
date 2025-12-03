@@ -102,4 +102,30 @@ public class OptionServiceImpl implements OptionService {
         }
         return value;
     }
+
+    @Override
+    @SimpleServiceLog("新增参数")
+    @Transactional
+    public DataMap add(SysOption option) {
+        try {
+            option.setId(null);
+            SysOption savedOption = sysOptionRepository.save(option);
+            if (savedOption.getFrontLoad()) self.cacheFrontLoadOptions();
+            if (savedOption.getBackLoad()) self.cacheBackLoadOptions();
+            DataMap result = new DataMap();
+            result.put("option", savedOption);
+            return result;
+        } catch (Exception e) {
+            throw new SysException("参数Key已存在");
+        }
+    }
+
+    @Override
+    @SimpleServiceLog("删除参数")
+    @Transactional
+    public void delete(Long optionId) {
+        sysOptionRepository.deleteById(optionId);
+        self.cacheFrontLoadOptions();
+        self.cacheBackLoadOptions();
+    }
 }
