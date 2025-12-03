@@ -8,7 +8,7 @@ import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.bean.BeanUtils;
-import fun.xianlai.core.utils.ChecksumUtil;
+import fun.xianlai.core.utils.ChecksumUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -56,7 +56,7 @@ public class OptionServiceImpl implements OptionService {
                 mapOptions.put(option.getOptionKey(), valueObject);
             }
         }
-        redis.opsForValue().set("optionsChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(mapOptions)), Duration.ofHours(CACHE_HOURS));
+        redis.opsForValue().set("optionsChecksum", ChecksumUtils.sha256Checksum(JSONObject.toJSONString(mapOptions)), Duration.ofHours(CACHE_HOURS));
         redis.opsForValue().set("options", mapOptions, Duration.ofHours(CACHE_HOURS));
     }
 
