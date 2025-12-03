@@ -8,8 +8,8 @@ import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
-import fun.xianlai.core.utils.bean.BeanUtils;
 import fun.xianlai.core.utils.ChecksumUtil;
+import fun.xianlai.core.utils.bean.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -78,6 +78,18 @@ public class MenuServiceImpl implements MenuService {
         }
     }
 
+    @Override
+    @ServiceLog("删除菜单")
+    @Transactional
+    public void delete(Long menuId) {
+        List<SysMenu> sonMenus = sysMenuRepository.findByParentId(menuId);
+        if (sonMenus == null || sonMenus.isEmpty()) {
+            sysMenuRepository.deleteById(menuId);
+            self.cacheActiveMenus();
+        } else {
+            throw new SysException("当前菜单仍然包含子菜单，无法删除");
+        }
+    }
     @Override
     public List<SysMenu> getMenuForest() {
         List<SysMenu> menus = sysMenuRepository.findAll(Sort.by(Sort.Order.asc("sortId")));
