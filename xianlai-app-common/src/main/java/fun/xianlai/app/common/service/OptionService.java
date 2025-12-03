@@ -49,4 +49,24 @@ public interface OptionService {
      * 修改参数
      */
     DataMap edit(SysOption option);
+
+    /**
+     * 获取分类后的参数列表
+     */
+    DataMap getClassifiedList();
+
+    /**
+     * 以String类型读取参数值
+     */
+    Optional<String> readValueInString(String key);
+
+    /**
+     * 以Integer类型读取参数值
+     */
+    Optional<Integer> readValueInInteger(String key);
+
+    /**
+     * 以Long类型读取参数值
+     */
+    Optional<Long> readValueInLong(String key);
 }
