@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface SysPathRepository extends JpaRepository<SysPath, Long> {
+    
     @Query("select distinct new SysPath(p.id, p.sortId, p.name, p.path) " +
             " from SysPath p " +
             " where (?1 is null or p.name like %?1%) " +
@@ -26,4 +27,5 @@ public interface SysPathRepository extends JpaRepository<SysPath, Long> {
             "      order by p.sort_id asc, p.name asc) t " +
             " where t.id = ?1", nativeQuery = true)
     Long findRowNumById(Long id);
+
 }
