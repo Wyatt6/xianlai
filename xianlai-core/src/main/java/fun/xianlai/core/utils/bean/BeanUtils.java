@@ -15,6 +15,31 @@ import java.lang.reflect.Method;
  */
 public class BeanUtils extends org.springframework.beans.BeanUtils {
     /**
+     * 从obj对象中获取名称为fieldName的属性值
+     */
+    public static <T> T getFieldValue(Object obj, String fieldName, Class<T> clazz) {
+        if (obj == null) return null;
+        Field[] fields = obj.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            if (field.getName().equals(fieldName)) {
+                try {
+                    // boolean类型的getter要特殊处理，因为lombok生成的是isXXX
+                    String getterName = (boolean.class.getName().equals(clazz.getName()) ? "is" : "get")
+                            + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+                    Method getter = obj.getClass().getMethod(getterName);
+                    Object value = getter.invoke(obj);
+                    return value == null ? null : (T) value;
+                } catch (NoSuchMethodException e) {
+                    throw new SysException("无法找到getter");
+                } catch (InvocationTargetException | IllegalAccessException e) {
+                    throw new SysException("调用失败");
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * 当source中的属性不为null时，复制给target对应的属性
      * 注意：暂无法处理父类属性
      */
