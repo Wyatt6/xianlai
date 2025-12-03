@@ -54,6 +54,25 @@ public class UserController {
     private RoleService roleService;
     @Autowired
     private PermissionService permissionService;
+    @ApiLog("注册新用户")
+    @PostMapping("/register")
+    public RetResult register(@RequestBody User form) {
+        BeanUtils.trimString(form);
+        String captchaKey = form.getCaptchaKey();
+        String captcha = form.getCaptcha();
+        String username = form.getUsername();
+        String password = form.getPassword();
+        log.info("请求参数: captchaKey=[{}], captcha=[{}], username=[{}]", captchaKey, captcha, username);
+        captchaService.verifyCaptcha(captchaKey, captcha);
+        if (!userService.matchUsernameFormat(form.getUsername())) {
+            throw new SysException("用户名格式错误");
+        }
+        if (!userService.matchPasswordFormat(form.getPassword())) {
+            throw new SysException("密码格式错误");
+        }
+        return new RetResult().success().setData(userService.createUser(username, password, true));
+    }
+
     @ApiLog("用户登录")
     @PostMapping("/login")
     public RetResult login(@RequestBody User form) {
