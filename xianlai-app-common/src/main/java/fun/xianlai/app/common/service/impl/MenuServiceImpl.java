@@ -90,6 +90,31 @@ public class MenuServiceImpl implements MenuService {
             throw new SysException("当前菜单仍然包含子菜单，无法删除");
         }
     }
+
+    @Override
+    @ServiceLog("修改菜单")
+    @Transactional
+    public DataMap edit(SysMenu menu) {
+        Optional<SysMenu> oldMenu = sysMenuRepository.findById(menu.getId());
+        if (oldMenu.isPresent()) {
+            SysMenu newMenu = oldMenu.get();
+            BeanUtils.copyPropertiesNotNull(menu, newMenu);
+            if (newMenu.getParentId().equals(newMenu.getId())) {
+                throw new SysException("上级菜单不能设置为自己");
+            }
+            try {
+                newMenu = sysMenuRepository.save(newMenu);
+            } catch (DataIntegrityViolationException e) {
+                log.info(e.getMessage());
+                throw new SysException("菜单已存在");
+            }
+            self.cacheActiveMenus();
+            return new DataMap("menu", newMenu);
+        } else {
+            throw new SysException("要修改的菜单不存在");
+        }
+    }
+
     @Override
     public List<SysMenu> getMenuForest() {
         List<SysMenu> menus = sysMenuRepository.findAll(Sort.by(Sort.Order.asc("sortId")));
