@@ -23,4 +23,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/menu")
 public class MenuController {
+    @Autowired
+    private MenuService menuService;
+
+    @ApiLog("新增菜单")
+    @SaCheckLogin
+    @SaCheckPermission("menu:add")
+    @PostMapping("/add")
+    public RetResult add(@RequestBody SysMenu form) {
+        log.info("请求参数: {}", form);
+        BeanUtils.trimString(form);
+        return new RetResult().success().setData(menuService.add(form));
+    }
 }
