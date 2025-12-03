@@ -65,4 +65,12 @@ public class OptionController {
         optionService.cacheBackLoadOptions();
         return new RetResult().success();
     }
+
+    @ApiLog("获取分类后的参数列表")
+    @SaCheckLogin
+    @SaCheckPermission("option:query")
+    @GetMapping("/getClassifiedList")
+    public RetResult getClassifiedList() {
+        return new RetResult().success().setData(optionService.getClassifiedList());
+    }
 }
