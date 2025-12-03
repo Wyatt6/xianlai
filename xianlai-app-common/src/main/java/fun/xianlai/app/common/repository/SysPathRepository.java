@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface SysPathRepository extends JpaRepository<SysPath, Long> {
-    
+
     @Query("select distinct new SysPath(p.id, p.sortId, p.name, p.path) " +
             " from SysPath p " +
             " where (?1 is null or p.name like %?1%) " +
