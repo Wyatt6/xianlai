@@ -54,6 +54,23 @@ public class UserController {
     private RoleService roleService;
     @Autowired
     private PermissionService permissionService;
+
+    @ApiLog("创建新用户")
+    @SaCheckLogin
+    @SaCheckPermission("user:add")
+    @PostMapping("/createUser")
+    public RetResult createUser(@RequestBody User form) {
+        BeanUtils.trimString(form);
+        log.info("请求参数: username=[{}], active=[{}]", form.getUsername(), form.getActive());
+        if (!userService.matchUsernameFormat(form.getUsername())) {
+            throw new SysException("用户名格式错误");
+        }
+        if (!userService.matchPasswordFormat(form.getPassword())) {
+            throw new SysException("密码格式错误");
+        }
+        return new RetResult().success().setData(userService.createUser(form.getUsername(), form.getPassword(), form.getActive()));
+    }
+
     @ApiLog("注册新用户")
     @PostMapping("/register")
     public RetResult register(@RequestBody User form) {
