@@ -88,4 +88,26 @@ public class ApiServiceImpl implements ApiService {
         sysApiRepository.deleteById(apiId);
         self.cacheApis();
     }
+
+    @Override
+    @ServiceLog("修改接口")
+    @Transactional
+    public DataMap edit(SysApi api) {
+        Optional<SysApi> oldApi = sysApiRepository.findById(api.getId());
+        if (oldApi.isPresent()) {
+            SysApi newApi = oldApi.get();
+            BeanUtils.copyPropertiesNotNull(api, newApi);
+            try {
+                newApi = sysApiRepository.save(newApi);
+            } catch (DataIntegrityViolationException e) {
+                log.info(e.getMessage());
+                throw new SysException("接口调用路径已存在");
+            }
+            self.cacheApis();
+            return new DataMap("api", newApi);
+        } else {
+            throw new SysException("要修改的接口不存在");
+        }
+    }
+
 }
