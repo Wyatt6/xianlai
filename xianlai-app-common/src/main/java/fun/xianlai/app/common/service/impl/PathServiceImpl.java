@@ -108,4 +108,21 @@ public class PathServiceImpl implements PathService {
             throw new SysException("要修改的路径不存在");
         }
     }
+
+    @Override
+    @ServiceLog("条件查询路径分页")
+    public Page<SysPath> getPathsByPageConditionally(int pageNum, int pageSize, SysPath condition) {
+        String name = BeanUtils.getFieldValue(condition, "name", String.class);
+        String path = BeanUtils.getFieldValue(condition, "path", String.class);
+
+        Sort sort = Sort.by(Sort.Order.asc("sortId"), Sort.Order.asc("name"));
+        if (pageNum >= 0 && pageSize > 0) {
+            log.info("分页查询");
+            Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
+            return sysPathRepository.findConditionally(name, path, pageable);
+        } else {
+            log.info("全表查询");
+            return sysPathRepository.findConditionally(name, path, Pageable.unpaged(sort));
+        }
+    }
 }
