@@ -128,4 +128,31 @@ public class OptionServiceImpl implements OptionService {
         self.cacheFrontLoadOptions();
         self.cacheBackLoadOptions();
     }
+
+    @Override
+    @SimpleServiceLog("修改参数")
+    @Transactional
+    public DataMap edit(SysOption option) {
+        Optional<SysOption> oldOption = sysOptionRepository.findById(option.getId());
+        if (oldOption.isPresent()) {
+            SysOption newOption = oldOption.get();
+            BeanUtils.copyPropertiesNotNull(option, newOption);
+            try {
+                newOption = sysOptionRepository.save(newOption);
+            } catch (DataIntegrityViolationException e) {
+                log.info(e.getMessage());
+                throw new SysException("参数Key已存在");
+            }
+            if (option.getFrontLoad() != null) {
+                self.cacheFrontLoadOptions();
+            }
+            if (option.getBackLoad() != null) {
+                self.cacheCertainBackLoadOption(newOption.getOptionKey());
+            }
+            return new DataMap("option", newOption);
+        } else {
+            throw new SysException("要修改的参数不存在");
+        }
+    }
+
 }
