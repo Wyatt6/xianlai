@@ -9,7 +9,7 @@ import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.bean.BeanUtils;
-import fun.xianlai.core.utils.ChecksumUtil;
+import fun.xianlai.core.utils.ChecksumUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -47,7 +47,7 @@ public class RouteServiceImpl implements RouteService {
     @Transactional
     public void cacheRoutes() {
         List<SysRoute> routes = self.getRouteForest();
-        redis.opsForValue().set("routesChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(routes)), Duration.ofHours(CACHE_HOURS));
+        redis.opsForValue().set("routesChecksum", ChecksumUtils.sha256Checksum(JSONObject.toJSONString(routes)), Duration.ofHours(CACHE_HOURS));
         redis.opsForValue().set("routes", routes, Duration.ofHours(CACHE_HOURS));
     }
 
