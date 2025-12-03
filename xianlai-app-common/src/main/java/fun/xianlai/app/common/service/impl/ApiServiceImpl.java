@@ -62,4 +62,30 @@ public class ApiServiceImpl implements ApiService {
         }
         return apis;
     }
+
+    @Override
+    @ServiceLog("新增接口")
+    @Transactional
+    public DataMap add(SysApi api) {
+        try {
+            api.setId(null);
+            SysApi savedApi = sysApiRepository.save(api);
+            Long rowNum = sysApiRepository.findRowNumById(savedApi.getId());
+            self.cacheApis();
+            DataMap result = new DataMap();
+            result.put("api", savedApi);
+            result.put("rowNum", rowNum);
+            return result;
+        } catch (DataIntegrityViolationException e) {
+            throw new SysException("接口已存在");
+        }
+    }
+
+    @Override
+    @ServiceLog("删除接口")
+    @Transactional
+    public void delete(Long apiId) {
+        sysApiRepository.deleteById(apiId);
+        self.cacheApis();
+    }
 }
