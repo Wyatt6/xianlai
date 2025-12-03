@@ -155,4 +155,25 @@ public class OptionServiceImpl implements OptionService {
         }
     }
 
+
+    @Override
+    @SimpleServiceLog("以String类型读取参数值")
+    public Optional<String> readValueInString(String key) {
+        String value = self.getCertainBackLoadOptionValueFromCache(key);
+        return value != null ? value.describeConstable() : Optional.empty();
+    }
+
+    @Override
+    @SimpleServiceLog("以Integer类型读取参数值")
+    public Optional<Integer> readValueInInteger(String key) {
+        String value = self.getCertainBackLoadOptionValueFromCache(key);
+        return value != null ? ((Integer) Integer.parseInt(value)).describeConstable() : Optional.empty();
+    }
+
+    @Override
+    @SimpleServiceLog("以Long类型读取参数值")
+    public Optional<Long> readValueInLong(String key) {
+        String value = self.getCertainBackLoadOptionValueFromCache(key);
+        return value != null ? ((Long) Long.parseLong(value)).describeConstable() : Optional.empty();
+    }
 }
