@@ -50,6 +50,10 @@ public class UserController {
     private FeignOptionService optionService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private PermissionService permissionService;
     @ApiLog("用户登录")
     @PostMapping("/login")
     public RetResult login(@RequestBody User form) {
