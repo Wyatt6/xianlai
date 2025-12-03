@@ -32,5 +32,5 @@ public interface SysApiRepository extends JpaRepository<SysApi, Long> {
             "      order by a.call_path asc) t " +
             " where t.id = ?1", nativeQuery = true)
     Long findRowNumById(Long id);
-    
+
 }
