@@ -155,6 +155,20 @@ public class OptionServiceImpl implements OptionService {
         }
     }
 
+    @Override
+    @SimpleServiceLog("获取分类后的参数列表")
+    public DataMap getClassifiedList() {
+        Sort sort = Sort.by(Sort.Order.asc("category"), Sort.Order.asc("sortId"));
+        List<SysOption> options = sysOptionRepository.findAll(sort);
+        Map<String, List<SysOption>> mapOptions = new HashMap<>();
+        for (SysOption option : options) {
+            if (!mapOptions.containsKey(option.getCategory())) {
+                mapOptions.put(option.getCategory(), new ArrayList<>());
+            }
+            mapOptions.get(option.getCategory()).add(option);
+        }
+        return new DataMap("options", mapOptions);
+    }
 
     @Override
     @SimpleServiceLog("以String类型读取参数值")
