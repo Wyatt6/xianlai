@@ -63,6 +63,62 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
+    @ServiceLog("新增路由")
+    @Transactional
+    public DataMap add(SysRoute route) {
+        try {
+            route.setId(null);
+            SysRoute savedRoute = sysRouteRepository.save(route);
+            self.cacheRoutes();
+            DataMap result = new DataMap();
+            result.put("route", savedRoute);
+            return result;
+        } catch (DataIntegrityViolationException e) {
+            throw new SysException("路由名称已存在");
+        }
+    }
+
+    @Override
+    @ServiceLog("删除路由")
+    @Transactional
+    public void delete(Long routeId) {
+        List<SysRoute> sonRoutes = sysRouteRepository.findByParentId(routeId);
+        if (sonRoutes == null || sonRoutes.isEmpty()) {
+            sysRouteRepository.deleteById(routeId);
+            self.cacheRoutes();
+        } else {
+            throw new SysException("当前路由仍然包含子路由，无法删除");
+        }
+    }
+
+    @Override
+    @ServiceLog("修改路由")
+    @Transactional
+    public DataMap edit(SysRoute route) {
+        Optional<SysRoute> oldRoute = sysRouteRepository.findById(route.getId());
+        if (oldRoute.isPresent()) {
+            SysRoute newRoute = oldRoute.get();
+            BeanUtils.copyPropertiesNotNull(route, newRoute);
+            if (newRoute.getParentId().equals(newRoute.getId())) {
+                throw new SysException("上级路由不能设置为自己");
+            }
+            if (newRoute.getRedirectPathName().equals(newRoute.getPathName())) {
+                throw new SysException("路由重定向不能和路由路径相同");
+            }
+            try {
+                newRoute = sysRouteRepository.save(newRoute);
+            } catch (DataIntegrityViolationException e) {
+                log.info(e.getMessage());
+                throw new SysException("路由名称已存在");
+            }
+            self.cacheRoutes();
+            return new DataMap("route", newRoute);
+        } else {
+            throw new SysException("要修改的路由不存在");
+        }
+    }
+
+    @Override
     public List<SysRoute> getRouteForest() {
         List<SysRoute> routes = sysRouteRepository.findAll(Sort.by(Sort.Order.asc("sortId")));
         List<SysRoute> forest = new ArrayList<>();
