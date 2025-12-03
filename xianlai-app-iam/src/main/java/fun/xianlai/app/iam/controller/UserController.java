@@ -44,4 +44,22 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+    @ApiLog("退出登录")
+    @GetMapping("/logout")
+    public RetResult logout() {
+        try {
+            log.info("token=[{}]", StpUtil.getTokenValue());
+            log.info("loginId=[{}]", StpUtil.getLoginIdAsLong());
+        } catch (Exception e) {
+            if (e instanceof NotLoginException) {
+                log.info("用户处于未登录状态");
+            } else {
+                throw e;
+            }
+        } finally {
+            StpUtil.logout();
+        }
+        log.info("退出登录成功");
+        return new RetResult().success();
+    }
 }
