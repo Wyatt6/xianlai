@@ -8,7 +8,7 @@ import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
-import fun.xianlai.core.utils.ChecksumUtil;
+import fun.xianlai.core.utils.ChecksumUtils;
 import fun.xianlai.core.utils.bean.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ public class ApiServiceImpl implements ApiService {
     @Transactional
     public void cacheApis() {
         List<SysApi> apis = sysApiRepository.findAll();
-        redis.opsForValue().set("apisChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(apis)), Duration.ofHours(CACHE_HOURS));
+        redis.opsForValue().set("apisChecksum", ChecksumUtils.sha256Checksum(JSONObject.toJSONString(apis)), Duration.ofHours(CACHE_HOURS));
         redis.opsForValue().set("apis", apis, Duration.ofHours(CACHE_HOURS));
     }
 
