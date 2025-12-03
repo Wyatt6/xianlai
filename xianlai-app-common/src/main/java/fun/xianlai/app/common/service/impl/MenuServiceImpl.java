@@ -8,7 +8,7 @@ import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
-import fun.xianlai.core.utils.ChecksumUtil;
+import fun.xianlai.core.utils.ChecksumUtils;
 import fun.xianlai.core.utils.bean.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -47,7 +47,7 @@ public class MenuServiceImpl implements MenuService {
     @Transactional
     public void cacheActiveMenus() {
         List<SysMenu> menus = self.getActiveMenuForest();
-        redis.opsForValue().set("menusChecksum", ChecksumUtil.sha256Checksum(JSONObject.toJSONString(menus)), Duration.ofHours(CACHE_HOURS));
+        redis.opsForValue().set("menusChecksum", ChecksumUtils.sha256Checksum(JSONObject.toJSONString(menus)), Duration.ofHours(CACHE_HOURS));
         redis.opsForValue().set("menus", menus, Duration.ofHours(CACHE_HOURS));
     }
 
