@@ -77,4 +77,23 @@ public class MenuServiceImpl implements MenuService {
             throw new SysException("菜单已存在");
         }
     }
+
+    @Override
+    public List<SysMenu> getMenuForest() {
+        List<SysMenu> menus = sysMenuRepository.findAll(Sort.by(Sort.Order.asc("sortId")));
+        List<SysMenu> forest = new ArrayList<>();
+        Map<Long, SysMenu> finder = new HashMap<>();
+        for (SysMenu menu : menus) {
+            finder.put(menu.getId(), menu);
+        }
+        for (SysMenu menu : menus) {
+            if (menu.getParentId() == 0) {
+                forest.add(finder.get(menu.getId()));
+            } else {
+                SysMenu fatherMenu = finder.get(menu.getParentId());
+                fatherMenu.getChildren().add(finder.get(menu.getId()));
+            }
+        }
+        return forest;
+    }
 }
