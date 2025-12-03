@@ -96,4 +96,23 @@ public class MenuServiceImpl implements MenuService {
         }
         return forest;
     }
+
+    @Override
+    public List<SysMenu> getActiveMenuForest() {
+        List<SysMenu> menus = sysMenuRepository.findByActive(true, Sort.by(Sort.Order.asc("sortId")));
+        List<SysMenu> forest = new ArrayList<>();
+        Map<Long, SysMenu> finder = new HashMap<>();
+        for (SysMenu menu : menus) {
+            finder.put(menu.getId(), menu);
+        }
+        for (SysMenu menu : menus) {
+            if (menu.getParentId() == 0) {
+                forest.add(finder.get(menu.getId()));
+            } else {
+                SysMenu fatherMenu = finder.get(menu.getParentId());
+                fatherMenu.getChildren().add(finder.get(menu.getId()));
+            }
+        }
+        return forest;
+    }
 }
