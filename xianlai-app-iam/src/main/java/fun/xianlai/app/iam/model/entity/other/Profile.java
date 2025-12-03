@@ -35,7 +35,7 @@ public class Profile {
     @Column
     private String nickname;
 
-    @Column
+    @Column(columnDefinition = "varchar(20) default 'unknown'")
     private String gender;              // 性别
 
     @Column
