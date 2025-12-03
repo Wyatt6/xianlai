@@ -16,6 +16,7 @@ import java.lang.reflect.Method;
 public class BeanUtils extends org.springframework.beans.BeanUtils {
     /**
      * 从obj对象中获取名称为fieldName的属性值
+     * 如果obj为null时直接返回null
      */
     public static <T> T getFieldValue(Object obj, String fieldName, Class<T> clazz) {
         if (obj == null) return null;
