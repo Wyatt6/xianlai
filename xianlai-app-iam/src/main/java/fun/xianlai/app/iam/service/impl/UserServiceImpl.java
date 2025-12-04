@@ -233,6 +233,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @SimpleServiceLog("修改密码")
+    @Transactional
+    public void changePassword(Long userId, String password) {
+        String salt = PasswordUtils.generateSalt();
+        String encryptedPassword = PasswordUtils.encode(password, salt);
+        Optional<User> oldUser = userRepository.findById(userId);
+        if (oldUser.isPresent()) {
+            User newUser = oldUser.get();
+            newUser.setPassword(encryptedPassword);
+            newUser.setSalt(salt);
+            userRepository.save(newUser);
+        } else {
+            throw new SysException("用户不存在");
+        }
+    }
+    @Override
     @ServiceLog("绑定")
     public List<Long> bind(Long userId, List<Long> roleIds) {
         List<Role> bindCheckList = roleRepository.findByBindCheck(true);
