@@ -38,5 +38,5 @@ public interface RouteService {
     /**
      * 获取路由森林
      */
-    List<SysRoute> getRouteForest();
+    List<SysRoute> getForest();
 }

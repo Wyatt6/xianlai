@@ -46,7 +46,7 @@ public class RouteServiceImpl implements RouteService {
     @SimpleServiceLog("缓存路由")
     @Transactional
     public void cacheRoutes() {
-        List<SysRoute> routes = self.getRouteForest();
+        List<SysRoute> routes = self.getForest();
         redis.opsForValue().set("routesChecksum", ChecksumUtils.sha256Checksum(JSONObject.toJSONString(routes)), Duration.ofHours(CACHE_HOURS));
         redis.opsForValue().set("routes", routes, Duration.ofHours(CACHE_HOURS));
     }
@@ -119,7 +119,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public List<SysRoute> getRouteForest() {
+    public List<SysRoute> getForest() {
         List<SysRoute> routes = sysRouteRepository.findAll(Sort.by(Sort.Order.asc("sortId")));
         List<SysRoute> forest = new ArrayList<>();
         Map<Long, SysRoute> finder = new HashMap<>();

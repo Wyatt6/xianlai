@@ -70,6 +70,6 @@ public class RouteController {
     @SaCheckPermission("route:query")
     @GetMapping("/getForest")
     public RetResult getForest() {
-        return new RetResult().success().addData("routes", routeService.getRouteForest());
+        return new RetResult().success().addData("routes", routeService.getForest());
     }
 }
