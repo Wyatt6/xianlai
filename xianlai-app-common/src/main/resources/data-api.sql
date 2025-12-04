@@ -36,3 +36,20 @@ INSERT IGNORE INTO tb_common_sys_api(`id`, `call_path`, `description`, `request_
 (16003, 'common.option.edit', '修改参数', 'POST', '/api/common/option/edit'),
 (16004, 'common.option.reloadCache', '重载参数缓存', 'GET', '/api/common/option/reloadCache'),
 (16005, 'common.option.getClassifiedList', '查询分类后的参数列表', 'GET', '/api/common/option/getClassifiedList'),
+
+-- ---------- --
+-- IAM模块接口 --
+-- ---------- --
+-- PermissionController
+(20001, 'iam.permission.add', '新增权限', 'POST', '/api/iam/permission/add'),
+(20002, 'iam.permission.delete', '删除权限', 'GET', '/api/iam/permission/delete'),
+(20003, 'iam.permission.edit', '修改权限', 'POST', '/api/iam/permission/edit'),
+(20004, 'iam.permission.getPageConditionally', '条件查询权限分页', 'POST', '/api/iam/permission/getPageConditionally'),
+(20005, 'iam.permission.getPermissionIdsOfRole', '查询某角色所具有的权限ID列表', 'GET', '/api/iam/permission/getPermissionIdsOfRole'),
+-- RoleController
+(21001, 'iam.role.add', '新增角色', 'POST', '/api/iam/role/add'),
+(21002, 'iam.role.delete', '删除角色', 'GET', '/api/iam/role/delete'),
+(21003, 'iam.role.edit', '修改角色', 'POST', '/api/iam/role/edit'),
+(21004, 'iam.role.getPageConditionally', '条件查询角色分页', 'POST', '/api/iam/role/getPageConditionally'),
+(21005, 'iam.role.getRoleIdsOfUser', '查询某用户所具有的角色ID列表', 'GET', '/api/iam/role/getRoleIdsOfUser'),
+(21006, 'iam.role.grant', '为角色授权/解除授权', 'POST', '/api/iam/role/grant'),
