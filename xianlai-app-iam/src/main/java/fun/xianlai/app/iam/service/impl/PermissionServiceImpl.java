@@ -1,0 +1,55 @@
+package fun.xianlai.app.iam.service.impl;
+
+
+import fun.xianlai.app.iam.model.entity.rbac.Permission;
+import fun.xianlai.app.iam.repository.PermissionRepository;
+import fun.xianlai.app.iam.repository.RolePermissionRepository;
+import fun.xianlai.app.iam.service.PermissionService;
+import fun.xianlai.core.annotation.ServiceLog;
+import fun.xianlai.core.annotation.SimpleServiceLog;
+import fun.xianlai.core.exception.SysException;
+import fun.xianlai.core.response.DataMap;
+import fun.xianlai.core.utils.bean.BeanUtils;
+import fun.xianlai.core.utils.time.DateUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * @author WyattLau
+ */
+@Slf4j
+@Service
+public class PermissionServiceImpl implements PermissionService {
+    @Autowired
+    private PermissionRepository permissionRepository;
+
+    @Override
+    @SimpleServiceLog("新增权限")
+    @Transactional
+    public DataMap add(Permission permission) {
+        try {
+            permission.setId(null);
+            Permission savedPermission = permissionRepository.save(permission);
+            Long rowNum = permissionRepository.findRowNumById(savedPermission.getId());
+            DataMap result = new DataMap();
+            result.put("permission", savedPermission);
+            result.put("rowNum", rowNum);
+            return result;
+        } catch (DataIntegrityViolationException e) {
+            throw new SysException("权限标识符重复");
+        }
+    }
+
+}
