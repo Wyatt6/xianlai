@@ -74,4 +74,42 @@ public class UserServiceImpl implements UserService {
         String PASSWORD_REGEXP = optionService.readValueInString("user.password.regexp").orElse("^[a-zA-Z_0-9.~!@#$%^&*?]{6,30}$");
         return password.matches(PASSWORD_REGEXP);
     }
+
+    @Override
+    @SimpleServiceLog("身份验证（用户名+密码）")
+    public User authentication(String username, String password) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) {
+            throw new SysException("用户未注册");
+        }
+        if (user.get().getIsDelete()) {
+            throw new SysException("用户已注销");
+        }
+        if (user.get().getActive() == false) {
+            throw new SysException("用户已被冻结，请联系管理员");
+        }
+        if (!user.get().getPassword().equals(PasswordUtils.encode(password, user.get().getSalt()))) {
+            throw new SysException("用户名或密码错误");
+        }
+        return user.get();
+    }
+
+    @Override
+    @SimpleServiceLog("身份验证（用户ID+密码）")
+    public User authentication(Long userId, String password) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new SysException("用户未注册");
+        }
+        if (user.get().getIsDelete()) {
+            throw new SysException("用户已注销");
+        }
+        if (user.get().getActive() == false) {
+            throw new SysException("用户已被冻结，请联系管理员");
+        }
+        if (!user.get().getPassword().equals(PasswordUtils.encode(password, user.get().getSalt()))) {
+            throw new SysException("用户名或密码错误");
+        }
+        return user.get();
+    }
 }
