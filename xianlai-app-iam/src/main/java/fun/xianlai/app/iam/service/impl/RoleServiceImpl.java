@@ -36,6 +36,8 @@ import java.util.Optional;
 @Service
 public class RoleServiceImpl implements RoleService {
     @Autowired
+    private RedisTemplate<String, Object> redis;
+    @Autowired
     private UserRoleRepository userRoleRepository;
     @Autowired
     private RoleRepository roleRepository;
