@@ -56,6 +56,8 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
+    @Autowired
+    private FeignOptionService optionService;
     @Override
     @SimpleServiceLog("检查用户名格式")
     public boolean matchUsernameFormat(String username) {
