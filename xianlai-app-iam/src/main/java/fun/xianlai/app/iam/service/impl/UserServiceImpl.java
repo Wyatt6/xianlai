@@ -489,4 +489,15 @@ public class UserServiceImpl implements UserService {
             }
         }
     }
+
+    @Override
+    @SimpleServiceLog("下载头像")
+    public void downloadAvatar(String filename, HttpServletResponse response) {
+        try {
+            response.setContentType(MimeTypeUtils.getMimeType(FilenameUtils.getExtension(filename)));
+            FileUtils.writeBytes(AVATAR_SAVE_BASE_DIR + filename, response.getOutputStream());
+        } catch (IOException e) {
+            throw new SysException("获取输出流异常");
+        }
+    }
 }
