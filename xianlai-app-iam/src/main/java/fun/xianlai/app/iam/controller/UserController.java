@@ -159,4 +159,27 @@ public class UserController {
         log.info("退出登录成功");
         return new RetResult().success();
     }
+
+    @ApiLog("修改密码")
+    @SaCheckLogin
+    @PostMapping("/changePassword")
+    public RetResult changePassword(@RequestBody ChangePasswordForm form) {
+        BeanUtils.trimString(form);
+        if (!userService.matchPasswordFormat(form.getOldPassword())) {
+            throw new SysException("旧密码格式错误");
+        }
+        if (!userService.matchPasswordFormat(form.getNewPassword())) {
+            throw new SysException("新密码格式错误");
+        }
+        Long userId = StpUtil.getLoginIdAsLong();
+        log.info("userId=[{}]", userId);
+        try {
+            userService.authentication(userId, form.getOldPassword());
+        } catch (SysException e) {
+            throw new SysException("当前密码错误");
+        }
+        userService.changePassword(userId, form.getNewPassword());
+        return new RetResult().success();
+    }
+
 }
