@@ -53,3 +53,12 @@ INSERT IGNORE INTO tb_common_sys_api(`id`, `call_path`, `description`, `request_
 (21004, 'iam.role.getPageConditionally', '条件查询角色分页', 'POST', '/api/iam/role/getPageConditionally'),
 (21005, 'iam.role.getRoleIdsOfUser', '查询某用户所具有的角色ID列表', 'GET', '/api/iam/role/getRoleIdsOfUser'),
 (21006, 'iam.role.grant', '为角色授权/解除授权', 'POST', '/api/iam/role/grant'),
+-- UserController
+(22001, 'iam.user.register', '注册新用户', 'POST', '/api/iam/user/register'),
+(22002, 'iam.user.login', '用户登录', 'POST', '/api/iam/user/login'),
+(22003, 'iam.user.logout', '退出登录', 'GET', '/api/iam/user/logout'),
+(22004, 'iam.user.changePassword', '修改密码', 'POST', '/api/iam/user/changePassword'),
+(22005, 'iam.user.getPageConditionally', '条件查询用户分页', 'POST', '/api/iam/user/getPageConditionally'),
+(22006, 'iam.user.bind', '为用户绑定/解除绑定角色', 'POST', '/api/iam/user/bind'),
+(22007, 'iam.user.createUser', '创建新用户', 'POST', '/api/iam/user/createUser'),
+(22008, 'iam.user.editUserInfo', '修改用户信息/注销用户', 'POST', '/api/iam/user/editUserInfo'),
