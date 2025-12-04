@@ -35,4 +35,23 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class RoleServiceImpl implements RoleService {
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Override
+    @SimpleServiceLog("创建角色")
+    @Transactional
+    public DataMap add(Role role) {
+        try {
+            role.setId(null);
+            Role savedRole = roleRepository.save(role);
+            Long rowNum = roleRepository.findRowNumById(savedRole.getId());
+            DataMap result = new DataMap();
+            result.put("role", savedRole);
+            result.put("rowNum", rowNum);
+            return result;
+        } catch (DataIntegrityViolationException e) {
+            throw new SysException("角色标识符重复");
+        }
+    }
 }
