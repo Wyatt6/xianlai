@@ -58,6 +58,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     @Autowired
     private FeignOptionService optionService;
+    @Autowired
+    private UserRepository userRepository;
     @Override
     @SimpleServiceLog("检查用户名格式")
     public boolean matchUsernameFormat(String username) {
