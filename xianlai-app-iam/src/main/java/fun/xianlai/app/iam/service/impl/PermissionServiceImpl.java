@@ -52,4 +52,15 @@ public class PermissionServiceImpl implements PermissionService {
         }
     }
 
+    @Override
+    @ServiceLog("删除权限")
+    @Transactional
+    public void delete(Long permissionId) {
+        log.info("删除与本权限相关的角色-权限关系");
+        rolePermissionRepository.deleteByPermissionId(permissionId);
+        log.info("数据库删除本权限数据");
+        permissionRepository.deleteById(permissionId);
+        log.info("更新标记permissionDbRefreshTime（数据库的权限数据更新的时间），表示此时间后应当刷新缓存的权限数据");
+        setPermissionDbRefreshTime(DateUtils.now());
+    }
 }
