@@ -94,6 +94,24 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
+    @ServiceLog("条件查询权限分页")
+    public Page<Permission> getPageConditionally(int pageNum, int pageSize, Permission condition) {
+        String identifier = BeanUtils.getFieldValue(condition, "identifier", String.class);
+        String name = BeanUtils.getFieldValue(condition, "name", String.class);
+        String description = BeanUtils.getFieldValue(condition, "description", String.class);
+
+        Sort sort = Sort.by(Sort.Order.asc("sortId"), Sort.Order.asc("identifier"));
+        if (pageNum >= 0 && pageSize > 0) {
+            log.info("分页查询");
+            Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
+            return permissionRepository.findConditionally(identifier, name, description, pageable);
+        } else {
+            log.info("全表查询");
+            return permissionRepository.findConditionally(identifier, name, description, Pageable.unpaged(sort));
+        }
+    }
+
+    @Override
     @SimpleServiceLog("获取某角色的权限ID列表")
     public List<Long> getPermissionIdsOfRole(Long roleId) {
         return permissionRepository.findIdsByRoleId(roleId);
