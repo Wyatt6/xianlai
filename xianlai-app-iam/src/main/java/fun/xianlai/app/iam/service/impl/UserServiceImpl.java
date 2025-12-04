@@ -23,11 +23,11 @@ import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.feign.consumer.FeignOptionService;
 import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.bean.BeanUtils;
-import fun.xianlai.core.utils.password.PasswordUtils;
 import fun.xianlai.core.utils.file.FileUploadUtils;
 import fun.xianlai.core.utils.file.FileUtils;
 import fun.xianlai.core.utils.file.FilenameUtils;
 import fun.xianlai.core.utils.file.MimeTypeUtils;
+import fun.xianlai.core.utils.password.PasswordUtils;
 import fun.xianlai.core.utils.time.DateUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -282,6 +281,39 @@ public class UserServiceImpl implements UserService {
             throw new SysException("用户不存在");
         }
     }
+
+    @Override
+    @ServiceLog("条件查询用户信息分页")
+    public Page<UserInfo> getUserInfoPageConditionally(int pageNum, int pageSize, UserCondition condition) {
+        Date stRegisterTime = BeanUtils.getFieldValue(condition, "stRegisterTime", Date.class);
+        Date edRegisterTime = BeanUtils.getFieldValue(condition, "edRegisterTime", Date.class);
+        String role = BeanUtils.getFieldValue(condition, "role", String.class);
+        String permission = BeanUtils.getFieldValue(condition, "permission", String.class);
+
+        String username = BeanUtils.getSuperClassFieldValue(condition, "username", String.class);
+        Boolean active = BeanUtils.getSuperClassFieldValue(condition, "active", Boolean.class);
+        Boolean isDelete = BeanUtils.getSuperClassFieldValue(condition, "isDelete", Boolean.class);
+        String nickname = BeanUtils.getSuperClassFieldValue(condition, "nickname", String.class);
+        String gender = BeanUtils.getSuperClassFieldValue(condition, "gender", String.class);
+        String phone = BeanUtils.getSuperClassFieldValue(condition, "phone", String.class);
+        String email = BeanUtils.getSuperClassFieldValue(condition, "email", String.class);
+
+        if (pageNum >= 0 && pageSize > 0) {
+            log.info("分页查询");
+            Pageable pageable = PageRequest.of(pageNum, pageSize);
+            return userRepository.findConditionally(
+                    username, stRegisterTime, edRegisterTime, active, isDelete,
+                    nickname, gender, phone, email, role, permission,
+                    pageable);
+        } else {
+            log.info("全表查询");
+            return userRepository.findConditionally(
+                    username, stRegisterTime, edRegisterTime, active, isDelete,
+                    nickname, gender, phone, email, role, permission,
+                    Pageable.unpaged());
+        }
+    }
+
     @Override
     @ServiceLog("绑定")
     public List<Long> bind(Long userId, List<Long> roleIds) {
