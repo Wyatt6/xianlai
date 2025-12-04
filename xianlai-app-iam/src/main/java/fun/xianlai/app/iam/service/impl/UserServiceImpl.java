@@ -385,4 +385,67 @@ public class UserServiceImpl implements UserService {
         }
         return failList;
     }
+
+    @Override
+    @ServiceLog("修改用户信息/注销用户")
+    @Transactional
+    public DataMap editUserInfo(UserInfo form) {
+        User user = form.exportUser();
+        Profile profile = form.exportProfile();
+        BeanUtils.trimString(user);
+        BeanUtils.trimString(profile);
+
+        if (StpUtil.getLoginIdAsLong() == user.getId()) {
+            log.info("操作自己的用户，不需要权限");
+        } else {
+            log.info("操作别人的用户，需要user:edit或user:delete权限");
+            List<String> permissionList = StpUtil.getPermissionList();
+            if (user.getIsDelete() != null && !permissionList.contains("user:delete")) {
+                throw new SysException("用户权限不足");
+            }
+            // 目前只支持修改这两个属性
+            if ((user.getUsername() != null || user.getActive() != null) && !permissionList.contains("user:edit")) {
+                throw new SysException("用户权限不足");
+            }
+        }
+
+        Optional<User> oldUser = userRepository.findById(user.getId());
+        if (oldUser.isEmpty()) {
+            throw new SysException("用户不存在");
+        }
+        if (oldUser.get().getIsDelete()) {
+            throw new SysException("用户已注销，无法修改");
+        }
+        User newUser = oldUser.get();
+        BeanUtils.copyPropertiesNotNull(user, newUser);
+
+        Optional<Profile> oldProfile = profileRepository.findById(profile.getUserId());
+        Profile newProfile = oldProfile.get();
+        BeanUtils.copyPropertiesNotNull(profile, newProfile);
+
+        try {
+            log.info("更新数据库");
+            newUser = userRepository.save(newUser);
+            newProfile = profileRepository.save(newProfile);
+            log.info("更新缓存");
+            SaSession session = StpUtil.getSessionByLoginId(newUser.getId());
+            if (session != null) {
+                session.set("user", newUser);
+                session.set("profile", newProfile);
+            }
+
+            UserInfo userInfo = new UserInfo();
+            userInfo.importUser(newUser);
+            userInfo.importProfile(newProfile);
+
+            DataMap result = new DataMap();
+            result.put("user", newUser);
+            result.put("profile", newProfile);
+            result.put("userInfo", userInfo);
+            return result;
+        } catch (DataIntegrityViolationException e) {
+            log.info(e.getMessage());
+            throw new SysException("用户名已存在");
+        }
+    }
 }
