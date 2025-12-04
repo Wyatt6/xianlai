@@ -73,6 +73,37 @@ public class RoleServiceImpl implements RoleService {
         setRoleDbRefreshTime(DateUtils.now());
     }
 
+    @Override
+    @ServiceLog("更新角色")
+    @Transactional
+    public DataMap edit(Role role) {
+        Optional<Role> oldRole = roleRepository.findById(role.getId());
+        if (oldRole.isPresent()) {
+            Role newRole = oldRole.get();
+            BeanUtils.copyPropertiesNotNull(role, newRole);
+
+            try {
+                log.info("更新数据库");
+                newRole = roleRepository.save(newRole);
+            } catch (DataIntegrityViolationException e) {
+                log.info(e.getMessage());
+                throw new SysException("角色标识重复");
+            }
+
+            boolean critical = false;
+            if (role.getIdentifier() != null) critical = true;
+            if (role.getActive() != null) critical = true;
+            if (critical) {
+                log.info("编辑此角色数据影响到用户权限控制，需要更新缓存");
+                log.info("更新标记roleDbRefreshTime（数据库的角色数据更新的时间）");
+                setRoleDbRefreshTime(DateUtils.now());
+            }
+            return new DataMap("role", newRole);
+        } else {
+            throw new SysException("要修改的角色不存在");
+        }
+    }
+
 
     @Override
     @SimpleServiceLog("获取某用户的角色ID列表")
