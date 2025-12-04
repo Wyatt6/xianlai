@@ -448,4 +448,10 @@ public class UserServiceImpl implements UserService {
             throw new SysException("用户名已存在");
         }
     }
+
+    @Override
+    @SimpleServiceLog("获取用户的Profile信息")
+    public Profile exportProfile(Long userId) {
+        return profileRepository.findById(userId).orElse(null);
+    }
 }
