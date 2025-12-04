@@ -57,4 +57,38 @@ public class PermissionController {
         return new RetResult().success().setData(permissionService.edit(form));
     }
 
+    /**
+     * 查询条件为空时查询全量数据
+     * 页码<0或页大小<=0时不分页
+     *
+     * @param pageNum   页码（从0开始）
+     * @param pageSize  页大小
+     * @param condition 查询条件
+     * @return {pageNum 页码, pageSize 页大小, totalPages 页码总数, totalElements 总条数, content 分页数据}
+     */
+    @ApiLog("条件查询权限分页")
+    @SaCheckLogin
+    @SaCheckPermission("permission:query")
+    @PostMapping("/getPageConditionally")
+    public RetResult getPageConditionally(@RequestParam int pageNum,
+                                          @RequestParam int pageSize,
+                                          @RequestBody(required = false) Permission condition) {
+        log.info("请求参数: pageNum=[{}], pageSize=[{}], condition=[{}]", pageNum, pageSize, condition);
+        Page<Permission> permissions = permissionService.getByPageConditionally(pageNum, pageSize, condition);
+        return new RetResult().success()
+                .addData("pageNum", pageNum)
+                .addData("pageSize", pageSize)
+                .addData("totalPages", permissions.getTotalPages())
+                .addData("totalElements", permissions.getTotalElements())
+                .addData("content", permissions.getContent());
+    }
+
+    @ApiLog("查询某角色所拥有的权限ID列表")
+    @SaCheckLogin
+    @SaCheckPermission("permission:query")
+    @GetMapping("/getPermissionIdsOfRole")
+    public RetResult getPermissionIdsOfRole(@RequestParam Long roleId) {
+        log.info("请求参数: roleId=[{}]", roleId);
+        return new RetResult().success().addData("permissionIds", permissionService.getPermissionIdsOfRole(roleId));
+    }
 }
