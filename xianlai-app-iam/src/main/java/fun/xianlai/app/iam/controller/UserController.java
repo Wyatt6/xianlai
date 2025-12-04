@@ -244,4 +244,22 @@ public class UserController {
         log.info("请求参数: {}", form);
         return new RetResult().success().setData(userService.editUserInfo(form));
     }
+
+    @ApiLog("上传头像图片")
+    @SaCheckLogin
+    @PostMapping("/uploadAvatar")
+    public RetResult uploadAvatar(@RequestBody MultipartFile file) {
+        userService.uploadAvatar(file);
+        return new RetResult().success().addData("profile", userService.exportProfile(StpUtil.getLoginIdAsLong()));
+    }
+
+    @ApiLog("下载头像图片")
+    @GetMapping("/downloadAvatar")
+    public void downloadAvatar(@RequestParam String filename, HttpServletResponse response) {
+        log.info("请求参数: filename={}", filename);
+        if (StringUtils.isBlank((filename))) {
+            throw new SysException("请输入头像文件名");
+        }
+        userService.downloadAvatar(filename, response);
+    }
 }
