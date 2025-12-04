@@ -94,6 +94,12 @@ public interface UserService {
      * @return 用户分页数据
      */
     Page<UserInfo> getUserInfoPageConditionally(int pageNum, int pageSize, UserCondition condition);
+
+    /**
+     * 根据用户ID查询用户
+     */
+    Optional<User> findByUserId(Long userId);
+
     /**
      * 绑定（绑定userId和roleIds）
      *
