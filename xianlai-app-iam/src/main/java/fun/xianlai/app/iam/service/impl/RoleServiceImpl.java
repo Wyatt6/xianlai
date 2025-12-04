@@ -107,6 +107,25 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @ServiceLog("条件查询角色分页")
+    public Page<Role> getPageConditionally(int pageNum, int pageSize, Role condition) {
+        String identifier = BeanUtils.getFieldValue(condition, "identifier", String.class);
+        String name = BeanUtils.getFieldValue(condition, "name", String.class);
+        String description = BeanUtils.getFieldValue(condition, "description", String.class);
+        Boolean active = BeanUtils.getFieldValue(condition, "active", Boolean.class);
+        Boolean bindCheck = BeanUtils.getFieldValue(condition, "bindCheck", Boolean.class);
+        String permission = BeanUtils.getFieldValue(condition, "permission", String.class);
+
+        Sort sort = Sort.by(Sort.Order.asc("sortId"), Sort.Order.asc("identifier"));
+        if (pageNum >= 0 && pageSize > 0) {
+            log.info("分页查询");
+            Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
+            return roleRepository.findConditionally(identifier, name, description, active, bindCheck, permission, pageable);
+        } else {
+            log.info("全表查询");
+            return roleRepository.findConditionally(identifier, name, description, active, bindCheck, permission, Pageable.unpaged(sort));
+        }
+    }
 
     @Override
     @SimpleServiceLog("获取某用户的角色ID列表")
