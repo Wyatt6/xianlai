@@ -74,7 +74,7 @@ public class PermissionController {
                                           @RequestParam int pageSize,
                                           @RequestBody(required = false) Permission condition) {
         log.info("请求参数: pageNum=[{}], pageSize=[{}], condition=[{}]", pageNum, pageSize, condition);
-        Page<Permission> permissions = permissionService.getByPageConditionally(pageNum, pageSize, condition);
+        Page<Permission> permissions = permissionService.getPageConditionally(pageNum, pageSize, condition);
         return new RetResult().success()
                 .addData("pageNum", pageNum)
                 .addData("pageSize", pageSize)
