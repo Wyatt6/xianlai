@@ -95,4 +95,28 @@ public class RoleController {
         return new RetResult().success().addData("roleIds", roleService.getRoleIdsOfUser(userId));
     }
 
+    @ApiLog("为角色授权/解除授权")
+    @SaCheckLogin
+    @SaCheckPermission("role:grant")
+    @PostMapping("/grant")
+    public RetResult grant(@RequestBody GrantForm form) {
+        log.info("请求参数: {}", form);
+        List<Long> failGrant = null;
+        List<Long> failCancel = null;
+        try {
+            log.info("授权");
+            failGrant = roleService.grant(form.getRoleId(), form.getGrant());
+        } catch (IllegalArgumentException e) {
+            log.info("无须授权");
+        }
+        try {
+            log.info("解除授权");
+            failCancel = roleService.cancelGrant(form.getRoleId(), form.getCancel());
+        } catch (IllegalArgumentException e) {
+            log.info("无须解除授权");
+        }
+        return new RetResult().success()
+                .addData("failGrant", failGrant)
+                .addData("failCancel", failCancel);
+    }
 }
