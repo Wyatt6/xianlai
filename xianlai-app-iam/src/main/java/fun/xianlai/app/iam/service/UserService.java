@@ -128,4 +128,14 @@ public interface UserService {
      */
     Profile exportProfile(Long userId);
 
+    /**
+     * 上传头像
+     */
+    void uploadAvatar(MultipartFile avatar);
+
+    /**
+     * 下载头像
+     */
+    void downloadAvatar(String filename, HttpServletResponse response);
+
 }
