@@ -17,7 +17,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 /**
  * RBAC-权限
- * 由程序运行时自动生成，不允许修改
  *
  * @author WyattLau
  */
