@@ -56,11 +56,27 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
+    private static final String AVATAR_SAVE_BASE_DIR = "./upload/avatar/";
+
+    @Autowired
+    private RedisTemplate<String, Object> redis;
     @Autowired
     private FeignOptionService optionService;
     @Autowired
+    private RoleService roleService;
+    @Autowired
+    private PermissionService permissionService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserRoleRepository userRoleRepository;
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    private PermissionRepository permissionRepository;
+    @Autowired
+    private ProfileRepository profileRepository;
+
     @Override
     @SimpleServiceLog("检查用户名格式")
     public boolean matchUsernameFormat(String username) {
