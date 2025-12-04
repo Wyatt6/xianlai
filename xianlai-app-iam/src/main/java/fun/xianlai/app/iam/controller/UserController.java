@@ -182,4 +182,30 @@ public class UserController {
         return new RetResult().success();
     }
 
+    /**
+     * 查询条件为空时查询全量数据
+     * 页码<0或页大小<=0时不分页
+     *
+     * @param pageNum   页码
+     * @param pageSize  页大小
+     * @param condition 查询条件
+     * @return {pageNum 页码, pageSize 页大小, totalPages 页码总数, totalElements 总条数, content 分页数据}
+     */
+    @ApiLog("条件查询用户分页")
+    @SaCheckLogin
+    @SaCheckPermission("user:query")
+    @PostMapping("/getPageConditionally")
+    public RetResult getPageConditionally(@RequestParam("pageNum") int pageNum,
+                                          @RequestParam("pageSize") int pageSize,
+                                          @RequestBody(required = false) UserCondition condition) {
+        log.info("请求参数：pageNum=[{}], pageSize=[{}], condition=[{}]", pageNum, pageSize, condition);
+        Page<UserInfo> userInfoList = userService.getUserInfoPageConditionally(pageNum, pageSize, condition);
+        return new RetResult().success()
+                .addData("pageNum", pageNum)
+                .addData("pageSize", pageSize)
+                .addData("totalPages", userInfoList.getTotalPages())
+                .addData("totalElements", userInfoList.getTotalElements())
+                .addData("content", userInfoList.getContent());
+    }
+
 }
