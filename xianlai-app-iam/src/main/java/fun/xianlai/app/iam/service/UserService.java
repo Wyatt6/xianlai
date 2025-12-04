@@ -84,6 +84,17 @@ public interface UserService {
     void changePassword(Long id, String password);
 
     /**
+     * 条件查询用户分页
+     * 查询条件为空时查询全量数据
+     * 页码<0或页大小<=0时不分页
+     *
+     * @param pageNum   页码
+     * @param pageSize  页大小
+     * @param condition 查询条件
+     * @return 用户分页数据
+     */
+    Page<UserInfo> getUserInfoPageConditionally(int pageNum, int pageSize, UserCondition condition);
+    /**
      * 绑定（绑定userId和roleIds）
      *
      * @param userId  用户ID
