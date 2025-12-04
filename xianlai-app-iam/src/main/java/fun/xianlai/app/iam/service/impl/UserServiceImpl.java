@@ -454,4 +454,39 @@ public class UserServiceImpl implements UserService {
     public Profile exportProfile(Long userId) {
         return profileRepository.findById(userId).orElse(null);
     }
+
+    @Override
+    @ServiceLog("上传头像")
+    @Transactional
+    public void uploadAvatar(MultipartFile avatar) {
+        log.info("保存头像图片文件");
+        String filename = FileUploadUtils.uploadFile(avatar, 500 * FileUtils.ONE_KB,
+                AVATAR_SAVE_BASE_DIR, "avatar_", null, null, MimeTypeUtils.IMAGE_EXTENSION);
+        log.info("查询旧头像文件名");
+        Long userId = StpUtil.getLoginIdAsLong();
+        Optional<Profile> profile = profileRepository.findById(userId);
+        String oldFilename = null;
+        if (profile.isPresent()) {
+            oldFilename = profile.get().getAvatar();
+            try {
+                log.info("更新新头像文件名");
+                profile.get().setAvatar(filename);
+                Profile newProfile = profileRepository.save(profile.get());
+                log.info("更新用户缓存");
+                StpUtil.getSession().set("profile", newProfile);
+                log.info("删除旧的头像图片文件");
+                try {
+                    FileUtils.delete(new File(AVATAR_SAVE_BASE_DIR + oldFilename));
+                } catch (IOException ignored) {
+                }
+            } catch (Exception e) {
+                try {
+                    log.info("失败时删除新上传的头像图片文件");
+                    FileUtils.delete(new File(AVATAR_SAVE_BASE_DIR + filename));
+                } catch (IOException ignored) {
+                }
+                throw new SysException("上传头像失败");
+            }
+        }
+    }
 }
