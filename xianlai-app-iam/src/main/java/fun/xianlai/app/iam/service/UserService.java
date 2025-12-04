@@ -31,4 +31,14 @@ public interface UserService {
      * @return 用户对象
      */
     User authentication(String username, String password);
+
+    /**
+     * 身份验证（用户ID+密码）
+     * 若验证成功则返回用户对象
+     *
+     * @param userId   用户ID
+     * @param password 密码（明文）
+     * @return 用户对象
+     */
+    User authentication(Long userId, String password);
 }
