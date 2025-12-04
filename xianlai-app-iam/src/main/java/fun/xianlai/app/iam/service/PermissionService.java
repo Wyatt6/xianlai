@@ -35,7 +35,7 @@ public interface PermissionService {
      * @param condition 查询条件
      * @return 分页数据
      */
-    Page<Permission> getByPageConditionally(int pageNum, int pageSize, Permission condition);
+    Page<Permission> getPageConditionally(int pageNum, int pageSize, Permission condition);
 
     /**
      * 获取某角色的权限ID列表

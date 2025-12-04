@@ -44,5 +44,5 @@ public interface ApiService {
      * @param condition 查询条件
      * @return 分页数据
      */
-    Page<SysApi> getApisByPageConditionally(int pageNum, int pageSize, SysApi condition);
+    Page<SysApi> getPageConditionally(int pageNum, int pageSize, SysApi condition);
 }
