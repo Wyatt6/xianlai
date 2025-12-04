@@ -208,4 +208,32 @@ public class UserController {
                 .addData("content", userInfoList.getContent());
     }
 
+    @ApiLog("为用户绑定/解除绑定角色")
+    @SaCheckLogin
+    @SaCheckPermission("user:bind")
+    @PostMapping("/bind")
+    public RetResult bind(@RequestBody BindForm form) {
+        log.info("请求参数: {}", form);
+        Optional<User> user = userService.findByUserId(form.getUserId());
+        if (user.isEmpty()) {
+            throw new SysException("用户已注销");
+        }
+        List<Long> failBind = null;
+        List<Long> failCancel = null;
+        try {
+            log.info("绑定");
+            failBind = userService.bind(form.getUserId(), form.getBind());
+        } catch (IllegalArgumentException e) {
+            log.info("无须绑定");
+        }
+        try {
+            log.info("解除绑定");
+            failCancel = userService.cancelBind(form.getUserId(), form.getCancel());
+        } catch (IllegalArgumentException e) {
+            log.info("无须解除绑定");
+        }
+        return new RetResult().success()
+                .addData("failBind", failBind)
+                .addData("failCancel", failCancel);
+    }
 }
