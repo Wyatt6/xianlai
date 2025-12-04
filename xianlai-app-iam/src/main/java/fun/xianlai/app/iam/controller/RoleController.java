@@ -46,7 +46,7 @@ public class RoleController {
     @GetMapping("/delete")
     public RetResult delete(@RequestParam Long roleId) {
         log.info("请求参数: roleId=[{}]", roleId);
-        roleService.deleteRole(roleId);
+        roleService.delete(roleId);
         return new RetResult().success();
     }
 
