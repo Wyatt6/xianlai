@@ -69,6 +69,11 @@ public interface UserService {
     void setPermissionListCacheTime(Long userId, Date timestamp);
 
     /**
+     * 修改密码
+     */
+    void changePassword(Long id, String password);
+
+    /**
      * 绑定（绑定userId和roleIds）
      *
      * @param userId  用户ID
