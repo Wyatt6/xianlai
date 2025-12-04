@@ -9,13 +9,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * @author WyattLau
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUsername(String username);
+
+    Optional<User> findByUsername(String username);
 
     // UserInfo没用@Entity注解，所以这里要写全路径
     @Query("select distinct new fun.xianlai.app.iam.model.entity.other.UserInfo(" +
