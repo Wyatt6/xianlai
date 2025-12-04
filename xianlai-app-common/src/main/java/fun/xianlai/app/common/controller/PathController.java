@@ -83,7 +83,7 @@ public class PathController {
                                           @RequestParam int pageSize,
                                           @RequestBody(required = false) SysPath condition) {
         log.info("请求参数：pageNum=[{}], pageSize=[{}], condition=[{}]", pageNum, pageSize, condition);
-        Page<SysPath> paths = pathService.getPathsByPageConditionally(pageNum, pageSize, condition);
+        Page<SysPath> paths = pathService.getPageConditionally(pageNum, pageSize, condition);
         return new RetResult().success()
                 .addData("pageNum", pageNum)
                 .addData("pageSize", pageSize)

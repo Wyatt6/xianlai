@@ -111,7 +111,7 @@ public class PathServiceImpl implements PathService {
 
     @Override
     @ServiceLog("条件查询路径分页")
-    public Page<SysPath> getPathsByPageConditionally(int pageNum, int pageSize, SysPath condition) {
+    public Page<SysPath> getPageConditionally(int pageNum, int pageSize, SysPath condition) {
         String name = BeanUtils.getFieldValue(condition, "name", String.class);
         String path = BeanUtils.getFieldValue(condition, "path", String.class);
 

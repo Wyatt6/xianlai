@@ -44,5 +44,5 @@ public interface PathService {
      * @param condition 查询条件
      * @return 分页数据
      */
-    Page<SysPath> getPathsByPageConditionally(int pageNum, int pageSize, SysPath condition);
+    Page<SysPath> getPageConditionally(int pageNum, int pageSize, SysPath condition);
 }
