@@ -122,4 +122,10 @@ public interface UserService {
      * 修改用户信息
      */
     DataMap editUserInfo(UserInfo form);
+
+    /**
+     * 获取用户的Profile信息
+     */
+    Profile exportProfile(Long userId);
+
 }
