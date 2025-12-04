@@ -112,7 +112,7 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     @ServiceLog("条件查询接口分页")
-    public Page<SysApi> getApisByPageConditionally(int pageNum, int pageSize, SysApi condition) {
+    public Page<SysApi> getByPageConditionally(int pageNum, int pageSize, SysApi condition) {
         String callPath = BeanUtils.getFieldValue(condition, "callPath", String.class);
         String description = BeanUtils.getFieldValue(condition, "description", String.class);
         RequestMethod requestMethod = BeanUtils.getFieldValue(condition, "requestMethod", RequestMethod.class);
