@@ -23,6 +23,16 @@ public interface UserService {
     boolean matchPasswordFormat(String password);
 
     /**
+     * 创建用户
+     *
+     * @param username 用户名
+     * @param password 密码（明文）
+     * @param active   状态
+     * @return 用户对象
+     */
+    DataMap createUser(String username, String password, Boolean active);
+
+    /**
      * 身份验证（用户名+密码）
      * 若验证成功则返回用户对象
      *
