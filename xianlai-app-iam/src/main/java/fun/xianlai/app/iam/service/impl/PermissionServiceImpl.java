@@ -69,6 +69,31 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
+    @ServiceLog("修改权限")
+    @Transactional
+    public DataMap edit(Permission permission) {
+        Optional<Permission> oldPermission = permissionRepository.findById(permission.getId());
+        if (oldPermission.isPresent()) {
+            Permission newPermission = oldPermission.get();
+            BeanUtils.copyPropertiesNotNull(permission, newPermission);
+            try {
+                newPermission = permissionRepository.save(newPermission);
+            } catch (DataIntegrityViolationException e) {
+                log.info(e.getMessage());
+                throw new SysException("权限标识重复");
+            }
+            if (permission.getIdentifier() != null) {
+                log.info("编辑此权限数据影响到用户权限控制，需要更新缓存");
+                log.info("更新标记permissionDbRefreshTime（数据库的权限数据更新的时间）");
+                setPermissionDbRefreshTime(DateUtils.now());
+            }
+            return new DataMap("permission", newPermission);
+        } else {
+            throw new SysException("要修改的权限不存在");
+        }
+    }
+
+    @Override
     @SimpleServiceLog("获取某角色的权限ID列表")
     public List<Long> getPermissionIdsOfRole(Long roleId) {
         return permissionRepository.findIdsByRoleId(roleId);
