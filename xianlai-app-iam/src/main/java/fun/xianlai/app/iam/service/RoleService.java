@@ -35,7 +35,7 @@ public interface RoleService {
      * @param condition 查询条件
      * @return 分页数据
      */
-    Page<Role> getRolesByPageConditionally(int pageNum, int pageSize, Role condition);
+    Page<Role> getPageConditionally(int pageNum, int pageSize, Role condition);
 
     /**
      * 获取某用户的角色ID列表

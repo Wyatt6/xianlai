@@ -77,7 +77,7 @@ public class RoleController {
                                           @RequestParam int pageSize,
                                           @RequestBody(required = false) Role condition) {
         log.info("请求参数：pageNum=[{}], pageSize=[{}], condition=[{}]", pageNum, pageSize, condition);
-        Page<Role> roles = roleService.getRolesByPageConditionally(pageNum, pageSize, condition);
+        Page<Role> roles = roleService.getPageConditionally(pageNum, pageSize, condition);
         return new RetResult().success()
                 .addData("pageNum", pageNum)
                 .addData("pageSize", pageSize)
