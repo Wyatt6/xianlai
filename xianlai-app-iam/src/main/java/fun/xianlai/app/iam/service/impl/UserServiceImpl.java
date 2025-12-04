@@ -59,6 +59,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private FeignOptionService optionService;
     @Autowired
+    @Autowired
     private UserRepository userRepository;
     @Override
     @SimpleServiceLog("检查用户名格式")
