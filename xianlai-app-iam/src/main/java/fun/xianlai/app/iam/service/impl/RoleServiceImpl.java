@@ -36,7 +36,11 @@ import java.util.Optional;
 @Service
 public class RoleServiceImpl implements RoleService {
     @Autowired
+    private UserRoleRepository userRoleRepository;
+    @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private RolePermissionRepository rolePermissionRepository;
 
     @Override
     @SimpleServiceLog("创建角色")
@@ -53,5 +57,24 @@ public class RoleServiceImpl implements RoleService {
         } catch (DataIntegrityViolationException e) {
             throw new SysException("角色标识符重复");
         }
+    }
+
+    @Override
+    @ServiceLog("删除角色")
+    @Transactional
+    public void delete(Long roleId) {
+        log.info("删除与本角色相关的用户-角色关系");
+        userRoleRepository.deleteByRoleId(roleId);
+        log.info("删除与本角色相关的角色-权限关系");
+        rolePermissionRepository.deleteByRoleId(roleId);
+        log.info("数据库删除本角色数据");
+        roleRepository.deleteById(roleId);
+        log.info("更新标记roleDbRefreshTime（数据库的角色数据更新的时间），表示此时间后应当刷新缓存的角色数据");
+        setRoleDbRefreshTime(DateUtils.now());
+    }
+
+    @Override
+    public void setRoleDbRefreshTime(Date timestamp) {
+        redis.opsForValue().set("roleDbRefreshTime", timestamp);
     }
 }
