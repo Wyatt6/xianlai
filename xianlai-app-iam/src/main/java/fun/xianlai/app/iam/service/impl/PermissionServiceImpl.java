@@ -33,7 +33,11 @@ import java.util.Optional;
 @Service
 public class PermissionServiceImpl implements PermissionService {
     @Autowired
+    private RedisTemplate<String, Object> redis;
+    @Autowired
     private PermissionRepository permissionRepository;
+    @Autowired
+    private RolePermissionRepository rolePermissionRepository;
 
     @Override
     @SimpleServiceLog("新增权限")
@@ -62,5 +66,16 @@ public class PermissionServiceImpl implements PermissionService {
         permissionRepository.deleteById(permissionId);
         log.info("更新标记permissionDbRefreshTime（数据库的权限数据更新的时间），表示此时间后应当刷新缓存的权限数据");
         setPermissionDbRefreshTime(DateUtils.now());
+    }
+
+    @Override
+    @SimpleServiceLog("获取某角色的权限ID列表")
+    public List<Long> getPermissionIdsOfRole(Long roleId) {
+        return permissionRepository.findIdsByRoleId(roleId);
+    }
+
+    @Override
+    public void setPermissionDbRefreshTime(Date timestamp) {
+        redis.opsForValue().set("permissionDbRefreshTime", timestamp);
     }
 }
