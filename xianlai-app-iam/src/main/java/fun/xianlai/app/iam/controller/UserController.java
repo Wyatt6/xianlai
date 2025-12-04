@@ -236,4 +236,12 @@ public class UserController {
                 .addData("failBind", failBind)
                 .addData("failCancel", failCancel);
     }
+
+    @ApiLog("修改用户信息/注销用户")
+    @SaCheckLogin
+    @PostMapping("/editUserInfo")
+    public RetResult editUserInfo(@RequestBody UserInfo form) {
+        log.info("请求参数: {}", form);
+        return new RetResult().success().setData(userService.editUserInfo(form));
+    }
 }
