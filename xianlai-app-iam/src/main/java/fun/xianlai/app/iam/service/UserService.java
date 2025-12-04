@@ -117,4 +117,9 @@ public interface UserService {
      * @return 解除绑定失败的角色ID列表
      */
     List<Long> cancelBind(Long userId, List<Long> roleIds);
+
+    /**
+     * 修改用户信息
+     */
+    DataMap editUserInfo(UserInfo form);
 }
