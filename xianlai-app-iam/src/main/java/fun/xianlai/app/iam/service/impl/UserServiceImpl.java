@@ -92,6 +92,40 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @ServiceLog("创建新用户")
+    @Transactional
+    public DataMap createUser(String username, String password, Boolean active) {
+        log.info("检查用户名是否已被使用");
+        if (userRepository.findByUsername(username).isPresent()) {
+            throw new SysException("用户名已被使用");
+        }
+
+        log.info("密码加密");
+        String salt = PasswordUtils.generateSalt();
+        String encryptedPassword = PasswordUtils.encode(password, salt);
+
+        User newUser = new User();
+        newUser.setUsername(username);
+        newUser.setPassword(encryptedPassword);
+        newUser.setSalt(salt);
+        newUser.setRegisterTime(DateUtils.now());
+        newUser.setActive(active);
+        newUser.setIsDelete(false);
+        User savedUser = userRepository.save(newUser);
+        Long rowNum = userRepository.findRowNumById(savedUser.getId());
+
+        log.info("创建用户的Profile");
+        Profile profile = new Profile();
+        profile.setUserId(savedUser.getId());
+        profileRepository.save(profile);
+
+        DataMap result = new DataMap();
+        result.put("user", savedUser);
+        result.put("rowNum", rowNum);
+        return result;
+    }
+
+    @Override
     @SimpleServiceLog("身份验证（用户名+密码）")
     public User authentication(String username, String password) {
         Optional<User> user = userRepository.findByUsername(username);
