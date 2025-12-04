@@ -38,10 +38,10 @@ public interface MenuService {
     /**
      * 获取菜单森林
      */
-    List<SysMenu> getMenuForest();
+    List<SysMenu> getForest();
 
     /**
      * 获取生效中的菜单森林
      */
-    List<SysMenu> getActiveMenuForest();
+    List<SysMenu> getActiveForest();
 }

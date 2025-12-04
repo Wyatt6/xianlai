@@ -46,7 +46,7 @@ public class MenuServiceImpl implements MenuService {
     @SimpleServiceLog("缓存生效的菜单")
     @Transactional
     public void cacheActiveMenus() {
-        List<SysMenu> menus = self.getActiveMenuForest();
+        List<SysMenu> menus = self.getActiveForest();
         redis.opsForValue().set("menusChecksum", ChecksumUtils.sha256Checksum(JSONObject.toJSONString(menus)), Duration.ofHours(CACHE_HOURS));
         redis.opsForValue().set("menus", menus, Duration.ofHours(CACHE_HOURS));
     }
@@ -116,7 +116,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public List<SysMenu> getMenuForest() {
+    public List<SysMenu> getForest() {
         List<SysMenu> menus = sysMenuRepository.findAll(Sort.by(Sort.Order.asc("sortId")));
         List<SysMenu> forest = new ArrayList<>();
         Map<Long, SysMenu> finder = new HashMap<>();
@@ -135,7 +135,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public List<SysMenu> getActiveMenuForest() {
+    public List<SysMenu> getActiveForest() {
         List<SysMenu> menus = sysMenuRepository.findByActive(true, Sort.by(Sort.Order.asc("sortId")));
         List<SysMenu> forest = new ArrayList<>();
         Map<Long, SysMenu> finder = new HashMap<>();

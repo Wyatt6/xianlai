@@ -70,6 +70,6 @@ public class MenuController {
     @SaCheckPermission("menu:query")
     @GetMapping("/getForest")
     public RetResult getForest() {
-        return new RetResult().success().addData("menus", menuService.getMenuForest());
+        return new RetResult().success().addData("menus", menuService.getForest());
     }
 }
