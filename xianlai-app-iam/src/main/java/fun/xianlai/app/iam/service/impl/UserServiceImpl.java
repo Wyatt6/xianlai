@@ -56,4 +56,17 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
+    @Override
+    @SimpleServiceLog("检查用户名格式")
+    public boolean matchUsernameFormat(String username) {
+        String USERNAME_REGEXP = optionService.readValueInString("user.username.regexp").orElse("^[a-zA-Z][a-zA-Z_0-9]{4,19}$");
+        return username.matches(USERNAME_REGEXP);
+    }
+
+    @Override
+    @SimpleServiceLog("检查密码格式")
+    public boolean matchPasswordFormat(String password) {
+        String PASSWORD_REGEXP = optionService.readValueInString("user.password.regexp").orElse("^[a-zA-Z_0-9.~!@#$%^&*?]{6,30}$");
+        return password.matches(PASSWORD_REGEXP);
+    }
 }
