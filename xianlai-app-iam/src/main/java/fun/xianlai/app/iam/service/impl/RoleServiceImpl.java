@@ -73,6 +73,13 @@ public class RoleServiceImpl implements RoleService {
         setRoleDbRefreshTime(DateUtils.now());
     }
 
+
+    @Override
+    @SimpleServiceLog("获取某用户的角色ID列表")
+    public List<Long> getRoleIdsOfUser(Long userId) {
+        return roleRepository.findIdsByUserId(userId);
+    }
+
     @Override
     public void setRoleDbRefreshTime(Date timestamp) {
         redis.opsForValue().set("roleDbRefreshTime", timestamp);
