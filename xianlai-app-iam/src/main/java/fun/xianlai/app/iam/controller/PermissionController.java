@@ -24,4 +24,37 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/permission")
 public class PermissionController {
+    @Autowired
+    private PermissionService permissionService;
+
+    @ApiLog("新增权限")
+    @SaCheckLogin
+    @SaCheckPermission("permission:add")
+    @PostMapping("/add")
+    public RetResult add(@RequestBody Permission form) {
+        log.info("请求参数: {}", form);
+        BeanUtils.trimString(form);
+        return new RetResult().success().setData(permissionService.add(form));
+    }
+
+    @ApiLog("删除权限")
+    @SaCheckLogin
+    @SaCheckPermission("permission:delete")
+    @GetMapping("/delete")
+    public RetResult delete(@RequestParam Long permissionId) {
+        log.info("请求参数: permissionId=[{}]", permissionId);
+        permissionService.delete(permissionId);
+        return new RetResult().success();
+    }
+
+    @ApiLog("修改权限")
+    @SaCheckLogin
+    @SaCheckPermission("permission:edit")
+    @PostMapping("/edit")
+    public RetResult edit(@RequestBody Permission form) {
+        log.info("请求参数: {}", form);
+        BeanUtils.trimString(form);
+        return new RetResult().success().setData(permissionService.edit(form));
+    }
+
 }
