@@ -315,6 +315,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @SimpleServiceLog("根据用户ID查询用户")
+    public Optional<User> findByUserId(Long userId) {
+        return userRepository.findById(userId);
+    }
+
+    @Override
     @ServiceLog("绑定")
     public List<Long> bind(Long userId, List<Long> roleIds) {
         List<Role> bindCheckList = roleRepository.findByBindCheck(true);
