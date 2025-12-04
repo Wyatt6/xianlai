@@ -43,6 +43,8 @@ public class RoleServiceImpl implements RoleService {
     private RoleRepository roleRepository;
     @Autowired
     private RolePermissionRepository rolePermissionRepository;
+    @Autowired
+    private PermissionService permissionService;
 
     @Override
     @SimpleServiceLog("创建角色")
@@ -136,5 +138,49 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void setRoleDbRefreshTime(Date timestamp) {
         redis.opsForValue().set("roleDbRefreshTime", timestamp);
+    }
+
+    @Override
+    @ServiceLog("授权")
+    public List<Long> grant(Long roleId, List<Long> permissionIds) {
+        List<Long> failList = new ArrayList<>();
+        for (Long permissionId : permissionIds) {
+            try {
+                RolePermission rp = new RolePermission();
+                rp.setRoleId(roleId);
+                rp.setPermissionId(permissionId);
+                rolePermissionRepository.save(rp);
+                log.info("授权成功: (roleId=[{}], permissionId=[{}])", roleId, permissionId);
+            } catch (Exception e) {
+                failList.add(permissionId);
+            }
+        }
+        if (failList.size() < permissionIds.size()) {
+            log.info("有授权成功，要更新permissionDbRefreshTime时间戳，以动态更新用户权限缓存");
+            permissionService.setPermissionDbRefreshTime(DateUtils.now());
+        }
+        return failList;
+    }
+
+    @Override
+    @ServiceLog("解除授权")
+    public List<Long> cancelGrant(Long roleId, List<Long> permissionIds) {
+        List<Long> failList = new ArrayList<>();
+        for (Long permissionId : permissionIds) {
+            try {
+                RolePermission rp = new RolePermission();
+                rp.setRoleId(roleId);
+                rp.setPermissionId(permissionId);
+                rolePermissionRepository.delete(rp);
+                log.info("解除授权成功: (roleId=[{}], permissionId=[{}])", roleId, permissionId);
+            } catch (Exception e) {
+                failList.add(permissionId);
+            }
+        }
+        if (failList.size() < permissionIds.size()) {
+            log.info("有解除授权成功，要更新permissionDbRefreshTime时间戳，以动态更新用户权限缓存");
+            permissionService.setPermissionDbRefreshTime(DateUtils.now());
+        }
+        return failList;
     }
 }
