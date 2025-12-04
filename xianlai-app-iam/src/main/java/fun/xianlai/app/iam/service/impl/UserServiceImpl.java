@@ -231,4 +231,37 @@ public class UserServiceImpl implements UserService {
     public void setPermissionListCacheTime(Long userId, Date timestamp) {
         StpUtil.getSessionByLoginId(userId).set("permissionListCacheTime", timestamp);
     }
+
+    @Override
+    @ServiceLog("绑定")
+    public List<Long> bind(Long userId, List<Long> roleIds) {
+        List<Role> bindCheckList = roleRepository.findByBindCheck(true);
+        List<String> roleList = StpUtil.getRoleList(userId);
+        List<Long> failList = new ArrayList<>();
+        for (Long roleId : roleIds) {
+            try {
+                for (Role item : bindCheckList) {
+                    if (roleId.equals(item.getId())) {
+                        if (!roleList.contains(MessageFormat.format("user:bind:{0}", item.getIdentifier()))) {
+                            throw new SysException(MessageFormat.format("权限不足，无法为用户绑定角色[{0} {1}]", item.getId(), item.getIdentifier()));
+                        }
+                        break;
+                    }
+                }
+                UserRole ur = new UserRole();
+                ur.setUserId(userId);
+                ur.setRoleId(roleId);
+                userRoleRepository.save(ur);
+                log.info("绑定成功: (userId=[{}], roleId=[{}])", userId, roleId);
+            } catch (Exception e) {
+                failList.add(roleId);
+            }
+        }
+        if (failList.size() < roleIds.size()) {
+            log.info("有绑定成功，要更新roleListCacheTime和permissionListCacheTime时间戳，以动态更新用户权限缓存");
+            setRoleListCacheTime(userId, DateUtils.zero());
+            setPermissionListCacheTime(userId, DateUtils.zero());
+        }
+        return failList;
+    }
 }
