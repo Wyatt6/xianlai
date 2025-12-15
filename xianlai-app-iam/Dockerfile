@@ -10,7 +10,7 @@ WORKDIR /app
 
 ADD ./target/xianlai-app-iam-${VERSION}.jar /app/xianlai-app-iam/application.jar
 
-VOLUME ["/app/xianlai-app-iam/application-run.properties", "/app/xianlai-app-iam/log"]
+VOLUME ["/app/xianlai-app-iam/application-run.yml", "/app/xianlai-app-iam/log"]
 
 ENTRYPOINT ["java", "-jar", "/app/xianlai-app-iam/application.jar", "--spring.profiles.active=run"]
 

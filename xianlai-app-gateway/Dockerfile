@@ -10,7 +10,7 @@ WORKDIR /app
 
 ADD ./target/xianlai-app-gateway-${VERSION}.jar /app/xianlai-app-gateway/application.jar
 
-VOLUME ["/app/xianlai-app-gateway/application-run.properties", "/app/xianlai-app-gateway/log"]
+VOLUME ["/app/xianlai-app-gateway/application-run.yml", "/app/xianlai-app-gateway/log"]
 
 ENTRYPOINT ["java", "-jar", "/app/xianlai-app-gateway/application.jar", "--spring.profiles.active=run"]
 
