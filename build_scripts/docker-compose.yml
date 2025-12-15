@@ -1,0 +1,40 @@
+# TODO CBR: 每次发版前检查模块版本号
+# 版本号在.env文件中定义
+
+services:
+  xianlai-app-gateway:
+    image: wyatt6/xianlai-app-gateway:${XIANLAI_APP_GATEWAY_VERSION}
+    container_name: xianlai-app-gateway
+    restart: on-failure:5
+    volumes:
+      - ./xianlai-app-gateway/application-run.yml:/app/xianlai-app-gateway/application-run.yml
+      - ./xianlai-app-gateway/log:/app/xianlai-app-gateway/log
+    networks:
+      - net
+    ports:
+      - "30000:30000"
+  xianlai-app-common:
+    image: wyatt6/xianlai-app-common:${XIANLAI_APP_COMMON_VERSION}
+    container_name: xianlai-app-common
+    restart: on-failure:5
+    volumes:
+      - ./xianlai-app-common/application-run.yml:/app/xianlai-app-common/application-run.yml
+      - ./xianlai-app-common/log:/app/xianlai-app-common/log
+    networks:
+      - net
+    ports:
+      - "30001:30001"
+  xianlai-app-iam:
+    image: wyatt6/xianlai-app-iam:${XIANLAI_APP_IAM_VERSION}
+    container_name: xianlai-app-iam
+    restart: on-failure:5
+    volumes:
+      - ./xianlai-app-iam/application-run.yml:/app/xianlai-app-iam/application-run.yml
+      - ./xianlai-app-iam/log:/app/xianlai-app-iam/log
+    networks:
+      - net
+    ports:
+      - "30002:30002"
+networks:
+  net:
+    driver: bridge
