@@ -17,7 +17,7 @@ INSERT IGNORE INTO tb_common_sys_option(
 -- ------- --
 -- 封面
 (20001, 20001, 'portal', 'portal.coverImageType', 'local', 'local', '封面图片类型', '用于设置门户页面封面图片的类型，有这几种选择：local-前端工程内部本地图片 / upload-上传到附件库中的图片 / web-来源于网络的图片。', 0, 1, 'STRING'),
-(20002, 20002, 'portal', 'portal.coverImagePath', '/src/assets/images/portal/default-cover.jpg', '/src/assets/images/portal/default-cover.jpg', '封面图片路径', '填写封面图片加载的路径。封面图片类型=local时，填写前端工程内部本地图片的路径；封面图片类型=upload时，填写上传图片的相对路径；封面图片类型=web时，填写网络图片的URL。', 0, 1, 'STRING'),
+(20002, 20002, 'portal', 'portal.coverImagePath', '/images/portal/cover.jpg', '/images/portal/cover.jpg', '封面图片路径', '填写封面图片加载的路径。封面图片类型=local时，填写前端工程的本地图片的路径（图片存储在public目录下，路径以斜杠开头）；封面图片类型=upload时，填写上传图片的相对路径；封面图片类型=web时，填写网络图片的URL。', 0, 1, 'STRING'),
 (20003, 20003, 'portal', 'portal.coverTitle', 'XianLai', 'XianLai', '封面标题', null, 0, 1, 'STRING'),
 (20004, 20004, 'portal', 'portal.coverTitleSize', '5', '5', '封面标题字体大小', null, 0, 1, 'NUMBER'),
 (20005, 20005, 'portal', 'portal.coverTitleColor', '#ffffff', '#ffffff', '封面标题字体颜色', '填写格式诸如“#ffffff”的十六进制颜色值。', 0, 1, 'STRING'),
