@@ -7,10 +7,10 @@ services:
     container_name: xianlai-app-gateway
     restart: on-failure:5
     volumes:
-      - ./xianlai-app-gateway/application-run.yml:/app/xianlai-app-gateway/application-run.yml
-      - ./xianlai-app-gateway/log:/app/xianlai-app-gateway/log
+      - ./xianlai-app-gateway/application-run.yml:/app/application-run.yml:rw
+      - ./xianlai-app-gateway/log:/app/log:rw
     networks:
-      - net
+      - xianlai_net
     ports:
       - "30000:30000"
   xianlai-app-common:
@@ -18,10 +18,10 @@ services:
     container_name: xianlai-app-common
     restart: on-failure:5
     volumes:
-      - ./xianlai-app-common/application-run.yml:/app/xianlai-app-common/application-run.yml
-      - ./xianlai-app-common/log:/app/xianlai-app-common/log
+      - ./xianlai-app-common/application-run.yml:/app/application-run.yml:rw
+      - ./xianlai-app-common/log:/app/log:rw
     networks:
-      - net
+      - xianlai_net
     ports:
       - "30001:30001"
   xianlai-app-iam:
@@ -29,12 +29,13 @@ services:
     container_name: xianlai-app-iam
     restart: on-failure:5
     volumes:
-      - ./xianlai-app-iam/application-run.yml:/app/xianlai-app-iam/application-run.yml
-      - ./xianlai-app-iam/log:/app/xianlai-app-iam/log
+      - ./xianlai-app-iam/application-run.yml:/app/application-run.yml:rw
+      - ./xianlai-app-iam/log:/app/log:rw
     networks:
-      - net
+      - xianlai_net
     ports:
       - "30002:30002"
+
 networks:
-  net:
-    driver: bridge
+  xianlai_net:
+    external: true
