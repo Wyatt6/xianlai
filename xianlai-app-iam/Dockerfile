@@ -8,10 +8,10 @@ ENV XIANLAI_APP_IAM_VERSION=${VERSION}
 
 WORKDIR /app
 
-ADD ./target/xianlai-app-iam-${VERSION}.jar /app/xianlai-app-iam/application.jar
+ADD ./target/xianlai-app-iam-${VERSION}.jar /app/application.jar
 
-VOLUME ["/app/xianlai-app-iam/application-run.yml", "/app/xianlai-app-iam/log"]
+ENTRYPOINT ["java", "-jar", "/app/application.jar", "--spring.profiles.active=run"]
 
-ENTRYPOINT ["java", "-jar", "/app/xianlai-app-iam/application.jar", "--spring.profiles.active=run"]
+VOLUME ["/app/application-run.yml", "/app/log"]
 
 EXPOSE 30002

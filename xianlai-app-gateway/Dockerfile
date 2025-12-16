@@ -8,10 +8,10 @@ ENV XIANLAI_APP_GATEWAY_VERSION=${VERSION}
 
 WORKDIR /app
 
-ADD ./target/xianlai-app-gateway-${VERSION}.jar /app/xianlai-app-gateway/application.jar
+ADD ./target/xianlai-app-gateway-${VERSION}.jar /app/application.jar
 
-VOLUME ["/app/xianlai-app-gateway/application-run.yml", "/app/xianlai-app-gateway/log"]
+ENTRYPOINT ["java", "-jar", "/app/application.jar", "--spring.profiles.active=run"]
 
-ENTRYPOINT ["java", "-jar", "/app/xianlai-app-gateway/application.jar", "--spring.profiles.active=run"]
+VOLUME ["/app/application-run.yml", "/app/log"]
 
 EXPOSE 30000

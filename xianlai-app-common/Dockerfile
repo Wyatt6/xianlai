@@ -8,10 +8,10 @@ ENV XIANLAI_APP_COMMON_VERSION=${VERSION}
 
 WORKDIR /app
 
-ADD ./target/xianlai-app-common-${VERSION}.jar /app/xianlai-app-common/application.jar
+ADD ./target/xianlai-app-common-${VERSION}.jar /app/application.jar
 
-VOLUME ["/app/xianlai-app-common/application-run.yml", "/app/xianlai-app-common/log"]
+ENTRYPOINT ["java", "-jar", "/app/application.jar", "--spring.profiles.active=run"]
 
-ENTRYPOINT ["java", "-jar", "/app/xianlai-app-common/application.jar", "--spring.profiles.active=run"]
+VOLUME ["/app/application-run.yml", "/app/log"]
 
 EXPOSE 30001
