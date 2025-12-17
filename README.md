@@ -18,7 +18,12 @@ XianLai 是一款基于 Vue3 + ElementPlus 和 Spring Cloud Alibaba 的开源、
 
 ## v0.1.0 新特性
 
-- 
+- **xianlai-app-gateway 技术网关 v1.0.0**：根据 URL 的流量分发；请求跟踪 ID；基于 Nacos 实现的动态路由配置；
+- **xianlai-app-common 公共功能 v1.0.0**：参数选项管理；数据初始化；验证码生成和校验；后端接口管理；前端路径常量管理；前端管理台菜单管理；前端页面路由管理；
+- **xianlai-app-iam 身份识别和访问管理 v1.0.0**：权限管理；角色管理，包括为角色授权；用户管理，包括用户创建、注册、登录、退出、修改密码、头像管理、信息修改、角色绑定；
+- **xianlai-core**：提供核心程序，包括公共注解、公共异常类、AOP 处理程序、日志打印程序、SaToken 配置、Feign 配置、Feign 消费者服务声明、响应对象封装类、工具类；
+- **xianlai-infra-redis**：提供对 Redis 连接的统一配置；
+- **xianlai-infra-mysql**：提供对 MySQL 连接和 Druid 工具的统一配置。
 
 ## 后端技术栈
 
