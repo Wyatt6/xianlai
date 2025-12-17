@@ -31,7 +31,11 @@ XianLai 是一款基于 Vue3 + ElementPlus 和 Spring Cloud Alibaba 的开源、
 
 ## 部署手册
 
-使用 Docker 和 Docker Compose（v2）部署，需提前安装和配置好。
+使用 Docker 和 Docker Compose（v2）部署，需提前安装和配置好。XianLai 发布的 Docker 镜像：
+
+- [wyatt6/xianlai-app-gateway](https://hub.docker.com/repository/docker/wyatt6/xianlai-app-gateway/general)
+- [wyatt6/xianlai-app-common](https://hub.docker.com/repository/docker/wyatt6/xianlai-app-common/general)
+- [wyatt6/xianlai-app-iam](https://hub.docker.com/repository/docker/wyatt6/xianlai-app-iam/general)
 
 ### 1. 创建容器网络
 
