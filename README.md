@@ -26,19 +26,95 @@ XianLai 是一款基于 Vue3 + ElementPlus 和 Spring Cloud Alibaba 的开源、
 
 ## 部署手册
 
-### 
+使用 Docker 和 Docker Compose（v2）部署，需提前安装和配置好。
 
-## 附录A：模块版本号对照表
+### 1. 创建容器网络
 
-XianLai当前版本号：`v0.1.0`
+```shell
+docker network create xianlai_net
+```
 
-| 模块                | 名称               | 模块版本 | XianLai版本 |
-| ------------------- | ------------------ | -------- | ----------- |
-| xianlai-vue         | 前端Web页面        | 0.1.0    | 0.1.0       |
-| xianlai-app-gateway | 技术网关           | 1.0.0    | 0.1.0       |
-| xianlai-app-common  | 公共功能           | 1.0.0    | 0.1.0       |
-| xianlai-app-iam     | 身份识别和访问管理 | 1.0.0    | 0.1.0       |
-| xianlai-core        | 核心程序           | 1.0.0    | 0.1.0       |
-| xianlai-infra-redis | Redis访问封装程序  | 1.0.0    | 0.1.0       |
-| xianlai-infra-mysql | MySQL访问封装程序  | 1.0.0    | 0.1.0       |
+### 2. 拉取 Redis 1.27.2 镜像并启动容器
 
+具体方法可网上搜索，注意为了提高安全性要给 Redis 设置访问密码。这里的密码需要填入后续步骤的`application-run.yml`配置文件中的相应配置项。
+
+### 3. 拉取 MySQL 8.4.7 镜像并启动容器
+
+具体方法可网上搜索。启动完成后连接数据库实例为 XianLai 系统创建数据库和访问对象并授权：
+
+```sql
+create database xianlai;
+create user xianlai identified by '设置的密码';
+grant all privileges on xianlai.* to xianlai@'%';
+flush privileges;
+```
+
+这里的用户和密码需要填入后续步骤的`application-run.yml`配置文件中的相应配置项，其中密码需要使用 druid 加密程序（在工程的`build_scripts/`目录下可找到）进行加密生成`password`和`publicKey`：
+
+```shell
+java -cp ./druid-1.2.18.jar com.alibaba.druid.filter.config.ConfigTools 上述xianlai用户的密码
+```
+
+### 4. 启动 Nacos 3.1.1 容器并配置
+
+具体方法可网上搜索。启动完成后需创建新的命名空间`xianlai`，创建访问用户并设置密码，创建角色绑定给访问用户，给角色授予读写命名空间`xianlai`的权限。这里的用户和密码需要填入后续步骤的`application-run.yml`配置文件中的相应配置项。
+
+### 5. 将 Redis、MySQL、Nacos 容器加入容器网络
+
+```shell
+docker network connect xianlai_net redis容器名
+docker network connect xianlai_net mysql容器名
+docker network connect xianlai_net nacos容器名
+```
+
+### 6. 创建目录和准备配置文件
+
+在服务器上为 XianLai 的部署创建如下结构的目录，并将各个模块的配置文件上传到目标位置：
+
+```
++ xianlai/
+|       .env
+|       docker-compose.yml
+|       + xianlai-app-gateway/
+|       |       application-run.yml
+|       |       + log/
+|       + xianlai-app-common/
+|       |       application-run.yml
+|       |       + log/
+|       + xianlai-app-iam/
+|       |       application-run.yml
+|       |       + log/
+```
+
+### 7. 启动容器编排
+
+进入上述的`xianlai/`目录中，执行以下命令启动容器编排：
+
+```shell
+docker compose up -d
+```
+
+启动后前端请求就可以发送到技术网关的`30000`端口，交给分布式的 XianLai 系统进行处理。其他运维过程中可能用到的命令：
+
+```shell
+docker compose up       创建并启动容器编排
+docker compose down     停止并删除容器编排
+docker compose start    启动容器编排
+docker compose restart  重启容器编排
+docker compose stop     停止容器编排
+docker compose ps       显示容器编排列表
+```
+
+## 附录 A：模块版本号对照表
+
+XianLai 当前版本号：`v0.1.0`
+
+| 模块                | 名称               | 模块版本 | XianLai 版本 |
+| ------------------- | ------------------ | -------- | ------------ |
+| xianlai-vue         | 前端 Web 页面      | 0.1.0    | 0.1.0        |
+| xianlai-app-gateway | 技术网关           | 1.0.0    | 0.1.0        |
+| xianlai-app-common  | 公共功能           | 1.0.0    | 0.1.0        |
+| xianlai-app-iam     | 身份识别和访问管理 | 1.0.0    | 0.1.0        |
+| xianlai-core        | 核心程序           | 1.0.0    | 0.1.0        |
+| xianlai-infra-redis | Redis 访问封装程序 | 1.0.0    | 0.1.0        |
+| xianlai-infra-mysql | MySQL 访问封装程序 | 1.0.0    | 0.1.0        |
