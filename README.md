@@ -148,7 +148,7 @@ docker network connect xianlai_net nacos容器名
 docker compose up -d
 ```
 
-启动后前端请求就可以发送到技术网关的`30000`端口，交给分布式的 XianLai 系统进行处理。
+启动后前端请求就可以发送到技术网关的`30000`端口，交给分布式的 XianLai 系统进行处理。超级管理员初始用户名和密码都是`superadmin`，请及时修改密码。
 
 其他可能用到的 Docker Compose 命令：
 
