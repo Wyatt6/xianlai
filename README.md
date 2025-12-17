@@ -59,6 +59,60 @@ java -cp ./druid-1.2.18.jar com.alibaba.druid.filter.config.ConfigTools 上述xi
 
 具体方法可网上搜索。启动完成后需创建新的命名空间`xianlai`，创建访问用户并设置密码，创建角色绑定给访问用户，给角色授予读写命名空间`xianlai`的权限。这里的用户和密码需要填入后续步骤的`application-run.yml`配置文件中的相应配置项。
 
+创建技术网关动态路由功能读取的配置文件：
+
+- **命名空间**: xianlai
+- **Data ID**: gateway-dynamic-routes
+- **Group ID**: DEFAULT_GROUP
+- **格式**: JSON
+
+初始配置内容如下，后续视情况添加和修改：
+
+```json
+[
+  {
+    "id": "common",
+    "order": 1,
+    "predicates": [
+      {
+        "name": "Path",
+        "args": { "pattern": "/api/common/**" }
+      }
+    ],
+    "uri": "lb://xianlai-app-common",
+    "filters": [
+      {
+        "name": "RewritePath",
+        "args": {
+          "regexp": "/api/common/?(?<segment>.*)",
+          "replacement": "/${segment}"
+        }
+      }
+    ]
+  },
+  {
+    "id": "iam",
+    "order": 2,
+    "predicates": [
+      {
+        "name": "Path",
+        "args": { "pattern": "/api/iam/**" }
+      }
+    ],
+    "uri": "lb://xianlai-app-iam",
+    "filters": [
+      {
+        "name": "RewritePath",
+        "args": {
+          "regexp": "/api/iam/?(?<segment>.*)",
+          "replacement": "/${segment}"
+        }
+      }
+    ]
+  }
+]
+```
+
 ### 5. 将 Redis、MySQL、Nacos 容器加入容器网络
 
 ```shell
@@ -94,7 +148,9 @@ docker network connect xianlai_net nacos容器名
 docker compose up -d
 ```
 
-启动后前端请求就可以发送到技术网关的`30000`端口，交给分布式的 XianLai 系统进行处理。其他运维过程中可能用到的命令：
+启动后前端请求就可以发送到技术网关的`30000`端口，交给分布式的 XianLai 系统进行处理。
+
+其他可能用到的 Docker Compose 命令：
 
 ```shell
 docker compose up       创建并启动容器编排
