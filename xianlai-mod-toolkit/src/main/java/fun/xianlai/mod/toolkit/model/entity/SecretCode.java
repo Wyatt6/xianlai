@@ -25,13 +25,16 @@ import org.hibernate.annotations.GenericGenerator;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "tb_toolkit_secret_code", indexes = {
-        @Index(columnList = "sortId, title"),
+        @Index(columnList = "tenant, sortId, title")
 })
 public class SecretCode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "PK_generator")
     @GenericGenerator(name = "PK_generator", type = PrimaryKeyGenerator.class)
     private Long id;
+
+    @Column(columnDefinition = "bigint not null")
+    private Long tenant;
 
     @Column(columnDefinition = "bigint not null default 0")
     private Long sortId;
@@ -71,7 +74,4 @@ public class SecretCode {
 
     @Column(length = 1000)
     private String remark;
-
-    @Column(columnDefinition = "bit not null default 0")
-    private Boolean isDeleted;
 }
