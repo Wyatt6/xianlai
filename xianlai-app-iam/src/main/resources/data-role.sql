@@ -63,4 +63,4 @@ INSERT IGNORE INTO tb_iam_role_permission(`role_id`, `permission_id`) VALUE
 (20001, 23003),
 (20001, 23004),
 (20001, 23005),
-(20001, 23006),
+(20001, 23006);
