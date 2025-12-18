@@ -13,4 +13,34 @@
     <artifactId>xianlai-mod-toolkit</artifactId>
     <version>${xianlai-mod-toolkit.version}</version>
     <packaging>jar</packaging>
+
+    <dependencies>
+        <!-- 内部依赖 -->
+        <dependency>
+            <groupId>fun.xianlai</groupId>
+            <artifactId>xianlai-infra-mysql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>fun.xianlai</groupId>
+            <artifactId>xianlai-infra-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>fun.xianlai</groupId>
+            <artifactId>xianlai-core</artifactId>
+        </dependency>
+        <!-- 外部依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>
