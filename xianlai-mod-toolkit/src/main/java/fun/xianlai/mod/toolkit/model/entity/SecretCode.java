@@ -42,7 +42,7 @@ public class SecretCode {
     @Column
     private String category;
 
-    @Column
+    @Column(columnDefinition = "varchar(255) not null")
     private String title;
 
     @Column
