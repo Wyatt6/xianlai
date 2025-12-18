@@ -25,7 +25,7 @@ import org.hibernate.annotations.GenericGenerator;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "tb_toolkit_secret_code", indexes = {
-        @Index(columnList = "sortId"),
+        @Index(columnList = "sortId, title"),
 })
 public class SecretCode {
     @Id
@@ -71,4 +71,7 @@ public class SecretCode {
 
     @Column(length = 1000)
     private String remark;
+
+    @Column(columnDefinition = "bit not null default 0")
+    private Boolean isDeleted;
 }
