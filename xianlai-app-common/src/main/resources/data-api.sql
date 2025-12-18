@@ -63,4 +63,10 @@ INSERT IGNORE INTO tb_common_sys_api(`id`, `call_path`, `description`, `request_
 (22007, 'iam.user.createUser', '创建新用户', 'POST', '/api/iam/user/createUser'),
 (22008, 'iam.user.editUserInfo', '修改用户信息/注销用户', 'POST', '/api/iam/user/editUserInfo'),
 (22009, 'iam.user.uploadAvatar', '上传头像图片', 'POST', '/api/iam/user/uploadAvatar'),
-(22010, 'iam.user.downloadAvatar', '下载头像图片', 'GET', '/api/iam/user/downloadAvatar');
+(22010, 'iam.user.downloadAvatar', '下载头像图片', 'GET', '/api/iam/user/downloadAvatar'),
+
+-- -------------- --
+-- Toolkit模组接口 --
+-- -------------- --
+-- CodebookController
+(30001, 'toolkit.codebook.getPageConditionally', '条件查询密码本分页', 'POST', '/api/toolkit/codebook/getPageConditionally');
