@@ -1,6 +1,6 @@
 # XianLai
 
-`v0.1.0`
+`v0.2.0`
 
 坚持不容易，请给作者点点 ⭐️Star⭐️ 鼓励鼓励。
 
@@ -16,29 +16,33 @@ XianLai 是一款基于 Vue3 + ElementPlus 和 Spring Cloud Alibaba 的开源、
 
 一个人的力量是有限的，团体的力量是无穷的。我们还有很多有趣的、可能对大家有帮助的想法有待实现。欢迎各位对本项目感兴趣的开发者参与进来，共同参与产品研发和项目建设，同时交流探讨技术一起进步。由于我们稍微有点完美主义，在用户体验和代码质量上的要求较高，请多担待。志同道合者请联系：wyatt6@163.com。
 
-## v0.1.0 新特性
+## 系统功能清单
 
-### xianlai-app-gateway 技术网关 v1.0.0
+### xianlai-app-gateway 技术网关
 
 根据 URL 的流量分发；请求跟踪 ID；基于 Nacos 实现的动态路由配置。
 
-### xianlai-app-common 公共功能 v1.0.0
+### xianlai-app-common 公共功能
 
 参数选项管理；数据初始化；验证码生成和校验；后端接口管理；前端路径常量管理；前端管理台菜单管理；前端页面路由管理。
 
-### xianlai-app-iam 身份识别和访问管理 v1.0.0
+### xianlai-app-iam 身份识别和访问管理
 
 权限管理；角色管理，包括为角色授权；用户管理，包括用户创建、注册、登录、退出、修改密码、头像管理、信息修改、角色绑定。
 
-### xianlai-core 核心程序 v1.0.0
+### xianlai-mod-toolkit 工具箱模组
+
+密码本。
+
+### xianlai-core 核心程序
 
 提供核心程序，包括公共注解、公共异常类、AOP 处理程序、日志打印程序、SaToken 配置、Feign 配置、Feign 消费者服务声明、响应对象封装类、工具类。
 
-### xianlai-infra-redis Redis 访问封装程序 v1.0.0
+### xianlai-infra-redis Redis 访问封装程序
 
 提供对 Redis 连接的统一配置。
 
-### xianlai-infra-mysql MySQL 访问封装程序 v1.0.0
+### xianlai-infra-mysql MySQL 访问封装程序
 
 提供对 MySQL 连接和 Druid 工具的统一配置。
 
@@ -135,6 +139,26 @@ java -cp ./druid-1.2.18.jar com.alibaba.druid.filter.config.ConfigTools 上述xi
         }
       }
     ]
+  },
+  {
+    "id": "toolkit",
+    "order": 3,
+    "predicates": [
+      {
+        "name": "Path",
+        "args": { "pattern": "/api/toolkit/**" }
+      }
+    ],
+    "uri": "lb://xianlai-mod-toolkit",
+    "filters": [
+      {
+        "name": "RewritePath",
+        "args": {
+          "regexp": "/api/toolkit/?(?<segment>.*)",
+          "replacement": "/${segment}"
+        }
+      }
+    ]
   }
 ]
 ```
@@ -164,6 +188,9 @@ docker network connect xianlai_net nacos容器名
 |       + xianlai-app-iam/
 |       |       application-run.yml
 |       |       + log/
+|       + xianlai-mod-toolkit/
+|       |       application-run.yml
+|       |       + log/
 ```
 
 ### 7. 启动容器编排
@@ -187,16 +214,25 @@ docker compose stop     停止容器编排
 docker compose ps       显示容器编排列表
 ```
 
+## 更新版本
+
+1. 上传新版本的`.env`和`docker-compose.yml`文件到目标位置；
+2. 进入`xianlai/`目录下；
+3. 执行`docker compose down`停止并删除旧的容器编排；
+4. 执行`docker compose up -d`创建并启动新版本的容器编排。
+
 ## 附录 A：模块版本号对照表
 
-XianLai 当前版本号：`v0.1.0`
+XianLai 当前版本号：`v0.2.0`
 
 | 模块                | 名称               | 模块版本 | XianLai 版本 |
 | ------------------- | ------------------ | -------- | ------------ |
-| xianlai-vue         | 前端 Web 页面      | 0.1.0    | 0.1.0        |
-| xianlai-app-gateway | 技术网关           | 1.0.0    | 0.1.0        |
+| xianlai-app-gateway | 技术网关           | 1.0.0    | 0.1.0+       |
 | xianlai-app-common  | 公共功能           | 1.0.0    | 0.1.0        |
+| xianlai-app-common  | 公共功能           | 1.1.0    | 0.2.0        |
 | xianlai-app-iam     | 身份识别和访问管理 | 1.0.0    | 0.1.0        |
-| xianlai-core        | 核心程序           | 1.0.0    | 0.1.0        |
-| xianlai-infra-redis | Redis 访问封装程序 | 1.0.0    | 0.1.0        |
-| xianlai-infra-mysql | MySQL 访问封装程序 | 1.0.0    | 0.1.0        |
+| xianlai-app-iam     | 身份识别和访问管理 | 1.1.0    | 0.2.0        |
+| xianlai-mod-toolkit | 工具箱模组         | 1.0.0    | 0.2.0        |
+| xianlai-core        | 核心程序           | 1.0.0    | 0.1.0+       |
+| xianlai-infra-redis | Redis 访问封装程序 | 1.0.0    | 0.1.0+       |
+| xianlai-infra-mysql | MySQL 访问封装程序 | 1.0.0    | 0.1.0+       |
