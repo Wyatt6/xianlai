@@ -14,6 +14,16 @@ public interface CodebookService {
     DataMap add(SecretCode secretCode);
 
     /**
+     * 删除密码条目
+     */
+    void delete(Long secretCodeId);
+
+    /**
+     * 修改密码条目
+     */
+    DataMap edit(SecretCode secretCode);
+
+    /**
      * 查询条件为空时查询全量数据
      * 页码<0或页大小<=0时不分页
      *

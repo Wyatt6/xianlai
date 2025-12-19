@@ -18,6 +18,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 /**
  * @author WyattLau
  */
@@ -42,6 +44,27 @@ public class CodebookServiceImpl implements CodebookService {
             return result;
         } catch (DataIntegrityViolationException e) {
             throw new SysException("密码条目已存在");
+        }
+    }
+
+    @Override
+    @ServiceLog("删除密码条目")
+    @Transactional
+    public void delete(Long secretCodeId) {
+        secretCodeRepository.deleteByIdAndTenant(secretCodeId, StpUtil.getLoginIdAsLong());
+    }
+
+    @Override
+    @ServiceLog("修改密码条目")
+    @Transactional
+    public DataMap edit(SecretCode secretCode) {
+        Optional<SecretCode> oldCode = secretCodeRepository.findById(secretCode.getId());
+        if (oldCode.isPresent() && oldCode.get().getTenant().equals(StpUtil.getLoginIdAsLong())) {
+            SecretCode newCode = oldCode.get();
+            BeanUtils.copyPropertiesNotNull(secretCode, newCode);
+            return new DataMap("secretCode", secretCodeRepository.save(newCode));
+        } else {
+            throw new SysException("要修改的密码条目不存在");
         }
     }
 

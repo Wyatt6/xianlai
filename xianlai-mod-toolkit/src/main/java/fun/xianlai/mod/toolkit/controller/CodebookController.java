@@ -10,6 +10,7 @@ import fun.xianlai.mod.toolkit.service.CodebookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,24 @@ public class CodebookController {
         log.info("请求参数: {}", form);
         BeanUtils.trimString(form);
         return new RetResult().success().setData(codebookService.add(form));
+    }
+
+    @ApiLog("删除密码条目")
+    @SaCheckLogin
+    @GetMapping("/delete")
+    public RetResult delete(@RequestParam Long secretCodeId) {
+        log.info("请求参数: secretCodeId=[{}]", secretCodeId);
+        codebookService.delete(secretCodeId);
+        return new RetResult().success();
+    }
+
+    @ApiLog("修改密码条目")
+    @SaCheckLogin
+    @PostMapping("/edit")
+    public RetResult edit(@RequestBody SecretCode form) {
+        log.info("请求参数: {}", form);
+        BeanUtils.trimString(form);
+        return new RetResult().success().setData(codebookService.edit(form));
     }
 
     /**

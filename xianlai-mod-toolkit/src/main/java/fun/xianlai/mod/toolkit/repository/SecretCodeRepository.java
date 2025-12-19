@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SecretCodeRepository extends JpaRepository<SecretCode, Long> {
 
+    void deleteByIdAndTenant(Long id, @NonNull Long tenant);
+
     @Query("select distinct new SecretCode(s.id, s.tenant, s.sortId, s.category, s.title, s.username, s.code, s.tips, " +
             "                              s.twoFAS, s.appleId, s.wechat, s.alipay, s.phone, s.email, s.remark) " +
             " from SecretCode s " +
