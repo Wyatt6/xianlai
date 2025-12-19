@@ -35,4 +35,11 @@ INSERT IGNORE INTO tb_common_sys_path(`id`, `sort_id`, `name`, `path`) VALUE
 (20002, 20002, 'IAM_REDIRECT', '/iam/user-manage'),
 (20003, 20003, 'IAM_USER_MANAGE', '/iam/user-manage'),
 (20004, 20004, 'IAM_ROLE_MANAGE', '/iam/role-manage'),
-(20005, 20005, 'IAM_PERMISSION_MANAGE', '/iam/permission-manage');
+(20005, 20005, 'IAM_PERMISSION_MANAGE', '/iam/permission-manage'),
+
+-- -------------- --
+-- Toolkit模组路径 --
+-- -------------- --
+(30001, 30001, 'TOOLKIT', '/toolkit'),
+(30002, 30002, 'TOOLKIT_REDIRECT', '/toolkit/codebook'),
+(30003, 30003, 'TOOLKIT_CODEBOOK', '/toolkit/codebook');

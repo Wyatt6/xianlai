@@ -1,8 +1,8 @@
 server:
-  port: 30002
+  port: 30003
 spring:
   application:
-    name: xianlai-app-iam
+    name: xianlai-mod-toolkit
   cloud:
     nacos:
       discovery:

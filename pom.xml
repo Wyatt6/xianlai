@@ -4,13 +4,14 @@
 
     <properties>
         <!-- TODO CBR: 每次发版前检查模块版本号 -->
-        <xianlai.version>0.1.0</xianlai.version>
+        <xianlai.version>0.2.0</xianlai.version>
         <xianlai-infra-mysql.version>1.0.0</xianlai-infra-mysql.version>
         <xianlai-infra-redis.version>1.0.0</xianlai-infra-redis.version>
         <xianlai-core.version>1.0.0</xianlai-core.version>
         <xianlai-app-gateway.version>1.0.0</xianlai-app-gateway.version>
-        <xianlai-app-common.version>1.0.0</xianlai-app-common.version>
-        <xianlai-app-iam.version>1.0.0</xianlai-app-iam.version>
+        <xianlai-app-common.version>1.1.0</xianlai-app-common.version>
+        <xianlai-app-iam.version>1.1.0</xianlai-app-iam.version>
+        <xianlai-mod-toolkit.version>1.0.0</xianlai-mod-toolkit.version>
 
         <!-- 替换成你的Nexus构件库地址 -->
         <distribution.releases.url>http://192.168.1.100:8081/repository/maven-releases/</distribution.releases.url>
@@ -50,6 +51,8 @@
         <module>xianlai-app-common</module>
         <!-- 应用：IAM（身份识别和访问管理）模块 -->
         <module>xianlai-app-iam</module>
+        <!-- 模组：工具箱 -->
+        <module>xianlai-mod-toolkit</module>
     </modules>
 
     <dependencyManagement>

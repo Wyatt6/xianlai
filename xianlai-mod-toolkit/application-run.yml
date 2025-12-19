@@ -1,0 +1,43 @@
+nacos:
+  server-addr: ???
+  namespace: ???
+  username: ???
+  password: ???
+datasource:
+  mysql:
+    host: ???
+    port: ???
+    db: ???
+    username: ???
+    password: ???
+    public-key: ???
+#    druid:                                                    # Druid连接池和监控后台配置（选填）
+#      pool:                                                   # 连接池配置（选填）
+#        initial-size: 1                                       # 初始连接数
+#        min-idle: 1                                           # 最小空闲连接数
+#        max-active: 100                                       # 最大活跃连接数
+#        max-wait: 60000                                       # 获取连接的最大等待时间（ms）
+#        min-evictable-idle-time-millis: 300000                # 连接在池中最小生存时间（ms）
+#        time-between-eviction-runs-millis: 60000              # 前后两次检测可关闭空闲连接的间隔时间（ms）
+#        test-while-idle: true                                 # 空闲时验证连接有效性（不影响性能）
+#        test-on-borrow: false                                 # 申请连接时检测连接有效性（影响性能，建议关闭）
+#        test-on-return: false                                 # 归还连接时检测连接有效性（影响性能，建议关闭）
+#        validation-query: "select 'x'"                        # 检测连接有效性的查询SQL
+#        pool-prepared-statements: false                       # 启用PSCache（对支持游标的数据库性能提升巨大），Oracle建议开启，MySQL建议关闭
+#        max-pool-prepared-statement-per-connection-size: 50   # 启用PSCache时有效，每个连接最多持有的PACache数量
+#        filters: "config,stat,wall,log4j"                     # 扩展插件
+#      monitor:                                                # Druid监控配置（选填）
+#        username: admin                                       # 监控管理台用户名
+#        password: admin                                       # 监控管理台密码
+#        whiteList: "ip1,ip2"                                  # 白名单，IP用逗号分隔
+#        blackList: "ip1,ip2"                                  # 黑名单，IP用逗号分隔，优先级比白名单高
+  redis:
+    host: ???
+    port: ???
+    password: ???
+    database: ???
+#    lettuce.pool:                                             # Lettuce连接池配置（可选）
+#      min-idle: 1                                             # 最小空闲连接数
+#      max-idle: 10                                            # 最大空闲连接数
+#      max-total: 10                                           # 最大连接数
+#      max-wait: -1                                            # 最大等待时间（ms），-1表示最大

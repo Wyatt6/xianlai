@@ -35,6 +35,17 @@ services:
       - xianlai_net
     ports:
       - "30002:30002"
+  xianlai-mod-toolkit:
+    image: wyatt6/xianlai-mod-toolkit:${XIANLAI_MOD_TOOLKIT_VERSION}
+    container_name: xianlai-mod-toolkit
+    restart: on-failure:5
+    volumes:
+      - ./xianlai-mod-toolkit/application-run.yml:/app/application-run.yml:rw
+      - ./xianlai-mod-toolkit/log:/app/log:rw
+    networks:
+      - xianlai_net
+    ports:
+      - "30003:30003"
 
 networks:
   xianlai_net:
