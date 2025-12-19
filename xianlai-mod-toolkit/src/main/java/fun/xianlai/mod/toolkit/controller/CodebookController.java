@@ -4,6 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
 import fun.xianlai.core.annotation.ApiLog;
 import fun.xianlai.core.response.RetResult;
+import fun.xianlai.core.utils.bean.BeanUtils;
 import fun.xianlai.mod.toolkit.model.entity.SecretCode;
 import fun.xianlai.mod.toolkit.service.CodebookService;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class CodebookController {
     @Autowired
     private CodebookService codebookService;
+
+    @ApiLog("新增密码条目")
+    @SaCheckLogin
+    @PostMapping("/add")
+    public RetResult add(@RequestBody SecretCode form) {
+        log.info("请求参数: {}", form);
+        BeanUtils.trimString(form);
+        return new RetResult().success().setData(codebookService.add(form));
+    }
 
     /**
      * 查询条件为空时查询全量数据

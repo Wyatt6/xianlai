@@ -25,7 +25,7 @@ import org.hibernate.annotations.GenericGenerator;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "tb_toolkit_secret_code", indexes = {
-        @Index(columnList = "tenant, sortId, title")
+        @Index(columnList = "tenant, category, sortId, title")
 })
 public class SecretCode {
     @Id

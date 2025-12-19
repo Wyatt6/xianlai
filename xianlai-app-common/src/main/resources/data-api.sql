@@ -69,4 +69,5 @@ INSERT IGNORE INTO tb_common_sys_api(`id`, `call_path`, `description`, `request_
 -- Toolkit模组接口 --
 -- -------------- --
 -- CodebookController
-(30001, 'toolkit.codebook.getPageConditionally', '条件查询密码本分页', 'POST', '/api/toolkit/codebook/getPageConditionally');
+(30001, 'toolkit.codebook.add', '新增密码条目', 'POST', '/api/toolkit/codebook/add'),
+(30004, 'toolkit.codebook.getPageConditionally', '条件查询密码本分页', 'POST', '/api/toolkit/codebook/getPageConditionally');

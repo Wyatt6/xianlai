@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface SecretCodeRepository extends JpaRepository<SecretCode, Long> {
+
     @Query("select distinct new SecretCode(s.id, s.tenant, s.sortId, s.category, s.title, s.username, s.code, s.tips, " +
             "                              s.twoFAS, s.appleId, s.wechat, s.alipay, s.phone, s.email, s.remark) " +
             " from SecretCode s " +
@@ -20,4 +21,12 @@ public interface SecretCodeRepository extends JpaRepository<SecretCode, Long> {
             "      and (?2 is null or s.title like %?2%) " +
             "      and (?2 is null or s.title like %?2%)")
     Page<SecretCode> findConditionally(@NonNull Long tenant, String category, String title, Pageable pageable);
+
+    @Query(value = "select num " +
+            " from (select @rownum \\:= @rownum + 1 as num, s.id as id " +
+            "      from tb_toolkit_secret_code s, (select @rownum \\:= 0) n " +
+            "      order by s.category asc, s.sort_id asc, s.title asc) t " +
+            " where t.id = ?1", nativeQuery = true)
+    Long findRowNumById(Long id);
+
 }
