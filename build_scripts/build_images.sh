@@ -2,7 +2,7 @@
 xianlai_app_gateway_ver=1.0.0
 xianlai_app_common_ver=1.1.0
 xianlai_app_iam_ver=1.1.0
-xianlai_mod_toolkit_ver=1.0.0
+xianlai_mod_toolkit_ver=1.0.1
 
 # 分布式镜像
 docker build \
