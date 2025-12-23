@@ -16,13 +16,14 @@ public interface SecretCodeRepository extends JpaRepository<SecretCode, Long> {
 
     void deleteByIdAndTenant(Long id, @NonNull Long tenant);
 
-    @Query("select distinct new SecretCode(s.id, s.tenant, s.sortId, s.category, s.title, s.username, s.code, s.tips, " +
+    @Query("select distinct new SecretCode(s.id, s.tenant, s.sortId, s.category, s.title, s.username, s.code, s.tips, s.address, " +
             "                              s.twoFAS, s.appleId, s.wechat, s.alipay, s.phone, s.email, s.remark) " +
             " from SecretCode s " +
             " where s.tenant = ?1 " +
-            "      and (?2 is null or s.title like %?2%) " +
-            "      and (?2 is null or s.title like %?2%)")
-    Page<SecretCode> findConditionally(@NonNull Long tenant, String category, String title, Pageable pageable);
+            "      and (?2 is null or s.category like %?2%) " +
+            "      and (?3 is null or s.title like %?3%) " +
+            "      and (?4 is null or s.remark like %?4%)")
+    Page<SecretCode> findConditionally(@NonNull Long tenant, String category, String title, String remark, Pageable pageable);
 
     @Query(value = "select num " +
             " from (select @rownum \\:= @rownum + 1 as num, s.id as id " +

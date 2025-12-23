@@ -74,6 +74,7 @@ public class CodebookServiceImpl implements CodebookService {
         Long tenant = BeanUtils.getFieldValue(condition, "tenant", Long.class);
         String category = BeanUtils.getFieldValue(condition, "category", String.class);
         String title = BeanUtils.getFieldValue(condition, "title", String.class);
+        String remark = BeanUtils.getFieldValue(condition, "remark", String.class);
 
         Sort sort = Sort.by(
                 Sort.Order.asc("category"),
@@ -83,10 +84,10 @@ public class CodebookServiceImpl implements CodebookService {
         if (pageNum >= 0 && pageSize > 0) {
             log.info("分页查询");
             Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
-            return secretCodeRepository.findConditionally(tenant, category, title, pageable);
+            return secretCodeRepository.findConditionally(tenant, category, title, remark, pageable);
         } else {
             log.info("全表查询");
-            return secretCodeRepository.findConditionally(tenant, category, title, Pageable.unpaged(sort));
+            return secretCodeRepository.findConditionally(tenant, category, title, remark, Pageable.unpaged(sort));
         }
     }
 }

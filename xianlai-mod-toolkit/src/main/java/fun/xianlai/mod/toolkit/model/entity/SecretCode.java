@@ -54,6 +54,9 @@ public class SecretCode {
     @Column
     private String tips;
 
+    @Column
+    private String address;
+
     @Column(columnDefinition = "bit not null default 0")
     private Boolean twoFAS;
 
