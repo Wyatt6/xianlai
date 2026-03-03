@@ -1,4 +1,4 @@
-package fun.xianlai.mod.toolkit.model.entity;
+package fun.xianlai.plugin.toolkit.model.entity;
 
 import fun.xianlai.core.utils.bean.PrimaryKeyGenerator;
 import jakarta.persistence.Column;

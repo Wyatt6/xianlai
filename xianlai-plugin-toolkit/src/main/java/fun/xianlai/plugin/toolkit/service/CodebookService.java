@@ -1,7 +1,7 @@
-package fun.xianlai.mod.toolkit.service;
+package fun.xianlai.plugin.toolkit.service;
 
 import fun.xianlai.core.response.DataMap;
-import fun.xianlai.mod.toolkit.model.entity.SecretCode;
+import fun.xianlai.plugin.toolkit.model.entity.SecretCode;
 import org.springframework.data.domain.Page;
 
 /**
