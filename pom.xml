@@ -47,6 +47,8 @@
         <module>xianlai-core</module>
         <!-- 应用：技术网关 -->
         <module>xianlai-app-gateway</module>
+        <!-- 应用：系统主服务 -->
+        <module>xianlai-system</module>
         <!-- 应用：IAM（身份识别和访问管理）模块 -->
         <module>xianlai-app-iam</module>
         <!-- 模组：工具箱 -->
