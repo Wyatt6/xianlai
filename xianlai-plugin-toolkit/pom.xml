@@ -8,7 +8,7 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>xianlai-mod-toolkit</artifactId>
+    <artifactId>xianlai-plugin-toolkit</artifactId>
     <version>${xianlai-mod-toolkit.version}</version>
     <packaging>jar</packaging>
 
