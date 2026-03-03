@@ -1,6 +1,6 @@
-package fun.xianlai.plugin.toolkit.repository;
+package fun.xianlai.mod.toolkit.repository;
 
-import fun.xianlai.plugin.toolkit.model.entity.SecretCode;
+import fun.xianlai.mod.toolkit.model.entity.SecretCode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

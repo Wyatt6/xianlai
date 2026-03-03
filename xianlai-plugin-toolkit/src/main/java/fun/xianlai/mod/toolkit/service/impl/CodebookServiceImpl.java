@@ -1,13 +1,13 @@
-package fun.xianlai.plugin.toolkit.service.impl;
+package fun.xianlai.mod.toolkit.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.response.DataMap;
 import fun.xianlai.core.utils.bean.BeanUtils;
-import fun.xianlai.plugin.toolkit.model.entity.SecretCode;
-import fun.xianlai.plugin.toolkit.repository.SecretCodeRepository;
-import fun.xianlai.plugin.toolkit.service.CodebookService;
+import fun.xianlai.mod.toolkit.model.entity.SecretCode;
+import fun.xianlai.mod.toolkit.repository.SecretCodeRepository;
+import fun.xianlai.mod.toolkit.service.CodebookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;

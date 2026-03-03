@@ -1,12 +1,12 @@
-package fun.xianlai.plugin.toolkit.controller;
+package fun.xianlai.mod.toolkit.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
 import fun.xianlai.core.annotation.ApiLog;
 import fun.xianlai.core.response.RetResult;
 import fun.xianlai.core.utils.bean.BeanUtils;
-import fun.xianlai.plugin.toolkit.model.entity.SecretCode;
-import fun.xianlai.plugin.toolkit.service.CodebookService;
+import fun.xianlai.mod.toolkit.model.entity.SecretCode;
+import fun.xianlai.mod.toolkit.service.CodebookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
