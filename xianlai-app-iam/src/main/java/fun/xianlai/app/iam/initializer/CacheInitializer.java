@@ -14,16 +14,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class CacheInitializer implements CommandLineRunner {
-    @Autowired
-    private PermissionService permissionService;
-    @Autowired
-    private RoleService roleService;
+
 
     @Override
     public void run(String... args) throws Exception {
-        log.info("开始初始化IAM模块缓存");
-        permissionService.setPermissionDbRefreshTime(DateUtils.now());
-        roleService.setRoleDbRefreshTime(DateUtils.now());
-        log.info("已完成IAM模块缓存初始化");
+
     }
 }
