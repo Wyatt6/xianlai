@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * @author WyattLau
  */
-@FeignClient(contextId = "xianlai-app-common-captcha", name = "xianlai-app-common", path = "/feign/captcha")
+@FeignClient(contextId = "xianlai-system-captcha", name = "xianlai-system", path = "/feign/captcha")
 public interface FeignCaptchaService {
     @GetMapping("/verifyCaptcha")
     void verifyCaptcha(@RequestParam String captchaKey, @RequestParam String captcha);
