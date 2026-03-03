@@ -3,7 +3,7 @@
 
 services:
   xianlai-app-gateway:
-    image: wyatt6/xianlai-app-gateway:${XIANLAI_APP_GATEWAY_VERSION}
+    image: wyatt6/xianlai-app-gateway:${XIANLAI_GATEWAY_VERSION}
     container_name: xianlai-app-gateway
     restart: on-failure:5
     volumes:
