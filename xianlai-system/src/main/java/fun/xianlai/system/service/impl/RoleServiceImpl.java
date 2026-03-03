@@ -1,12 +1,12 @@
-package fun.xianlai.app.iam.service.impl;
+package fun.xianlai.system.service.impl;
 
-import fun.xianlai.app.iam.model.entity.rbac.Role;
-import fun.xianlai.app.iam.model.entity.rbac.RolePermission;
-import fun.xianlai.app.iam.repository.RolePermissionRepository;
-import fun.xianlai.app.iam.repository.RoleRepository;
-import fun.xianlai.app.iam.repository.UserRoleRepository;
-import fun.xianlai.app.iam.service.PermissionService;
-import fun.xianlai.app.iam.service.RoleService;
+import fun.xianlai.system.model.entity.rbac.Role;
+import fun.xianlai.system.model.entity.rbac.RolePermission;
+import fun.xianlai.system.repository.RolePermissionRepository;
+import fun.xianlai.system.repository.RoleRepository;
+import fun.xianlai.system.repository.UserRoleRepository;
+import fun.xianlai.system.service.PermissionService;
+import fun.xianlai.system.service.RoleService;
 import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;

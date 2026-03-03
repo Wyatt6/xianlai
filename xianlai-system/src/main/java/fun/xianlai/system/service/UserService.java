@@ -1,9 +1,9 @@
-package fun.xianlai.app.iam.service;
+package fun.xianlai.system.service;
 
-import fun.xianlai.app.iam.model.entity.other.Profile;
-import fun.xianlai.app.iam.model.entity.rbac.User;
-import fun.xianlai.app.iam.model.form.UserCondition;
-import fun.xianlai.app.iam.model.entity.other.UserInfo;
+import fun.xianlai.system.model.entity.other.Profile;
+import fun.xianlai.system.model.entity.rbac.User;
+import fun.xianlai.system.model.form.UserCondition;
+import fun.xianlai.system.model.entity.other.UserInfo;
 import fun.xianlai.core.response.DataMap;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.Page;

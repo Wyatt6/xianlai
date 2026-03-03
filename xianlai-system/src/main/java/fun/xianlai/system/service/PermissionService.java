@@ -1,6 +1,6 @@
-package fun.xianlai.app.iam.service;
+package fun.xianlai.system.service;
 
-import fun.xianlai.app.iam.model.entity.rbac.Permission;
+import fun.xianlai.system.model.entity.rbac.Permission;
 import fun.xianlai.core.response.DataMap;
 import org.springframework.data.domain.Page;
 
