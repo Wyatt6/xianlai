@@ -9,7 +9,7 @@
         <xianlai-infra-redis.version>1.0.0</xianlai-infra-redis.version>
         <xianlai-core.version>1.0.0</xianlai-core.version>
         <xianlai-app-gateway.version>1.0.0</xianlai-app-gateway.version>
-        <xianlai-app-common.version>1.1.0</xianlai-app-common.version>
+        <xianlai-system.version>1.1.0</xianlai-system.version>
         <xianlai-app-iam.version>1.1.0</xianlai-app-iam.version>
         <xianlai-mod-toolkit.version>1.0.1</xianlai-mod-toolkit.version>
 
@@ -47,8 +47,6 @@
         <module>xianlai-core</module>
         <!-- 应用：技术网关 -->
         <module>xianlai-app-gateway</module>
-        <!-- 应用：公共功能 -->
-        <module>xianlai-app-common</module>
         <!-- 应用：IAM（身份识别和访问管理）模块 -->
         <module>xianlai-app-iam</module>
         <!-- 模组：工具箱 -->
