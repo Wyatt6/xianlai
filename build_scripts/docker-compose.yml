@@ -13,6 +13,7 @@ services:
       - xianlai_net
     ports:
       - "30000:30000"
+
   xianlai-system:
     image: wyatt6/xianlai-system:${XIANLAI_SYSTEM_VERSION}
     container_name: xianlai-system
@@ -24,6 +25,13 @@ services:
       - xianlai_net
     ports:
       - "30001:30001"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:30001/actuator/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
   xianlai-mod-toolkit:
     image: wyatt6/xianlai-mod-toolkit:${XIANLAI_MOD_TOOLKIT_VERSION}
     container_name: xianlai-mod-toolkit
@@ -35,6 +43,9 @@ services:
       - xianlai_net
     ports:
       - "30003:30003"
+    depends_on:
+      xianlai-system:
+        condition: service_healthy
 
 networks:
   xianlai_net:

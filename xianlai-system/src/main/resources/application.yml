@@ -29,3 +29,8 @@ logging:
     org.springframework.boot.web.embedded: INFO
     org.apache: WARN
     fun.xianlai: INFO
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
