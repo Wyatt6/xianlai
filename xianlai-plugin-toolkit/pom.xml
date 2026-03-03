@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>xianlai-plugin-toolkit</artifactId>
-    <version>${xianlai-mod-toolkit.version}</version>
+    <version>${xianlai-plugin-toolkit.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>

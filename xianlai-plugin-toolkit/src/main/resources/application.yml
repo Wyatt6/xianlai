@@ -2,7 +2,7 @@ server:
   port: 30003
 spring:
   application:
-    name: xianlai-mod-toolkit
+    name: xianlai-plugin-toolkit
   cloud:
     nacos:
       discovery:

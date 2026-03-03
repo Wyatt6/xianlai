@@ -1,8 +1,7 @@
 # TODO CBR: 每次发版前检查模块版本号
 xianlai_gateway_ver=1.0.0
 xianlai_system_ver=1.1.0
-xianlai_app_iam_ver=1.1.0
-xianlai_mod_toolkit_ver=1.0.1
+xianlai_plugin_toolkit_ver=1.0.1
 
 # 分布式镜像
 docker build \
@@ -19,12 +18,6 @@ docker build \
 
 docker build \
   --platform linux/amd64 \
-  --build-arg VERSION=${xianlai_app_iam_ver} \
-  -t wyatt6/xianlai-app-iam:${xianlai_app_iam_ver} \
-  ../xianlai-app-iam/
-
-docker build \
-  --platform linux/amd64 \
-  --build-arg VERSION=${xianlai_mod_toolkit_ver} \
-  -t wyatt6/xianlai-mod-toolkit:${xianlai_mod_toolkit_ver} \
-  ../xianlai-mod-toolkit/
+  --build-arg VERSION=${xianlai_plugin_toolkit_ver} \
+  -t wyatt6/xianlai-plugin-toolkit:${xianlai_plugin_toolkit_ver} \
+  ../xianlai-plugin-toolkit/

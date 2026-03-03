@@ -135,7 +135,7 @@ java -cp ./druid-1.2.18.jar com.alibaba.druid.filter.config.ConfigTools 上述xi
         "args": { "pattern": "/api/toolkit/**" }
       }
     ],
-    "uri": "lb://xianlai-mod-toolkit",
+    "uri": "lb://xianlai-plugin-toolkit",
     "filters": [
       {
         "name": "RewritePath",
@@ -174,7 +174,7 @@ docker network connect xianlai_net nacos容器名
 |       + xianlai-app-iam/
 |       |       application-run.yml
 |       |       + log/
-|       + xianlai-mod-toolkit/
+|       + xianlai-plugin-toolkit/
 |       |       application-run.yml
 |       |       + log/
 ```
