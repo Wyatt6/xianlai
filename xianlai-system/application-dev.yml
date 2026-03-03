@@ -1,16 +1,16 @@
 nacos:
-  server-addr: 172.16.2.205:8848
-  namespace: xianlai-dev
-  username: xianlai-dev
-  password: wa5rjAJTBn8RHEnF
+  server-addr: ???
+  namespace: ???
+  username: ???
+  password: ???
 datasource:
   mysql:
-    host: 172.16.2.205
-    port: 23306
-    db: xianlai-dev
-    username: xianlai-dev
-    password: Hb2AwyTGzqLeVfVcHisQjwqvPD4lr+qWGUaFBEtMeh0gk3ISKFSxFvK76jtSMbZhYtFD6cgO0PStAjc0Rn1EvA==
-    public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAICSEnq3bJO81vbb5h2nHFrR80EnVUgrIOJXTvrc/mFB3QcxaxI+I45RdfT/oJ5SRorXKOxDZJs7jNHDNbjykTECAwEAAQ==
+    host: ???
+    port: ???
+    db: ???
+    username: ???
+    password: ???
+    public-key: ???
 #    druid:                                                    # Druid连接池和监控后台配置（选填）
 #      pool:                                                   # 连接池配置（选填）
 #        initial-size: 1                                       # 初始连接数
@@ -32,10 +32,10 @@ datasource:
 #        whiteList: "ip1,ip2"                                  # 白名单，IP用逗号分隔
 #        blackList: "ip1,ip2"                                  # 黑名单，IP用逗号分隔，优先级比白名单高
   redis:
-    host: 172.16.2.205
-    port: 26379
-    password: R3dyX2yKb8PFz5CP
-    database: 1
+    host: ???
+    port: ???
+    password: ???
+    database: ???
 #    lettuce.pool:                                             # Lettuce连接池配置（可选）
 #      min-idle: 1                                             # 最小空闲连接数
 #      max-idle: 10                                            # 最大空闲连接数
