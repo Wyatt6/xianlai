@@ -8,8 +8,8 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>xianlai-app-gateway</artifactId>
-    <version>${xianlai-app-gateway.version}</version>
+    <artifactId>xianlai-gateway</artifactId>
+    <version>${xianlai-gateway.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>
