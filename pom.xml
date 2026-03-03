@@ -8,7 +8,7 @@
         <xianlai-infra-mysql.version>1.0.0</xianlai-infra-mysql.version>
         <xianlai-infra-redis.version>1.0.0</xianlai-infra-redis.version>
         <xianlai-core.version>1.0.0</xianlai-core.version>
-        <xianlai-app-gateway.version>1.0.0</xianlai-app-gateway.version>
+        <xianlai-gateway.version>1.0.0</xianlai-gateway.version>
         <xianlai-system.version>1.1.0</xianlai-system.version>
         <xianlai-app-iam.version>1.1.0</xianlai-app-iam.version>
         <xianlai-mod-toolkit.version>1.0.1</xianlai-mod-toolkit.version>
@@ -46,7 +46,7 @@
         <!-- 核心程序 -->
         <module>xianlai-core</module>
         <!-- 应用：技术网关 -->
-        <module>xianlai-app-gateway</module>
+        <module>xianlai-gateway</module>
         <!-- 应用：系统主服务 -->
         <module>xianlai-system</module>
         <!-- 应用：IAM（身份识别和访问管理）模块 -->

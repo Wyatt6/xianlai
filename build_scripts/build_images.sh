@@ -8,8 +8,8 @@ xianlai_mod_toolkit_ver=1.0.1
 docker build \
   --platform linux/amd64 \
   --build-arg VERSION=${xianlai_gateway_ver} \
-  -t wyatt6/xianlai-app-gateway:${xianlai_gateway_ver} \
-  ../xianlai-app-gateway/
+  -t wyatt6/xianlai-gateway:${xianlai_gateway_ver} \
+  ../xianlai-gateway/
 
 docker build \
   --platform linux/amd64 \
