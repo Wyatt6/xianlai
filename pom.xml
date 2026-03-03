@@ -10,7 +10,7 @@
         <xianlai-core.version>1.0.0</xianlai-core.version>
         <xianlai-gateway.version>1.0.0</xianlai-gateway.version>
         <xianlai-system.version>1.1.0</xianlai-system.version>
-        <xianlai-plugin-toolkit.version>1.0.1</xianlai-plugin-toolkit.version>
+        <xianlai-mod-toolkit.version>1.0.1</xianlai-mod-toolkit.version>
 
         <!-- 替换成你的Nexus构件库地址 -->
         <distribution.releases.url>http://192.168.1.100:8081/repository/maven-releases/</distribution.releases.url>
@@ -48,6 +48,8 @@
         <module>xianlai-gateway</module>
         <!-- 系统主服务 -->
         <module>xianlai-system</module>
+        <!-- 模组：工具箱 -->
+        <module>xianlai-mod-toolkit</module>
     </modules>
 
     <dependencyManagement>
