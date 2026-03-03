@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author WyattLau
  */
-@FeignClient(contextId = "xianlai-app-iam-user-notlog", name = "xianlai-app-iam", path = "/feign/user")
+@FeignClient(contextId = "xianlai-system-user-notlog", name = "xianlai-system", path = "/feign/user")
 public interface FeignUserService {
     @GetMapping("/getRoleList")
     List<String> getRoleList(@RequestParam Long userId);
