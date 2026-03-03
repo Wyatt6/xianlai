@@ -165,6 +165,7 @@ docker network connect xianlai_net nacos容器名
 + xianlai/
 |       .env
 |       docker-compose.yml
+|       + xianlai-gateway/
 |       |       application-run.yml
 |       |       + log/
 |       + xianlai-system/
