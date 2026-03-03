@@ -5,6 +5,8 @@ import fun.xianlai.system.service.ApiService;
 import fun.xianlai.system.service.MenuService;
 import fun.xianlai.system.service.OptionService;
 import fun.xianlai.system.service.PathService;
+import fun.xianlai.system.service.PermissionService;
+import fun.xianlai.system.service.RoleService;
 import fun.xianlai.system.service.RouteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

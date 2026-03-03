@@ -1,6 +1,6 @@
 package fun.xianlai.system.model.form;
 
-import fun.xianlai.app.iam.model.entity.other.UserInfo;
+import fun.xianlai.system.model.entity.other.UserInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
