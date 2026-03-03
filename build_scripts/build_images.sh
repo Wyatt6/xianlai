@@ -1,6 +1,6 @@
 # TODO CBR: 每次发版前检查模块版本号
 xianlai_app_gateway_ver=1.0.0
-xianlai_app_common_ver=1.1.0
+xianlai_system_ver=1.1.0
 xianlai_app_iam_ver=1.1.0
 xianlai_mod_toolkit_ver=1.0.1
 
@@ -13,9 +13,9 @@ docker build \
 
 docker build \
   --platform linux/amd64 \
-  --build-arg VERSION=${xianlai_app_common_ver} \
-  -t wyatt6/xianlai-app-common:${xianlai_app_common_ver} \
-  ../xianlai-app-common/
+  --build-arg VERSION=${xianlai_system_ver} \
+  -t wyatt6/xianlai-system:${xianlai_system_ver} \
+  ../xianlai-system/
 
 docker build \
   --platform linux/amd64 \
