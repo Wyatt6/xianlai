@@ -1,6 +1,6 @@
-package fun.xianlai.app.iam.repository;
+package fun.xianlai.system.repository;
 
-import fun.xianlai.app.iam.model.entity.rbac.Role;
+import fun.xianlai.system.model.entity.rbac.Role;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

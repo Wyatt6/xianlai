@@ -1,7 +1,7 @@
-package fun.xianlai.app.iam.repository;
+package fun.xianlai.system.repository;
 
-import fun.xianlai.app.iam.model.entity.rbac.UserRole;
-import fun.xianlai.app.iam.model.entity.rbac.pk.UserRolePK;
+import fun.xianlai.system.model.entity.rbac.UserRole;
+import fun.xianlai.system.model.entity.rbac.pk.UserRolePK;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

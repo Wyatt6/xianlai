@@ -1,7 +1,7 @@
-package fun.xianlai.app.iam.repository;
+package fun.xianlai.system.repository;
 
-import fun.xianlai.app.iam.model.entity.other.UserInfo;
-import fun.xianlai.app.iam.model.entity.rbac.User;
+import fun.xianlai.system.model.entity.other.UserInfo;
+import fun.xianlai.system.model.entity.rbac.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 
     // UserInfo没用@Entity注解，所以这里要写全路径
-    @Query("select distinct new fun.xianlai.app.iam.model.entity.other.UserInfo(" +
+    @Query("select distinct new fun.xianlai.system.model.entity.other.UserInfo(" +
             "      u.id, u.username, u.registerTime, u.active, u.isDelete, " +
             "      pf.avatar, pf.nickname, pf.gender, pf.phone, pf.email) " +
             " from User u " +
