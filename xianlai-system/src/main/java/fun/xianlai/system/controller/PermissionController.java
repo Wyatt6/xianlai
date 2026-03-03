@@ -1,9 +1,9 @@
-package fun.xianlai.app.iam.controller;
+package fun.xianlai.system.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import fun.xianlai.app.iam.model.entity.rbac.Permission;
-import fun.xianlai.app.iam.service.PermissionService;
+import fun.xianlai.system.model.entity.rbac.Permission;
+import fun.xianlai.system.service.PermissionService;
 import fun.xianlai.core.annotation.ApiLog;
 import fun.xianlai.core.response.RetResult;
 import fun.xianlai.core.utils.bean.BeanUtils;

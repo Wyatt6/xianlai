@@ -1,6 +1,6 @@
-package fun.xianlai.app.iam.feign.producer;
+package fun.xianlai.system.feign.producer;
 
-import fun.xianlai.app.iam.service.UserService;
+import fun.xianlai.system.service.UserService;
 import fun.xianlai.core.response.RetResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

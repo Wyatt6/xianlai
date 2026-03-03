@@ -1,10 +1,10 @@
-package fun.xianlai.app.iam.controller;
+package fun.xianlai.system.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import fun.xianlai.app.iam.model.entity.rbac.Role;
-import fun.xianlai.app.iam.model.form.GrantForm;
-import fun.xianlai.app.iam.service.RoleService;
+import fun.xianlai.system.model.entity.rbac.Role;
+import fun.xianlai.system.model.form.GrantForm;
+import fun.xianlai.system.service.RoleService;
 import fun.xianlai.core.annotation.ApiLog;
 import fun.xianlai.core.response.RetResult;
 import fun.xianlai.core.utils.bean.BeanUtils;
