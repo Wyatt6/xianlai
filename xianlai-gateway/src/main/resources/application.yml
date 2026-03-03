@@ -2,7 +2,7 @@ server:
   port: 30000
 spring:
   application:
-    name: xianlai-app-gateway
+    name: xianlai-gateway
   cloud:
     nacos:
       discovery:
