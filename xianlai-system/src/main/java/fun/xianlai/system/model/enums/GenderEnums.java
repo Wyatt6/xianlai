@@ -1,4 +1,4 @@
-package fun.xianlai.app.iam.model.enums;
+package fun.xianlai.system.model.enums;
 
 /**
  * @author WyattLau

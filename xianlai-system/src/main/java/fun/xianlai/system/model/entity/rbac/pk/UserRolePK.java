@@ -1,4 +1,4 @@
-package fun.xianlai.app.iam.model.entity.rbac.pk;
+package fun.xianlai.system.model.entity.rbac.pk;
 
 import lombok.Data;
 

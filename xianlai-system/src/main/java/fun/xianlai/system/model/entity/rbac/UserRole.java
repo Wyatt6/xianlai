@@ -1,6 +1,6 @@
-package fun.xianlai.app.iam.model.entity.rbac;
+package fun.xianlai.system.model.entity.rbac;
 
-import fun.xianlai.app.iam.model.entity.rbac.pk.UserRolePK;
+import fun.xianlai.system.model.entity.rbac.pk.UserRolePK;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;

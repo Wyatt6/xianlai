@@ -1,6 +1,6 @@
-package fun.xianlai.app.iam.model.entity.other;
+package fun.xianlai.system.model.entity.other;
 
-import fun.xianlai.app.iam.model.entity.rbac.User;
+import fun.xianlai.system.model.entity.rbac.User;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.utils.bean.BeanUtils;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package fun.xianlai.app.iam.model.form;
+package fun.xianlai.system.model.form;
 
 import lombok.Data;
 

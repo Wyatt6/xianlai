@@ -1,4 +1,4 @@
-package fun.xianlai.app.iam.model.entity.rbac;
+package fun.xianlai.system.model.entity.rbac;
 
 import fun.xianlai.core.utils.bean.PrimaryKeyGenerator;
 import jakarta.persistence.Column;
