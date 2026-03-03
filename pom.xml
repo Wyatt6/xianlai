@@ -13,8 +13,8 @@
         <xianlai-plugin-toolkit.version>1.0.1</xianlai-plugin-toolkit.version>
 
         <!-- 替换成你的Nexus构件库地址 -->
-        <distribution.releases.url>http://172.16.2.205:28081/repository/maven-releases/</distribution.releases.url>
-        <distribution.snapshots.url>http://172.16.2.205:28081/repository/maven-snapshots/</distribution.snapshots.url>
+        <distribution.releases.url>http://192.168.1.100:8081/repository/maven-releases/</distribution.releases.url>
+        <distribution.snapshots.url>http://192.168.1.100:8081/repository/maven-snapshots/</distribution.snapshots.url>
         <!-- 不要修改以下参数 -->
         <java.version>17</java.version>
         <spring-boot.version>3.2.4</spring-boot.version>
@@ -48,8 +48,6 @@
         <module>xianlai-gateway</module>
         <!-- 系统主服务 -->
         <module>xianlai-system</module>
-        <!-- 插件：工具箱 -->
-        <module>xianlai-plugin-toolkit</module>
     </modules>
 
     <dependencyManagement>
