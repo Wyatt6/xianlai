@@ -31,7 +31,7 @@
             <charset>UTF-8</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${PATH}/mod-toolkit/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${PATH}/xianlai-mod-toolkit.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxHistory>10</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
             <maxFileSize>10MB</maxFileSize>

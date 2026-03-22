@@ -9,7 +9,7 @@ import java.util.Optional;
 /**
  * @author WyattLau
  */
-@FeignClient(contextId = "xianlai-app-common-option", name = "xianlai-app-common", path = "/feign/option")
+@FeignClient(contextId = "xianlai-system-option", name = "xianlai-system", path = "/feign/option")
 public interface FeignOptionService {
     @GetMapping("/readValueInString")
     Optional<String> readValueInString(@RequestParam String key);

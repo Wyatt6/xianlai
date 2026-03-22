@@ -40,8 +40,8 @@ XianLai 是一款基于 Vue3 + ElementPlus 和 Spring Cloud Alibaba 的开源、
 
 使用 Docker 和 Docker Compose（v2）部署，需提前安装和配置好。XianLai 发布的 Docker 镜像：
 
-- [wyatt6/xianlai-app-gateway](https://hub.docker.com/repository/docker/wyatt6/xianlai-app-gateway/general)
-- [wyatt6/xianlai-app-common](https://hub.docker.com/repository/docker/wyatt6/xianlai-app-common/general)
+- [wyatt6/xianlai-gateway](https://hub.docker.com/repository/docker/wyatt6/xianlai-gateway/general)
+- [wyatt6/xianlai-system](https://hub.docker.com/repository/docker/wyatt6/xianlai-system/general)
 - [wyatt6/xianlai-app-iam](https://hub.docker.com/repository/docker/wyatt6/xianlai-app-iam/general)
 
 ### 1. 创建容器网络
@@ -95,7 +95,7 @@ java -cp ./druid-1.2.18.jar com.alibaba.druid.filter.config.ConfigTools 上述xi
         "args": { "pattern": "/api/common/**" }
       }
     ],
-    "uri": "lb://xianlai-app-common",
+    "uri": "lb://xianlai-system",
     "filters": [
       {
         "name": "RewritePath",
@@ -165,10 +165,10 @@ docker network connect xianlai_net nacos容器名
 + xianlai/
 |       .env
 |       docker-compose.yml
-|       + xianlai-app-gateway/
+|       + xianlai-gateway/
 |       |       application-run.yml
 |       |       + log/
-|       + xianlai-app-common/
+|       + xianlai-system/
 |       |       application-run.yml
 |       |       + log/
 |       + xianlai-app-iam/

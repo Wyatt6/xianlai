@@ -1,0 +1,8 @@
+nacos:
+  server-addr: 172.16.2.205:8848
+  namespace: xianlai-dev
+  username: xianlai-dev
+  password: wa5rjAJTBn8RHEnF
+  group: DEFAULT_GROUP
+  data-id: gateway-dynamic-routes
+  timeout: 10000

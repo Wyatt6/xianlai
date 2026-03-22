@@ -2,39 +2,36 @@
 # 版本号在.env文件中定义
 
 services:
-  xianlai-app-gateway:
-    image: wyatt6/xianlai-app-gateway:${XIANLAI_APP_GATEWAY_VERSION}
-    container_name: xianlai-app-gateway
+  xianlai-gateway:
+    image: wyatt6/xianlai-gateway:${XIANLAI_GATEWAY_VERSION}
+    container_name: xianlai-gateway
     restart: on-failure:5
     volumes:
-      - ./xianlai-app-gateway/application-run.yml:/app/application-run.yml:rw
-      - ./xianlai-app-gateway/log:/app/log:rw
+      - ./xianlai-gateway/application-run.yml:/app/application-run.yml:rw
+      - ./xianlai-gateway/log:/app/log:rw
     networks:
       - xianlai_net
     ports:
       - "30000:30000"
-  xianlai-app-common:
-    image: wyatt6/xianlai-app-common:${XIANLAI_APP_COMMON_VERSION}
-    container_name: xianlai-app-common
+
+  xianlai-system:
+    image: wyatt6/xianlai-system:${XIANLAI_SYSTEM_VERSION}
+    container_name: xianlai-system
     restart: on-failure:5
     volumes:
-      - ./xianlai-app-common/application-run.yml:/app/application-run.yml:rw
-      - ./xianlai-app-common/log:/app/log:rw
+      - ./xianlai-system/application-run.yml:/app/application-run.yml:rw
+      - ./xianlai-system/log:/app/log:rw
     networks:
       - xianlai_net
     ports:
       - "30001:30001"
-  xianlai-app-iam:
-    image: wyatt6/xianlai-app-iam:${XIANLAI_APP_IAM_VERSION}
-    container_name: xianlai-app-iam
-    restart: on-failure:5
-    volumes:
-      - ./xianlai-app-iam/application-run.yml:/app/application-run.yml:rw
-      - ./xianlai-app-iam/log:/app/log:rw
-    networks:
-      - xianlai_net
-    ports:
-      - "30002:30002"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:30001/actuator/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
   xianlai-mod-toolkit:
     image: wyatt6/xianlai-mod-toolkit:${XIANLAI_MOD_TOOLKIT_VERSION}
     container_name: xianlai-mod-toolkit
@@ -46,6 +43,9 @@ services:
       - xianlai_net
     ports:
       - "30003:30003"
+    depends_on:
+      xianlai-system:
+        condition: service_healthy
 
 networks:
   xianlai_net:
