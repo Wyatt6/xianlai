@@ -17,11 +17,6 @@ public interface OptionService {
     void updateFrontLoadTenantOptionsCache(Long tenantId);
 
     /**
-     * 更新前端加载的【用户参数】缓存
-     */
-    void updateFrontLoadUserOptionsCache(Long userId);
-
-    /**
      * 从缓存获取前端加载的【系统参数】参数
      */
     Map<String, Map<String, String>> getFrontLoadSystemOptionsFromCache();
@@ -32,24 +27,14 @@ public interface OptionService {
     Map<String, Map<String, String>> getFrontLoadTenantOptionsFromCache(Long tenantId);
 
     /**
-     * 从缓存获取前端加载的【用户参数】参数
+     * 更新后端加载的【系统参数】缓存
      */
-    Map<String, Map<String, String>> getFrontLoadUserOptionsFromCache(Long userId);
+    void updateBackLoadSystemOptionsCache();
 
     /**
-     * 更新所有后端加载的【系统参数】缓存
+     * 更新后端加载的【租户参数】缓存
      */
-    void updateAllBackLoadSystemOptionsCache();
-
-    /**
-     * 更新所有后端加载的【租户参数】缓存
-     */
-    void updateAllBackLoadTenantOptionsCache(Long tenantId);
-
-    /**
-     * 更新所有后端加载的【用户参数】缓存
-     */
-    void updateAllBackLoadUserOptionsCache(Long userId);
+    void updateBackLoadTenantOptionsCache(Long tenantId);
 
     /**
      * 更新某个后端加载参数的缓存
@@ -60,22 +45,12 @@ public interface OptionService {
      * 从缓存获取某个后端加载的参数
      */
     Map<String, String> getCertainBackLoadOptionFromCache(String key);
-
-//    /**
-//     * 新增参数
-//     */
-//    DataMap add(SysOption option);
-//
-//    /**
-//     * 删除参数
-//     */
-//    void delete(Long optionId);
 //
 //    /**
 //     * 修改参数
 //     */
-//    DataMap edit(SysOption option);
-
+//    DataMap edit(SysOptionDefault option);
+//
 //    /**
 //     * 以String类型读取参数值
 //     */
