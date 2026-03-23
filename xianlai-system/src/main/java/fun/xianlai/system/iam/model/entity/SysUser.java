@@ -64,8 +64,9 @@ public class SysUser {
     @Transient
     private String captcha;     // 验证码
 
-    public SysUser(Long id, String username, String password, String salt, Date registerAt, Boolean active, Boolean isDeleted) {
+    public SysUser(Long id, Long tenantId, String username, String password, String salt, Date registerAt, Boolean active, Boolean isDeleted) {
         this.id = id;
+        this.tenantId = tenantId;
         this.username = username;
         this.password = password;
         this.salt = salt;
