@@ -16,13 +16,12 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * 参数定义
- * <p>
- * 把系统参数、用户自定义参数等都统一起来了，用type属性区分
- * 参数Key应遵循规范：
- * 系统参数： sys.xxx.xxx
- * 租户参数： tenant.TENANT_ID.xxx.xxx
- * 用户参数： user.USER_ID.xxx.xxx
+ * 参数
+ * 一旦参数值修改后就用此记录的数据覆盖默认参数
+ * 参数Key规范：
+ *      system:{key}
+ *      tenant:{tenantId}:{key}
+ *      user:{userId}:{key}
  *
  * @author WyattLau
  */
@@ -32,12 +31,11 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "sys_common_option_definition", indexes = {
-        @Index(columnList = "optionKey", unique = true),
-        @Index(columnList = "type, optionKey"),   // type ASC, optionKey ASC
+@Table(name = "sys_common_option", indexes = {
+        @Index(columnList = "scope, scopeId, optionKey", unique = true), // scope ASC, scopeId ASC, optionKey ASC
         @Index(columnList = "frontLoad")
 })
-public class SysOptionDefinition {
+public class SysOption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
     @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)
@@ -46,11 +44,19 @@ public class SysOptionDefinition {
     @Column(columnDefinition = "varchar(30) not null")
     private String scope;           // 参数作用域，取值见： EnumOptionScope
 
+    /**
+     * 当 scope=SYSTEM 时，取值 0
+     * 当 scope=TENANT 时，取值 tenantId
+     * 当 scope=USER 时，取值 userId
+     */
+    @Column(columnDefinition = "bigint not null default 0")
+    private Long scopeId;           // 参数作用域ID
+
     @Column(columnDefinition = "varchar(100) not null")
     private String optionKey;
 
     @Column(length = 8000)
-    private String defaultValue;    // 参数值默认值
+    private String optionValue;     // 参数值
 
     @Column(columnDefinition = "varchar(30) not null")
     private String valueType;       // 参数值类型，取值见： EnumOptionValueType
