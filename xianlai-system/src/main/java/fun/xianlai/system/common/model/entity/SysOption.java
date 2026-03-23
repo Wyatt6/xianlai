@@ -19,9 +19,9 @@ import org.hibernate.annotations.GenericGenerator;
  * 参数
  * 一旦参数值修改后就用此记录的数据覆盖默认参数
  * 参数Key规范：
- *      system:{key}
- *      tenant:{tenantId}:{key}
- *      user:{userId}:{key}
+ * system.xxx.xxx.……
+ * tenant.TENANT_ID.xxx.xxx.……
+ * user.USER_ID.xxx.xxx.……
  *
  * @author WyattLau
  */

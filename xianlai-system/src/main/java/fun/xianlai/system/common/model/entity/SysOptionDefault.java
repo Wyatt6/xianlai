@@ -17,6 +17,10 @@ import org.hibernate.annotations.GenericGenerator;
 
 /**
  * 默认参数
+ * 参数Key规范：
+ * system.xxx.xxx.……
+ * tenant.{0}.xxx.xxx.……
+ * user.{0}.xxx.xxx.……
  *
  * @author WyattLau
  */

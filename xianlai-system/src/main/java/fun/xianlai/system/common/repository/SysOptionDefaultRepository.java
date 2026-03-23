@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author WyattLau
@@ -13,11 +14,7 @@ import java.util.List;
 public interface SysOptionDefaultRepository extends JpaRepository<SysOptionDefault, Long> {
     List<SysOptionDefault> findByScopeAndFrontLoad(String scope, Boolean frontLoad);
 
-    List<SysOptionDefault> findByScopeAndScopeIdAndFrontLoad(String scope, Long scopeId, Boolean frontLoad);
-
     List<SysOptionDefault> findByScope(String scope);
 
-    List<SysOptionDefault> findByScopeAndScopeId(String scope, Long ScopeId);
-//
-//    Optional<SysOptionDefault> findByOptionKey(String optionKey);
+    Optional<SysOptionDefault> findByOptionKey(String optionKey);
 }
