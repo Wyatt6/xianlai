@@ -16,6 +16,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.Date;
+
 /**
  * @author WyattLau
  */
@@ -25,11 +27,10 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "sys_iam_role", indexes = {
-        @Index(columnList = "tenantId, identifier", unique = true),
-        @Index(columnList = "tenantId, sortId, identifier")
+@Table(name = "sys_iam_user", indexes = {
+        @Index(columnList = "username", unique = true)
 })
-public class SysRole {
+public class SysUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
     @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)
@@ -38,36 +39,38 @@ public class SysRole {
     @Column(columnDefinition = "bigint not null")
     private Long tenantId;
 
-    @Column(columnDefinition = "bigint not null default 100")
-    private Long sortId;
+    @Column(columnDefinition = "varchar(100) not null")
+    private String username;
 
-    @Column(columnDefinition = "varchar(300) not null")
-    private String identifier;
+    @Column(columnDefinition = "varchar(1000) not null")
+    private String password;
+
+    @Column(columnDefinition = "varchar(100) not null")
+    private String salt;                // 加密盐
 
     @Column
-    private String name;
-
-    @Column(length = 1000)
-    private String description;
+    private Date registerAt;          // 注册时间
 
     @Column(columnDefinition = "bit not null default 0")
     private Boolean active;
 
     @Column(columnDefinition = "bit not null default 0")
-    private Boolean bindCheck;      // 用户绑定本角色时是否需要检查有无权限
+    private Boolean isDeleted;
 
     // ----- 非持久化属性 -----
     @Transient
-    private String permission;
+    private String captchaKey;  // 验证码KEY
 
-    public SysRole(Long id, Long tenantId, Long sortId, String identifier, String name, String description, Boolean active, Boolean bindCheck) {
+    @Transient
+    private String captcha;     // 验证码
+
+    public SysUser(Long id, String username, String password, String salt, Date registerAt, Boolean active, Boolean isDeleted) {
         this.id = id;
-        this.tenantId = tenantId;
-        this.sortId = sortId;
-        this.identifier = identifier;
-        this.name = name;
-        this.description = description;
+        this.username = username;
+        this.password = password;
+        this.salt = salt;
+        this.registerAt = registerAt;
         this.active = active;
-        this.bindCheck = bindCheck;
+        this.isDeleted = isDeleted;
     }
 }
