@@ -11,15 +11,15 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * 参数实体类
- * 把系统参数、用户自定义参数等都统一起来了，用optionType属性区分
- * 参数Key遵循规范：
+ * 参数定义
+ * <p>
+ * 把系统参数、用户自定义参数等都统一起来了，用type属性区分
+ * 参数Key应遵循规范：
  * 系统参数： sys.xxx.xxx
  * 租户参数： tenant.TENANT_ID.xxx.xxx
  * 用户参数： user.USER_ID.xxx.xxx
@@ -32,55 +32,35 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "sys_common_option", indexes = {
+@Table(name = "sys_common_option_definition", indexes = {
         @Index(columnList = "optionKey", unique = true),
-        @Index(columnList = "optionType, sortId, optionKey"),   // optionType ASC, sortId ASC, optionKey ASC
+        @Index(columnList = "type, optionKey"),   // type ASC, optionKey ASC
         @Index(columnList = "frontLoad")
 })
-public class SysOption {
+public class SysOptionDefinition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
     @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)
-    @Comment("主键ID")
     private Long id;
 
-    @Column(columnDefinition = "bigint not null default 1000")
-    @Comment("排序号，越小越前")
-    private Long sortId;
-
     @Column(columnDefinition = "varchar(30) not null")
-    @Comment("参数类型，取值见: EnumOptionType")
-    private String type;
-
-    @Column(columnDefinition = "bigint not null default -1")
-    @Comment("参数标识号")
-    private Long identifier;    // 当type=SYSTEM时取值-1；当type=TENANT时取值TENANT_ID；当type=USER时取值USER_ID
+    private String scope;           // 参数作用域，取值见： EnumOptionScope
 
     @Column(columnDefinition = "varchar(100) not null")
-    @Comment("参数Key（唯一）")
     private String optionKey;
 
-    @Column(columnDefinition = "varchar(5000) not null")
-    @Comment("参数值")
-    private String optionValue;
+    @Column(length = 8000)
+    private String defaultValue;    // 参数值默认值
 
     @Column(columnDefinition = "varchar(30) not null")
-    @Comment("参数值类型，取值见: EnumOptionValueType")
-    private String valueType;
-
-    @Column(length = 5000)
-    @Comment("参数值默认值")
-    private String defaultValue;
+    private String valueType;       // 参数值类型，取值见： EnumOptionValueType
 
     @Column(length = 50)
-    @Comment("参数名")
     private String name;
 
     @Column(length = 500)
-    @Comment("参数说明")
     private String description;
 
     @Column(columnDefinition = "bit not null default 0")
-    @Comment("是否加载到前端")
-    private Boolean frontLoad;
+    private Boolean frontLoad;      // 是否加载到前端
 }
