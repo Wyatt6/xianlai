@@ -1,4 +1,4 @@
-package fun.xianlai.system.model.entity.rbac;
+package fun.xianlai.system.iam.model.entity;
 
 import fun.xianlai.core.utils.bean.PrimaryKeyGenerator;
 import jakarta.persistence.Column;
@@ -16,8 +16,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * RBAC-权限
- *
  * @author WyattLau
  */
 @Data
@@ -26,20 +24,19 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "tb_iam_permission", indexes = {
-        @Index(columnList = "identifier", unique = true),
-        @Index(columnList = "sortId, identifier")   // sortId asc, identifier asc
+@Table(name = "sys_iam_permission", indexes = {
+        @Index(columnList = "tenantId, identifier", unique = true)
 })
-public class Permission {
+public class SysPermission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
     @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)
     private Long id;
 
-    @Column(columnDefinition = "bigint not null default 0")
-    private Long sortId;
+    @Column(columnDefinition = "bigint not null")
+    private Long tenantId;
 
-    @Column(columnDefinition = "varchar(255) not null")
+    @Column(columnDefinition = "varchar(300) not null")
     private String identifier;
 
     @Column
