@@ -20,8 +20,9 @@ import org.hibernate.annotations.GenericGenerator;
  * 参数实体类
  * 把系统参数、用户自定义参数等都统一起来了，用optionType属性区分
  * 参数Key遵循规范：
- *      系统参数： sys.xxx.xxx
- *      用户参数： user.USER_ID.xxx.xxx
+ * 系统参数： sys.xxx.xxx
+ * 租户参数： tenant.TENANT_ID.xxx.xxx
+ * 用户参数： user.USER_ID.xxx.xxx
  *
  * @author WyattLau
  */
@@ -48,8 +49,12 @@ public class SysOption {
     private Long sortId;
 
     @Column(columnDefinition = "varchar(30) not null")
-    @Comment("参数类型，见: EnumOptionType")
-    private String optionType;
+    @Comment("参数类型，取值见: EnumOptionType")
+    private String type;
+
+    @Column(columnDefinition = "bigint not null default -1")
+    @Comment("参数标识号")
+    private Long identifier;    // 当type=SYSTEM时取值-1；当type=TENANT时取值TENANT_ID；当type=USER时取值USER_ID
 
     @Column(columnDefinition = "varchar(100) not null")
     @Comment("参数Key（唯一）")
@@ -60,7 +65,7 @@ public class SysOption {
     private String optionValue;
 
     @Column(columnDefinition = "varchar(30) not null")
-    @Comment("参数值类型，见: EnumOptionValueType")
+    @Comment("参数值类型，取值见: EnumOptionValueType")
     private String valueType;
 
     @Column(length = 5000)
