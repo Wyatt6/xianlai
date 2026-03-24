@@ -1,4 +1,4 @@
-package fun.xianlai.system.launch;
+package fun.xianlai.system.initialization;
 
 import fun.xianlai.system.iam.service.ApiService;
 import fun.xianlai.system.iam.service.MenuService;

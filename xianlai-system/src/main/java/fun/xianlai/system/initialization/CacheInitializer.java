@@ -1,4 +1,4 @@
-package fun.xianlai.system.launch;
+package fun.xianlai.system.initialization;
 
 import fun.xianlai.system.common.service.OptionService;
 import lombok.extern.slf4j.Slf4j;
