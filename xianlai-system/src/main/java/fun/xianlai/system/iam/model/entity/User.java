@@ -27,7 +27,7 @@ import java.util.Date;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "sys_iam_user", indexes = {
+@Table(name = "tb_iam_user", indexes = {
         @Index(columnList = "tenantId, username", unique = true)
 })
 public class User {

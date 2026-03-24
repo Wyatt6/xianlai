@@ -24,7 +24,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "sys_iam_permission", indexes = {
+@Table(name = "tb_iam_permission", indexes = {
         @Index(columnList = "tenantId, identifier", unique = true),
         @Index(columnList = "tenantId, sortId, identifier")
 })

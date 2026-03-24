@@ -30,7 +30,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "sys_common_option_default", indexes = {
+@Table(name = "tb_common_option_default", indexes = {
         @Index(columnList = "optionKey", unique = true),
         @Index(columnList = "scope, optionKey"),   // scope ASC, optionKey ASC
         @Index(columnList = "frontLoad")

@@ -20,7 +20,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "sys_iam_profile", indexes = {
+@Table(name = "tb_iam_profile", indexes = {
         @Index(columnList = "nickname", unique = true),
         @Index(columnList = "phone", unique = true),
         @Index(columnList = "email", unique = true)
