@@ -30,7 +30,7 @@ import java.util.Date;
 @Table(name = "sys_iam_user", indexes = {
         @Index(columnList = "tenantId, username", unique = true)
 })
-public class SysUser {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
     @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)
@@ -64,7 +64,7 @@ public class SysUser {
     @Transient
     private String captcha;     // 验证码
 
-    public SysUser(Long id, Long tenantId, String username, String password, String salt, Date registerAt, Boolean active, Boolean isDeleted) {
+    public User(Long id, Long tenantId, String username, String password, String salt, Date registerAt, Boolean active, Boolean isDeleted) {
         this.id = id;
         this.tenantId = tenantId;
         this.username = username;

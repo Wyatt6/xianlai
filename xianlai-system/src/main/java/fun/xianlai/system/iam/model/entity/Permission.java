@@ -28,7 +28,7 @@ import org.hibernate.annotations.GenericGenerator;
         @Index(columnList = "tenantId, identifier", unique = true),
         @Index(columnList = "tenantId, sortId, identifier")
 })
-public class SysPermission {
+public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
     @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)

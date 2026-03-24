@@ -29,7 +29,7 @@ import org.hibernate.annotations.GenericGenerator;
         @Index(columnList = "tenantId, identifier", unique = true),
         @Index(columnList = "tenantId, sortId, identifier")
 })
-public class SysRole {
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
     @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)
@@ -60,7 +60,7 @@ public class SysRole {
     @Transient
     private String permission;
 
-    public SysRole(Long id, Long tenantId, Long sortId, String identifier, String name, String description, Boolean active, Boolean bindCheck) {
+    public Role(Long id, Long tenantId, Long sortId, String identifier, String name, String description, Boolean active, Boolean bindCheck) {
         this.id = id;
         this.tenantId = tenantId;
         this.sortId = sortId;

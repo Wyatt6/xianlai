@@ -27,7 +27,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "sys_iam_tenant", indexes = {
         @Index(columnList = "code", unique = true)
 })
-public class SysTenant {
+public class Tenant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
     @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)

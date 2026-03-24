@@ -25,7 +25,7 @@ import org.hibernate.annotations.DynamicUpdate;
         @Index(columnList = "phone", unique = true),
         @Index(columnList = "email", unique = true)
 })
-public class SysProfile {
+public class Profile {
     @Id
     private Long userId;
 

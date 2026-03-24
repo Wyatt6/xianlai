@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "sys_iam_role_permission")
 @IdClass(RolePermissionPK.class)
-public class SysRolePermission {
+public class RolePermission {
     @Id
     private Long roleId;
     @Id

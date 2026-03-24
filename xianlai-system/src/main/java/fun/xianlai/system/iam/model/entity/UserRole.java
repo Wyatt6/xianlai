@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "sys_iam_user_role")
 @IdClass(UserRolePK.class)
-public class SysUserRole {
+public class UserRole {
     @Id
     private Long userId;
     @Id

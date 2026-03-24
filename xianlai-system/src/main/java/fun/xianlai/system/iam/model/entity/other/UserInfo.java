@@ -1,6 +1,6 @@
 package fun.xianlai.system.iam.model.entity.other;
 
-import fun.xianlai.system.iam.model.entity.SysUser;
+import fun.xianlai.system.iam.model.entity.User;
 import fun.xianlai.core.exception.SysException;
 import fun.xianlai.core.utils.bean.BeanUtils;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SysUserInfo {
+public class UserInfo {
     // User
     private Long id;
     private Long tenantId;
@@ -30,13 +30,13 @@ public class SysUserInfo {
     private String phone;
     private String email;
 
-    public SysUser exportUser() {
-        SysUser user = new SysUser();
+    public User exportUser() {
+        User user = new User();
         BeanUtils.copyProperties(this, user);
         return user;
     }
 
-    public void importUser(SysUser user) {
+    public void importUser(User user) {
         if (this.id != null && !this.id.equals(user.getId())) {
             throw new SysException("用户信息错误");
         } else {
@@ -44,14 +44,14 @@ public class SysUserInfo {
         }
     }
 
-    public SysProfile exportProfile() {
-        SysProfile profile = new SysProfile();
+    public Profile exportProfile() {
+        Profile profile = new Profile();
         BeanUtils.copyProperties(this, profile);
         profile.setUserId(this.id);
         return profile;
     }
 
-    public void importProfile(SysProfile profile) {
+    public void importProfile(Profile profile) {
         if (this.id != null && !this.id.equals(profile.getUserId())) {
             throw new SysException("用户信息错误");
         } else {
