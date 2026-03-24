@@ -4,11 +4,11 @@ import com.alibaba.fastjson2.JSONObject;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.utils.ChecksumUtils;
 import fun.xianlai.system.common.model.consts.ConstOptionCache;
-import fun.xianlai.system.common.model.entity.SysOption;
-import fun.xianlai.system.common.model.entity.SysOptionDefault;
+import fun.xianlai.system.common.model.entity.Option;
+import fun.xianlai.system.common.model.entity.OptionDefault;
 import fun.xianlai.system.common.model.enums.EnumOptionScope;
-import fun.xianlai.system.common.repository.SysOptionDefaultRepository;
-import fun.xianlai.system.common.repository.SysOptionRepository;
+import fun.xianlai.system.common.repository.OptionDefaultRepository;
+import fun.xianlai.system.common.repository.OptionRepository;
 import fun.xianlai.system.common.service.OptionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +33,9 @@ public class OptionServiceImpl implements OptionService {
     @Autowired
     private RedisTemplate<String, Object> redis;
     @Autowired
-    private SysOptionDefaultRepository optionDefaultRepository;
+    private OptionDefaultRepository optionDefaultRepository;
     @Autowired
-    private SysOptionRepository optionRepository;
+    private OptionRepository optionRepository;
     @Lazy
     @Autowired
     private OptionService self;
@@ -46,9 +46,9 @@ public class OptionServiceImpl implements OptionService {
     public void updateFrontLoadSystemOptionsCache() {
         Map<String, Map<String, String>> mapOptions = new HashMap<>();
         // 先查询默认参数
-        List<SysOptionDefault> optionDefaults = optionDefaultRepository.findByScopeAndFrontLoad(EnumOptionScope.SYSTEM, true);
+        List<OptionDefault> optionDefaults = optionDefaultRepository.findByScopeAndFrontLoad(EnumOptionScope.SYSTEM, true);
         if (optionDefaults != null) {
-            for (SysOptionDefault optionDefault : optionDefaults) {
+            for (OptionDefault optionDefault : optionDefaults) {
                 Map<String, String> valueObject = new HashMap<>();
                 valueObject.put("value", optionDefault.getDefaultValue());
                 valueObject.put("type", optionDefault.getValueType());
@@ -56,9 +56,9 @@ public class OptionServiceImpl implements OptionService {
             }
         }
         // 再查询参数实例，如有实例则覆盖默认参数
-        List<SysOption> options = optionRepository.findByScopeAndFrontLoad(EnumOptionScope.SYSTEM, true);
+        List<Option> options = optionRepository.findByScopeAndFrontLoad(EnumOptionScope.SYSTEM, true);
         if (options != null) {
-            for (SysOption option : options) {
+            for (Option option : options) {
                 Map<String, String> valueObject = new HashMap<>();
                 valueObject.put("value", option.getOptionValue());
                 valueObject.put("type", option.getValueType());
@@ -76,9 +76,9 @@ public class OptionServiceImpl implements OptionService {
     public void updateFrontLoadTenantOptionsCache(Long tenantId) {
         Map<String, Map<String, String>> mapOptions = new HashMap<>();
         // 先查询默认参数
-        List<SysOptionDefault> optionDefaults = optionDefaultRepository.findByScopeAndFrontLoad(EnumOptionScope.TENANT, true);
+        List<OptionDefault> optionDefaults = optionDefaultRepository.findByScopeAndFrontLoad(EnumOptionScope.TENANT, true);
         if (optionDefaults != null) {
-            for (SysOptionDefault optionDefault : optionDefaults) {
+            for (OptionDefault optionDefault : optionDefaults) {
                 Map<String, String> valueObject = new HashMap<>();
                 valueObject.put("value", optionDefault.getDefaultValue());
                 valueObject.put("type", optionDefault.getValueType());
@@ -86,9 +86,9 @@ public class OptionServiceImpl implements OptionService {
             }
         }
         // 再查询参数实例，如有实例则覆盖默认参数
-        List<SysOption> options = optionRepository.findByScopeAndScopeIdAndFrontLoad(EnumOptionScope.TENANT, tenantId, true);
+        List<Option> options = optionRepository.findByScopeAndScopeIdAndFrontLoad(EnumOptionScope.TENANT, tenantId, true);
         if (options != null) {
-            for (SysOption option : options) {
+            for (Option option : options) {
                 Map<String, String> valueObject = new HashMap<>();
                 valueObject.put("value", option.getOptionValue());
                 valueObject.put("type", option.getValueType());
@@ -106,9 +106,9 @@ public class OptionServiceImpl implements OptionService {
     public void updateFrontLoadUserOptionsCache(Long userId) {
         Map<String, Map<String, String>> mapOptions = new HashMap<>();
         // 先查询默认参数
-        List<SysOptionDefault> optionDefaults = optionDefaultRepository.findByScopeAndFrontLoad(EnumOptionScope.USER, true);
+        List<OptionDefault> optionDefaults = optionDefaultRepository.findByScopeAndFrontLoad(EnumOptionScope.USER, true);
         if (optionDefaults != null) {
-            for (SysOptionDefault optionDefault : optionDefaults) {
+            for (OptionDefault optionDefault : optionDefaults) {
                 Map<String, String> valueObject = new HashMap<>();
                 valueObject.put("value", optionDefault.getDefaultValue());
                 valueObject.put("type", optionDefault.getValueType());
@@ -116,9 +116,9 @@ public class OptionServiceImpl implements OptionService {
             }
         }
         // 再查询参数实例，如有实例则覆盖默认参数
-        List<SysOption> options = optionRepository.findByScopeAndScopeIdAndFrontLoad(EnumOptionScope.USER, userId, true);
+        List<Option> options = optionRepository.findByScopeAndScopeIdAndFrontLoad(EnumOptionScope.USER, userId, true);
         if (options != null) {
-            for (SysOption option : options) {
+            for (Option option : options) {
                 Map<String, String> valueObject = new HashMap<>();
                 valueObject.put("value", option.getOptionValue());
                 valueObject.put("type", option.getValueType());
@@ -167,15 +167,15 @@ public class OptionServiceImpl implements OptionService {
     @SimpleServiceLog("更新后端加载的【系统参数】缓存")
     @Transactional
     public void updateBackLoadSystemOptionsCache() {
-        List<SysOptionDefault> optionDefaults = optionDefaultRepository.findByScope(EnumOptionScope.SYSTEM);
-        for (SysOptionDefault optionDefault : optionDefaults) {
+        List<OptionDefault> optionDefaults = optionDefaultRepository.findByScope(EnumOptionScope.SYSTEM);
+        for (OptionDefault optionDefault : optionDefaults) {
             Map<String, String> valueObject = new HashMap<>();
             valueObject.put("value", optionDefault.getDefaultValue());
             valueObject.put("type", optionDefault.getValueType());
             redis.opsForValue().set(ConstOptionCache.SINGLE_OPTION_CACHE_KEY_PREFIX + optionDefault.getOptionKey(), valueObject, Duration.ofHours(ConstOptionCache.SYSTEM_OPTION_CACHE_HOURS));
         }
-        List<SysOption> options = optionRepository.findByScope(EnumOptionScope.SYSTEM);
-        for (SysOption option : options) {
+        List<Option> options = optionRepository.findByScope(EnumOptionScope.SYSTEM);
+        for (Option option : options) {
             Map<String, String> valueObject = new HashMap<>();
             valueObject.put("value", option.getOptionValue());
             valueObject.put("type", option.getValueType());
@@ -187,15 +187,15 @@ public class OptionServiceImpl implements OptionService {
     @SimpleServiceLog("更新后端加载的【租户参数】缓存")
     @Transactional
     public void updateBackLoadTenantOptionsCache(Long tenantId) {
-        List<SysOptionDefault> optionDefaults = optionDefaultRepository.findByScope(EnumOptionScope.TENANT);
-        for (SysOptionDefault optionDefault : optionDefaults) {
+        List<OptionDefault> optionDefaults = optionDefaultRepository.findByScope(EnumOptionScope.TENANT);
+        for (OptionDefault optionDefault : optionDefaults) {
             Map<String, String> valueObject = new HashMap<>();
             valueObject.put("value", optionDefault.getDefaultValue());
             valueObject.put("type", optionDefault.getValueType());
             redis.opsForValue().set(ConstOptionCache.SINGLE_OPTION_CACHE_KEY_PREFIX + MessageFormat.format(optionDefault.getOptionKey(), tenantId), valueObject, Duration.ofHours(ConstOptionCache.TENANT_OPTION_CACHE_HOURS));
         }
-        List<SysOption> options = optionRepository.findByScopeAndScopeId(EnumOptionScope.TENANT, tenantId);
-        for (SysOption option : options) {
+        List<Option> options = optionRepository.findByScopeAndScopeId(EnumOptionScope.TENANT, tenantId);
+        for (Option option : options) {
             Map<String, String> valueObject = new HashMap<>();
             valueObject.put("value", option.getOptionValue());
             valueObject.put("type", option.getValueType());
@@ -207,15 +207,15 @@ public class OptionServiceImpl implements OptionService {
     @SimpleServiceLog("更新后端加载的【用户参数】缓存")
     @Transactional
     public void updateBackLoadUserOptionsCache(Long userId) {
-        List<SysOptionDefault> optionDefaults = optionDefaultRepository.findByScope(EnumOptionScope.USER);
-        for (SysOptionDefault optionDefault : optionDefaults) {
+        List<OptionDefault> optionDefaults = optionDefaultRepository.findByScope(EnumOptionScope.USER);
+        for (OptionDefault optionDefault : optionDefaults) {
             Map<String, String> valueObject = new HashMap<>();
             valueObject.put("value", optionDefault.getDefaultValue());
             valueObject.put("type", optionDefault.getValueType());
             redis.opsForValue().set(ConstOptionCache.SINGLE_OPTION_CACHE_KEY_PREFIX + MessageFormat.format(optionDefault.getOptionKey(), userId), valueObject, Duration.ofHours(ConstOptionCache.USER_OPTION_CACHE_HOURS));
         }
-        List<SysOption> options = optionRepository.findByScopeAndScopeId(EnumOptionScope.USER, userId);
-        for (SysOption option : options) {
+        List<Option> options = optionRepository.findByScopeAndScopeId(EnumOptionScope.USER, userId);
+        for (Option option : options) {
             Map<String, String> valueObject = new HashMap<>();
             valueObject.put("value", option.getOptionValue());
             valueObject.put("type", option.getValueType());
@@ -247,14 +247,14 @@ public class OptionServiceImpl implements OptionService {
                 cacheHours = ConstOptionCache.USER_OPTION_CACHE_HOURS;
             }
         }
-        Optional<SysOptionDefault> optionDefault = optionDefaultRepository.findByOptionKey(defaultKey);
+        Optional<OptionDefault> optionDefault = optionDefaultRepository.findByOptionKey(defaultKey);
         if (optionDefault.isPresent()) {
             Map<String, String> valueObject = new HashMap<>();
             valueObject.put("value", optionDefault.get().getDefaultValue());
             valueObject.put("type", optionDefault.get().getValueType());
             redis.opsForValue().set(ConstOptionCache.SINGLE_OPTION_CACHE_KEY_PREFIX + key, valueObject, Duration.ofHours(cacheHours));
         }
-        Optional<SysOption> option = optionRepository.findByOptionKey(key);
+        Optional<Option> option = optionRepository.findByOptionKey(key);
         if (option.isPresent()) {
             Map<String, String> valueObject = new HashMap<>();
             valueObject.put("value", option.get().getOptionValue());
