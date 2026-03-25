@@ -67,7 +67,7 @@
             </dependency>
             <dependency>
                 <groupId>fun.xianlai</groupId>
-                <artifactId>xianlai-core</artifactId>
+                <artifactId>xianlai-common</artifactId>
                 <version>${xianlai-core.version}</version>
             </dependency>
 

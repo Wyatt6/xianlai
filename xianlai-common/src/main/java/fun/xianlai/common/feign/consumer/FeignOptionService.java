@@ -1,0 +1,22 @@
+package fun.xianlai.common.feign.consumer;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Optional;
+
+/**
+ * @author WyattLau
+ */
+@FeignClient(contextId = "xianlai-system-option", name = "xianlai-system", path = "/feign/option")
+public interface FeignOptionService {
+    @GetMapping("/readValueInString")
+    Optional<String> readValueInString(@RequestParam String key);
+
+    @GetMapping("/readValueInInteger")
+    Optional<String> readValueInInteger(@RequestParam String key);
+
+    @GetMapping("/readValueInLong")
+    Optional<Long> readValueInLong(@RequestParam String key);
+}

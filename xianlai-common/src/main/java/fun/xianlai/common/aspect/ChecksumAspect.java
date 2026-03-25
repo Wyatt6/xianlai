@@ -1,0 +1,56 @@
+package fun.xianlai.common.aspect;
+
+import fun.xianlai.common.response.RetResult;
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
+
+/**
+ * @author WyattLau
+ */
+@Slf4j
+@Aspect
+@Component
+@Order(2)
+public class ChecksumAspect {
+    @Autowired
+    private RedisTemplate<String, Object> redis;
+
+    @Pointcut("execution(* fun.xianlai..*.controller..*(..))")
+    public void pointcut() {
+    }
+
+    @AfterReturning(pointcut = "pointcut()", returning = "result")
+    public void assembleChecksum(JoinPoint joinPoint, RetResult result) {
+        String systemOptionsChecksum = (String) redis.opsForValue().get("systemOptionsChecksum");
+        if (systemOptionsChecksum != null) {
+            result.addChecksum("systemOptionsChecksum", systemOptionsChecksum);
+        }
+
+        String pathsChecksum = (String) redis.opsForValue().get("pathsChecksum");
+        if (pathsChecksum != null) {
+            result.addChecksum("pathsChecksum", pathsChecksum);
+        }
+
+        String menusChecksum = (String) redis.opsForValue().get("menusChecksum");
+        if (menusChecksum != null) {
+            result.addChecksum("menusChecksum", menusChecksum);
+        }
+
+        String apisChecksum = (String) redis.opsForValue().get("apisChecksum");
+        if (apisChecksum != null) {
+            result.addChecksum("apisChecksum", apisChecksum);
+        }
+
+        String routesChecksum = (String) redis.opsForValue().get("routesChecksum");
+        if (routesChecksum != null) {
+            result.addChecksum("routesChecksum", routesChecksum);
+        }
+    }
+}

@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>fun.xianlai</groupId>
-            <artifactId>xianlai-core</artifactId>
+            <artifactId>xianlai-common</artifactId>
         </dependency>
         <!-- 外部依赖 -->
         <dependency>
