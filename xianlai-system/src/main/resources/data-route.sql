@@ -29,7 +29,10 @@ INSERT IGNORE INTO tb_common_route(
 (990004, 9900000004, 0, 'not_connected', 'NOT_CONNECTED', null, 'errors/500.vue', 0, 0, 0, null, 0, null),
 -- 最终无匹配
 (999999, 9999999999, 0, 'final_not_match', 'FINAL_NOT_MATCH', 'NOT_FOUND', null, 0, 0, 0, null, 0, null);
---
+
+-- 复位非初始化数据的自增主键初值为1000000
+ALTER TABLE tb_common_route AUTO_INCREMENT = 1000000;
+
 -- -- ---------- --
 -- -- IAM模块路由 --
 -- -- ---------- --

@@ -4,10 +4,10 @@ INSERT IGNORE INTO tb_common_path(`id`, `sort_id`, `name`, `path`) VALUE
 -- 公共路径 --
 -- ------- --
 -- -- 门户
--- (10001, 10001, 'PORTAL', '/portal'),
--- (10002, 10002, 'LOGIN', '/portal/login'),
--- (10003, 10003, 'REGISTER', '/portal/register'),
--- (10004, 10004, 'RESET_PASSWORD', '/portal/reset-password'),
+(100001, 100001, 'PORTAL', '/portal'),
+(100002, 100002, 'LOGIN', '/portal/login'),
+(100003, 100003, 'REGISTER', '/portal/register'),
+(100004, 100004, 'RESET_PASSWORD', '/portal/reset-password'),
 -- -- 首页、个人中心
 -- (11001, 11001, 'INDEX', '/'),
 -- (11002, 11002, 'INDEX_REDIRECT', '/homepage'),
@@ -28,6 +28,9 @@ INSERT IGNORE INTO tb_common_path(`id`, `sort_id`, `name`, `path`) VALUE
 (990004, 9900000004, 'NOT_CONNECTED', '/500'),
 -- 最终无匹配
 (999999, 9999999999, 'FINAL_NOT_MATCH', '/:catchAll(.*)');
+
+-- 复位非初始化数据的自增主键初值为1000000
+ALTER TABLE tb_common_path AUTO_INCREMENT = 1000000;
 
 -- -- ---------- --
 -- -- IAM模块路径 --
