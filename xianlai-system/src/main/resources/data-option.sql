@@ -1,14 +1,13 @@
 INSERT IGNORE INTO tb_common_option_default(
        `id`, `scope`, `option_key`, `default_value`, `value_type`, `name`, `description`, `front_load`
 ) VALUE
--- ------- --
--- 其他控制 --
--- ------- --
--- 其他
-(10001, 'SYSTEM', 'system.request.timeout', '30000', 'LONG', '请求超时时长', '用于设置前端往后台发送API请求时，等待多长时间，超过这个时间报请求超时错误。单位：毫秒。注意：此参数值建议设置30000毫秒（30秒）以上，不应设置太小。', 1),
--- 验证码
-(11001, 'SYSTEM', 'system.captcha.length', '5', 'INTEGER', '验证码长度', '设置公用的验证码的长度，建议4～6位。', 1),
-(11002, 'SYSTEM', 'system.captcha.expireSeconds', '120', 'INTEGER', '验证码有效期', '设置公用的验证码的有效期，单位：秒。', 0);
+-- id 自增主键，1000000 （不含）以下区间可以用来设置初始值
+(1000001, 'SYSTEM', 'system.request.timeout', '30000', 'LONG', '请求超时时长', '用于设置前端往后台发送API请求时，等待多长时间，超过这个时间报请求超时错误。单位：毫秒。注意：此参数值建议设置30000毫秒（30秒）以上，不应设置太小。', 1),
+(1100001, 'SYSTEM', 'system.captcha.length', '5', 'INTEGER', '验证码长度', '设置公用的验证码的长度，建议4～6位。', 1),
+(1100002, 'SYSTEM', 'system.captcha.expireSeconds', '120', 'INTEGER', '验证码有效期', '设置公用的验证码的有效期，单位：秒。', 0);
+
+
+       
 -- -- ------- --
 -- -- 门户页面 --
 -- -- ------- --
