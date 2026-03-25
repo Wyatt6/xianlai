@@ -1,4 +1,4 @@
-package fun.xianlai.system.launch.initializer;
+package fun.xianlai.system.initializer;
 
 import fun.xianlai.system.common.service.MenuService;
 import fun.xianlai.system.common.service.OptionService;
