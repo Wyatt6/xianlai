@@ -11,45 +11,45 @@ public interface OptionService {
      */
     void updateFrontLoadSystemOptionsCache();
 
-    /**
-     * 更新前端加载的【租户参数】缓存
-     */
-    void updateFrontLoadTenantOptionsCache(Long tenantId);
-
-    /**
-     * 更新前端加载的【用户参数】缓存
-     */
-    void updateFrontLoadUserOptionsCache(Long userId);
+//    /**
+//     * 更新前端加载的【租户参数】缓存
+//     */
+//    void updateFrontLoadTenantOptionsCache(Long tenantId);
+//
+//    /**
+//     * 更新前端加载的【用户参数】缓存
+//     */
+//    void updateFrontLoadUserOptionsCache(Long userId);
 
     /**
      * 从缓存获取前端加载的【系统参数】参数
      */
     Map<String, Map<String, String>> getFrontLoadSystemOptionsFromCache();
 
-    /**
-     * 从缓存获取前端加载的【租户参数】参数
-     */
-    Map<String, Map<String, String>> getFrontLoadTenantOptionsFromCache(Long tenantId);
-
-    /**
-     * 从缓存获取前端加载的【用户参数】参数
-     */
-    Map<String, Map<String, String>> getFrontLoadUserOptionsFromCache(Long userId);
+//    /**
+//     * 从缓存获取前端加载的【租户参数】参数
+//     */
+//    Map<String, Map<String, String>> getFrontLoadTenantOptionsFromCache(Long tenantId);
+//
+//    /**
+//     * 从缓存获取前端加载的【用户参数】参数
+//     */
+//    Map<String, Map<String, String>> getFrontLoadUserOptionsFromCache(Long userId);
 
     /**
      * 更新后端加载的【系统参数】缓存
      */
     void updateBackLoadSystemOptionsCache();
 
-    /**
-     * 更新后端加载的【租户参数】缓存
-     */
-    void updateBackLoadTenantOptionsCache(Long tenantId);
-
-    /**
-     * 更新后端加载的【用户参数】缓存
-     */
-    void updateBackLoadUserOptionsCache(Long userId);
+//    /**
+//     * 更新后端加载的【租户参数】缓存
+//     */
+//    void updateBackLoadTenantOptionsCache(Long tenantId);
+//
+//    /**
+//     * 更新后端加载的【用户参数】缓存
+//     */
+//    void updateBackLoadUserOptionsCache(Long userId);
 
     /**
      * 更新某个后端加载参数的缓存

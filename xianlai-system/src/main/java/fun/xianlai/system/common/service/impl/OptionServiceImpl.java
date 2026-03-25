@@ -4,11 +4,11 @@ import com.alibaba.fastjson2.JSONObject;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.utils.ChecksumUtils;
 import fun.xianlai.system.common.model.consts.ConstOptionCache;
-import fun.xianlai.system.common.model.entity.Option;
-import fun.xianlai.system.common.model.entity.OptionDefault;
+import fun.xianlai.system.common.model.entity.XLOption;
+import fun.xianlai.system.common.model.entity.XLOptionDefault;
 import fun.xianlai.system.common.model.enums.EnumOptionScope;
-import fun.xianlai.system.common.repository.OptionDefaultRepository;
-import fun.xianlai.system.common.repository.OptionRepository;
+import fun.xianlai.system.common.repository.XLOptionDefaultRepository;
+import fun.xianlai.system.common.repository.XLOptionRepository;
 import fun.xianlai.system.common.service.OptionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.MessageFormat;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
@@ -33,9 +32,9 @@ public class OptionServiceImpl implements OptionService {
     @Autowired
     private RedisTemplate<String, Object> redis;
     @Autowired
-    private OptionDefaultRepository optionDefaultRepository;
+    private XLOptionDefaultRepository optionDefaultRepository;
     @Autowired
-    private OptionRepository optionRepository;
+    private XLOptionRepository optionRepository;
     @Lazy
     @Autowired
     private OptionService self;
@@ -46,9 +45,9 @@ public class OptionServiceImpl implements OptionService {
     public void updateFrontLoadSystemOptionsCache() {
         Map<String, Map<String, String>> mapOptions = new HashMap<>();
         // 先查询默认参数
-        List<OptionDefault> optionDefaults = optionDefaultRepository.findByScopeAndFrontLoad(EnumOptionScope.SYSTEM, true);
+        List<XLOptionDefault> optionDefaults = optionDefaultRepository.findByScopeAndFrontLoad(EnumOptionScope.SYSTEM, true);
         if (optionDefaults != null) {
-            for (OptionDefault optionDefault : optionDefaults) {
+            for (XLOptionDefault optionDefault : optionDefaults) {
                 Map<String, String> valueObject = new HashMap<>();
                 valueObject.put("value", optionDefault.getDefaultValue());
                 valueObject.put("type", optionDefault.getValueType());
@@ -56,9 +55,9 @@ public class OptionServiceImpl implements OptionService {
             }
         }
         // 再查询参数实例，如有实例则覆盖默认参数
-        List<Option> options = optionRepository.findByScopeAndFrontLoad(EnumOptionScope.SYSTEM, true);
+        List<XLOption> options = optionRepository.findByScopeAndFrontLoad(EnumOptionScope.SYSTEM, true);
         if (options != null) {
-            for (Option option : options) {
+            for (XLOption option : options) {
                 Map<String, String> valueObject = new HashMap<>();
                 valueObject.put("value", option.getOptionValue());
                 valueObject.put("type", option.getValueType());
@@ -70,65 +69,65 @@ public class OptionServiceImpl implements OptionService {
         redis.opsForValue().set(ConstOptionCache.SYSTEM_OPTION_CACHE_KEY, mapOptions, Duration.ofHours(ConstOptionCache.SYSTEM_OPTION_CACHE_HOURS));
     }
 
-    @Override
-    @SimpleServiceLog("更新前端加载的【租户参数】缓存")
-    @Transactional
-    public void updateFrontLoadTenantOptionsCache(Long tenantId) {
-        Map<String, Map<String, String>> mapOptions = new HashMap<>();
-        // 先查询默认参数
-        List<OptionDefault> optionDefaults = optionDefaultRepository.findByScopeAndFrontLoad(EnumOptionScope.TENANT, true);
-        if (optionDefaults != null) {
-            for (OptionDefault optionDefault : optionDefaults) {
-                Map<String, String> valueObject = new HashMap<>();
-                valueObject.put("value", optionDefault.getDefaultValue());
-                valueObject.put("type", optionDefault.getValueType());
-                mapOptions.put(MessageFormat.format(optionDefault.getOptionKey(), tenantId), valueObject);
-            }
-        }
-        // 再查询参数实例，如有实例则覆盖默认参数
-        List<Option> options = optionRepository.findByScopeAndScopeIdAndFrontLoad(EnumOptionScope.TENANT, tenantId, true);
-        if (options != null) {
-            for (Option option : options) {
-                Map<String, String> valueObject = new HashMap<>();
-                valueObject.put("value", option.getOptionValue());
-                valueObject.put("type", option.getValueType());
-                mapOptions.put(option.getOptionKey(), valueObject);
-            }
-        }
-        // 缓存
-        redis.opsForValue().set(ConstOptionCache.TENANT_OPTION_CHECKSUM_CACHE_KEY_PREFIX + tenantId, ChecksumUtils.sha256Checksum(JSONObject.toJSONString(mapOptions)), Duration.ofHours(ConstOptionCache.TENANT_OPTION_CACHE_HOURS));
-        redis.opsForValue().set(ConstOptionCache.TENANT_OPTION_CACHE_KEY_PREFIX + tenantId, mapOptions, Duration.ofHours(ConstOptionCache.TENANT_OPTION_CACHE_HOURS));
-    }
+//    @Override
+//    @SimpleServiceLog("更新前端加载的【租户参数】缓存")
+//    @Transactional
+//    public void updateFrontLoadTenantOptionsCache(Long tenantId) {
+//        Map<String, Map<String, String>> mapOptions = new HashMap<>();
+//        // 先查询默认参数
+//        List<XLOptionDefault> XLOptionDefaults = optionDefaultRepository.findByScopeAndFrontLoad(EnumOptionScope.TENANT, true);
+//        if (XLOptionDefaults != null) {
+//            for (XLOptionDefault XLOptionDefault : XLOptionDefaults) {
+//                Map<String, String> valueObject = new HashMap<>();
+//                valueObject.put("value", XLOptionDefault.getDefaultValue());
+//                valueObject.put("type", XLOptionDefault.getValueType());
+//                mapOptions.put(MessageFormat.format(XLOptionDefault.getOptionKey(), tenantId), valueObject);
+//            }
+//        }
+//        // 再查询参数实例，如有实例则覆盖默认参数
+//        List<XLOption> XLOptions = optionRepository.findByScopeAndScopeIdAndFrontLoad(EnumOptionScope.TENANT, tenantId, true);
+//        if (XLOptions != null) {
+//            for (XLOption XLOption : XLOptions) {
+//                Map<String, String> valueObject = new HashMap<>();
+//                valueObject.put("value", XLOption.getOptionValue());
+//                valueObject.put("type", XLOption.getValueType());
+//                mapOptions.put(XLOption.getOptionKey(), valueObject);
+//            }
+//        }
+//        // 缓存
+//        redis.opsForValue().set(ConstOptionCache.TENANT_OPTION_CHECKSUM_CACHE_KEY_PREFIX + tenantId, ChecksumUtils.sha256Checksum(JSONObject.toJSONString(mapOptions)), Duration.ofHours(ConstOptionCache.TENANT_OPTION_CACHE_HOURS));
+//        redis.opsForValue().set(ConstOptionCache.TENANT_OPTION_CACHE_KEY_PREFIX + tenantId, mapOptions, Duration.ofHours(ConstOptionCache.TENANT_OPTION_CACHE_HOURS));
+//    }
 
-    @Override
-    @SimpleServiceLog("更新前端加载的【用户参数】缓存")
-    @Transactional
-    public void updateFrontLoadUserOptionsCache(Long userId) {
-        Map<String, Map<String, String>> mapOptions = new HashMap<>();
-        // 先查询默认参数
-        List<OptionDefault> optionDefaults = optionDefaultRepository.findByScopeAndFrontLoad(EnumOptionScope.USER, true);
-        if (optionDefaults != null) {
-            for (OptionDefault optionDefault : optionDefaults) {
-                Map<String, String> valueObject = new HashMap<>();
-                valueObject.put("value", optionDefault.getDefaultValue());
-                valueObject.put("type", optionDefault.getValueType());
-                mapOptions.put(MessageFormat.format(optionDefault.getOptionKey(), userId), valueObject);
-            }
-        }
-        // 再查询参数实例，如有实例则覆盖默认参数
-        List<Option> options = optionRepository.findByScopeAndScopeIdAndFrontLoad(EnumOptionScope.USER, userId, true);
-        if (options != null) {
-            for (Option option : options) {
-                Map<String, String> valueObject = new HashMap<>();
-                valueObject.put("value", option.getOptionValue());
-                valueObject.put("type", option.getValueType());
-                mapOptions.put(option.getOptionKey(), valueObject);
-            }
-        }
-        // 缓存
-        redis.opsForValue().set(ConstOptionCache.USER_OPTION_CHECKSUM_CACHE_KEY_PREFIX + userId, ChecksumUtils.sha256Checksum(JSONObject.toJSONString(mapOptions)), Duration.ofHours(ConstOptionCache.USER_OPTION_CACHE_HOURS));
-        redis.opsForValue().set(ConstOptionCache.USER_OPTION_CACHE_KEY_PREFIX + userId, mapOptions, Duration.ofHours(ConstOptionCache.USER_OPTION_CACHE_HOURS));
-    }
+//    @Override
+//    @SimpleServiceLog("更新前端加载的【用户参数】缓存")
+//    @Transactional
+//    public void updateFrontLoadUserOptionsCache(Long userId) {
+//        Map<String, Map<String, String>> mapOptions = new HashMap<>();
+//        // 先查询默认参数
+//        List<XLOptionDefault> XLOptionDefaults = optionDefaultRepository.findByScopeAndFrontLoad(EnumOptionScope.USER, true);
+//        if (XLOptionDefaults != null) {
+//            for (XLOptionDefault XLOptionDefault : XLOptionDefaults) {
+//                Map<String, String> valueObject = new HashMap<>();
+//                valueObject.put("value", XLOptionDefault.getDefaultValue());
+//                valueObject.put("type", XLOptionDefault.getValueType());
+//                mapOptions.put(MessageFormat.format(XLOptionDefault.getOptionKey(), userId), valueObject);
+//            }
+//        }
+//        // 再查询参数实例，如有实例则覆盖默认参数
+//        List<XLOption> XLOptions = optionRepository.findByScopeAndScopeIdAndFrontLoad(EnumOptionScope.USER, userId, true);
+//        if (XLOptions != null) {
+//            for (XLOption XLOption : XLOptions) {
+//                Map<String, String> valueObject = new HashMap<>();
+//                valueObject.put("value", XLOption.getOptionValue());
+//                valueObject.put("type", XLOption.getValueType());
+//                mapOptions.put(XLOption.getOptionKey(), valueObject);
+//            }
+//        }
+//        // 缓存
+//        redis.opsForValue().set(ConstOptionCache.USER_OPTION_CHECKSUM_CACHE_KEY_PREFIX + userId, ChecksumUtils.sha256Checksum(JSONObject.toJSONString(mapOptions)), Duration.ofHours(ConstOptionCache.USER_OPTION_CACHE_HOURS));
+//        redis.opsForValue().set(ConstOptionCache.USER_OPTION_CACHE_KEY_PREFIX + userId, mapOptions, Duration.ofHours(ConstOptionCache.USER_OPTION_CACHE_HOURS));
+//    }
 
     @Override
     @SimpleServiceLog("从缓存获取前端加载的【系统参数】参数")
@@ -141,41 +140,41 @@ public class OptionServiceImpl implements OptionService {
         return options;
     }
 
-    @Override
-    @SimpleServiceLog("从缓存获取前端加载的【租户参数】参数")
-    public Map<String, Map<String, String>> getFrontLoadTenantOptionsFromCache(Long tenantId) {
-        Map<String, Map<String, String>> options = (Map<String, Map<String, String>>) redis.opsForValue().get(ConstOptionCache.TENANT_OPTION_CACHE_KEY_PREFIX + tenantId);
-        if (options == null) {
-            self.updateFrontLoadTenantOptionsCache(tenantId);
-            options = (Map<String, Map<String, String>>) redis.opsForValue().get(ConstOptionCache.TENANT_OPTION_CACHE_KEY_PREFIX + tenantId);
-        }
-        return options;
-    }
+//    @Override
+//    @SimpleServiceLog("从缓存获取前端加载的【租户参数】参数")
+//    public Map<String, Map<String, String>> getFrontLoadTenantOptionsFromCache(Long tenantId) {
+//        Map<String, Map<String, String>> options = (Map<String, Map<String, String>>) redis.opsForValue().get(ConstOptionCache.TENANT_OPTION_CACHE_KEY_PREFIX + tenantId);
+//        if (options == null) {
+//            self.updateFrontLoadTenantOptionsCache(tenantId);
+//            options = (Map<String, Map<String, String>>) redis.opsForValue().get(ConstOptionCache.TENANT_OPTION_CACHE_KEY_PREFIX + tenantId);
+//        }
+//        return options;
+//    }
 
-    @Override
-    @SimpleServiceLog("从缓存获取前端加载的【用户参数】参数")
-    public Map<String, Map<String, String>> getFrontLoadUserOptionsFromCache(Long userId) {
-        Map<String, Map<String, String>> options = (Map<String, Map<String, String>>) redis.opsForValue().get(ConstOptionCache.USER_OPTION_CACHE_KEY_PREFIX + userId);
-        if (options == null) {
-            self.updateFrontLoadUserOptionsCache(userId);
-            options = (Map<String, Map<String, String>>) redis.opsForValue().get(ConstOptionCache.USER_OPTION_CACHE_KEY_PREFIX + userId);
-        }
-        return options;
-    }
+//    @Override
+//    @SimpleServiceLog("从缓存获取前端加载的【用户参数】参数")
+//    public Map<String, Map<String, String>> getFrontLoadUserOptionsFromCache(Long userId) {
+//        Map<String, Map<String, String>> options = (Map<String, Map<String, String>>) redis.opsForValue().get(ConstOptionCache.USER_OPTION_CACHE_KEY_PREFIX + userId);
+//        if (options == null) {
+//            self.updateFrontLoadUserOptionsCache(userId);
+//            options = (Map<String, Map<String, String>>) redis.opsForValue().get(ConstOptionCache.USER_OPTION_CACHE_KEY_PREFIX + userId);
+//        }
+//        return options;
+//    }
 
     @Override
     @SimpleServiceLog("更新后端加载的【系统参数】缓存")
     @Transactional
     public void updateBackLoadSystemOptionsCache() {
-        List<OptionDefault> optionDefaults = optionDefaultRepository.findByScope(EnumOptionScope.SYSTEM);
-        for (OptionDefault optionDefault : optionDefaults) {
+        List<XLOptionDefault> optionDefaults = optionDefaultRepository.findByScope(EnumOptionScope.SYSTEM);
+        for (XLOptionDefault optionDefault : optionDefaults) {
             Map<String, String> valueObject = new HashMap<>();
             valueObject.put("value", optionDefault.getDefaultValue());
             valueObject.put("type", optionDefault.getValueType());
             redis.opsForValue().set(ConstOptionCache.SINGLE_OPTION_CACHE_KEY_PREFIX + optionDefault.getOptionKey(), valueObject, Duration.ofHours(ConstOptionCache.SYSTEM_OPTION_CACHE_HOURS));
         }
-        List<Option> options = optionRepository.findByScope(EnumOptionScope.SYSTEM);
-        for (Option option : options) {
+        List<XLOption> options = optionRepository.findByScope(EnumOptionScope.SYSTEM);
+        for (XLOption option : options) {
             Map<String, String> valueObject = new HashMap<>();
             valueObject.put("value", option.getOptionValue());
             valueObject.put("type", option.getValueType());
@@ -183,45 +182,45 @@ public class OptionServiceImpl implements OptionService {
         }
     }
 
-    @Override
-    @SimpleServiceLog("更新后端加载的【租户参数】缓存")
-    @Transactional
-    public void updateBackLoadTenantOptionsCache(Long tenantId) {
-        List<OptionDefault> optionDefaults = optionDefaultRepository.findByScope(EnumOptionScope.TENANT);
-        for (OptionDefault optionDefault : optionDefaults) {
-            Map<String, String> valueObject = new HashMap<>();
-            valueObject.put("value", optionDefault.getDefaultValue());
-            valueObject.put("type", optionDefault.getValueType());
-            redis.opsForValue().set(ConstOptionCache.SINGLE_OPTION_CACHE_KEY_PREFIX + MessageFormat.format(optionDefault.getOptionKey(), tenantId), valueObject, Duration.ofHours(ConstOptionCache.TENANT_OPTION_CACHE_HOURS));
-        }
-        List<Option> options = optionRepository.findByScopeAndScopeId(EnumOptionScope.TENANT, tenantId);
-        for (Option option : options) {
-            Map<String, String> valueObject = new HashMap<>();
-            valueObject.put("value", option.getOptionValue());
-            valueObject.put("type", option.getValueType());
-            redis.opsForValue().set(ConstOptionCache.SINGLE_OPTION_CACHE_KEY_PREFIX + option.getOptionKey(), valueObject, Duration.ofHours(ConstOptionCache.TENANT_OPTION_CACHE_HOURS));
-        }
-    }
+//    @Override
+//    @SimpleServiceLog("更新后端加载的【租户参数】缓存")
+//    @Transactional
+//    public void updateBackLoadTenantOptionsCache(Long tenantId) {
+//        List<XLOptionDefault> XLOptionDefaults = optionDefaultRepository.findByScope(EnumOptionScope.TENANT);
+//        for (XLOptionDefault XLOptionDefault : XLOptionDefaults) {
+//            Map<String, String> valueObject = new HashMap<>();
+//            valueObject.put("value", XLOptionDefault.getDefaultValue());
+//            valueObject.put("type", XLOptionDefault.getValueType());
+//            redis.opsForValue().set(ConstOptionCache.SINGLE_OPTION_CACHE_KEY_PREFIX + MessageFormat.format(XLOptionDefault.getOptionKey(), tenantId), valueObject, Duration.ofHours(ConstOptionCache.TENANT_OPTION_CACHE_HOURS));
+//        }
+//        List<XLOption> XLOptions = optionRepository.findByScopeAndScopeId(EnumOptionScope.TENANT, tenantId);
+//        for (XLOption XLOption : XLOptions) {
+//            Map<String, String> valueObject = new HashMap<>();
+//            valueObject.put("value", XLOption.getOptionValue());
+//            valueObject.put("type", XLOption.getValueType());
+//            redis.opsForValue().set(ConstOptionCache.SINGLE_OPTION_CACHE_KEY_PREFIX + XLOption.getOptionKey(), valueObject, Duration.ofHours(ConstOptionCache.TENANT_OPTION_CACHE_HOURS));
+//        }
+//    }
 
-    @Override
-    @SimpleServiceLog("更新后端加载的【用户参数】缓存")
-    @Transactional
-    public void updateBackLoadUserOptionsCache(Long userId) {
-        List<OptionDefault> optionDefaults = optionDefaultRepository.findByScope(EnumOptionScope.USER);
-        for (OptionDefault optionDefault : optionDefaults) {
-            Map<String, String> valueObject = new HashMap<>();
-            valueObject.put("value", optionDefault.getDefaultValue());
-            valueObject.put("type", optionDefault.getValueType());
-            redis.opsForValue().set(ConstOptionCache.SINGLE_OPTION_CACHE_KEY_PREFIX + MessageFormat.format(optionDefault.getOptionKey(), userId), valueObject, Duration.ofHours(ConstOptionCache.USER_OPTION_CACHE_HOURS));
-        }
-        List<Option> options = optionRepository.findByScopeAndScopeId(EnumOptionScope.USER, userId);
-        for (Option option : options) {
-            Map<String, String> valueObject = new HashMap<>();
-            valueObject.put("value", option.getOptionValue());
-            valueObject.put("type", option.getValueType());
-            redis.opsForValue().set(ConstOptionCache.SINGLE_OPTION_CACHE_KEY_PREFIX + option.getOptionKey(), valueObject, Duration.ofHours(ConstOptionCache.USER_OPTION_CACHE_HOURS));
-        }
-    }
+//    @Override
+//    @SimpleServiceLog("更新后端加载的【用户参数】缓存")
+//    @Transactional
+//    public void updateBackLoadUserOptionsCache(Long userId) {
+//        List<XLOptionDefault> XLOptionDefaults = optionDefaultRepository.findByScope(EnumOptionScope.USER);
+//        for (XLOptionDefault XLOptionDefault : XLOptionDefaults) {
+//            Map<String, String> valueObject = new HashMap<>();
+//            valueObject.put("value", XLOptionDefault.getDefaultValue());
+//            valueObject.put("type", XLOptionDefault.getValueType());
+//            redis.opsForValue().set(ConstOptionCache.SINGLE_OPTION_CACHE_KEY_PREFIX + MessageFormat.format(XLOptionDefault.getOptionKey(), userId), valueObject, Duration.ofHours(ConstOptionCache.USER_OPTION_CACHE_HOURS));
+//        }
+//        List<XLOption> XLOptions = optionRepository.findByScopeAndScopeId(EnumOptionScope.USER, userId);
+//        for (XLOption XLOption : XLOptions) {
+//            Map<String, String> valueObject = new HashMap<>();
+//            valueObject.put("value", XLOption.getOptionValue());
+//            valueObject.put("type", XLOption.getValueType());
+//            redis.opsForValue().set(ConstOptionCache.SINGLE_OPTION_CACHE_KEY_PREFIX + XLOption.getOptionKey(), valueObject, Duration.ofHours(ConstOptionCache.USER_OPTION_CACHE_HOURS));
+//        }
+//    }
 
     @Override
     @SimpleServiceLog("更新某个后端加载参数的缓存")
@@ -247,14 +246,14 @@ public class OptionServiceImpl implements OptionService {
                 cacheHours = ConstOptionCache.USER_OPTION_CACHE_HOURS;
             }
         }
-        Optional<OptionDefault> optionDefault = optionDefaultRepository.findByOptionKey(defaultKey);
+        Optional<XLOptionDefault> optionDefault = optionDefaultRepository.findByOptionKey(defaultKey);
         if (optionDefault.isPresent()) {
             Map<String, String> valueObject = new HashMap<>();
             valueObject.put("value", optionDefault.get().getDefaultValue());
             valueObject.put("type", optionDefault.get().getValueType());
             redis.opsForValue().set(ConstOptionCache.SINGLE_OPTION_CACHE_KEY_PREFIX + key, valueObject, Duration.ofHours(cacheHours));
         }
-        Optional<Option> option = optionRepository.findByOptionKey(key);
+        Optional<XLOption> option = optionRepository.findByOptionKey(key);
         if (option.isPresent()) {
             Map<String, String> valueObject = new HashMap<>();
             valueObject.put("value", option.get().getOptionValue());
