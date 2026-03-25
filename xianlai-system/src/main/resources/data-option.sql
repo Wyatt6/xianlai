@@ -2,11 +2,17 @@ INSERT IGNORE INTO tb_common_option_default(
        `id`, `scope`, `option_key`, `default_value`, `value_type`, `name`, `description`, `front_load`
 ) VALUE
 -- id 自增主键，1000000 （不含）以下区间可以用来设置初始值
-(1000001, 'SYSTEM', 'system.request.timeout', '30000', 'LONG', '请求超时时长', '用于设置前端往后台发送API请求时，等待多长时间，超过这个时间报请求超时错误。单位：毫秒。注意：此参数值建议设置30000毫秒（30秒）以上，不应设置太小。', 1),
-(1100001, 'SYSTEM', 'system.captcha.length', '5', 'INTEGER', '验证码长度', '设置公用的验证码的长度，建议4～6位。', 1),
-(1100002, 'SYSTEM', 'system.captcha.expireSeconds', '120', 'INTEGER', '验证码有效期', '设置公用的验证码的有效期，单位：秒。', 0);
+-- ------- --
+-- 其他参数 --
+-- ------- --
+-- 网络请求
+(100001, 'SYSTEM', 'system.request.timeout', '30000', 'LONG', '请求超时时长', '用于设置前端往后台发送API请求时，等待多长时间，超过这个时间报请求超时错误。单位：毫秒。注意：此参数值建议设置30000毫秒（30秒）以上，不应设置太小。', 1),
+-- 验证码
+(110001, 'SYSTEM', 'system.captcha.length', '5', 'INTEGER', '验证码长度', '设置公用的验证码的长度，建议4～6位。', 1),
+(110002, 'SYSTEM', 'system.captcha.expireSeconds', '120', 'INTEGER', '验证码有效期', '设置公用的验证码的有效期，单位：秒。', 0);
 
 
+-- (10002, 10002, 'other', 'XLOption.categoryList', '[{"label": "门户页面", "category": "portal"}, {"label": "注册登陆", "category": "user"}, {"label": "其他控制", "category": "other"}]', '[{"label": "门户页面", "category": "portal"}, {"label": "注册登陆", "category": "user"}, {"label": "其他控制", "category": "other"}]', '参数类别列表', '用于定义“系统设置-参数选项”页面有什么标签，以及每个标签所代表的参数分类标识符，在查询和新增参数时需要用该分类标识符进行区分。', 0, 1, 'ARRAY'),
 -- -- ------- --
 -- -- 门户页面 --
 -- -- ------- --
