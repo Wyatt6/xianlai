@@ -34,7 +34,7 @@ import java.util.List;
         @Index(columnList = "name", unique = true),
         @Index(columnList = "sortId")
 })
-public class Route {
+public class XLRoute {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
     @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)
@@ -78,11 +78,11 @@ public class Route {
 
     // ----- 非持久化属性 -----
     @Transient
-    private List<Route> children = new ArrayList<>();
+    private List<XLRoute> children = new ArrayList<>();
 
-    public Route(Long id, Long sortId, Long parentId, String name, String pathName,
-                 String redirectPathName, String componentPath, Boolean keepAlive, Boolean needLogin,
-                 Boolean needPermission, String permission, Boolean showTag, String tagTitle) {
+    public XLRoute(Long id, Long sortId, Long parentId, String name, String pathName,
+                   String redirectPathName, String componentPath, Boolean keepAlive, Boolean needLogin,
+                   Boolean needPermission, String permission, Boolean showTag, String tagTitle) {
         this.id = id;
         this.sortId = sortId;
         this.parentId = parentId;
