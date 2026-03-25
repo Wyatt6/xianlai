@@ -40,7 +40,7 @@ public class XLMenu {
     @TableGenerator(name="menuPkGen", initialValue = 1000000, allocationSize = 1)
     private Long id;
 
-    @Column(columnDefinition = "bigint not null default 100")
+    @Column(columnDefinition = "bigint not null default 1000")
     private Long sortId;
 
     @Column(columnDefinition = "bigint not null default 0")
