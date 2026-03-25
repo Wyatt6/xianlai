@@ -1,9 +1,9 @@
-package fun.xianlai.system.initialization;
+package fun.xianlai.system.launch.controller;
 
 import fun.xianlai.system.iam.service.ApiService;
 import fun.xianlai.system.iam.service.MenuService;
 import fun.xianlai.system.common.service.OptionService;
-import fun.xianlai.system.iam.service.PathService;
+import fun.xianlai.system.common.service.PathService;
 import fun.xianlai.system.iam.service.RouteService;
 import fun.xianlai.core.annotation.ApiLog;
 import fun.xianlai.core.response.RetResult;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("/init")
+@RequestMapping("/launch/init")
 public class InitController {
     @Autowired
     private OptionService optionService;
@@ -35,10 +35,10 @@ public class InitController {
     @GetMapping("/getInitData")
     public RetResult getInitData() {
         return new RetResult().success()
-//                .addData("options", optionService.getFrontLoadOptionsFromCache())
-                .addData("paths", pathService.getPathsFromCache())
-                .addData("routes", routeService.getRoutesFromCache())
-                .addData("menus", menuService.getActiveMenusFromCache())
-                .addData("apis", apiService.getApisFromCache());
+                .addData("systemOptions", optionService.getFrontLoadSystemOptionsFromCache())
+                .addData("paths", pathService.getPathsFromCache());
+//                .addData("routes", routeService.getRoutesFromCache())
+//                .addData("menus", menuService.getActiveMenusFromCache())
+//                .addData("apis", apiService.getApisFromCache());
     }
 }

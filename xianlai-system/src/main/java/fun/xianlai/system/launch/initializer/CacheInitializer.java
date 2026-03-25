@@ -1,6 +1,7 @@
-package fun.xianlai.system.initialization;
+package fun.xianlai.system.launch.initializer;
 
 import fun.xianlai.system.common.service.OptionService;
+import fun.xianlai.system.common.service.PathService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -14,8 +15,8 @@ import org.springframework.stereotype.Component;
 public class CacheInitializer implements CommandLineRunner {
     @Autowired
     private OptionService optionService;
-//    @Autowired
-//    private PathService pathService;
+    @Autowired
+    private PathService pathService;
 //    @Autowired
 //    private RouteService routeService;
 //    @Autowired
@@ -33,7 +34,7 @@ public class CacheInitializer implements CommandLineRunner {
         log.info("开始初始化缓存......");
         optionService.updateFrontLoadSystemOptionsCache();
         optionService.updateBackLoadSystemOptionsCache();
-//        pathService.cachePaths();
+        pathService.cachePaths();
 //        routeService.cacheRoutes();
 //        menuService.cacheActiveMenus();
 //        apiService.cacheApis();

@@ -32,12 +32,12 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "tb_common_sys_path", indexes = {
+@Table(name = "tb_common_path", indexes = {
         @Index(columnList = "name", unique = true),
         @Index(columnList = "path", unique = true),
         @Index(columnList = "sortId, name") // 第1关键字sortId，第2关键字name
 })
-public class SysPath {
+public class Path {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
     @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)

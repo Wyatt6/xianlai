@@ -1,9 +1,9 @@
-package fun.xianlai.system.iam.service.impl;
+package fun.xianlai.system.common.service.impl;
 
 import com.alibaba.fastjson2.JSONObject;
-import fun.xianlai.system.common.model.entity.SysPath;
-import fun.xianlai.system.iam.repository.SysPathRepository;
-import fun.xianlai.system.iam.service.PathService;
+import fun.xianlai.system.common.model.entity.Path;
+import fun.xianlai.system.common.repository.PathRepository;
+import fun.xianlai.system.common.service.PathService;
 import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
@@ -40,24 +40,24 @@ public class PathServiceImpl implements PathService {
     @Autowired
     private PathService self;
     @Autowired
-    private SysPathRepository sysPathRepository;
+    private PathRepository pathRepository;
 
     @Override
     @SimpleServiceLog("缓存路径")
     @Transactional
     public void cachePaths() {
-        List<SysPath> paths = sysPathRepository.findAll();
+        List<Path> paths = pathRepository.findAll();
         redis.opsForValue().set("pathsChecksum", ChecksumUtils.sha256Checksum(JSONObject.toJSONString(paths)), Duration.ofHours(CACHE_HOURS));
         redis.opsForValue().set("paths", paths, Duration.ofHours(CACHE_HOURS));
     }
 
     @Override
     @SimpleServiceLog("从缓存获取路径")
-    public List<SysPath> getPathsFromCache() {
-        List<SysPath> paths = (List<SysPath>) redis.opsForValue().get("paths");
+    public List<Path> getPathsFromCache() {
+        List<Path> paths = (List<Path>) redis.opsForValue().get("paths");
         if (paths == null) {
             self.cachePaths();
-            paths = (List<SysPath>) redis.opsForValue().get("paths");
+            paths = (List<Path>) redis.opsForValue().get("paths");
         }
         return paths;
     }
@@ -65,11 +65,11 @@ public class PathServiceImpl implements PathService {
     @Override
     @ServiceLog("新增路径")
     @Transactional
-    public DataMap add(SysPath path) {
+    public DataMap add(Path path) {
         try {
             path.setId(null);
-            SysPath savedPath = sysPathRepository.save(path);
-            Long rowNum = sysPathRepository.findRowNumById(savedPath.getId());
+            Path savedPath = pathRepository.save(path);
+            Long rowNum = pathRepository.findRowNumById(savedPath.getId());
             self.cachePaths();
             DataMap result = new DataMap();
             result.put("path", savedPath);
@@ -84,20 +84,20 @@ public class PathServiceImpl implements PathService {
     @ServiceLog("删除路径")
     @Transactional
     public void delete(Long pathId) {
-        sysPathRepository.deleteById(pathId);
+        pathRepository.deleteById(pathId);
         self.cachePaths();
     }
 
     @Override
     @ServiceLog("修改路径")
     @Transactional
-    public DataMap edit(SysPath path) {
-        Optional<SysPath> oldPath = sysPathRepository.findById(path.getId());
+    public DataMap edit(Path path) {
+        Optional<Path> oldPath = pathRepository.findById(path.getId());
         if (oldPath.isPresent()) {
-            SysPath newPath = oldPath.get();
+            Path newPath = oldPath.get();
             BeanUtils.copyPropertiesNotNull(path, newPath);
             try {
-                newPath = sysPathRepository.save(newPath);
+                newPath = pathRepository.save(newPath);
             } catch (DataIntegrityViolationException e) {
                 log.info(e.getMessage());
                 throw new SysException("路径名称或路径URL已存在");
@@ -111,7 +111,7 @@ public class PathServiceImpl implements PathService {
 
     @Override
     @ServiceLog("条件查询路径分页")
-    public Page<SysPath> getPageConditionally(int pageNum, int pageSize, SysPath condition) {
+    public Page<Path> getPageConditionally(int pageNum, int pageSize, Path condition) {
         String name = BeanUtils.getFieldValue(condition, "name", String.class);
         String path = BeanUtils.getFieldValue(condition, "path", String.class);
 
@@ -119,10 +119,10 @@ public class PathServiceImpl implements PathService {
         if (pageNum >= 0 && pageSize > 0) {
             log.info("分页查询");
             Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
-            return sysPathRepository.findConditionally(name, path, pageable);
+            return pathRepository.findConditionally(name, path, pageable);
         } else {
             log.info("全表查询");
-            return sysPathRepository.findConditionally(name, path, Pageable.unpaged(sort));
+            return pathRepository.findConditionally(name, path, Pageable.unpaged(sort));
         }
     }
 }

@@ -50,10 +50,10 @@ public class SysRoute {
     private String name;
 
     @Column(columnDefinition = "varchar(255) not null")
-    private String pathName;            // SysPath的name
+    private String pathName;            // Path的name
 
     @Column
-    private String redirectPathName;    // SysPath的name
+    private String redirectPathName;    // Path的name
 
     @Column(length = 1000)
     private String componentPath;       // 组件（相对）路径

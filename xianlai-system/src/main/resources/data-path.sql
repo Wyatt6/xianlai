@@ -1,4 +1,4 @@
-INSERT IGNORE INTO tb_common_sys_path(`id`, `sort_id`, `name`, `path`) VALUE
+INSERT IGNORE INTO tb_common_path(`id`, `sort_id`, `name`, `path`) VALUE
 -- ------- --
 -- 公共路径 --
 -- ------- --

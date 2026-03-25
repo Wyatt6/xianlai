@@ -2,8 +2,8 @@ package fun.xianlai.system.common.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import fun.xianlai.system.common.model.entity.SysPath;
-import fun.xianlai.system.iam.service.PathService;
+import fun.xianlai.system.common.model.entity.Path;
+import fun.xianlai.system.common.service.PathService;
 import fun.xianlai.core.annotation.ApiLog;
 import fun.xianlai.core.response.RetResult;
 import fun.xianlai.core.utils.bean.BeanUtils;
@@ -31,7 +31,7 @@ public class PathController {
     @SaCheckLogin
     @SaCheckPermission("path:add")
     @PostMapping("/add")
-    public RetResult add(@RequestBody SysPath form) {
+    public RetResult add(@RequestBody Path form) {
         log.info("请求参数: {}", form);
         BeanUtils.trimString(form);
         return new RetResult().success().setData(pathService.add(form));
@@ -51,7 +51,7 @@ public class PathController {
     @SaCheckLogin
     @SaCheckPermission("path:edit")
     @PostMapping("/edit")
-    public RetResult edit(@RequestBody SysPath form) {
+    public RetResult edit(@RequestBody Path form) {
         log.info("请求参数: {}", form);
         BeanUtils.trimString(form);
         return new RetResult().success().setData(pathService.edit(form));
@@ -81,9 +81,9 @@ public class PathController {
     @PostMapping("/getPageConditionally")
     public RetResult getPageConditionally(@RequestParam int pageNum,
                                           @RequestParam int pageSize,
-                                          @RequestBody(required = false) SysPath condition) {
+                                          @RequestBody(required = false) Path condition) {
         log.info("请求参数：pageNum=[{}], pageSize=[{}], condition=[{}]", pageNum, pageSize, condition);
-        Page<SysPath> paths = pathService.getPageConditionally(pageNum, pageSize, condition);
+        Page<Path> paths = pathService.getPageConditionally(pageNum, pageSize, condition);
         return new RetResult().success()
                 .addData("pageNum", pageNum)
                 .addData("pageSize", pageSize)

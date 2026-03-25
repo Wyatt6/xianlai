@@ -1,6 +1,6 @@
-package fun.xianlai.system.iam.service;
+package fun.xianlai.system.common.service;
 
-import fun.xianlai.system.common.model.entity.SysPath;
+import fun.xianlai.system.common.model.entity.Path;
 import fun.xianlai.core.response.DataMap;
 import org.springframework.data.domain.Page;
 
@@ -18,12 +18,12 @@ public interface PathService {
     /**
      * 从缓存获取路径
      */
-    List<SysPath> getPathsFromCache();
+    List<Path> getPathsFromCache();
 
     /**
      * 新增路径
      */
-    DataMap add(SysPath path);
+    DataMap add(Path path);
 
     /**
      * 删除路径
@@ -33,7 +33,7 @@ public interface PathService {
     /**
      * 修改路径
      */
-    DataMap edit(SysPath path);
+    DataMap edit(Path path);
 
     /**
      * 查询条件为空时查询全量数据
@@ -44,5 +44,5 @@ public interface PathService {
      * @param condition 查询条件
      * @return 分页数据
      */
-    Page<SysPath> getPageConditionally(int pageNum, int pageSize, SysPath condition);
+    Page<Path> getPageConditionally(int pageNum, int pageSize, Path condition);
 }
