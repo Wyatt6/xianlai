@@ -7,7 +7,7 @@ import fun.xianlai.common.annotation.ServiceLog;
 import fun.xianlai.common.annotation.SimpleServiceLog;
 import fun.xianlai.common.exception.SysException;
 import fun.xianlai.common.response.DataMap;
-import fun.xianlai.system.common.service.OptionService;
+import fun.xianlai.system.core.service.OptionService;
 import fun.xianlai.system.iam.service.CaptchaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

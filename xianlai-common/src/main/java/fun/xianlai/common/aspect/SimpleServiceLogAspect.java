@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 public class SimpleServiceLogAspect {
-    @Pointcut("@annotation(fun.xianlai.core.annotation.SimpleServiceLog)")
+    @Pointcut("@annotation(fun.xianlai.common.annotation.SimpleServiceLog)")
     public void pointcut() {
     }
 

@@ -31,7 +31,7 @@ import java.lang.reflect.Method;
 @Component
 @Order(1)
 public class ApiLogAspect {
-    @Pointcut("@annotation(fun.xianlai.core.annotation.ApiLog)")
+    @Pointcut("@annotation(fun.xianlai.common.annotation.ApiLog)")
     public void pointcut() {
     }
 

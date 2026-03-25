@@ -1,6 +1,6 @@
 package fun.xianlai.system.iam.producer;
 
-import fun.xianlai.system.common.service.OptionService;
+import fun.xianlai.system.core.service.OptionService;
 import fun.xianlai.common.response.RetResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,10 +1,10 @@
 package fun.xianlai.system.initializer;
 
-import fun.xianlai.system.common.service.ApiService;
-import fun.xianlai.system.common.service.MenuService;
-import fun.xianlai.system.common.service.OptionService;
-import fun.xianlai.system.common.service.PathService;
-import fun.xianlai.system.common.service.RouteService;
+import fun.xianlai.system.core.service.ApiService;
+import fun.xianlai.system.core.service.MenuService;
+import fun.xianlai.system.core.service.OptionService;
+import fun.xianlai.system.core.service.PathService;
+import fun.xianlai.system.core.service.RouteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

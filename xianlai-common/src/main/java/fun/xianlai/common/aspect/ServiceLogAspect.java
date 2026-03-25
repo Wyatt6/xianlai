@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 public class ServiceLogAspect {
-    @Pointcut("@annotation(fun.xianlai.core.annotation.ServiceLog)")
+    @Pointcut("@annotation(fun.xianlai.common.annotation.ServiceLog)")
     public void pointcut() {
     }
 
