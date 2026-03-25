@@ -4,7 +4,7 @@ import fun.xianlai.system.iam.service.ApiService;
 import fun.xianlai.system.iam.service.MenuService;
 import fun.xianlai.system.common.service.OptionService;
 import fun.xianlai.system.common.service.PathService;
-import fun.xianlai.system.iam.service.RouteService;
+import fun.xianlai.system.common.service.RouteService;
 import fun.xianlai.core.annotation.ApiLog;
 import fun.xianlai.core.response.RetResult;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +36,8 @@ public class InitController {
     public RetResult getInitData() {
         return new RetResult().success()
                 .addData("systemOptions", optionService.getFrontLoadSystemOptionsFromCache())
-                .addData("paths", pathService.getPathsFromCache());
-//                .addData("routes", routeService.getRoutesFromCache())
+                .addData("paths", pathService.getPathsFromCache())
+                .addData("routes", routeService.getRoutesFromCache());
 //                .addData("menus", menuService.getActiveMenusFromCache())
 //                .addData("apis", apiService.getApisFromCache());
     }

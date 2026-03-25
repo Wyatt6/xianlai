@@ -2,8 +2,8 @@ package fun.xianlai.system.common.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import fun.xianlai.system.common.model.entity.SysRoute;
-import fun.xianlai.system.iam.service.RouteService;
+import fun.xianlai.system.common.model.entity.Route;
+import fun.xianlai.system.common.service.RouteService;
 import fun.xianlai.core.annotation.ApiLog;
 import fun.xianlai.core.response.RetResult;
 import fun.xianlai.core.utils.bean.BeanUtils;
@@ -30,7 +30,7 @@ public class RouteController {
     @SaCheckLogin
     @SaCheckPermission("route:add")
     @PostMapping("/add")
-    public RetResult add(@RequestBody SysRoute form) {
+    public RetResult add(@RequestBody Route form) {
         log.info("请求参数: {}", form);
         BeanUtils.trimString(form);
         return new RetResult().success().setData(routeService.add(form));
@@ -50,7 +50,7 @@ public class RouteController {
     @SaCheckLogin
     @SaCheckPermission("route:edit")
     @PostMapping("/edit")
-    public RetResult edit(@RequestBody SysRoute form) {
+    public RetResult edit(@RequestBody Route form) {
         log.info("请求参数: {}", form);
         BeanUtils.trimString(form);
         return new RetResult().success().setData(routeService.edit(form));

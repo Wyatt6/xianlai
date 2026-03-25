@@ -1,6 +1,6 @@
-package fun.xianlai.system.iam.service;
+package fun.xianlai.system.common.service;
 
-import fun.xianlai.system.common.model.entity.SysRoute;
+import fun.xianlai.system.common.model.entity.Route;
 import fun.xianlai.core.response.DataMap;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public interface RouteService {
     /**
      * 新增路由
      */
-    DataMap add(SysRoute route);
+    DataMap add(Route route);
 
     /**
      * 删除路由
@@ -33,10 +33,10 @@ public interface RouteService {
     /**
      * 修改路由
      */
-    DataMap edit(SysRoute route);
+    DataMap edit(Route route);
 
     /**
      * 获取路由森林
      */
-    List<SysRoute> getForest();
+    List<Route> getForest();
 }

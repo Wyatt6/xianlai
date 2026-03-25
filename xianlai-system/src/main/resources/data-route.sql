@@ -1,4 +1,4 @@
-INSERT IGNORE INTO tb_common_sys_route(
+INSERT IGNORE INTO tb_common_route(
     `id`, `sort_id`, `parent_id`, `name`, `path_name`, `redirect_path_name`, `component_path`,
     `keep_alive`, `need_login`, `need_permission`, `permission`, `show_tag`, `tag_title`
 ) VALUE

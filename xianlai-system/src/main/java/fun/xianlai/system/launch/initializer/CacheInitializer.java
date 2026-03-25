@@ -2,6 +2,7 @@ package fun.xianlai.system.launch.initializer;
 
 import fun.xianlai.system.common.service.OptionService;
 import fun.xianlai.system.common.service.PathService;
+import fun.xianlai.system.common.service.RouteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -17,8 +18,8 @@ public class CacheInitializer implements CommandLineRunner {
     private OptionService optionService;
     @Autowired
     private PathService pathService;
-//    @Autowired
-//    private RouteService routeService;
+    @Autowired
+    private RouteService routeService;
 //    @Autowired
 //    private MenuService menuService;
 //    @Autowired
@@ -35,7 +36,7 @@ public class CacheInitializer implements CommandLineRunner {
         optionService.updateFrontLoadSystemOptionsCache();
         optionService.updateBackLoadSystemOptionsCache();
         pathService.cachePaths();
-//        routeService.cacheRoutes();
+        routeService.cacheRoutes();
 //        menuService.cacheActiveMenus();
 //        apiService.cacheApis();
 //        permissionService.setPermissionDbRefreshTime(DateUtils.now());
