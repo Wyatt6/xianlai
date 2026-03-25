@@ -32,10 +32,10 @@ import java.util.List;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "tb_common_sys_menu", indexes = {
+@Table(name = "tb_common_menu", indexes = {
         @Index(columnList = "sortId")
 })
-public class SysMenu {
+public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
     @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)
@@ -67,9 +67,9 @@ public class SysMenu {
 
     // ----- 非持久化属性 -----
     @Transient
-    private List<SysMenu> children = new ArrayList<>();
+    private List<Menu> children = new ArrayList<>();
 
-    public SysMenu(Long id, Long sortId, Long parentId, String icon, String title, String pathName, Boolean needPermission, String permission, Boolean active) {
+    public Menu(Long id, Long sortId, Long parentId, String icon, String title, String pathName, Boolean needPermission, String permission, Boolean active) {
         this.id = id;
         this.sortId = sortId;
         this.parentId = parentId;

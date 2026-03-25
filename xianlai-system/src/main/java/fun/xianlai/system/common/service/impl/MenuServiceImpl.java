@@ -1,9 +1,9 @@
-package fun.xianlai.system.iam.service.impl;
+package fun.xianlai.system.common.service.impl;
 
 import com.alibaba.fastjson2.JSONObject;
-import fun.xianlai.system.common.model.entity.SysMenu;
-import fun.xianlai.system.iam.repository.SysMenuRepository;
-import fun.xianlai.system.iam.service.MenuService;
+import fun.xianlai.system.common.model.entity.Menu;
+import fun.xianlai.system.common.repository.MenuRepository;
+import fun.xianlai.system.common.service.MenuService;
 import fun.xianlai.core.annotation.ServiceLog;
 import fun.xianlai.core.annotation.SimpleServiceLog;
 import fun.xianlai.core.exception.SysException;
@@ -40,13 +40,13 @@ public class MenuServiceImpl implements MenuService {
     @Autowired
     private MenuService self;
     @Autowired
-    private SysMenuRepository sysMenuRepository;
+    private MenuRepository menuRepository;
 
     @Override
     @SimpleServiceLog("缓存生效的菜单")
     @Transactional
     public void cacheActiveMenus() {
-        List<SysMenu> menus = self.getActiveForest();
+        List<Menu> menus = self.getActiveForest();
         redis.opsForValue().set("menusChecksum", ChecksumUtils.sha256Checksum(JSONObject.toJSONString(menus)), Duration.ofHours(CACHE_HOURS));
         redis.opsForValue().set("menus", menus, Duration.ofHours(CACHE_HOURS));
     }
@@ -65,10 +65,10 @@ public class MenuServiceImpl implements MenuService {
     @Override
     @ServiceLog("新增菜单")
     @Transactional
-    public DataMap add(SysMenu menu) {
+    public DataMap add(Menu menu) {
         try {
             menu.setId(null);
-            SysMenu savedMenu = sysMenuRepository.save(menu);
+            Menu savedMenu = menuRepository.save(menu);
             self.cacheActiveMenus();
             DataMap result = new DataMap();
             result.put("menu", savedMenu);
@@ -82,9 +82,9 @@ public class MenuServiceImpl implements MenuService {
     @ServiceLog("删除菜单")
     @Transactional
     public void delete(Long menuId) {
-        List<SysMenu> sonMenus = sysMenuRepository.findByParentId(menuId);
+        List<Menu> sonMenus = menuRepository.findByParentId(menuId);
         if (sonMenus == null || sonMenus.isEmpty()) {
-            sysMenuRepository.deleteById(menuId);
+            menuRepository.deleteById(menuId);
             self.cacheActiveMenus();
         } else {
             throw new SysException("当前菜单仍然包含子菜单，无法删除");
@@ -94,16 +94,16 @@ public class MenuServiceImpl implements MenuService {
     @Override
     @ServiceLog("修改菜单")
     @Transactional
-    public DataMap edit(SysMenu menu) {
-        Optional<SysMenu> oldMenu = sysMenuRepository.findById(menu.getId());
+    public DataMap edit(Menu menu) {
+        Optional<Menu> oldMenu = menuRepository.findById(menu.getId());
         if (oldMenu.isPresent()) {
-            SysMenu newMenu = oldMenu.get();
+            Menu newMenu = oldMenu.get();
             BeanUtils.copyPropertiesNotNull(menu, newMenu);
             if (newMenu.getParentId().equals(newMenu.getId())) {
                 throw new SysException("上级菜单不能设置为自己");
             }
             try {
-                newMenu = sysMenuRepository.save(newMenu);
+                newMenu = menuRepository.save(newMenu);
             } catch (DataIntegrityViolationException e) {
                 log.info(e.getMessage());
                 throw new SysException("菜单已存在");
@@ -116,18 +116,18 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public List<SysMenu> getForest() {
-        List<SysMenu> menus = sysMenuRepository.findAll(Sort.by(Sort.Order.asc("sortId")));
-        List<SysMenu> forest = new ArrayList<>();
-        Map<Long, SysMenu> finder = new HashMap<>();
-        for (SysMenu menu : menus) {
+    public List<Menu> getForest() {
+        List<Menu> menus = menuRepository.findAll(Sort.by(Sort.Order.asc("sortId")));
+        List<Menu> forest = new ArrayList<>();
+        Map<Long, Menu> finder = new HashMap<>();
+        for (Menu menu : menus) {
             finder.put(menu.getId(), menu);
         }
-        for (SysMenu menu : menus) {
+        for (Menu menu : menus) {
             if (menu.getParentId() == 0) {
                 forest.add(finder.get(menu.getId()));
             } else {
-                SysMenu fatherMenu = finder.get(menu.getParentId());
+                Menu fatherMenu = finder.get(menu.getParentId());
                 fatherMenu.getChildren().add(finder.get(menu.getId()));
             }
         }
@@ -135,18 +135,18 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public List<SysMenu> getActiveForest() {
-        List<SysMenu> menus = sysMenuRepository.findByActive(true, Sort.by(Sort.Order.asc("sortId")));
-        List<SysMenu> forest = new ArrayList<>();
-        Map<Long, SysMenu> finder = new HashMap<>();
-        for (SysMenu menu : menus) {
+    public List<Menu> getActiveForest() {
+        List<Menu> menus = menuRepository.findByActive(true, Sort.by(Sort.Order.asc("sortId")));
+        List<Menu> forest = new ArrayList<>();
+        Map<Long, Menu> finder = new HashMap<>();
+        for (Menu menu : menus) {
             finder.put(menu.getId(), menu);
         }
-        for (SysMenu menu : menus) {
+        for (Menu menu : menus) {
             if (menu.getParentId() == 0) {
                 forest.add(finder.get(menu.getId()));
             } else {
-                SysMenu fatherMenu = finder.get(menu.getParentId());
+                Menu fatherMenu = finder.get(menu.getParentId());
                 fatherMenu.getChildren().add(finder.get(menu.getId()));
             }
         }

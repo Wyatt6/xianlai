@@ -1,7 +1,7 @@
 package fun.xianlai.system.launch.controller;
 
 import fun.xianlai.system.iam.service.ApiService;
-import fun.xianlai.system.iam.service.MenuService;
+import fun.xianlai.system.common.service.MenuService;
 import fun.xianlai.system.common.service.OptionService;
 import fun.xianlai.system.common.service.PathService;
 import fun.xianlai.system.common.service.RouteService;
@@ -37,8 +37,8 @@ public class InitController {
         return new RetResult().success()
                 .addData("systemOptions", optionService.getFrontLoadSystemOptionsFromCache())
                 .addData("paths", pathService.getPathsFromCache())
-                .addData("routes", routeService.getRoutesFromCache());
-//                .addData("menus", menuService.getActiveMenusFromCache())
+                .addData("routes", routeService.getRoutesFromCache())
+                .addData("menus", menuService.getActiveMenusFromCache());
 //                .addData("apis", apiService.getApisFromCache());
     }
 }

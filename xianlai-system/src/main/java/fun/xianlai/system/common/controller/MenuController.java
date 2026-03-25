@@ -2,8 +2,8 @@ package fun.xianlai.system.common.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import fun.xianlai.system.common.model.entity.SysMenu;
-import fun.xianlai.system.iam.service.MenuService;
+import fun.xianlai.system.common.model.entity.Menu;
+import fun.xianlai.system.common.service.MenuService;
 import fun.xianlai.core.annotation.ApiLog;
 import fun.xianlai.core.response.RetResult;
 import fun.xianlai.core.utils.bean.BeanUtils;
@@ -30,7 +30,7 @@ public class MenuController {
     @SaCheckLogin
     @SaCheckPermission("menu:add")
     @PostMapping("/add")
-    public RetResult add(@RequestBody SysMenu form) {
+    public RetResult add(@RequestBody Menu form) {
         log.info("请求参数: {}", form);
         BeanUtils.trimString(form);
         return new RetResult().success().setData(menuService.add(form));
@@ -50,7 +50,7 @@ public class MenuController {
     @SaCheckLogin
     @SaCheckPermission("menu:edit")
     @PostMapping("/edit")
-    public RetResult edit(@RequestBody SysMenu form) {
+    public RetResult edit(@RequestBody Menu form) {
         log.info("请求参数: {}", form);
         BeanUtils.trimString(form);
         return new RetResult().success().setData(menuService.edit(form));

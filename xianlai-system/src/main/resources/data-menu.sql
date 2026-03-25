@@ -1,4 +1,4 @@
-INSERT IGNORE INTO tb_common_sys_menu(
+INSERT IGNORE INTO tb_common_menu(
     `id`, `sort_id`, `parent_id`, `icon`, `title`,
     `path_name`, `need_permission`, `permission`, `active`
 ) VALUE

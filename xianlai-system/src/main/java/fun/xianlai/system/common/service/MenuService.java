@@ -1,6 +1,6 @@
-package fun.xianlai.system.iam.service;
+package fun.xianlai.system.common.service;
 
-import fun.xianlai.system.common.model.entity.SysMenu;
+import fun.xianlai.system.common.model.entity.Menu;
 import fun.xianlai.core.response.DataMap;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public interface MenuService {
     /**
      * 新增菜单
      */
-    DataMap add(SysMenu menu);
+    DataMap add(Menu menu);
 
     /**
      * 删除菜单
@@ -33,15 +33,15 @@ public interface MenuService {
     /**
      * 修改菜单
      */
-    DataMap edit(SysMenu menu);
+    DataMap edit(Menu menu);
 
     /**
      * 获取菜单森林
      */
-    List<SysMenu> getForest();
+    List<Menu> getForest();
 
     /**
      * 获取生效中的菜单森林
      */
-    List<SysMenu> getActiveForest();
+    List<Menu> getActiveForest();
 }

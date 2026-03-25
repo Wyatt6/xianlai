@@ -1,5 +1,6 @@
 package fun.xianlai.system.launch.initializer;
 
+import fun.xianlai.system.common.service.MenuService;
 import fun.xianlai.system.common.service.OptionService;
 import fun.xianlai.system.common.service.PathService;
 import fun.xianlai.system.common.service.RouteService;
@@ -20,8 +21,8 @@ public class CacheInitializer implements CommandLineRunner {
     private PathService pathService;
     @Autowired
     private RouteService routeService;
-//    @Autowired
-//    private MenuService menuService;
+    @Autowired
+    private MenuService menuService;
 //    @Autowired
 //    private ApiService apiService;
 //
@@ -37,7 +38,7 @@ public class CacheInitializer implements CommandLineRunner {
         optionService.updateBackLoadSystemOptionsCache();
         pathService.cachePaths();
         routeService.cacheRoutes();
-//        menuService.cacheActiveMenus();
+        menuService.cacheActiveMenus();
 //        apiService.cacheApis();
 //        permissionService.setPermissionDbRefreshTime(DateUtils.now());
 //        roleService.setRoleDbRefreshTime(DateUtils.now());
