@@ -1,41 +1,58 @@
 package fun.xianlai.system.common.service.impl;
 
+import com.alibaba.fastjson2.JSONObject;
+import fun.xianlai.core.annotation.SimpleServiceLog;
+import fun.xianlai.core.utils.ChecksumUtils;
+import fun.xianlai.system.common.model.consts.ConstMenuCache;
+import fun.xianlai.system.common.model.entity.XLMenu;
+import fun.xianlai.system.common.repository.XLMenuRepository;
 import fun.xianlai.system.common.service.MenuService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author WyattLau
  */
 @Service
 public class MenuServiceImpl implements MenuService {
-//    @Autowired
-//    private RedisTemplate<String, Object> redis;
-//    @Lazy
-//    @Autowired
-//    private MenuService self;
-//    @Autowired
-//    private XLMenuRepository menuRepository;
-//
-//    @Override
-//    @SimpleServiceLog("缓存生效的菜单")
-//    @Transactional
-//    public void cacheActiveMenus() {
-//        List<XLMenu> menus = self.getActiveForest();
-//        redis.opsForValue().set("menusChecksum", ChecksumUtils.sha256Checksum(JSONObject.toJSONString(menus)), Duration.ofHours(CACHE_HOURS));
-//        redis.opsForValue().set("menus", menus, Duration.ofHours(CACHE_HOURS));
-//    }
-//
-//    @Override
-//    @SimpleServiceLog("从缓存获取生效的菜单")
-//    public List<Map<String, Object>> getActiveMenusFromCache() {
-//        List<Map<String, Object>> menus = (List<Map<String, Object>>) redis.opsForValue().get("menus");
-//        if (menus == null) {
-//            self.cacheActiveMenus();
-//            menus = (List<Map<String, Object>>) redis.opsForValue().get("menus");
-//        }
-//        return menus;
-//    }
-//
+    @Autowired
+    private RedisTemplate<String, Object> redis;
+    @Lazy
+    @Autowired
+    private MenuService self;
+    @Autowired
+    private XLMenuRepository menuRepository;
+
+    @Override
+    @SimpleServiceLog("更新生效菜单的缓存")
+    @Transactional
+    public void updateActiveMenusCache() {
+        List<XLMenu> menus = self.getActiveForest();
+        redis.opsForValue().set(ConstMenuCache.MENU_CHECKSUM_CACHE_KEY, ChecksumUtils.sha256Checksum(JSONObject.toJSONString(menus)), Duration.ofHours(ConstMenuCache.MENU_CACHE_HOURS));
+        redis.opsForValue().set(ConstMenuCache.MENU_CACHE_KEY, menus, Duration.ofHours(ConstMenuCache.MENU_CACHE_HOURS));
+    }
+
+    @Override
+    @SimpleServiceLog("从缓存获取生效的菜单")
+    public List<Map<String, Object>> getActiveMenusFromCache() {
+        List<Map<String, Object>> menus = (List<Map<String, Object>>) redis.opsForValue().get(ConstMenuCache.MENU_CACHE_KEY);
+        if (menus == null) {
+            self.updateActiveMenusCache();
+            menus = (List<Map<String, Object>>) redis.opsForValue().get(ConstMenuCache.MENU_CACHE_KEY);
+        }
+        return menus;
+    }
+
 //    @Override
 //    @ServiceLog("新增菜单")
 //    @Transactional
@@ -107,23 +124,23 @@ public class MenuServiceImpl implements MenuService {
 //        }
 //        return forest;
 //    }
-//
-//    @Override
-//    public List<XLMenu> getActiveForest() {
-//        List<XLMenu> menus = menuRepository.findByActive(true, Sort.by(Sort.Order.asc("sortId")));
-//        List<XLMenu> forest = new ArrayList<>();
-//        Map<Long, XLMenu> finder = new HashMap<>();
-//        for (XLMenu menu : menus) {
-//            finder.put(menu.getId(), menu);
-//        }
-//        for (XLMenu menu : menus) {
-//            if (menu.getParentId() == 0) {
-//                forest.add(finder.get(menu.getId()));
-//            } else {
-//                XLMenu fatherMenu = finder.get(menu.getParentId());
-//                fatherMenu.getChildren().add(finder.get(menu.getId()));
-//            }
-//        }
-//        return forest;
-//    }
+
+    @Override
+    public List<XLMenu> getActiveForest() {
+        List<XLMenu> menus = menuRepository.findByActive(true, Sort.by(Sort.Order.asc("sortId")));
+        List<XLMenu> forest = new ArrayList<>();
+        Map<Long, XLMenu> finder = new HashMap<>();
+        for (XLMenu menu : menus) {
+            finder.put(menu.getId(), menu);
+        }
+        for (XLMenu menu : menus) {
+            if (menu.getParentId() == 0) {
+                forest.add(finder.get(menu.getId()));
+            } else {
+                XLMenu fatherMenu = finder.get(menu.getParentId());
+                fatherMenu.getChildren().add(finder.get(menu.getId()));
+            }
+        }
+        return forest;
+    }
 }

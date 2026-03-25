@@ -1,18 +1,23 @@
 package fun.xianlai.system.common.service;
 
+import fun.xianlai.system.common.model.entity.XLMenu;
+
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author WyattLau
  */
 public interface MenuService {
-//    /**
-//     * 缓存生效的菜单
-//     */
-//    void cacheActiveMenus();
-//
-//    /**
-//     * 从缓存获取生效的菜单
-//     */
-//    List<Map<String, Object>> getActiveMenusFromCache();
+    /**
+     * 更新生效菜单的缓存
+     */
+    void updateActiveMenusCache();
+
+    /**
+     * 从缓存获取生效的菜单
+     */
+    List<Map<String, Object>> getActiveMenusFromCache();
 //
 //    /**
 //     * 新增菜单
@@ -33,9 +38,9 @@ public interface MenuService {
 //     * 获取菜单森林
 //     */
 //    List<XLMenu> getForest();
-//
-//    /**
-//     * 获取生效中的菜单森林
-//     */
-//    List<XLMenu> getActiveForest();
+
+    /**
+     * 获取生效中的菜单森林
+     */
+    List<XLMenu> getActiveForest();
 }
