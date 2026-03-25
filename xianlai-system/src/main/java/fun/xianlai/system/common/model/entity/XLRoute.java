@@ -39,7 +39,7 @@ public class XLRoute {
     @TableGenerator(name="routePkGen", initialValue = 1000000, allocationSize = 1)
     private Long id;
 
-    @Column(columnDefinition = "bigint not null default 0")
+    @Column(columnDefinition = "bigint not null default 100")
     private Long sortId;
 
     @Column(columnDefinition = "bigint not null default 0")
