@@ -1,6 +1,5 @@
 package fun.xianlai.system.common.model.entity;
 
-import fun.xianlai.core.utils.bean.PrimaryKeyGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,12 +7,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.persistence.TableGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  * 路径
@@ -37,16 +36,16 @@ import org.hibernate.annotations.GenericGenerator;
         @Index(columnList = "path", unique = true),
         @Index(columnList = "sortId, name") // 第1关键字sortId，第2关键字name
 })
-public class Path {
+public class XLPath {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
-    @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableGenerator(name="pathPkGen", initialValue = 1000000, allocationSize = 1)
     private Long id;
 
     @Column(columnDefinition = "bigint not null default 1")
     private Long sortId;
 
-    @Column(columnDefinition = "varchar(255) not null")
+    @Column(columnDefinition = "varchar(200) not null")
     private String name;
 
     @Column(columnDefinition = "varchar(1000) not null")
