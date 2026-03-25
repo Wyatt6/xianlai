@@ -1,6 +1,5 @@
 package fun.xianlai.system.common.model.entity;
 
-import fun.xianlai.core.utils.bean.PrimaryKeyGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,13 +7,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.persistence.TableGenerator;
 import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +35,8 @@ import java.util.List;
 })
 public class XLRoute {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
-    @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableGenerator(name="pathPkGen", initialValue = 1000000, allocationSize = 1)
     private Long id;
 
     @Column(columnDefinition = "bigint not null default 0")
