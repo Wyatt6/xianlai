@@ -7,7 +7,6 @@ INSERT IGNORE INTO tb_common_option_default(
 (1100002, 'SYSTEM', 'system.captcha.expireSeconds', '120', 'INTEGER', '验证码有效期', '设置公用的验证码的有效期，单位：秒。', 0);
 
 
-       
 -- -- ------- --
 -- -- 门户页面 --
 -- -- ------- --

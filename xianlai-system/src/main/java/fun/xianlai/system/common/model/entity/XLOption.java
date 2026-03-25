@@ -37,7 +37,7 @@ import org.hibernate.annotations.DynamicUpdate;
 public class XLOption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @TableGenerator(name="optionDefaultPkGen", initialValue = 1000000, allocationSize = 1)
+    @TableGenerator(name="optionPkGen", initialValue = 1000000, allocationSize = 1)
     private Long id;
 
     @Column(columnDefinition = "varchar(30) not null")
