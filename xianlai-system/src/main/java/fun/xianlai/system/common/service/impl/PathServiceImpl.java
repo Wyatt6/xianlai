@@ -36,17 +36,17 @@ public class PathServiceImpl implements PathService {
     @Transactional
     public void updatePathsCache() {
         List<XLPath> paths = pathRepository.findAll();
-        redis.opsForValue().set(ConstPathCache.PATH_OPTION_CHECKSUM_CACHE_KEY, ChecksumUtils.sha256Checksum(JSONObject.toJSONString(paths)), Duration.ofHours(ConstPathCache.PATH_CACHE_HOURS));
-        redis.opsForValue().set(ConstPathCache.PATH_OPTION_CACHE_KEY, paths, Duration.ofHours(ConstPathCache.PATH_CACHE_HOURS));
+        redis.opsForValue().set(ConstPathCache.PATH_CHECKSUM_CACHE_KEY, ChecksumUtils.sha256Checksum(JSONObject.toJSONString(paths)), Duration.ofHours(ConstPathCache.PATH_CACHE_HOURS));
+        redis.opsForValue().set(ConstPathCache.PATH_CACHE_KEY, paths, Duration.ofHours(ConstPathCache.PATH_CACHE_HOURS));
     }
 
     @Override
     @SimpleServiceLog("从缓存获取路径")
     public List<XLPath> getPathsFromCache() {
-        List<XLPath> paths = (List<XLPath>) redis.opsForValue().get(ConstPathCache.PATH_OPTION_CACHE_KEY);
+        List<XLPath> paths = (List<XLPath>) redis.opsForValue().get(ConstPathCache.PATH_CACHE_KEY);
         if (paths == null) {
             self.updatePathsCache();
-            paths = (List<XLPath>) redis.opsForValue().get(ConstPathCache.PATH_OPTION_CACHE_KEY);
+            paths = (List<XLPath>) redis.opsForValue().get(ConstPathCache.PATH_CACHE_KEY);
         }
         return paths;
     }

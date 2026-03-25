@@ -40,17 +40,17 @@ public class RouteServiceImpl implements RouteService {
     @Transactional
     public void updateRoutesCache() {
         List<XLRoute> routes = self.getForest();
-        redis.opsForValue().set(ConstRouteCache.ROUTE_OPTION_CHECKSUM_CACHE_KEY, ChecksumUtils.sha256Checksum(JSONObject.toJSONString(routes)), Duration.ofHours(ConstRouteCache.ROUTE_CACHE_HOURS));
-        redis.opsForValue().set(ConstRouteCache.ROUTE_OPTION_CACHE_KEY, routes, Duration.ofHours(ConstRouteCache.ROUTE_CACHE_HOURS));
+        redis.opsForValue().set(ConstRouteCache.ROUTE_CHECKSUM_CACHE_KEY, ChecksumUtils.sha256Checksum(JSONObject.toJSONString(routes)), Duration.ofHours(ConstRouteCache.ROUTE_CACHE_HOURS));
+        redis.opsForValue().set(ConstRouteCache.ROUTE_CACHE_KEY, routes, Duration.ofHours(ConstRouteCache.ROUTE_CACHE_HOURS));
     }
 
     @Override
     @SimpleServiceLog("从缓存获取路由")
     public List<Map<String, Object>> getRoutesFromCache() {
-        List<Map<String, Object>> routes = (List<Map<String, Object>>) redis.opsForValue().get(ConstRouteCache.ROUTE_OPTION_CACHE_KEY);
+        List<Map<String, Object>> routes = (List<Map<String, Object>>) redis.opsForValue().get(ConstRouteCache.ROUTE_CACHE_KEY);
         if (routes == null) {
             self.updateRoutesCache();
-            routes = (List<Map<String, Object>>) redis.opsForValue().get(ConstRouteCache.ROUTE_OPTION_CACHE_KEY);
+            routes = (List<Map<String, Object>>) redis.opsForValue().get(ConstRouteCache.ROUTE_CACHE_KEY);
         }
         return routes;
     }
