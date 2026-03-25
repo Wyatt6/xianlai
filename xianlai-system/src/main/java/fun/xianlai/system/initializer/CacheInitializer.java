@@ -37,7 +37,7 @@ public class CacheInitializer implements CommandLineRunner {
         optionService.updateFrontLoadSystemOptionsCache();
         optionService.updateBackLoadSystemOptionsCache();
         pathService.updatePathsCache();
-//        routeService.cacheRoutes();
+        routeService.updateRoutesCache();
 //        menuService.cacheActiveMenus();
 //        apiService.cacheApis();
 //        permissionService.setPermissionDbRefreshTime(DateUtils.now());

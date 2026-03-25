@@ -36,8 +36,8 @@ public class InitController {
     public RetResult getInitData() {
         return new RetResult().success()
                 .addData("systemOptions", optionService.getFrontLoadSystemOptionsFromCache())
-                .addData("paths", pathService.getPathsFromCache());
-//                .addData("routes", routeService.getRoutesFromCache())
+                .addData("paths", pathService.getPathsFromCache())
+                .addData("routes", routeService.getRoutesFromCache());
 //                .addData("menus", menuService.getActiveMenusFromCache())
 //                .addData("apis", apiService.getApisFromCache());
     }

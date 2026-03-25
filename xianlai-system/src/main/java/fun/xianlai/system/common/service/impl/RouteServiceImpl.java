@@ -1,8 +1,25 @@
 package fun.xianlai.system.common.service.impl;
 
+import com.alibaba.fastjson2.JSONObject;
+import fun.xianlai.core.annotation.SimpleServiceLog;
+import fun.xianlai.core.utils.ChecksumUtils;
+import fun.xianlai.system.common.model.consts.ConstRouteCache;
+import fun.xianlai.system.common.model.entity.XLRoute;
+import fun.xianlai.system.common.repository.XLRouteRepository;
 import fun.xianlai.system.common.service.RouteService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author WyattLau
@@ -10,35 +27,33 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class RouteServiceImpl implements RouteService {
-//    private static final long CACHE_HOURS = 720L;   // 30天
-//
-//    @Autowired
-//    private RedisTemplate<String, Object> redis;
-//    @Lazy
-//    @Autowired
-//    private RouteService self;
-//    @Autowired
-//    private XLRouteRepository routeRepository;
-//
-//    @Override
-//    @SimpleServiceLog("缓存路由")
-//    @Transactional
-//    public void cacheRoutes() {
-//        List<XLRoute> routes = self.getForest();
-//        redis.opsForValue().set("routesChecksum", ChecksumUtils.sha256Checksum(JSONObject.toJSONString(routes)), Duration.ofHours(CACHE_HOURS));
-//        redis.opsForValue().set("routes", routes, Duration.ofHours(CACHE_HOURS));
-//    }
-//
-//    @Override
-//    @SimpleServiceLog("从缓存获取路由")
-//    public List<Map<String, Object>> getRoutesFromCache() {
-//        List<Map<String, Object>> routes = (List<Map<String, Object>>) redis.opsForValue().get("routes");
-//        if (routes == null) {
-//            self.cacheRoutes();
-//            routes = (List<Map<String, Object>>) redis.opsForValue().get("routes");
-//        }
-//        return routes;
-//    }
+    @Autowired
+    private RedisTemplate<String, Object> redis;
+    @Lazy
+    @Autowired
+    private RouteService self;
+    @Autowired
+    private XLRouteRepository routeRepository;
+
+    @Override
+    @SimpleServiceLog("更新路由缓存")
+    @Transactional
+    public void updateRoutesCache() {
+        List<XLRoute> routes = self.getForest();
+        redis.opsForValue().set(ConstRouteCache.ROUTE_OPTION_CHECKSUM_CACHE_KEY, ChecksumUtils.sha256Checksum(JSONObject.toJSONString(routes)), Duration.ofHours(ConstRouteCache.ROUTE_CACHE_HOURS));
+        redis.opsForValue().set(ConstRouteCache.ROUTE_OPTION_CACHE_KEY, routes, Duration.ofHours(ConstRouteCache.ROUTE_CACHE_HOURS));
+    }
+
+    @Override
+    @SimpleServiceLog("从缓存获取路由")
+    public List<Map<String, Object>> getRoutesFromCache() {
+        List<Map<String, Object>> routes = (List<Map<String, Object>>) redis.opsForValue().get(ConstRouteCache.ROUTE_OPTION_CACHE_KEY);
+        if (routes == null) {
+            self.updateRoutesCache();
+            routes = (List<Map<String, Object>>) redis.opsForValue().get(ConstRouteCache.ROUTE_OPTION_CACHE_KEY);
+        }
+        return routes;
+    }
 //
 //    @Override
 //    @ServiceLog("新增路由")
@@ -96,22 +111,22 @@ public class RouteServiceImpl implements RouteService {
 //        }
 //    }
 //
-//    @Override
-//    public List<XLRoute> getForest() {
-//        List<XLRoute> routes = routeRepository.findAll(Sort.by(Sort.Order.asc("sortId")));
-//        List<XLRoute> forest = new ArrayList<>();
-//        Map<Long, XLRoute> finder = new HashMap<>();
-//        for (XLRoute route : routes) {
-//            finder.put(route.getId(), route);
-//        }
-//        for (XLRoute route : routes) {
-//            if (route.getParentId() == 0) {
-//                forest.add(finder.get(route.getId()));
-//            } else {
-//                XLRoute fatherRoute = finder.get(route.getParentId());
-//                fatherRoute.getChildren().add(finder.get(route.getId()));
-//            }
-//        }
-//        return forest;
-//    }
+    @Override
+    public List<XLRoute> getForest() {
+        List<XLRoute> routes = routeRepository.findAll(Sort.by(Sort.Order.asc("sortId")));
+        List<XLRoute> forest = new ArrayList<>();
+        Map<Long, XLRoute> finder = new HashMap<>();
+        for (XLRoute route : routes) {
+            finder.put(route.getId(), route);
+        }
+        for (XLRoute route : routes) {
+            if (route.getParentId() == 0) {
+                forest.add(finder.get(route.getId()));
+            } else {
+                XLRoute fatherRoute = finder.get(route.getParentId());
+                fatherRoute.getChildren().add(finder.get(route.getId()));
+            }
+        }
+        return forest;
+    }
 }
