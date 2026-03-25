@@ -1,6 +1,5 @@
 package fun.xianlai.system.common.model.entity;
 
-import fun.xianlai.core.utils.bean.PrimaryKeyGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,13 +7,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.persistence.TableGenerator;
 import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,13 +34,13 @@ import java.util.List;
 @Table(name = "tb_common_menu", indexes = {
         @Index(columnList = "sortId")
 })
-public class Menu {
+public class XLMenu {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pkGen")
-    @GenericGenerator(name = "pkGen", type = PrimaryKeyGenerator.class)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableGenerator(name="menuPkGen", initialValue = 1000000, allocationSize = 1)
     private Long id;
 
-    @Column(columnDefinition = "bigint not null default 0")
+    @Column(columnDefinition = "bigint not null default 100")
     private Long sortId;
 
     @Column(columnDefinition = "bigint not null default 0")
@@ -67,9 +66,9 @@ public class Menu {
 
     // ----- 非持久化属性 -----
     @Transient
-    private List<Menu> children = new ArrayList<>();
+    private List<XLMenu> children = new ArrayList<>();
 
-    public Menu(Long id, Long sortId, Long parentId, String icon, String title, String pathName, Boolean needPermission, String permission, Boolean active) {
+    public XLMenu(Long id, Long sortId, Long parentId, String icon, String title, String pathName, Boolean needPermission, String permission, Boolean active) {
         this.id = id;
         this.sortId = sortId;
         this.parentId = parentId;

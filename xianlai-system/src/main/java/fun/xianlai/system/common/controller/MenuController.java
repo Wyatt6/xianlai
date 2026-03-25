@@ -1,19 +1,7 @@
 package fun.xianlai.system.common.controller;
 
-import cn.dev33.satoken.annotation.SaCheckLogin;
-import cn.dev33.satoken.annotation.SaCheckPermission;
-import fun.xianlai.system.common.model.entity.Menu;
-import fun.xianlai.system.common.service.MenuService;
-import fun.xianlai.core.annotation.ApiLog;
-import fun.xianlai.core.response.RetResult;
-import fun.xianlai.core.utils.bean.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -23,53 +11,53 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/menu")
 public class MenuController {
-    @Autowired
-    private MenuService menuService;
-
-    @ApiLog("新增菜单")
-    @SaCheckLogin
-    @SaCheckPermission("menu:add")
-    @PostMapping("/add")
-    public RetResult add(@RequestBody Menu form) {
-        log.info("请求参数: {}", form);
-        BeanUtils.trimString(form);
-        return new RetResult().success().setData(menuService.add(form));
-    }
-
-    @ApiLog("删除菜单")
-    @SaCheckLogin
-    @SaCheckPermission("menu:delete")
-    @GetMapping("/delete")
-    public RetResult delete(@RequestParam Long menuId) {
-        log.info("请求参数: menuId=[{}]", menuId);
-        menuService.delete(menuId);
-        return new RetResult().success();
-    }
-
-    @ApiLog("修改菜单")
-    @SaCheckLogin
-    @SaCheckPermission("menu:edit")
-    @PostMapping("/edit")
-    public RetResult edit(@RequestBody Menu form) {
-        log.info("请求参数: {}", form);
-        BeanUtils.trimString(form);
-        return new RetResult().success().setData(menuService.edit(form));
-    }
-
-    @ApiLog("重载菜单缓存")
-    @SaCheckLogin
-    @SaCheckPermission("menu:edit")
-    @GetMapping("/reloadCache")
-    public RetResult reloadCache() {
-        menuService.cacheActiveMenus();
-        return new RetResult().success();
-    }
-
-    @ApiLog("查询菜单森林")
-    @SaCheckLogin
-    @SaCheckPermission("menu:query")
-    @GetMapping("/getForest")
-    public RetResult getForest() {
-        return new RetResult().success().addData("menus", menuService.getForest());
-    }
+//    @Autowired
+//    private MenuService menuService;
+//
+//    @ApiLog("新增菜单")
+//    @SaCheckLogin
+//    @SaCheckPermission("menu:add")
+//    @PostMapping("/add")
+//    public RetResult add(@RequestBody XLMenu form) {
+//        log.info("请求参数: {}", form);
+//        BeanUtils.trimString(form);
+//        return new RetResult().success().setData(menuService.add(form));
+//    }
+//
+//    @ApiLog("删除菜单")
+//    @SaCheckLogin
+//    @SaCheckPermission("menu:delete")
+//    @GetMapping("/delete")
+//    public RetResult delete(@RequestParam Long menuId) {
+//        log.info("请求参数: menuId=[{}]", menuId);
+//        menuService.delete(menuId);
+//        return new RetResult().success();
+//    }
+//
+//    @ApiLog("修改菜单")
+//    @SaCheckLogin
+//    @SaCheckPermission("menu:edit")
+//    @PostMapping("/edit")
+//    public RetResult edit(@RequestBody XLMenu form) {
+//        log.info("请求参数: {}", form);
+//        BeanUtils.trimString(form);
+//        return new RetResult().success().setData(menuService.edit(form));
+//    }
+//
+//    @ApiLog("重载菜单缓存")
+//    @SaCheckLogin
+//    @SaCheckPermission("menu:edit")
+//    @GetMapping("/reloadCache")
+//    public RetResult reloadCache() {
+//        menuService.cacheActiveMenus();
+//        return new RetResult().success();
+//    }
+//
+//    @ApiLog("查询菜单森林")
+//    @SaCheckLogin
+//    @SaCheckPermission("menu:query")
+//    @GetMapping("/getForest")
+//    public RetResult getForest() {
+//        return new RetResult().success().addData("menus", menuService.getForest());
+//    }
 }
