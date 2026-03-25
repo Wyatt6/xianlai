@@ -1,18 +1,22 @@
 package fun.xianlai.system.common.service;
 
+import fun.xianlai.system.common.model.entity.XLPath;
+
+import java.util.List;
+
 /**
  * @author WyattLau
  */
 public interface PathService {
-//    /**
-//     * 缓存路径
-//     */
-//    void cachePaths();
-//
-//    /**
-//     * 从缓存获取路径
-//     */
-//    List<XLPath> getPathsFromCache();
+    /**
+     * 更新路径缓存
+     */
+    void updatePathsCache();
+
+    /**
+     * 从缓存获取路径
+     */
+    List<XLPath> getPathsFromCache();
 //
 //    /**
 //     * 新增路径

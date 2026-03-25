@@ -1,8 +1,21 @@
 package fun.xianlai.system.common.service.impl;
 
+import com.alibaba.fastjson2.JSONObject;
+import fun.xianlai.core.annotation.SimpleServiceLog;
+import fun.xianlai.core.utils.ChecksumUtils;
+import fun.xianlai.system.common.model.consts.ConstPathCache;
+import fun.xianlai.system.common.model.entity.XLPath;
+import fun.xianlai.system.common.repository.XLPathRepository;
 import fun.xianlai.system.common.service.PathService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Duration;
+import java.util.List;
 
 /**
  * @author WyattLau
@@ -10,35 +23,33 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class PathServiceImpl implements PathService {
-//    private static final long CACHE_HOURS = 720L;   // 30天
-//
-//    @Autowired
-//    private RedisTemplate<String, Object> redis;
-//    @Lazy
-//    @Autowired
-//    private PathService self;
-//    @Autowired
-//    private XLPathRepository pathRepository;
-//
-//    @Override
-//    @SimpleServiceLog("缓存路径")
-//    @Transactional
-//    public void cachePaths() {
-//        List<XLPath> paths = pathRepository.findAll();
-//        redis.opsForValue().set("pathsChecksum", ChecksumUtils.sha256Checksum(JSONObject.toJSONString(paths)), Duration.ofHours(CACHE_HOURS));
-//        redis.opsForValue().set("paths", paths, Duration.ofHours(CACHE_HOURS));
-//    }
-//
-//    @Override
-//    @SimpleServiceLog("从缓存获取路径")
-//    public List<XLPath> getPathsFromCache() {
-//        List<XLPath> paths = (List<XLPath>) redis.opsForValue().get("paths");
-//        if (paths == null) {
-//            self.cachePaths();
-//            paths = (List<XLPath>) redis.opsForValue().get("paths");
-//        }
-//        return paths;
-//    }
+    @Autowired
+    private RedisTemplate<String, Object> redis;
+    @Lazy
+    @Autowired
+    private PathService self;
+    @Autowired
+    private XLPathRepository pathRepository;
+
+    @Override
+    @SimpleServiceLog("更新路径缓存")
+    @Transactional
+    public void updatePathsCache() {
+        List<XLPath> paths = pathRepository.findAll();
+        redis.opsForValue().set(ConstPathCache.PATH_OPTION_CHECKSUM_CACHE_KEY, ChecksumUtils.sha256Checksum(JSONObject.toJSONString(paths)), Duration.ofHours(ConstPathCache.PATH_CACHE_HOURS));
+        redis.opsForValue().set(ConstPathCache.PATH_OPTION_CACHE_KEY, paths, Duration.ofHours(ConstPathCache.PATH_CACHE_HOURS));
+    }
+
+    @Override
+    @SimpleServiceLog("从缓存获取路径")
+    public List<XLPath> getPathsFromCache() {
+        List<XLPath> paths = (List<XLPath>) redis.opsForValue().get(ConstPathCache.PATH_OPTION_CACHE_KEY);
+        if (paths == null) {
+            self.updatePathsCache();
+            paths = (List<XLPath>) redis.opsForValue().get(ConstPathCache.PATH_OPTION_CACHE_KEY);
+        }
+        return paths;
+    }
 //
 //    @Override
 //    @ServiceLog("新增路径")
