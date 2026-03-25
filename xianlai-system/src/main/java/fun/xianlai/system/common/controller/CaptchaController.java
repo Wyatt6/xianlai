@@ -1,8 +1,8 @@
 package fun.xianlai.system.common.controller;
 
 import fun.xianlai.system.iam.service.CaptchaService;
-import fun.xianlai.core.annotation.ApiLog;
-import fun.xianlai.core.response.RetResult;
+import fun.xianlai.common.annotation.ApiLog;
+import fun.xianlai.common.response.RetResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

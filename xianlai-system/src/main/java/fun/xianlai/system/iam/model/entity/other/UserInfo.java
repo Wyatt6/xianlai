@@ -1,8 +1,8 @@
 package fun.xianlai.system.iam.model.entity.other;
 
 import fun.xianlai.system.iam.model.entity.User;
-import fun.xianlai.core.exception.SysException;
-import fun.xianlai.core.utils.bean.BeanUtils;
+import fun.xianlai.common.exception.SysException;
+import fun.xianlai.common.utils.bean.BeanUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

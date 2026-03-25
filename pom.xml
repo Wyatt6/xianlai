@@ -4,17 +4,16 @@
 
     <properties>
         <!-- TODO CBR: 每次发版前检查模块版本号 -->
-        <xianlai.version>0.2.1</xianlai.version>
+        <xianlai.version>2.0.0</xianlai.version>
         <xianlai-infra-mysql.version>1.0.0</xianlai-infra-mysql.version>
         <xianlai-infra-redis.version>1.0.0</xianlai-infra-redis.version>
-        <xianlai-core.version>1.0.0</xianlai-core.version>
-        <xianlai-gateway.version>1.0.0</xianlai-gateway.version>
-        <xianlai-system.version>1.1.0</xianlai-system.version>
-        <xianlai-mod-toolkit.version>1.0.1</xianlai-mod-toolkit.version>
+        <xianlai-common.version>2.0.0</xianlai-common.version>
+        <xianlai-gateway.version>2.0.0</xianlai-gateway.version>
+        <xianlai-system.version>2.0.0</xianlai-system.version>
 
         <!-- 替换成你的Nexus构件库地址 -->
-        <distribution.releases.url>http://192.168.1.100:8081/repository/maven-releases/</distribution.releases.url>
-        <distribution.snapshots.url>http://192.168.1.100:8081/repository/maven-snapshots/</distribution.snapshots.url>
+        <distribution.releases.url>http://172.16.2.205:8081/repository/maven-releases/</distribution.releases.url>
+        <distribution.snapshots.url>http://172.16.2.205:8081/repository/maven-snapshots/</distribution.snapshots.url>
         <!-- 不要修改以下参数 -->
         <java.version>17</java.version>
         <spring-boot.version>3.2.4</spring-boot.version>
@@ -38,18 +37,11 @@
     <packaging>pom</packaging>
 
     <modules>
-        <!-- 基础：封装后的MySQL数据库访问 -->
         <module>xianlai-infra-mysql</module>
-        <!-- 基础：封装后的Redis缓存访问 -->
         <module>xianlai-infra-redis</module>
-        <!-- 核心程序 -->
-        <module>xianlai-core</module>
-        <!-- 技术网关 -->
+        <module>xianlai-common</module>
         <module>xianlai-gateway</module>
-        <!-- 系统主服务 -->
         <module>xianlai-system</module>
-        <!-- 模组：工具箱 -->
-        <module>xianlai-mod-toolkit</module>
     </modules>
 
     <dependencyManagement>
@@ -68,7 +60,7 @@
             <dependency>
                 <groupId>fun.xianlai</groupId>
                 <artifactId>xianlai-common</artifactId>
-                <version>${xianlai-core.version}</version>
+                <version>${xianlai-common.version}</version>
             </dependency>
 
             <!-- 第三方依赖 -->

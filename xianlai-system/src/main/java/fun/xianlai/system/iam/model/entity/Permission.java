@@ -1,6 +1,6 @@
 package fun.xianlai.system.iam.model.entity;
 
-import fun.xianlai.core.utils.bean.PrimaryKeyGenerator;
+import fun.xianlai.common.utils.bean.PrimaryKeyGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

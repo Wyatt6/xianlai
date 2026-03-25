@@ -1,8 +1,8 @@
 package fun.xianlai.system.common.service.impl;
 
 import com.alibaba.fastjson2.JSONObject;
-import fun.xianlai.core.annotation.SimpleServiceLog;
-import fun.xianlai.core.utils.ChecksumUtils;
+import fun.xianlai.common.annotation.SimpleServiceLog;
+import fun.xianlai.common.utils.ChecksumUtils;
 import fun.xianlai.system.common.model.consts.ConstPathCache;
 import fun.xianlai.system.common.model.entity.XLPath;
 import fun.xianlai.system.common.repository.XLPathRepository;

@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>xianlai-common</artifactId>
-    <version>${xianlai-core.version}</version>
+    <version>${xianlai-common.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>

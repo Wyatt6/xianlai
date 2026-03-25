@@ -1,7 +1,7 @@
 package fun.xianlai.system.iam.producer;
 
 import fun.xianlai.system.iam.service.CaptchaService;
-import fun.xianlai.core.response.RetResult;
+import fun.xianlai.common.response.RetResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

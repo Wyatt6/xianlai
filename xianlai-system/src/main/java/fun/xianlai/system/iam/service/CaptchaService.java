@@ -1,7 +1,7 @@
 package fun.xianlai.system.iam.service;
 
 
-import fun.xianlai.core.response.DataMap;
+import fun.xianlai.common.response.DataMap;
 
 /**
  * @author WyattLau

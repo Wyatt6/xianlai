@@ -1,7 +1,7 @@
 package fun.xianlai.system.iam.service;
 
 import fun.xianlai.system.iam.model.entity.Role;
-import fun.xianlai.core.response.DataMap;
+import fun.xianlai.common.response.DataMap;
 import org.springframework.data.domain.Page;
 
 import java.util.Date;

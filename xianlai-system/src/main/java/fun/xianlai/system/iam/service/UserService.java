@@ -4,7 +4,7 @@ import fun.xianlai.system.iam.model.entity.other.Profile;
 import fun.xianlai.system.iam.model.entity.User;
 import fun.xianlai.system.iam.model.form.UserCondition;
 import fun.xianlai.system.iam.model.entity.other.UserInfo;
-import fun.xianlai.core.response.DataMap;
+import fun.xianlai.common.response.DataMap;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
