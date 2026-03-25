@@ -36,7 +36,7 @@ import java.util.List;
 public class XLRoute {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @TableGenerator(name="pathPkGen", initialValue = 1000000, allocationSize = 1)
+    @TableGenerator(name="routePkGen", initialValue = 1000000, allocationSize = 1)
     private Long id;
 
     @Column(columnDefinition = "bigint not null default 0")
