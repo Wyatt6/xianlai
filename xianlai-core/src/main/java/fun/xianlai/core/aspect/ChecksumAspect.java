@@ -28,9 +28,9 @@ public class ChecksumAspect {
 
     @AfterReturning(pointcut = "pointcut()", returning = "result")
     public void assembleChecksum(JoinPoint joinPoint, RetResult result) {
-        String optionsChecksum = (String) redis.opsForValue().get("optionsChecksum");
-        if (optionsChecksum != null) {
-            result.addChecksum("optionsChecksum", optionsChecksum);
+        String systemOptionsChecksum = (String) redis.opsForValue().get("systemOptionsChecksum");
+        if (systemOptionsChecksum != null) {
+            result.addChecksum("systemOptionsChecksum", systemOptionsChecksum);
         }
 
         String pathsChecksum = (String) redis.opsForValue().get("pathsChecksum");
