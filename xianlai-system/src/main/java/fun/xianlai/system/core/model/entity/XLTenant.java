@@ -57,7 +57,7 @@ public class XLTenant {
 
     @Column(columnDefinition = "datetime not null default current_timestamp")
     @Comment("租户配置最后更新时间")
-    private LocalDateTime configUpdateTime; // TODO
+    private LocalDateTime configUpdateTime;
 
     @Column(length = 300)
     @Comment("租户Logo")
@@ -73,7 +73,7 @@ public class XLTenant {
 
     @Column(columnDefinition = "varchar(10) not null default 'UNKNOWN'")
     @Comment("租户联系人性别")
-    private String contactGender;   // TODO
+    private String contactGender;
 
     @Column(length = 50)
     @Comment("租户联系人手机号")
