@@ -1,8 +1,10 @@
 package fun.xianlai.pkg.redis.config;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONReader;
-import com.alibaba.fastjson2.JSONWriter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import fun.xianlai.pkg.redis.properties.LettucePoolProperties;
 import fun.xianlai.pkg.redis.properties.RedisProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +16,12 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author WyattLau
@@ -29,29 +33,6 @@ public class RedisConfig {
     private RedisProperties rp;
     @Autowired
     private LettucePoolProperties lpp;
-    /**
-     * Fastjson2 序列化器
-     */
-    private static final RedisSerializer<Object> FASTJSON2_SERIALIZER = new RedisSerializer<Object>() {
-        @Override
-        public byte[] serialize(Object value) {
-            if (value == null) return new byte[0];
-            return JSON.toJSONBytes(value,
-                    JSONWriter.Feature.WriteClassName,
-                    JSONWriter.Feature.FieldBased,
-                    JSONWriter.Feature.WriteMapNullValue
-            );
-        }
-
-        @Override
-        public Object deserialize(byte[] bytes) {
-            if (bytes == null || bytes.length == 0) return null;
-            return JSON.parseObject(bytes, Object.class,
-                    JSONReader.Feature.SupportClassForName,
-                    JSONReader.Feature.FieldBased
-            );
-        }
-    };
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
@@ -68,14 +49,40 @@ public class RedisConfig {
         return new LettuceConnectionFactory(config, poolConfig);
     }
 
+    /**
+     * Jackson配置（解决LocalDateTime格式问题）
+     */
+    private ObjectMapper getObjectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        // 注册 JSR310 时间模块
+        JavaTimeModule javaTimeModule = new JavaTimeModule();
+        // 自定义序列化与反序列化规则
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(formatter));
+        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(formatter));
+        objectMapper.registerModule(javaTimeModule);
+        // 关闭时间转时间戳
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        // *注：这行不用，因为使用GenericJackson2JsonRedisSerializer已经默认是这样的了
+        // 支持范型的序列化，序列化时携带全类名，保证能反序列化为原类，而不变成LinkedHashMap
+        // objectMapper.activateDefaultTyping(objectMapper.getPolymorphicTypeValidator(), ObjectMapper.DefaultTyping.NON_FINAL);
+        return objectMapper;
+    }
+
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(FASTJSON2_SERIALIZER);
-        template.setHashKeySerializer(new StringRedisSerializer());
-        template.setHashValueSerializer(FASTJSON2_SERIALIZER);
+
+        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+        template.setKeySerializer(stringRedisSerializer);
+        template.setHashKeySerializer(stringRedisSerializer);
+
+        GenericJackson2JsonRedisSerializer jsonRedisSerializer = new GenericJackson2JsonRedisSerializer(getObjectMapper());
+        template.setValueSerializer(jsonRedisSerializer);
+        template.setHashValueSerializer(jsonRedisSerializer);
+
+        template.afterPropertiesSet();
         return template;
     }
 }
