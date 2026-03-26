@@ -28,14 +28,14 @@ import java.time.LocalDateTime;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "tb_core_sys_config", indexes = {
+@Table(name = "tb_core_system_config", indexes = {
         @Index(columnList = "configKey", unique = true),
         @Index(columnList = "scope, configKey"),   // scope ASC, configKey ASC
 })
-public class XLSysConfig {
+public class XLSystemConfig {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @TableGenerator(name = "pkGenSysConfig", initialValue = 100000, allocationSize = 1)
+    @TableGenerator(name = "pkGenSystemConfig", initialValue = 100000, allocationSize = 1)
     @Comment("主键ID")
     private Long id;
 
