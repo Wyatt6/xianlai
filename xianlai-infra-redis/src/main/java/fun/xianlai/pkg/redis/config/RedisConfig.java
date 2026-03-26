@@ -63,9 +63,9 @@ public class RedisConfig {
         objectMapper.registerModule(javaTimeModule);
         // 关闭时间转时间戳
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        // *注：这行不用，因为使用GenericJackson2JsonRedisSerializer已经默认是这样的了
-        // 支持范型的序列化，序列化时携带全类名，保证能反序列化为原类，而不变成LinkedHashMap
-        // objectMapper.activateDefaultTyping(objectMapper.getPolymorphicTypeValidator(), ObjectMapper.DefaultTyping.NON_FINAL);
+        // *注：解决缓存数据没有全类名，重启后从缓存读取数据时不知道反序列化为哪个类
+        // 支持范型的序列化，序列化时携带全类名，保证能反序列化为原类，而不变成LinkedHashMap无法类型转换为目标类型
+         objectMapper.activateDefaultTyping(objectMapper.getPolymorphicTypeValidator(), ObjectMapper.DefaultTyping.NON_FINAL);
         return objectMapper;
     }
 
