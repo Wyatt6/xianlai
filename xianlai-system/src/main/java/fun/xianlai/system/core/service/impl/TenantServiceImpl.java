@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Optional;
 
 /**
  * @author WyattLau
@@ -35,14 +36,14 @@ public class TenantServiceImpl implements TenantService {
             return cachedTenant;
         }
 
-        XLTenant tenant = tenantRepository.findByDomain(domain);
-        if (tenant == null) {
+        Optional<XLTenant> tenant = tenantRepository.findByDomain(domain);
+        if (tenant.isEmpty()) {
             String subDomain = getFirstSubDomain(domain);
             tenant = tenantRepository.findByCode(subDomain);
         }
-        if (tenant != null) {
-            redis.opsForValue().set(key, tenant, Duration.ofHours(TENANT_DOMAIN_CACHE_HOURS));
-            return tenant;
+        if (tenant.isPresent()) {
+            redis.opsForValue().set(key, tenant.get(), Duration.ofHours(TENANT_DOMAIN_CACHE_HOURS));
+            return tenant.get();
         } else {
             throw new SysException("未找到对应租户，请检查域名是否正确");
         }
