@@ -35,7 +35,7 @@ import java.time.LocalDateTime;
 public class XLTenant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @TableGenerator(name = "pkGenTenant", initialValue = 1, allocationSize = 1)
+    @TableGenerator(name = "pkGenTenant", initialValue = 100000, allocationSize = 1)
     @Comment("主键ID")
     private Long id;
 
