@@ -68,6 +68,10 @@ public class XLTenantConfig {
     @Comment("配置生效标志")
     private Boolean enabled;
 
+    @Column(columnDefinition = "bit not null default 0")
+    @Comment("配置前端加载标志")
+    private Boolean frontLoad;
+    
     @Column(length = 50)
     @Comment("配置名称")
     private String name;
