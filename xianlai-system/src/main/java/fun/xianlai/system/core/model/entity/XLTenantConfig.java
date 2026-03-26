@@ -38,28 +38,47 @@ public class XLTenantConfig {
     @Comment("主键ID")
     private Long id;
 
+    /**
+     * 取值见：EConfigScope
+     * SYSTEM --> 只允许系统加载使用，租户、用户不允许加载使用
+     * TENANT --> 允许系统、租户加载使用，用户不允许加载使用，默认值由系统维护，租户可覆盖此默认值
+     * USER   --> 允许系统、租户、用户加载使用，默认值由系统维护，租户可覆盖此默认值，用户可覆盖租户的默认值，用户也可直接覆盖系统的默认值
+     */
+    @Column(columnDefinition = "varchar(10) not null")
+    @Comment("作用域")
+    private String scope;
+
+    /**
+     * SYSTEM --> 0
+     * TENANT --> tenantId
+     * USER   --> userId
+     */
     @Column(columnDefinition = "bigint not null")
-    @Comment("租户ID")
-    private Long tenantId;
+    @Comment("作用域ID")
+    private Long scopeId;
 
     @Column(length = 100, nullable = false)
-    @Comment("租户配置key")
+    @Comment("配置key")
     private String configKey;
 
     @Column(columnDefinition = "longtext")
-    @Comment("租户配置值")
+    @Comment("配置值")
     private String configValue;
 
+    @Column(columnDefinition = "varchar(30) not null")
+    @Comment("配置值数据类型")
+    private String valueType;       // 取值见： EConfigValueType
+
     @Column(columnDefinition = "bit not null default 0")
-    @Comment("租户配置生效标志")
+    @Comment("配置生效标志")
     private Boolean enabled;
 
     @Column(length = 50)
-    @Comment("租户配置名称")
+    @Comment("配置名称")
     private String name;
 
     @Column(length = 300)
-    @Comment("租户配置备注")
+    @Comment("配置备注")
     private String remark;
 
     @Column(columnDefinition = "datetime not null default current_timestamp")
