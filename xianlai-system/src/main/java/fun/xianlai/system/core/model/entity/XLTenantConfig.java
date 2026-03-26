@@ -48,14 +48,9 @@ public class XLTenantConfig {
     @Comment("作用域")
     private String scope;
 
-    /**
-     * SYSTEM --> 0
-     * TENANT --> tenantId
-     * USER   --> userId
-     */
     @Column(columnDefinition = "bigint not null")
     @Comment("作用域ID")
-    private Long scopeId;
+    private Long scopeId;   // XLTenantConfig 取值 tenantId
 
     @Column(length = 100, nullable = false)
     @Comment("配置key")

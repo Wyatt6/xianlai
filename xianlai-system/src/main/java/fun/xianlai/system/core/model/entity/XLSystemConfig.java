@@ -49,14 +49,9 @@ public class XLSystemConfig {
     @Comment("作用域")
     private String scope;
 
-    /**
-     * SYSTEM --> 0
-     * TENANT --> tenantId
-     * USER   --> userId
-     */
     @Column(columnDefinition = "bigint not null default 0")
     @Comment("作用域ID")
-    private Long scopeId;
+    private Long scopeId;   // XLSystemConfig 恒为 0
 
     @Column(length = 100, nullable = false)
     @Comment("配置key")
