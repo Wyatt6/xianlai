@@ -6,7 +6,7 @@ import fun.xianlai.common.utils.ChecksumUtils;
 import fun.xianlai.system.core.model.consts.ConstOptionCache;
 import fun.xianlai.system.core.model.entity.XLOption;
 import fun.xianlai.system.core.model.entity.XLOptionDefault;
-import fun.xianlai.system.core.model.enums.EnumOptionScope;
+import fun.xianlai.system.core.model.enums.EConfigScope;
 import fun.xianlai.system.core.repository.XLOptionDefaultRepository;
 import fun.xianlai.system.core.repository.XLOptionRepository;
 import fun.xianlai.system.core.service.OptionService;
@@ -45,7 +45,7 @@ public class OptionServiceImpl implements OptionService {
     public void updateFrontLoadSystemOptionsCache() {
         Map<String, Map<String, String>> mapOptions = new HashMap<>();
         // 先查询默认参数
-        List<XLOptionDefault> optionDefaults = optionDefaultRepository.findByScopeAndFrontLoad(EnumOptionScope.SYSTEM, true);
+        List<XLOptionDefault> optionDefaults = optionDefaultRepository.findByScopeAndFrontLoad(EConfigScope.SYSTEM, true);
         if (optionDefaults != null) {
             for (XLOptionDefault optionDefault : optionDefaults) {
                 Map<String, String> valueObject = new HashMap<>();
@@ -55,7 +55,7 @@ public class OptionServiceImpl implements OptionService {
             }
         }
         // 再查询参数实例，如有实例则覆盖默认参数
-        List<XLOption> options = optionRepository.findByScopeAndFrontLoad(EnumOptionScope.SYSTEM, true);
+        List<XLOption> options = optionRepository.findByScopeAndFrontLoad(EConfigScope.SYSTEM, true);
         if (options != null) {
             for (XLOption option : options) {
                 Map<String, String> valueObject = new HashMap<>();
@@ -166,14 +166,14 @@ public class OptionServiceImpl implements OptionService {
     @SimpleServiceLog("更新后端加载的【系统参数】缓存")
     @Transactional
     public void updateBackLoadSystemOptionsCache() {
-        List<XLOptionDefault> optionDefaults = optionDefaultRepository.findByScope(EnumOptionScope.SYSTEM);
+        List<XLOptionDefault> optionDefaults = optionDefaultRepository.findByScope(EConfigScope.SYSTEM);
         for (XLOptionDefault optionDefault : optionDefaults) {
             Map<String, String> valueObject = new HashMap<>();
             valueObject.put("value", optionDefault.getDefaultValue());
             valueObject.put("type", optionDefault.getValueType());
             redis.opsForValue().set(ConstOptionCache.SINGLE_OPTION_CACHE_KEY_PREFIX + optionDefault.getOptionKey(), valueObject, Duration.ofHours(ConstOptionCache.SYSTEM_OPTION_CACHE_HOURS));
         }
-        List<XLOption> options = optionRepository.findByScope(EnumOptionScope.SYSTEM);
+        List<XLOption> options = optionRepository.findByScope(EConfigScope.SYSTEM);
         for (XLOption option : options) {
             Map<String, String> valueObject = new HashMap<>();
             valueObject.put("value", option.getOptionValue());
@@ -233,15 +233,15 @@ public class OptionServiceImpl implements OptionService {
         int secondDot = key.indexOf('.', firstDot + 1);
         String firstItem = key.substring(0, firstDot).toUpperCase();
         switch (firstItem) {
-            case EnumOptionScope.SYSTEM -> {
+            case EConfigScope.SYSTEM -> {
                 defaultKey = key;
                 cacheHours = ConstOptionCache.SYSTEM_OPTION_CACHE_HOURS;
             }
-            case EnumOptionScope.TENANT -> {
+            case EConfigScope.TENANT -> {
                 defaultKey = firstItem + ".{0}." + key.substring(secondDot + 1);
                 cacheHours = ConstOptionCache.TENANT_OPTION_CACHE_HOURS;
             }
-            case EnumOptionScope.USER -> {
+            case EConfigScope.USER -> {
                 defaultKey = firstItem + ".{0}." + key.substring(secondDot + 1);
                 cacheHours = ConstOptionCache.USER_OPTION_CACHE_HOURS;
             }
