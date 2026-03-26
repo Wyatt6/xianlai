@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "tb_sys_core_tenant", indexes = {
+@Table(name = "tb_core_tenant", indexes = {
         @Index(columnList = "code", unique = true),
         @Index(columnList = "status")
 })
