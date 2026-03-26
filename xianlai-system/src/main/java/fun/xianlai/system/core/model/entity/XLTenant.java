@@ -30,6 +30,7 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 @Table(name = "tb_core_tenant", indexes = {
         @Index(columnList = "code", unique = true),
+        @Index(columnList = "domain", unique = true),
         @Index(columnList = "status")
 })
 public class XLTenant {
