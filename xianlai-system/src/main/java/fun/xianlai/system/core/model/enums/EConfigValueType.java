@@ -3,7 +3,7 @@ package fun.xianlai.system.core.model.enums;
 /**
  * @author WyattLau
  */
-public class EnumOptionValueType {
+public class EConfigValueType {
     public static final String STRING = "STRING";
     public static final String BOOLEAN = "BOOLEAN";
     public static final String INTEGER = "INTEGER";
