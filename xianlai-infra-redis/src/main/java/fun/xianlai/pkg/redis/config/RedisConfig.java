@@ -1,5 +1,8 @@
 package fun.xianlai.pkg.redis.config;
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONReader;
+import com.alibaba.fastjson2.JSONWriter;
 import fun.xianlai.pkg.redis.properties.LettucePoolProperties;
 import fun.xianlai.pkg.redis.properties.RedisProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +14,7 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
@@ -26,6 +29,29 @@ public class RedisConfig {
     private RedisProperties rp;
     @Autowired
     private LettucePoolProperties lpp;
+    /**
+     * Fastjson2 序列化器
+     */
+    private static final RedisSerializer<Object> FASTJSON2_SERIALIZER = new RedisSerializer<Object>() {
+        @Override
+        public byte[] serialize(Object value) {
+            if (value == null) return new byte[0];
+            return JSON.toJSONBytes(value,
+                    JSONWriter.Feature.WriteClassName,
+                    JSONWriter.Feature.FieldBased,
+                    JSONWriter.Feature.WriteMapNullValue
+            );
+        }
+
+        @Override
+        public Object deserialize(byte[] bytes) {
+            if (bytes == null || bytes.length == 0) return null;
+            return JSON.parseObject(bytes, Object.class,
+                    JSONReader.Feature.SupportClassForName,
+                    JSONReader.Feature.FieldBased
+            );
+        }
+    };
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
@@ -43,11 +69,13 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, Object> stringObjectRedisTemplate(RedisConnectionFactory factory) {
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
         template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        template.setValueSerializer(FASTJSON2_SERIALIZER);
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(FASTJSON2_SERIALIZER);
         return template;
     }
 }
