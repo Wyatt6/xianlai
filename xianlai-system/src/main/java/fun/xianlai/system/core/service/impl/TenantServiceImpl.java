@@ -17,7 +17,7 @@ import java.time.Duration;
 @Service
 public class TenantServiceImpl implements TenantService {
     private static final String TENANT_DOMAIN_KEY = "tenant:domain:";
-    private static final long TENANT_CACHE_HOURS = 3L;
+    private static final long TENANT_DOMAIN_CACHE_HOURS = 3L;
 
     @Autowired
     private RedisTemplate<String, Object> redis;
@@ -31,7 +31,7 @@ public class TenantServiceImpl implements TenantService {
 
         XLTenant cachedTenant = (XLTenant) redis.opsForValue().get(key);
         if (cachedTenant != null) {
-            redis.expire(key, Duration.ofHours(TENANT_CACHE_HOURS));
+            redis.expire(key, Duration.ofHours(TENANT_DOMAIN_CACHE_HOURS));
             return cachedTenant;
         }
 
@@ -41,7 +41,7 @@ public class TenantServiceImpl implements TenantService {
             tenant = tenantRepository.findByCode(subDomain);
         }
         if (tenant != null) {
-            redis.opsForValue().set(key, tenant, Duration.ofHours(TENANT_CACHE_HOURS));
+            redis.opsForValue().set(key, tenant, Duration.ofHours(TENANT_DOMAIN_CACHE_HOURS));
             return tenant;
         } else {
             throw new SysException("未找到对应租户，请检查域名是否正确");
