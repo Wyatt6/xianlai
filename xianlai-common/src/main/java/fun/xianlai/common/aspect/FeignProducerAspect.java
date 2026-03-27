@@ -3,13 +3,10 @@ package fun.xianlai.common.aspect;
 import fun.xianlai.common.exception.SysException;
 import fun.xianlai.common.response.RetResult;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,17 +33,12 @@ public class FeignProducerAspect {
             if (e instanceof SysException) {
                 log.info("处理耗时: {}ms", System.currentTimeMillis() - startTimestamp);
                 log.info("<<-- Finish Feign Call [{}] with SysException", joinPoint.getSignature().getName());
-                return new RetResult().writeFeignSysException((SysException) e).setTraceId(MDC.get("traceId"));
+                return new RetResult().writeFeignSysException((SysException) e);
             } else {
                 log.info("处理耗时: {}ms", System.currentTimeMillis() - startTimestamp);
                 log.info("<<-- Finish Feign Call [{}] with Unknown Exception", joinPoint.getSignature().getName());
                 throw e;
             }
         }
-    }
-
-    @AfterReturning(pointcut = "pointcut()", returning = "result")
-    public void afterReturning(JoinPoint joinPoint, RetResult result) {
-        result.setTraceId(MDC.get("traceId"));
     }
 }
