@@ -41,9 +41,14 @@ public class ConfigServiceImpl implements ConfigService {
     @SimpleServiceLog("缓存系统配置")
     public void cacheSystemConfigs() {
         List<XLSystemConfig> configList = systemConfigRepository.findByEnabled(true);
-        Map<String, XLSystemConfig> configMap = new HashMap<>();
+        Map<String, Map<String, Object>> configMap = new HashMap<>();
         for (XLSystemConfig item : configList) {
-            configMap.put(item.getConfigKey(), item);
+            Map<String, Object> itemMap = new HashMap<>();
+            itemMap.put("scope", item.getScope());
+            itemMap.put("value", item.getConfigValue());
+            itemMap.put("type", item.getValueType());
+            itemMap.put("frontLoad", item.getFrontLoad());
+            configMap.put(item.getConfigKey(), itemMap);
         }
         redis.opsForHash().putAll(SYSTEM_CONFIG_KEY, configMap);
         redis.expire(SYSTEM_CONFIG_KEY, Duration.ofHours(SYSTEM_CONFIG_CACHE_HOURS));
@@ -51,17 +56,17 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     @SimpleServiceLog("获取系统配置")
-    public Map<String, XLSystemConfig> getSystemConfigs() {
+    public Map<String, Map<String, Object>> getSystemConfigs() {
         if (!redis.hasKey(SYSTEM_CONFIG_KEY)) {
             this.cacheSystemConfigs();
         } else {
             redis.expire(SYSTEM_CONFIG_KEY, Duration.ofHours(SYSTEM_CONFIG_CACHE_HOURS));
         }
         Map<Object, Object> cachedConfigs = redis.opsForHash().entries(SYSTEM_CONFIG_KEY);
-        Map<String, XLSystemConfig> configs = new HashMap<>();
+        Map<String, Map<String, Object>> configs = new HashMap<>();
         if (!cachedConfigs.isEmpty()) {
             cachedConfigs.forEach((key, value) -> {
-                configs.put(String.valueOf(key), (XLSystemConfig) value);
+                configs.put(String.valueOf(key), BeanUtils.objectToMap(value));
             });
         }
         return configs;

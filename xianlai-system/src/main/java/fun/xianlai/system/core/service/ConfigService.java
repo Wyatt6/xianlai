@@ -18,5 +18,5 @@ public interface ConfigService {
     /**
      * 获取系统配置
      */
-    Map<String, XLSystemConfig> getSystemConfigs();
+    Map<String, Map<String, Object>> getSystemConfigs();
 }
