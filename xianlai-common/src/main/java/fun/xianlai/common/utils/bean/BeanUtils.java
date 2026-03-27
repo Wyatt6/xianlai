@@ -7,6 +7,8 @@ import org.springframework.beans.BeansException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 复用org.springframework.beans.BeanUtils里的工具
@@ -14,6 +16,17 @@ import java.lang.reflect.Method;
  * @author WyattLau
  */
 public class BeanUtils extends org.springframework.beans.BeanUtils {
+    /**
+     * 安全地将 Object 转为 Map<String, Object>
+     */
+    public static Map<String, Object> objectToMap(Object value) {
+        Map<String, Object> map = new HashMap<>();
+        if (value instanceof Map) {
+            ((Map<?, ?>) value).forEach((k, v) -> map.put(String.valueOf(k), v));
+        }
+        return map;
+    }
+
     /**
      * 从obj对象中获取位于其父类中定义的名称为fieldName的属性值
      * 如果obj为null时直接返回null
