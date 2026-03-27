@@ -13,7 +13,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -62,6 +61,7 @@ public class ApiLogAspect {
         } catch (Throwable e) {
             // 当Controller不能正常执行完毕抛出异常时，封装成失败的响应信息
             RetResult result = new RetResult();
+            result.fail();
             if (e instanceof SysException) {
                 result.setFailMessage(e.getMessage());
             } else if (e instanceof IllegalArgumentException) {
@@ -69,7 +69,6 @@ public class ApiLogAspect {
             } else {
                 result.setFailCode("500").setFailMessage("系统错误");
             }
-            result.fail().setTraceId(MDC.get("traceId"));
             logResponseText(result);
             log.info("处理耗时: {}ms", System.currentTimeMillis() - startTimestamp);
             log.info("<<-- Exit Controller {}[{}] with Exception", annotationValue, joinPoint.getSignature().getName());
@@ -86,7 +85,6 @@ public class ApiLogAspect {
      */
     @AfterReturning(pointcut = "pointcut()", returning = "result")
     public void afterReturning(JoinPoint joinPoint, RetResult result) {
-        result.setTraceId(MDC.get("traceId"));
         logResponseText(result);
     }
 
