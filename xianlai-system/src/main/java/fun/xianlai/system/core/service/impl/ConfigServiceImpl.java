@@ -54,6 +54,8 @@ public class ConfigServiceImpl implements ConfigService {
     public Map<String, XLSystemConfig> getSystemConfigs() {
         if (!redis.hasKey(SYSTEM_CONFIG_KEY)) {
             this.cacheSystemConfigs();
+        } else {
+            redis.expire(SYSTEM_CONFIG_KEY, Duration.ofHours(SYSTEM_CONFIG_CACHE_HOURS));
         }
         Map<Object, Object> cachedConfigs = redis.opsForHash().entries(SYSTEM_CONFIG_KEY);
         Map<String, XLSystemConfig> configs = new HashMap<>();
