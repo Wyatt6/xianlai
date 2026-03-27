@@ -44,7 +44,7 @@ public class ConfigServiceImpl implements ConfigService {
     private ConfigService self;
 
     @Override
-    @SimpleServiceLog("缓存系统配置")
+    @SimpleServiceLog("缓存全量系统配置")
     public void cacheSystemConfigs() {
         List<XLSystemConfig> configList = systemConfigRepository.findByEnabled(true);
         Map<String, Map<String, Object>> configMap = new HashMap<>();
@@ -61,7 +61,7 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    @SimpleServiceLog("获取系统配置")
+    @SimpleServiceLog("获取全量系统配置")
     public Map<String, Map<String, Object>> getSystemConfigs() {
         if (!redis.hasKey(SYSTEM_CONFIG_KEY)) {
             self.cacheSystemConfigs();
@@ -76,7 +76,7 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    @ServiceLog("缓存租户配置")
+    @ServiceLog("缓存全量租户配置")
     public void cacheTenantConfigs(Long tenantId) {
         Map<String, Map<String, Object>> tenantConfigs = new HashMap<>();
         log.info("先继承系统配置中作用域是TENANT和USER的项");
@@ -103,7 +103,7 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    @SimpleServiceLog("获取租户配置")
+    @SimpleServiceLog("获取全量租户配置")
     public Map<String, Map<String, Object>> getTenantConfigs(Long tenantId) {
         String key = MessageFormat.format(TENANT_CONFIG_KEY, tenantId);
         if (!redis.hasKey(key)) {
@@ -122,7 +122,7 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    @ServiceLog("获取租户加载到前端的配置")
+    @ServiceLog("获取租户加载到前端的全量配置")
     public Map<String, Map<String, Object>> getFrontLoadConfigsOfTenant(Long tenantId) {
         Map<String, Map<String, Object>> systemConfigs = self.getSystemConfigs();
         Map<String, Map<String, Object>> tenantConfigs = self.getTenantConfigs(tenantId);
