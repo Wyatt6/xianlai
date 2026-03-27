@@ -1,5 +1,6 @@
 package fun.xianlai.common.filter;
 
+import fun.xianlai.common.context.TenantContext;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,25 +15,19 @@ import java.io.IOException;
 import java.util.UUID;
 
 /**
- * 请求拦截与日志打印
- * <p>
- * 对于从服务网关转发过来的请求，从报文头获取服务网关生成的traceId并保存到MDC中，
- * 前端直接发送过来不经过服务网关的请求，生成traceId并保存到MDC中，
- * 使得traceId可以在其他地方被获取。同时打印该请求的开始分界线日志信息用以区分。
- *
  * @author WyattLau
  */
 @Slf4j
 @Component
-public class RequestLogFilter extends OncePerRequestFilter implements Filter {
+public class RequestFilter extends OncePerRequestFilter implements Filter {
 
-    private static final String[] NOT_PRINT_URL_PATTERN_REGEX = {
+    private static final String[] EXCLUDE_URL_PATTERN = {
             ".*/actuator.*",
             ".*/druid.*"
     };
 
-    private boolean shouldPrint(String url) {
-        for (String regex : NOT_PRINT_URL_PATTERN_REGEX) {
+    private boolean shouldHandle(String url) {
+        for (String regex : EXCLUDE_URL_PATTERN) {
             if (url.matches(regex)) {
                 return false;
             }
@@ -43,21 +38,30 @@ public class RequestLogFilter extends OncePerRequestFilter implements Filter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            String url = request.getRequestURL().toString();
-            if (shouldPrint(url)) {
-                // 从服务网关报文头获取traceId或者生成traceId
+            String path = request.getRequestURI();
+            if (shouldHandle(path)) {
+                // 1. 获取网关传递的traceId，并保存在日志框架的MDC上下文中
                 String traceId = request.getHeader("traceId");
                 if (traceId == null) {
                     traceId = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12);
                 }
-                // traceId保存在日志框架的MDC上下文中，方便其他地方获取使用
                 MDC.put("traceId", traceId);
                 log.info("****** 请求: {} {}", request.getMethod(), request.getRequestURL());
+                // 2. 获取网关传递的tenantId，并保存在租户上下文中
+                String tenantIdStr = request.getHeader("tenantId");
+                if (tenantIdStr != null && !tenantIdStr.isBlank()) {
+                    Long tenantId = Long.parseLong(tenantIdStr);
+                    TenantContext.setTenantId(tenantId);
+                    log.info("tenantId: {}", tenantId);
+                } else {
+                    log.info("报文头无tenantId");
+                }
             }
             // 处理请求
             filterChain.doFilter(request, response);
         } finally {
             MDC.clear();
+            TenantContext.clear();
         }
     }
 }
