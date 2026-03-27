@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,5 +119,26 @@ public class ConfigServiceImpl implements ConfigService {
             });
         }
         return configs;
+    }
+
+    @Override
+    @ServiceLog("获取租户加载到前端的配置")
+    public Map<String, Map<String, Object>> getFrontLoadConfigsOfTenant(Long tenantId) {
+        Map<String, Map<String, Object>> systemConfigs = self.getSystemConfigs();
+        Map<String, Map<String, Object>> tenantConfigs = self.getTenantConfigs(tenantId);
+        Map<String, Map<String, Object>> frontLoadConfigs = new HashMap<>();
+        log.info("筛选出加载到前端的系统配置");
+        systemConfigs.forEach((k, v) -> {
+            if (Boolean.parseBoolean(String.valueOf(v.get("frontLoad")))) {
+                frontLoadConfigs.put(k, v);
+            }
+        });
+        log.info("筛选出加载到前端的租户配置，并覆盖系统配置（如有）");
+        tenantConfigs.forEach((k, v) -> {
+            if (Boolean.parseBoolean(String.valueOf(v.get("frontLoad")))) {
+                frontLoadConfigs.put(k, v);
+            }
+        });
+        return frontLoadConfigs;
     }
 }

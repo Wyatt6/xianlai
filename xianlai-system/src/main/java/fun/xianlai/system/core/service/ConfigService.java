@@ -25,4 +25,9 @@ public interface ConfigService {
      * 获取租户配置
      */
     Map<String, Map<String, Object>> getTenantConfigs(Long tenantId);
+
+    /**
+     * 获取租户加载到前端的配置（含系统配置和租户配置）
+     */
+    Map<String, Map<String, Object>> getFrontLoadConfigsOfTenant(Long tenantId);
 }
