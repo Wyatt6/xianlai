@@ -21,7 +21,8 @@ import java.util.UUID;
 @Component
 public class LogAndTenantFilter implements GlobalFilter, Ordered {
     private static final String[] EXCLUDE_URL_PATTERN = {
-            ".*/actuator.*"
+            ".*/actuator.*",
+            ".*/druid.*"
     };
 
     private boolean shouldHandle(String url) {
