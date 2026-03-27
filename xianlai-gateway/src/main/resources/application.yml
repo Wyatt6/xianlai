@@ -30,3 +30,5 @@ logging:
     org.springframework.boot.web.embedded: INFO
     org.apache: WARN
     fun.xianlai: INFO
+    # 解决：在macOS开发时Netty首次请求尝试加载macOS专属DNS优化组件时的日志报错，但对网关运行毫无影响
+    io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider: ERROR
