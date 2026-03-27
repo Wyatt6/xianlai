@@ -80,12 +80,12 @@ public class LogAndTenantFilter implements GlobalFilter, Ordered {
                 MDC.clear();
             }));
         } else {
-            return null;
+            return chain.filter(exchange);
         }
     }
 
     @Override
     public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE;
+        return -100;
     }
 }
