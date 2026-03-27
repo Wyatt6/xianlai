@@ -34,11 +34,11 @@ public class TenantServiceImpl implements TenantService {
         log.info("根据域名查询缓存");
         Long cachedId = (Long) redis.opsForValue().get(domainKey);
         if (cachedId != null) {
-            redis.expire(domainKey, Duration.ofHours(CacheKey.TENANT_DOMAIN_CACHE_HOURS));
+            redis.expire(domainKey, Duration.ofHours(CacheKey.TENANT_DEFAULT_CACHE_HOURS));
             String entityKey = MessageFormat.format(CacheKey.TENANT_ENTITY_KEY, cachedId);
             XLTenant cachedEntity = (XLTenant) redis.opsForValue().get(entityKey);
             if (cachedEntity != null) {
-                redis.expire(entityKey, Duration.ofHours(CacheKey.TENANT_DOMAIN_CACHE_HOURS));
+                redis.expire(entityKey, Duration.ofHours(CacheKey.TENANT_DEFAULT_CACHE_HOURS));
                 return cachedEntity;
             }
         }
@@ -53,8 +53,8 @@ public class TenantServiceImpl implements TenantService {
             log.info("成功从数据库查到租户数据，更新缓存");
             Long tenantId = tenant.get().getId();
             String entityKey = MessageFormat.format(CacheKey.TENANT_ENTITY_KEY, tenantId);
-            redis.opsForValue().set(domainKey, tenantId, Duration.ofHours(CacheKey.TENANT_DOMAIN_CACHE_HOURS));
-            redis.opsForValue().set(entityKey, tenant.get(), Duration.ofHours(CacheKey.TENANT_DOMAIN_CACHE_HOURS));
+            redis.opsForValue().set(domainKey, tenantId, Duration.ofHours(CacheKey.TENANT_DEFAULT_CACHE_HOURS));
+            redis.opsForValue().set(entityKey, tenant.get(), Duration.ofHours(CacheKey.TENANT_DEFAULT_CACHE_HOURS));
             return tenant.get();
         } else {
             throw new SysException("未找到对应租户，请检查域名是否正确");
