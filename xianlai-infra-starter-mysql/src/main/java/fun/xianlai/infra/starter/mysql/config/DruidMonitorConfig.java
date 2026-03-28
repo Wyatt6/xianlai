@@ -1,8 +1,8 @@
-package fun.xianlai.pkg.mysql.config;
+package fun.xianlai.infra.starter.mysql.config;
 
 import com.alibaba.druid.support.jakarta.StatViewServlet;
 import com.alibaba.druid.support.jakarta.WebStatFilter;
-import fun.xianlai.pkg.mysql.properties.DruidMonitorProperties;
+import fun.xianlai.infra.starter.mysql.properties.DruidMonitorProperties;
 import jakarta.servlet.Filter;
 import jakarta.servlet.Servlet;
 import org.springframework.beans.factory.annotation.Autowired;
