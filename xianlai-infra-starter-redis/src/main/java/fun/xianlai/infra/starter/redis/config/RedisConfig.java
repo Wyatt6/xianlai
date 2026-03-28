@@ -1,12 +1,12 @@
-package fun.xianlai.pkg.redis.config;
+package fun.xianlai.infra.starter.redis.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import fun.xianlai.pkg.redis.properties.LettucePoolProperties;
-import fun.xianlai.pkg.redis.properties.RedisProperties;
+import fun.xianlai.infra.starter.redis.properties.LettucePoolProperties;
+import fun.xianlai.infra.starter.redis.properties.RedisProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;

@@ -5,8 +5,8 @@
     <properties>
         <!-- TODO CBR: 每次发版前检查模块版本号 -->
         <xianlai.version>2.0.0</xianlai.version>
-        <xianlai-infra-redis.version>1.0.0</xianlai-infra-redis.version>
         <xianlai-infra-starter-mysql.version>1.0.0</xianlai-infra-starter-mysql.version>
+        <xianlai-infra-starter-redis.version>1.0.0</xianlai-infra-starter-redis.version>
         <xianlai-common.version>2.0.0</xianlai-common.version>
         <xianlai-gateway.version>2.0.0</xianlai-gateway.version>
         <xianlai-system.version>2.0.0</xianlai-system.version>
@@ -37,8 +37,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>xianlai-infra-redis</module>
         <module>xianlai-infra-starter-mysql</module>
+        <module>xianlai-infra-starter-redis</module>
         <module>xianlai-common</module>
         <module>xianlai-gateway</module>
         <module>xianlai-system</module>
@@ -49,12 +49,13 @@
             <!-- 内部依赖 -->
             <dependency>
                 <groupId>fun.xianlai</groupId>
-                <version>${xianlai-infra-mysql.version}</version>
+                <artifactId>xianlai-infra-starter-mysql</artifactId>
+                <version>${xianlai-infra-starter-mysql.version}</version>
             </dependency>
             <dependency>
                 <groupId>fun.xianlai</groupId>
-                <artifactId>xianlai-infra-redis</artifactId>
-                <version>${xianlai-infra-redis.version}</version>
+                <artifactId>xianlai-infra-starter-redis</artifactId>
+                <version>${xianlai-infra-starter-redis.version}</version>
             </dependency>
             <dependency>
                 <groupId>fun.xianlai</groupId>
