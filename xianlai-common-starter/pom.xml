@@ -20,10 +20,6 @@
             <groupId>fun.xianlai</groupId>
             <artifactId>xianlai-common</artifactId>
         </dependency>
-        <dependency>
-            <groupId>fun.xianlai</groupId>
-            <artifactId>xianlai-infra-starter-mysql</artifactId>
-        </dependency>
         <!-- 外部依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
