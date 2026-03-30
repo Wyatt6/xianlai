@@ -28,15 +28,15 @@ public class GlobalExceptionHandler {
         return RetResult.fail(RetCode.SYS_ERROR, "服务器繁忙，请稍后再试");
     }
 
-    @ExceptionHandler(BizException.class)
-    public RetResult<?> handleBizException(BizException e) {
-        log.error("业务错误：{}", e.getMessage());
-        return RetResult.fail(e.getCode(), e.getMessage());
-    }
-
     @ExceptionHandler(SysException.class)
     public RetResult<?> handleSysException(SysException e) {
         log.error("系统错误：", e);
+        return RetResult.fail(e.getCode(), e.getMessage());
+    }
+
+    @ExceptionHandler(BizException.class)
+    public RetResult<?> handleBizException(BizException e) {
+        log.warn("业务错误：{}", e.getMessage());
         return RetResult.fail(e.getCode(), e.getMessage());
     }
 }
