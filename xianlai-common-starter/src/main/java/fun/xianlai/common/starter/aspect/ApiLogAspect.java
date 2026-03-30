@@ -56,7 +56,7 @@ public class ApiLogAspect {
         }
         String annotationValue = annotation.value();    // 获取@ApiLog注解的值
 
-        log.info("==================== 请求开始 ====================");
+        log.info("==================== Controller 开始 ====================");
         if (request != null) {
             log.info("URL        : {}", request.getRequestURL());
             log.info("HTTP Method: {}", request.getMethod());
@@ -73,12 +73,12 @@ public class ApiLogAspect {
             Object result = joinPoint.proceed();
             log.info("Result     : {}", getResultPrintText(result));
             log.info("Time Cost  : {}ms", DateUtils.nowMilliTimestamp() - startTimestamp);
-            log.info("==================== 请求结束 ====================");
+            log.info("==================== Controller 结束 ====================");
             return result;
         } catch (Throwable e) {
             log.info("Exception  : {} {}", e.getMessage(), e.getClass().getName());
             log.info("Time Cost  : {}ms", DateUtils.nowMilliTimestamp() - startTimestamp);
-            log.info("=============== 请求结束（执行异常） ===============");
+            log.info("=============== Controller 结束（执行异常） ===============");
             throw e;    // 原样抛出异常给ExceptionHandler进行处理
         }
     }
