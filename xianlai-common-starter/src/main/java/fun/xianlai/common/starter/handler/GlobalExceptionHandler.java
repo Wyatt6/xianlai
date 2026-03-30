@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
+ * Spring里多个异常处理器之间的处理顺序是按异常类的匹配程度来的
+ * 匹配在注解@ExceptionHandler(XxxException.class)中声明的异常类
+ * 最匹配的子类的方法就执行，否则就匹配该异常的父类有没有合适的handler
+ * 所以这里最终都会交给@ExceptionHandler(Exception.class)的handler兜底执行
+ *
  * @author WyattLau
  */
 @Slf4j
