@@ -7,12 +7,12 @@ import fun.xianlai.common.response.RetCode;
  *
  * @author WyattLau
  */
-public class AuthenticationExeption extends BaseException {
-    public AuthenticationExeption(String message) {
+public class AuthenticationException extends BaseException {
+    public AuthenticationException(String message) {
         super(RetCode.UNAUTHORIZED, message);
     }
 
-    public AuthenticationExeption(String message, Throwable cause) {
+    public AuthenticationException(String message, Throwable cause) {
         super(RetCode.UNAUTHORIZED, message, cause);
     }
 }
