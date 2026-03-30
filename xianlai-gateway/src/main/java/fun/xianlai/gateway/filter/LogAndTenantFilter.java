@@ -71,7 +71,7 @@ public class LogAndTenantFilter implements GlobalFilter, Ordered {
             if (tenantId != null) {
                 builder.header("tenantId", tenantId);
             }
-            
+
             // 4. 转发处理和后处理
             ServerHttpRequest redirectRequest = builder.build();
             return chain.filter(exchange.mutate().request(redirectRequest).build()).then(Mono.fromRunnable(() -> {
