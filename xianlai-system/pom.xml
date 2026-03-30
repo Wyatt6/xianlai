@@ -16,11 +16,11 @@
         <!-- 内部依赖 -->
         <dependency>
             <groupId>fun.xianlai</groupId>
-            <artifactId>xianlai-infra-mysql</artifactId>
+            <artifactId>xianlai-infra-starter-mysql</artifactId>
         </dependency>
         <dependency>
             <groupId>fun.xianlai</groupId>
-            <artifactId>xianlai-infra-redis</artifactId>
+            <artifactId>xianlai-infra-starter-redis</artifactId>
         </dependency>
         <dependency>
             <groupId>fun.xianlai</groupId>
