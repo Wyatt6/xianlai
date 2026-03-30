@@ -115,10 +115,6 @@ public class RetResult<T> {
         return this;
     }
 
-    private void setTimestamp(long timestamp) {
-        // ignored
-    }
-
 //    public RetResult addData(String key, Object value) {
 //        this.data.put(key, value);
 //        return this;
