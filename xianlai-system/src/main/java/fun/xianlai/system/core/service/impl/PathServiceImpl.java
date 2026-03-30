@@ -1,7 +1,6 @@
 package fun.xianlai.system.core.service.impl;
 
 import com.alibaba.fastjson2.JSONObject;
-import fun.xianlai.common.annotation.SimpleServiceLog;
 import fun.xianlai.common.utils.ChecksumUtils;
 import fun.xianlai.system.core.model.consts.ConstPathCache;
 import fun.xianlai.system.core.model.entity.XLPath;
@@ -32,7 +31,6 @@ public class PathServiceImpl implements PathService {
     private XLPathRepository pathRepository;
 
     @Override
-    @SimpleServiceLog("更新路径缓存")
     @Transactional
     public void updatePathsCache() {
         List<XLPath> paths = pathRepository.findAll();
@@ -41,7 +39,6 @@ public class PathServiceImpl implements PathService {
     }
 
     @Override
-    @SimpleServiceLog("从缓存获取路径")
     public List<XLPath> getPathsFromCache() {
         List<XLPath> paths = (List<XLPath>) redis.opsForValue().get(ConstPathCache.PATH_CACHE_KEY);
         if (paths == null) {

@@ -1,7 +1,6 @@
 package fun.xianlai.system.core.service.impl;
 
 import com.alibaba.fastjson2.JSONObject;
-import fun.xianlai.common.annotation.SimpleServiceLog;
 import fun.xianlai.common.utils.ChecksumUtils;
 import fun.xianlai.system.core.model.consts.ConstRouteCache;
 import fun.xianlai.system.core.model.entity.XLRoute;
@@ -36,7 +35,6 @@ public class RouteServiceImpl implements RouteService {
     private XLRouteRepository routeRepository;
 
     @Override
-    @SimpleServiceLog("更新路由缓存")
     @Transactional
     public void updateRoutesCache() {
         List<XLRoute> routes = self.getForest();
@@ -45,7 +43,6 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    @SimpleServiceLog("从缓存获取路由")
     public List<Map<String, Object>> getRoutesFromCache() {
         List<Map<String, Object>> routes = (List<Map<String, Object>>) redis.opsForValue().get(ConstRouteCache.ROUTE_CACHE_KEY);
         if (routes == null) {
