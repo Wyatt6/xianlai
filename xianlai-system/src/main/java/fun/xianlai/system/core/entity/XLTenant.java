@@ -1,6 +1,5 @@
 package fun.xianlai.system.core.entity;
 
-import fun.xianlai.common.starter.pojo.XLTenantPOJO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,147 +10,112 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.TableGenerator;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * @author WyattLau
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "tb_com_tenant", indexes = {
+@Table(name = "tb_core_tenant", indexes = {
         @Index(columnList = "code", unique = true),
         @Index(columnList = "domain", unique = true),
         @Index(columnList = "status")
 })
-public class XLTenant extends XLTenantPOJO {
+public class XLTenant implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @TableGenerator(name = "pkGenTenant", initialValue = 100000, allocationSize = 1)
     @Comment("主键ID")
-    @Override
-    public Long getId() {
-        return super.getId();
-    }
+    private Long id;
 
     @Column(length = 100, nullable = false)
     @Comment("租户编码（唯一）")
-    @Override
-    public String getCode() {
-        return super.getCode();
-    }
+    private String code;
 
     @Column(length = 300)
     @Comment("租户独立域名")
-    @Override
-    public String getDomain() {
-        return super.getDomain();
-    }
+    private String domain;
 
     @Column(columnDefinition = "varchar(30) not null default 'disabled'")
     @Comment("租户状态")
-    @Override
-    public String getStatus() {
-        return super.getStatus();
-    }
+    private String status;
 
     @Column
     @Comment("租户过期时间")
-    @Override
-    public LocalDateTime getExpireTime() {
-        return super.getExpireTime();
-    }
+    private LocalDateTime expireTime;
 
     @Column(columnDefinition = "datetime not null default current_timestamp")
     @Comment("租户配置最后更新时间")
-    @Override
-    public LocalDateTime getConfigUpdateTime() {
-        return super.getConfigUpdateTime();
-    }
+    private LocalDateTime configUpdateTime;
 
     @Column(length = 300)
     @Comment("租户Logo")
-    @Override
-    public String getLogo() {
-        return super.getLogo();
-    }
+    private String logo;
 
     @Column(length = 100, nullable = false)
     @Comment("租户显示名称")
-    @Override
-    public String getDisplayName() {
-        return super.getDisplayName();
-    }
+    private String displayName;
 
     @Column(length = 50)
     @Comment("租户联系人")
-    @Override
-    public String getContactName() {
-        return super.getContactName();
-    }
+    private String contactName;
 
     @Column(columnDefinition = "varchar(10) not null default 'UNKNOWN'")
     @Comment("租户联系人性别")
-    @Override
-    public String getContactGender() {
-        return super.getContactGender();
-    }
+    private String contactGender;
 
     @Column(length = 50)
     @Comment("租户联系人手机号")
-    @Override
-    public String getContactPhone() {
-        return super.getContactPhone();
-    }
+    private String contactPhone;
 
     @Column(length = 100)
     @Comment("租户联系人电子邮箱")
-    @Override
-    public String getContactEmail() {
-        return super.getContactEmail();
-    }
+    private String contactEmail;
 
     @Column(columnDefinition = "datetime not null default current_timestamp")
     @Comment("记录创建时间")
-    @Override
-    public LocalDateTime getCreateAt() {
-        return super.getCreateAt();
-    }
+    private LocalDateTime createAt;
 
     @Column(columnDefinition = "datetime not null default current_timestamp on update current_timestamp")
     @Comment("记录更新时间")
-    @Override
-    public LocalDateTime getUpdateAt() {
-        return super.getUpdateAt();
-    }
+    private LocalDateTime updateAt;
 
     @PrePersist
     public void prePersist() {
-        if (getConfigUpdateTime() == null) {
-            setConfigUpdateTime(LocalDateTime.now());
+        if (this.configUpdateTime == null) {
+            this.configUpdateTime = LocalDateTime.now();
         }
-        if (getCreateAt() == null) {
-            setCreateAt(LocalDateTime.now());
+        if (this.createAt == null) {
+            this.createAt = LocalDateTime.now();
         }
-        if (getUpdateAt() == null) {
-            setUpdateAt(LocalDateTime.now());
+        if (this.updateAt == null) {
+            this.updateAt = LocalDateTime.now();
         }
     }
 
     @PreUpdate
     public void preUpdate() {
-        setUpdateAt(LocalDateTime.now());
+        this.updateAt = LocalDateTime.now();
     }
 
     public void refreshConfigUpdateTime() {
-        setConfigUpdateTime(LocalDateTime.now());
+        this.configUpdateTime = LocalDateTime.now();
     }
 }
