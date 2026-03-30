@@ -4,14 +4,14 @@ package fun.xianlai.common.context;
  * @author WyattLau
  */
 public class RequestContext {
-    private static final ThreadLocal<Long> TRACE_ID = new ThreadLocal<>();
+    private static final ThreadLocal<String> TRACE_ID = new ThreadLocal<>();
     private static final ThreadLocal<Long> ST_TIMESTAMP = new ThreadLocal<>();
 
-    public static void setTraceId(Long traceId) {
+    public static void setTraceId(String traceId) {
         TRACE_ID.set(traceId);
     }
 
-    public static Long getTraceId() {
+    public static String getTraceId() {
         return TRACE_ID.get();
     }
 
