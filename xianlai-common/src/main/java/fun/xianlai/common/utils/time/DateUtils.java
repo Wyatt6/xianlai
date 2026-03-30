@@ -27,6 +27,13 @@ public final class DateUtils {
     }
 
     /**
+     * 当前时间戳（毫秒级）
+     */
+    public static long nowMilliTimestamp() {
+        return System.currentTimeMillis();
+    }
+
+    /**
      * 日期格式化 yyyy-MM-dd
      */
     public static String dateFormat(LocalDate date) {
