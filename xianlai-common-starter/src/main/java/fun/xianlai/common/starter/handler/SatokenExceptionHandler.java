@@ -29,7 +29,7 @@ public class SatokenExceptionHandler {
 
     @ExceptionHandler(SaTokenContextException.class)
     public RetResult<?> handleSaTokenContextException(SaTokenContextException e) {
-        log.error("Sa-Token 上下文异常，无法获取会话信息：{}", e.getMessage());
+        log.info("Sa-Token 上下文异常，无法获取会话信息：{}", e.getMessage());
         return RetResult.fail(RetCode.SYS_ERROR, "系统环境异常，请稍后重试");
     }
 
@@ -52,13 +52,13 @@ public class SatokenExceptionHandler {
 
     @ExceptionHandler(NotSafeException.class)
     public RetResult<?> handleNotSafeException(NotSafeException e) {
-        log.error("Sa-Token 安全验证异常：{}", e.getMessage());
+        log.info("Sa-Token 安全验证异常：{}", e.getMessage());
         return RetResult.fail(RetCode.FORBIDDEN, "安全验证未通过，请完成安全验证后继续");
     }
 
     @ExceptionHandler(NotRoleException.class)
     public RetResult<?> handleNotRoleException(NotRoleException e) {
-        log.error("Sa-Token 角色异常：无[{}]角色", e.getRole());
+        log.info("Sa-Token 角色异常：无[{}]角色", e.getRole());
         return RetResult.fail(RetCode.FORBIDDEN, "权限不足，无法访问该资源");
     }
 

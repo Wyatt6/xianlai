@@ -24,19 +24,19 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public RetResult<?> handleException(Exception e) {
-        log.error("未知错误：", e);
+        log.error("未知错误", e);
         return RetResult.fail(RetCode.SYS_ERROR, "服务器繁忙，请稍后再试");
     }
 
     @ExceptionHandler(SysException.class)
     public RetResult<?> handleSysException(SysException e) {
-        log.error("系统错误：", e);
+        log.error("系统错误：{}, {}", e.getCode(), e.getMessage(), e);
         return RetResult.fail(e.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(BizException.class)
     public RetResult<?> handleBizException(BizException e) {
-        log.warn("业务错误：{}", e.getMessage());
+        log.warn("业务错误：{}, {}", e.getCode(), e.getMessage());
         return RetResult.fail(e.getCode(), e.getMessage());
     }
 }
