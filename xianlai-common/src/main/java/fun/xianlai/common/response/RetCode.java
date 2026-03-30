@@ -6,7 +6,7 @@ package fun.xianlai.common.response;
  *
  * @author WyattLau
  */
-public class RetCode {
+public final class RetCode {
     // 成功（复用HTTP状态码200）
     public static final String SUCCESS = "200";
 
@@ -27,4 +27,6 @@ public class RetCode {
     public static final String DB_ERROR = "500-001";                        // 数据库异常
     public static final String CACHE_ERROR = "500-002";                     // 缓存异常
     public static final String THIRD_SERVICE_ERROR = "500-003";             // 第三方服务异常
+
+    private RetCode() {}
 }
