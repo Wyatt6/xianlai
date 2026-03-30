@@ -1,4 +1,4 @@
-package fun.xianlai.common.starter.entity;
+package fun.xianlai.system.core.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,6 +17,8 @@ import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -28,16 +30,22 @@ import java.time.LocalDateTime;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "tb_com_system_config", indexes = {
-        @Index(columnList = "configKey", unique = true),
-        @Index(columnList = "scope, configKey"),   // scope ASC, configKey ASC
+@Table(name = "tb_core_system_config", indexes = {
+        @Index(columnList = "belongTo, configKey", unique = true)
 })
-public class XLSystemConfig {
+public class XLSystemConfig implements Serializable  {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @TableGenerator(name = "pkGenSystemConfig", initialValue = 100000, allocationSize = 1)
     @Comment("主键ID")
     private Long id;
+
+    @Column(columnDefinition = "bigint not null default 0")
+    @Comment("配置归属")
+    private Long belongTo;  // XLSystemConfig 恒为 0
 
     /**
      * 取值见：EConfigScope
@@ -48,10 +56,6 @@ public class XLSystemConfig {
     @Column(columnDefinition = "varchar(10) not null")
     @Comment("作用域")
     private String scope;
-
-    @Column(columnDefinition = "bigint not null default 0")
-    @Comment("作用域ID")
-    private Long scopeId;   // XLSystemConfig 恒为 0
 
     @Column(length = 100, nullable = false)
     @Comment("配置key")

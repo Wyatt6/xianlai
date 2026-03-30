@@ -1,4 +1,4 @@
-package fun.xianlai.common.starter.entity;
+package fun.xianlai.system.core.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,6 +17,8 @@ import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -28,29 +30,32 @@ import java.time.LocalDateTime;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "tb_com_tenant_config", indexes = {
-        @Index(columnList = "tenantId, configKey", unique = true)
+@Table(name = "tb_core_tenant_config", indexes = {
+        @Index(columnList = "belongTo, configKey", unique = true)
 })
-public class XLTenantConfig {
+public class XLTenantConfig implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @TableGenerator(name = "pkGenTenantConfig", initialValue = 100000, allocationSize = 1)
     @Comment("主键ID")
     private Long id;
 
+    @Column(columnDefinition = "bigint not null")
+    @Comment("配置归属")
+    private Long belongTo;   // XLTenantConfig 取值 tenantId
+
     /**
      * 取值见：EConfigScope
-     * SYSTEM --> 只允许系统加载使用，租户、用户不允许加载使用
+     * SYSTEM --> 只允许系统加载使用，租户、用户不允许加载使用（XLTenantConfig不会取此值）
      * TENANT --> 允许系统、租户加载使用，用户不允许加载使用，默认值由系统维护，租户可覆盖此默认值
      * USER   --> 允许系统、租户、用户加载使用，默认值由系统维护，租户可覆盖此默认值，用户可覆盖租户的默认值，用户也可直接覆盖系统的默认值
      */
     @Column(columnDefinition = "varchar(10) not null")
     @Comment("作用域")
     private String scope;
-
-    @Column(columnDefinition = "bigint not null")
-    @Comment("作用域ID")
-    private Long scopeId;   // XLTenantConfig 取值 tenantId
 
     @Column(length = 100, nullable = false)
     @Comment("配置key")
@@ -71,7 +76,7 @@ public class XLTenantConfig {
     @Column(columnDefinition = "bit not null default 0")
     @Comment("配置前端加载标志")
     private Boolean frontLoad;
-    
+
     @Column(length = 50)
     @Comment("配置名称")
     private String name;
