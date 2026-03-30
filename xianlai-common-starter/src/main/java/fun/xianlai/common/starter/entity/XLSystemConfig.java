@@ -1,4 +1,4 @@
-package fun.xianlai.system.core.model.entity;
+package fun.xianlai.common.starter.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "tb_core_system_config", indexes = {
+@Table(name = "tb_com_system_config", indexes = {
         @Index(columnList = "configKey", unique = true),
         @Index(columnList = "scope, configKey"),   // scope ASC, configKey ASC
 })

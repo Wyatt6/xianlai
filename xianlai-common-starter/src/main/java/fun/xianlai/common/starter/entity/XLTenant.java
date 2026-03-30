@@ -1,4 +1,4 @@
-package fun.xianlai.system.core.model.entity;
+package fun.xianlai.common.starter.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "tb_core_tenant", indexes = {
+@Table(name = "tb_com_tenant", indexes = {
         @Index(columnList = "code", unique = true),
         @Index(columnList = "domain", unique = true),
         @Index(columnList = "status")
