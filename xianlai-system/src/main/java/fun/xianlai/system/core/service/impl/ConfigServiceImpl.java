@@ -52,9 +52,7 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public Map<String, Map<String, Object>> getSystemConfigs() {
-        if (redis.hasKey(SystemConst.CONFIG_CACHE_KEY)) {
-            redis.expire(SystemConst.CONFIG_CACHE_KEY, Duration.ofHours(SystemConst.DEFAULT_CACHE_HOURS));
-        } else {
+        if (!redis.hasKey(SystemConst.CONFIG_CACHE_KEY)) {
             this.cacheSystemConfigs();
         }
         Map<String, Map<String, Object>> configs = new HashMap<>();
@@ -101,16 +99,10 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public Map<String, Map<String, Object>> getTenantFrontLoadConfigs(Long tenantId) {
-        String keyAll = MessageFormat.format(TenantConst.CONFIG_ALL_CACHE_KEY, tenantId);
         String keyFrontLoad = MessageFormat.format(TenantConst.CONFIG_FRONT_LOAD_CACHE_KEY, tenantId);
-
-        if (redis.hasKey(keyFrontLoad)) {
-            redis.expire(keyAll, Duration.ofHours(TenantConst.DEFAULT_CACHE_HOURS));
-            redis.expire(keyFrontLoad, Duration.ofHours(TenantConst.DEFAULT_CACHE_HOURS));
-        } else {
+        if (!redis.hasKey(keyFrontLoad)) {
             this.cacheTenantConfigs(tenantId);
         }
-
         Map<String, Map<String, Object>> configs = new HashMap<>();
         redis.opsForHash().entries(keyFrontLoad).forEach((k, v) -> {
             configs.put(String.valueOf(k), BeanUtils.objectToMap(v));
