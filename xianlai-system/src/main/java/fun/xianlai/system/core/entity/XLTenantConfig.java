@@ -80,11 +80,11 @@ public class XLTenantConfig implements Serializable {
     @Comment("配置备注")
     private String remark;
 
-    @Column(columnDefinition = "datetime not null default current_timestamp")
+    @Column(columnDefinition = "datetime not null default current_timestamp(3)")
     @Comment("记录创建时间")
     private LocalDateTime createAt;
 
-    @Column(columnDefinition = "datetime not null default current_timestamp on update current_timestamp")
+    @Column(columnDefinition = "datetime not null default current_timestamp(3) on update current_timestamp(3)")
     @Comment("记录更新时间")
     private LocalDateTime updateAt;
 
