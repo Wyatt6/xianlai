@@ -3,7 +3,7 @@ package fun.xianlai.common.context;
 /**
  * @author WyattLau
  */
-public class TenantContext {
+public final class TenantContext {
     private static final ThreadLocal<Long> TENANT_ID = new ThreadLocal<>();
 
     public static void setTenantId(Long tenantId) {
@@ -17,4 +17,6 @@ public class TenantContext {
     public static void clear() {
         TENANT_ID.remove();
     }
+
+    private TenantContext() {}
 }
