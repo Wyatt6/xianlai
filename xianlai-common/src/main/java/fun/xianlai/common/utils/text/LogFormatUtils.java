@@ -3,7 +3,7 @@ package fun.xianlai.common.utils.text;
 /**
  * @author WyattLau
  */
-public class LogFormatUtils {
+public final class LogFormatUtils {
     /**
      * 参数日志打印器
      * 美化打印请求参数：每个参数一行
@@ -43,4 +43,6 @@ public class LogFormatUtils {
                 || name.contains("Model")
                 || name.contains("RedirectAttributes");
     }
+
+    private LogFormatUtils() {}
 }
