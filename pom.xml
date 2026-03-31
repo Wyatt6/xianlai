@@ -11,6 +11,7 @@
         <xianlai-common-starter.version>2.0.0</xianlai-common-starter.version>
         <xianlai-gateway.version>2.0.0</xianlai-gateway.version>
         <xianlai-system.version>2.0.0</xianlai-system.version>
+        <xianlai-system-api.version>2.0.0</xianlai-system-api.version>
 
         <!-- 替换成你的Nexus构件库地址 -->
         <distribution.releases.url>http://172.16.2.205:8081/repository/maven-releases/</distribution.releases.url>
@@ -44,6 +45,7 @@
         <module>xianlai-common-starter</module>
         <module>xianlai-gateway</module>
         <module>xianlai-system</module>
+        <module>xianlai-system-api</module>
     </modules>
 
     <dependencyManagement>
@@ -68,6 +70,16 @@
                 <groupId>fun.xianlai</groupId>
                 <artifactId>xianlai-common-starter</artifactId>
                 <version>${xianlai-common-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>fun.xianlai</groupId>
+                <artifactId>xianlai-system</artifactId>
+                <version>${xianlai-system.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>fun.xianlai</groupId>
+                <artifactId>xianlai-system-api</artifactId>
+                <version>${xianlai-system-api.version}</version>
             </dependency>
 
             <!-- 第三方依赖 -->
