@@ -1,9 +1,11 @@
-package fun.xianlai.system.core.model.enums;
+package fun.xianlai.common.enums;
 
 /**
  * @author WyattLau
  */
-public class ETenantStatus {
+public final class ETenantStatus {
     public static final String NORMAL = "NORMAL";
     public static final String DISABLED = "DISABLED";
+
+    private ETenantStatus() {}
 }
