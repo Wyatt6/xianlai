@@ -1,6 +1,6 @@
 package fun.xianlai.system.core.service;
 
-import fun.xianlai.system.core.model.entity.XLTenant;
+import fun.xianlai.system.core.entity.XLTenant;
 
 /**
  * @author WyattLau
