@@ -49,7 +49,7 @@ public class LogAndTenantFilter implements GlobalFilter, Ordered {
             log.info("traceId: {}", traceId);
 
             // 2. 解析报文头token获取tenantId（尚未验签）
-            String token = request.getHeaders().getFirst("token");
+            String token = request.getHeaders().getFirst("X-Token");
             String tenantId = null;
             if (token == null) {
                 log.info("报文头无token");
@@ -66,10 +66,10 @@ public class LogAndTenantFilter implements GlobalFilter, Ordered {
 
             // 3. 组装转发请求的报文头，写入stTimestamp、traceId和tenantId
             ServerHttpRequest.Builder builder = request.mutate();
-            builder.header("stTimestamp", "" + stTimestamp);
-            builder.header("traceId", traceId);
+            builder.header("X-StTimestamp", "" + stTimestamp);
+            builder.header("X-TraceID", traceId);
             if (tenantId != null) {
-                builder.header("tenantId", tenantId);
+                builder.header("X-TenantID", tenantId);
             }
 
             // 4. 转发处理和后处理
