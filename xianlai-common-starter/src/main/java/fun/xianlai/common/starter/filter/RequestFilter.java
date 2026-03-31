@@ -3,6 +3,7 @@ package fun.xianlai.common.starter.filter;
 import fun.xianlai.common.constant.HeaderConst;
 import fun.xianlai.common.context.RequestContext;
 import fun.xianlai.common.context.TenantContext;
+import fun.xianlai.common.context.TraceContext;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -46,7 +47,7 @@ public class RequestFilter extends OncePerRequestFilter implements Filter {
                 if (traceId == null) {
                     traceId = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12);
                 }
-                RequestContext.setTraceId(traceId);
+                TraceContext.setTraceId(traceId);
                 MDC.put("traceId", traceId);
                 // 2. 获取网关传递的stTimestamp，并保存在RequestContext中
                 String stTimestampStr = request.getHeader(HeaderConst.ST_TIMESTAMP);
@@ -70,6 +71,7 @@ public class RequestFilter extends OncePerRequestFilter implements Filter {
             MDC.clear();
             RequestContext.clear();
             TenantContext.clear();
+            TraceContext.clear();
         }
     }
 }
