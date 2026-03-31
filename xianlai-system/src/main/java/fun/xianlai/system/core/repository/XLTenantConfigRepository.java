@@ -1,6 +1,6 @@
 package fun.xianlai.system.core.repository;
 
-import fun.xianlai.system.core.model.entity.XLTenantConfig;
+import fun.xianlai.system.core.entity.XLTenantConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,5 +11,5 @@ import java.util.List;
  */
 @Repository
 public interface XLTenantConfigRepository extends JpaRepository<XLTenantConfig, Long> {
-    List<XLTenantConfig> findByScopeIdAndEnabled(Long scopeId, Boolean enabled);
+    List<XLTenantConfig> findByBelongToAndEnabled(Long belongTo, Boolean enabled);
 }

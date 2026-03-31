@@ -1,6 +1,6 @@
 package fun.xianlai.system.core.repository;
 
-import fun.xianlai.system.core.model.entity.XLSystemConfig;
+import fun.xianlai.system.core.entity.XLSystemConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
