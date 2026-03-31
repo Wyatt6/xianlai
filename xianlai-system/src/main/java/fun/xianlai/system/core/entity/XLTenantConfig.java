@@ -48,15 +48,9 @@ public class XLTenantConfig implements Serializable {
     @Comment("配置归属")
     private Long belongTo;   // XLTenantConfig 取值 tenantId
 
-    /**
-     * 取值见：EConfigScope
-     * SYSTEM --> 只允许系统加载使用，租户、用户不允许加载使用（XLTenantConfig不会取此值）
-     * TENANT --> 允许系统、租户加载使用，用户不允许加载使用，默认值由系统维护，租户可覆盖此默认值
-     * USER   --> 允许系统、租户、用户加载使用，默认值由系统维护，租户可覆盖此默认值，用户可覆盖租户的默认值，用户也可直接覆盖系统的默认值
-     */
     @Column(columnDefinition = "varchar(10) not null")
     @Comment("作用域")
-    private String scope;
+    private String scope;   // 取值复制自XLSystemConfig，此处不产生意义，取值见：EConfigScope
 
     @Column(length = 100, nullable = false)
     @Comment("配置key")

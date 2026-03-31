@@ -2,7 +2,6 @@ package fun.xianlai.system.core.service.impl;
 
 import fun.xianlai.common.constant.SystemConst;
 import fun.xianlai.common.constant.TenantConst;
-import fun.xianlai.common.enums.EConfigScope;
 import fun.xianlai.common.utils.bean.BeanUtils;
 import fun.xianlai.system.core.entity.XLSystemConfig;
 import fun.xianlai.system.core.entity.XLTenantConfig;
@@ -42,7 +41,6 @@ public class ConfigServiceImpl implements ConfigService {
             Map<String, Object> itemMap = new HashMap<>();
             itemMap.put("value", item.getConfigValue());
             itemMap.put("type", item.getValueType());
-            itemMap.put("scope", item.getScope());
             itemMap.put("frontLoad", item.getFrontLoad());
             allConfigs.put(item.getConfigKey(), itemMap);
         }
@@ -68,38 +66,29 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public void cacheTenantConfigs(Long tenantId) {
-        Map<String, Map<String, Object>> allConfigs = new HashMap<>();
-        Map<String, Map<String, Object>> frontLoadConfigs = new HashMap<>();
-
-        // 先继承系统配置中作用域是TENANT和USER的项
-        Map<String, Map<String, Object>> systemAllConfigs = this.getSystemConfigs();
-        systemAllConfigs.forEach((k, v) -> {
-            String scope = (String) v.remove("scope");
-            switch (scope) {
-                case EConfigScope.TENANT, EConfigScope.USER -> allConfigs.put(k, v);
-            }
-            if ((Boolean) v.get("frontLoad")) {
-                switch (scope) {
-                    case EConfigScope.TENANT, EConfigScope.USER -> frontLoadConfigs.put(k, v);
-                }
-            }
-        });
+        // 先继承所有系统配置作为兜底的默认配置
+        Map<String, Map<String, Object>> allConfigs = this.getSystemConfigs();
 
         // 查数据库获取租户配置数据，覆盖默认配置（系统配置）
         List<XLTenantConfig> tenantConfigList = tenantConfigRepository.findByBelongToAndEnabled(tenantId, true);
         for (XLTenantConfig item : tenantConfigList) {
-            Map<String, Object> map1 = new HashMap<>();
-            map1.put("value", item.getConfigValue());
-            map1.put("type", item.getValueType());
-            allConfigs.put(item.getConfigKey(), map1);
-
-            if (item.getFrontLoad()) {
-                Map<String, Object> map2 = new HashMap<>();
-                map2.put("value", item.getConfigValue());
-                map2.put("type", item.getValueType());
-                frontLoadConfigs.put(item.getConfigKey(), map2);
+            String itemKey = item.getConfigKey();
+            if (allConfigs.containsKey(itemKey)) {
+                Map<String, Object> itemMap = new HashMap<>();
+                itemMap.put("value", item.getConfigValue());
+                itemMap.put("type", item.getValueType());
+                itemMap.put("frontLoad", item.getFrontLoad());
+                allConfigs.put(itemKey, itemMap);
             }
         }
+
+        // 筛选出前端加载的配置
+        Map<String, Map<String, Object>> frontLoadConfigs = new HashMap<>();
+        allConfigs.forEach((k, v) -> {
+            if ((Boolean) v.remove("frontLoad")) {
+                frontLoadConfigs.put(k, v);
+            }
+        });
 
         String keyAll = MessageFormat.format(TenantConst.CONFIG_ALL_CACHE_KEY, tenantId);
         String keyFrontLoad = MessageFormat.format(TenantConst.CONFIG_FRONT_LOAD_CACHE_KEY, tenantId);

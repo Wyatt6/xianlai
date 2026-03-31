@@ -22,6 +22,24 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
+ * 【配置机制说明】
+ * <p>
+ * 三级别配置层级
+ * 1. 系统配置 XLSystemConfig    tb_core_system_config
+ * 2. 租户配置 XLTenantConfig    tb_core_tenant_config
+ * 3. 用户配置 XLUserConfig      tb_iam_user_config
+ * <p>
+ * 配置覆盖关系
+ * 1. 系统配置是最底层的配置，作为兜底的配置值，即默认值
+ * 2. 系统配置中scope=TENANT/USER的项可以作为模板给每个新租户生成一套租户配置，或者被租户配置用懒加载的方式覆盖
+ * 3. 系统配置中scope=USER的项可以作为模板每个新用户生成一套用户配置，或者被用户配置用懒加载的方式覆盖
+ * 4. 要实现以上3点应满足：用户配置、租户配置的configKey可以在系统配置里找到，在初始化或管理用户配置和租户配置时，应基于系统配置数据而来
+ * 5. 所以在缓存时默认了租户配置是符合能且仅能覆盖系统配置中scope=TENANT/USER的项，用户配置是能符合能且近能覆盖系统配置中scope=USER的项
+ * <p>
+ * 前端加载
+ * (1) 是否能加载到前端与scope无关系
+ * (2) 系统配置、租户配置、用户配置中frontLoad为true的就可以允许加载到前端
+ *
  * @author WyattLau
  */
 @Data
@@ -34,7 +52,7 @@ import java.time.LocalDateTime;
         @Index(columnList = "belongTo, configKey", unique = true),
         @Index(columnList = "enabled")
 })
-public class XLSystemConfig implements Serializable  {
+public class XLSystemConfig implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -48,15 +66,9 @@ public class XLSystemConfig implements Serializable  {
     @Comment("配置归属")
     private Long belongTo;  // XLSystemConfig 恒为 0
 
-    /**
-     * 取值见：EConfigScope
-     * SYSTEM --> 只允许系统加载使用，租户、用户不允许加载使用
-     * TENANT --> 允许系统、租户加载使用，用户不允许加载使用，默认值由系统维护，租户可覆盖此默认值
-     * USER   --> 允许系统、租户、用户加载使用，默认值由系统维护，租户可覆盖此默认值，用户可覆盖租户的默认值，用户也可直接覆盖系统的默认值
-     */
     @Column(columnDefinition = "varchar(10) not null")
     @Comment("作用域")
-    private String scope;
+    private String scope;    // 取值见：EConfigScope
 
     @Column(length = 100, nullable = false)
     @Comment("配置key")
