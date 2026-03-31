@@ -31,7 +31,8 @@ import java.time.LocalDateTime;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "tb_core_tenant_config", indexes = {
-        @Index(columnList = "belongTo, configKey", unique = true)
+        @Index(columnList = "belongTo, configKey", unique = true),
+        @Index(columnList = "belongTo, enabled")
 })
 public class XLTenantConfig implements Serializable {
     @Serial
