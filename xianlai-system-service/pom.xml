@@ -9,11 +9,19 @@
     </parent>
 
     <artifactId>xianlai-system-service</artifactId>
-    <version>${xianlai-system.version}</version>
+    <version>${xianlai-system-service.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>
         <!-- 内部依赖 -->
+        <dependency>
+            <groupId>fun.xianlai</groupId>
+            <artifactId>xianlai-infra-starter-mysql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>fun.xianlai</groupId>
+            <artifactId>xianlai-infra-starter-redis</artifactId>
+        </dependency>
         <dependency>
             <groupId>fun.xianlai</groupId>
             <artifactId>xianlai-common</artifactId>
@@ -24,11 +32,7 @@
         </dependency>
         <dependency>
             <groupId>fun.xianlai</groupId>
-            <artifactId>xianlai-infra-starter-mysql</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>fun.xianlai</groupId>
-            <artifactId>xianlai-infra-starter-redis</artifactId>
+            <artifactId>xianlai-system-api</artifactId>
         </dependency>
         <!-- 外部依赖 -->
         <dependency>

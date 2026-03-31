@@ -11,6 +11,13 @@
     </parent>
 
     <artifactId>xianlai-system-api</artifactId>
-    <version>${xianlai-system.version}</version>
+    <version>${xianlai-system-api.version}</version>
     <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>fun.xianlai</groupId>
+            <artifactId>xianlai-common</artifactId>
+        </dependency>
+    </dependencies>
 </project>
