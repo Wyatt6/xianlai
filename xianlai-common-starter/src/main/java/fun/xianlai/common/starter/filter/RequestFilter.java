@@ -1,5 +1,6 @@
 package fun.xianlai.common.starter.filter;
 
+import fun.xianlai.common.constant.HeaderConst;
 import fun.xianlai.common.context.RequestContext;
 import fun.xianlai.common.context.TenantContext;
 import jakarta.servlet.Filter;
@@ -41,20 +42,20 @@ public class RequestFilter extends OncePerRequestFilter implements Filter {
             String path = request.getRequestURI();
             if (shouldHandle(path)) {
                 // 1. 获取网关传递的traceId，并保存在RequestContext和日志框架的MDC上下文中
-                String traceId = request.getHeader("traceId");
+                String traceId = request.getHeader(HeaderConst.TRACE_ID);
                 if (traceId == null) {
                     traceId = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12);
                 }
                 RequestContext.setTraceId(traceId);
                 MDC.put("traceId", traceId);
                 // 2. 获取网关传递的stTimestamp，并保存在RequestContext中
-                String stTimestampStr = request.getHeader("stTimestamp");
+                String stTimestampStr = request.getHeader(HeaderConst.ST_TIMESTAMP);
                 if (stTimestampStr != null && !stTimestampStr.isBlank()) {
                     RequestContext.setStTimestamp(Long.parseLong(stTimestampStr));
                 }
                 // 3. 获取网关传递的tenantId，并保存在TenantContext中
                 log.info("****** 请求: {} {}", request.getMethod(), request.getRequestURL());
-                String tenantIdStr = request.getHeader("tenantId");
+                String tenantIdStr = request.getHeader(HeaderConst.TENANT_ID);
                 if (tenantIdStr != null && !tenantIdStr.isBlank()) {
                     Long tenantId = Long.parseLong(tenantIdStr);
                     TenantContext.setTenantId(tenantId);
