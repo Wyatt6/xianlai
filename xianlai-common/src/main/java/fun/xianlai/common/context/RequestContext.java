@@ -3,7 +3,7 @@ package fun.xianlai.common.context;
 /**
  * @author WyattLau
  */
-public class RequestContext {
+public final class RequestContext {
     private static final ThreadLocal<Long> ST_TIMESTAMP = new ThreadLocal<>();
 
     public static void setStTimestamp(Long stTimestamp) {
