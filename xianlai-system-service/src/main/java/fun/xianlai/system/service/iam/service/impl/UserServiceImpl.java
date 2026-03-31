@@ -1,0 +1,444 @@
+package fun.xianlai.system.service.iam.service.impl;
+
+import fun.xianlai.system.service.iam.service.UserService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+/**
+ * @author WyattLau
+ */
+@Slf4j
+@Service
+public class UserServiceImpl implements UserService {
+//    private static final String AVATAR_SAVE_BASE_DIR = "./upload/avatar/";
+//
+//    @Autowired
+//    private RedisTemplate<String, Object> redis;
+//    @Autowired
+//    private FeignOptionService optionService;
+//    @Autowired
+//    private RoleService roleService;
+//    @Autowired
+//    private PermissionService permissionService;
+//    @Autowired
+//    private UserRepository userRepository;
+//    @Autowired
+//    private UserRoleRepository userRoleRepository;
+//    @Autowired
+//    private RoleRepository roleRepository;
+//    @Autowired
+//    private PermissionRepository permissionRepository;
+//    @Autowired
+//    private ProfileRepository profileRepository;
+//
+//    @Override
+//    public boolean matchUsernameFormat(String username) {
+//        String USERNAME_REGEXP = optionService.readValueInString("user.username.regexp").orElse("^[a-zA-Z][a-zA-Z_0-9]{4,19}$");
+//        return username.matches(USERNAME_REGEXP);
+//    }
+//
+//    @Override
+//    public boolean matchPasswordFormat(String password) {
+//        String PASSWORD_REGEXP = optionService.readValueInString("user.password.regexp").orElse("^[a-zA-Z_0-9.~!@#$%^&*?]{6,30}$");
+//        return password.matches(PASSWORD_REGEXP);
+//    }
+//
+//    @Override
+//    @Transactional
+//    public DataMap createUser(String username, String password, Boolean active) {
+//        log.info("检查用户名是否已被使用");
+//        if (userRepository.findByUsername(username).isPresent()) {
+//            throw new SysException("用户名已被使用");
+//        }
+//
+//        log.info("密码加密");
+//        String salt = PasswordUtils.generateSalt();
+//        String encryptedPassword = PasswordUtils.encode(password, salt);
+//
+//        User newUser = new User();
+//        newUser.setUsername(username);
+//        newUser.setPassword(encryptedPassword);
+//        newUser.setSalt(salt);
+//        newUser.setRegisterAt(DateUtils.now());
+//        newUser.setActive(active);
+//        newUser.setIsDeleted(false);
+//        User savedUser = userRepository.save(newUser);
+//        Long rowNum = userRepository.findRowNumById(savedUser.getId());
+//
+//        log.info("创建用户的Profile");
+//        Profile profile = new Profile();
+//        profile.setUserId(savedUser.getId());
+//        profileRepository.save(profile);
+//
+//        DataMap result = new DataMap();
+//        result.put("user", savedUser);
+//        result.put("rowNum", rowNum);
+//        return result;
+//    }
+//
+//    @Override
+//    public User authentication(String username, String password) {
+//        Optional<User> user = userRepository.findByUsername(username);
+//        if (user.isEmpty()) {
+//            throw new SysException("用户未注册");
+//        }
+//        if (user.get().getIsDeleted()) {
+//            throw new SysException("用户已注销");
+//        }
+//        if (user.get().getActive() == false) {
+//            throw new SysException("用户已被冻结，请联系管理员");
+//        }
+//        if (!user.get().getPassword().equals(PasswordUtils.encode(password, user.get().getSalt()))) {
+//            throw new SysException("用户名或密码错误");
+//        }
+//        return user.get();
+//    }
+//
+//    @Override
+//    public User authentication(Long userId, String password) {
+//        Optional<User> user = userRepository.findById(userId);
+//        if (user.isEmpty()) {
+//            throw new SysException("用户未注册");
+//        }
+//        if (user.get().getIsDeleted()) {
+//            throw new SysException("用户已注销");
+//        }
+//        if (user.get().getActive() == false) {
+//            throw new SysException("用户已被冻结，请联系管理员");
+//        }
+//        if (!user.get().getPassword().equals(PasswordUtils.encode(password, user.get().getSalt()))) {
+//            throw new SysException("用户名或密码错误");
+//        }
+//        return user.get();
+//    }
+//
+//    /**
+//     * 公共标记：roleDbRefreshTime   数据库的角色数据更新的时间戳
+//     * 用户标记：roleListCacheTime   本用户角色数据缓存更新时间戳
+//     * <p>
+//     * 一、由于角色的数据库变更造成的需要大范围用户刷新角色缓存的场景
+//     * 1、角色记录的identifier、active变更时，更新roleDbRefreshTime；其他字段变更不打紧。
+//     * 2、若roleListCacheTime >= roleDbRefreshTime表明缓存中的角色数据已经是最新的，先查询缓存的角色数据作为结果，查不到缓存再查数据库更新缓存。
+//     * 3、若不满足上述条件则查数据库更新缓存，刷新缓存后更新roleListCacheTime。
+//     * <p>
+//     * 二、由于用户自身变更造成的自己需要刷新角色缓存的场景
+//     * 1、用户自身变更时，置用户标记roleListCacheTime为0。
+//     * 2、若roleListCacheTime >= roleDbRefreshTime表明缓存中的角色数据已经是最新的，则先查询缓存的角色数据作为结果，查不到缓存再查数据库更新缓存。
+//     * 3、若不满足上述条件则查数据库更新缓存，刷新缓存后更新roleListCacheTime。
+//     */
+//    @Override
+//    public List<String> getRoleList(Long userId) {
+//        List<String> roles = null;
+//        SaSession session = StpUtil.getSessionByLoginId(userId);
+//
+//        Date t1 = (Date) redis.opsForValue().get("roleDbRefreshTime");
+//        Date t2 = (Date) session.get("roleListCacheTime");
+//        // 先查询Session缓存的角色数据
+//        if (t1 == null || (t2 != null && t2.compareTo(t1) >= 0)) {
+//            // 第一二点第2小点：返回Session缓存的角色数据
+//            roles = (List<String>) session.get("roleList");
+//        }
+//        if (roles == null) {
+//            // 第一二点第3小点：先用数据库数据刷新Session缓存，再返回角色数据
+//            List<Role> activeRoles = roleRepository.findActiveRolesByUserId(userId);
+//            // 提取标识符字符串列表
+//            roles = new ArrayList<>();
+//            for (Role item : activeRoles) {
+//                roles.add(item.getIdentifier());
+//            }
+//            // 更新本用户缓存的角色数据
+//            session.set("roleList", roles);
+//            setRoleListCacheTime(userId, DateUtils.now());
+//        }
+//
+//        return roles;
+//    }
+//
+//    /**
+//     * 公共标记：roleDbRefreshTime           数据库的角色数据更新的时间
+//     * 公共标记：permissionDbRefreshTime     数据库的权限数据更新的时间
+//     * 用户标记：permissionListCacheTime     本用户权限数据缓存更新时间
+//     * <p>
+//     * 一、由于角色、权限的数据库变更造成的需要大范围用户刷新权限缓存的场景
+//     * 1、角色的identifier、active变更时，更新roleDbRefreshTime；其他字段变更不打紧。
+//     * 权限的identifier、active变更时或角色与权限映射关系变更时，更新permissionDbRefreshTime；其他字段变更不打紧。
+//     * 2、若permissionListCacheTime >= roleDbRefreshTime
+//     * 且permissionListCacheTime >= permissionDbRefreshTime，
+//     * 则先查询缓存的权限数据作为结果，查不到缓存再查数据库更新缓存。
+//     * 3、若不满足上述条件则查数据库更新缓存，刷新缓存后更新permissionListCacheTime。
+//     * <p>
+//     * 二、由于用户自身变更造成的自己需要刷新权限缓存的场景
+//     * 1、用户自身变更时，置用户标记permissionListCacheTime为0。
+//     * 2、若permissionListCacheTime >= roleDbRefreshTime
+//     * 且permissionListCacheTime >= permissionDbRefreshTime，
+//     * 则先查询缓存的权限数据作为结果，查不到缓存再查数据库更新缓存。
+//     * 3、若不满足上述条件则查数据库更新缓存，刷新缓存后更新permissionListCacheTime。
+//     */
+//    @Override
+//    public List<String> getPermissionList(Long userId) {
+//        List<String> permissions = null;
+//        SaSession session = StpUtil.getSessionByLoginId(userId);
+//
+//        Date t1 = (Date) redis.opsForValue().get("roleDbRefreshTime");
+//        Date t2 = (Date) redis.opsForValue().get("permissionDbRefreshTime");
+//        Date t3 = (Date) session.get("permissionListCacheTime");
+//        // 先查询Session缓存的权限数据
+//        if ((t1 == null || (t3 != null && t3.compareTo(t1) >= 0)) && (t2 == null || (t3 != null && t3.compareTo(t2) >= 0))) {
+//            // 第一二点第2小点：返回Session缓存的角色数据
+//            permissions = (List<String>) session.get("permissionList");
+//        }
+//
+//        if (permissions == null) {
+//            // 第一二点第3小点：先用数据库数据刷新Session缓存，再返回角色数据
+//            List<Permission> activePermissions = permissionRepository.findActivePermissionsByUserId(userId);
+//            // 提取标识符字符串列表
+//            permissions = new ArrayList<>();
+//            for (Permission item : activePermissions) {
+//                permissions.add(item.getIdentifier());
+//            }
+//            // 更新本用户缓存的权限数据
+//            session.set("permissionList", permissions);
+//            setPermissionListCacheTime(userId, DateUtils.now());
+//        }
+//
+//        return permissions;
+//    }
+//
+//
+//    @Override
+//    public void setRoleListCacheTime(Long userId, Date timestamp) {
+//        StpUtil.getSessionByLoginId(userId).set("roleListCacheTime", timestamp);
+//    }
+//
+//    @Override
+//    public void setPermissionListCacheTime(Long userId, Date timestamp) {
+//        StpUtil.getSessionByLoginId(userId).set("permissionListCacheTime", timestamp);
+//    }
+//
+//    @Override
+//    @Transactional
+//    public void changePassword(Long userId, String password) {
+//        String salt = PasswordUtils.generateSalt();
+//        String encryptedPassword = PasswordUtils.encode(password, salt);
+//        Optional<User> oldUser = userRepository.findById(userId);
+//        if (oldUser.isPresent()) {
+//            User newUser = oldUser.get();
+//            newUser.setPassword(encryptedPassword);
+//            newUser.setSalt(salt);
+//            userRepository.save(newUser);
+//        } else {
+//            throw new SysException("用户不存在");
+//        }
+//    }
+//
+//    @Override
+//    public Page<UserInfo> getUserInfoPageConditionally(int pageNum, int pageSize, UserCondition condition) {
+//        Date stRegisterAt = BeanUtils.getFieldValue(condition, "stRegisterAt", Date.class);
+//        Date edRegisterAt = BeanUtils.getFieldValue(condition, "edRegisterAt", Date.class);
+//        String role = BeanUtils.getFieldValue(condition, "role", String.class);
+//        String permission = BeanUtils.getFieldValue(condition, "permission", String.class);
+//
+//        String username = BeanUtils.getSuperClassFieldValue(condition, "username", String.class);
+//        Boolean active = BeanUtils.getSuperClassFieldValue(condition, "active", Boolean.class);
+//        Boolean isDeleted = BeanUtils.getSuperClassFieldValue(condition, "isDeleted", Boolean.class);
+//        String nickname = BeanUtils.getSuperClassFieldValue(condition, "nickname", String.class);
+//        String gender = BeanUtils.getSuperClassFieldValue(condition, "gender", String.class);
+//        String phone = BeanUtils.getSuperClassFieldValue(condition, "phone", String.class);
+//        String email = BeanUtils.getSuperClassFieldValue(condition, "email", String.class);
+//
+//        if (pageNum >= 0 && pageSize > 0) {
+//            log.info("分页查询");
+//            Pageable pageable = PageRequest.of(pageNum, pageSize);
+//            return userRepository.findConditionally(
+//                    username, stRegisterAt, edRegisterAt, active, isDeleted,
+//                    nickname, gender, phone, email, role, permission,
+//                    pageable);
+//        } else {
+//            log.info("全表查询");
+//            return userRepository.findConditionally(
+//                    username, stRegisterAt, edRegisterAt, active, isDeleted,
+//                    nickname, gender, phone, email, role, permission,
+//                    Pageable.unpaged());
+//        }
+//    }
+//
+//    @Override
+//    public Optional<User> findByUserId(Long userId) {
+//        return userRepository.findById(userId);
+//    }
+//
+//    @Override
+//    public List<Long> bind(Long userId, List<Long> roleIds) {
+//        List<Role> bindCheckList = roleRepository.findByBindCheck(true);
+//        List<String> roleList = StpUtil.getRoleList(userId);
+//        List<Long> failList = new ArrayList<>();
+//        for (Long roleId : roleIds) {
+//            try {
+//                for (Role item : bindCheckList) {
+//                    if (roleId.equals(item.getId())) {
+//                        if (!roleList.contains(MessageFormat.format("user:bind:{0}", item.getIdentifier()))) {
+//                            throw new SysException(MessageFormat.format("权限不足，无法为用户绑定角色[{0} {1}]", item.getId(), item.getIdentifier()));
+//                        }
+//                        break;
+//                    }
+//                }
+//                UserRole ur = new UserRole();
+//                ur.setUserId(userId);
+//                ur.setRoleId(roleId);
+//                userRoleRepository.save(ur);
+//                log.info("绑定成功: (userId=[{}], roleId=[{}])", userId, roleId);
+//            } catch (Exception e) {
+//                failList.add(roleId);
+//            }
+//        }
+//        if (failList.size() < roleIds.size()) {
+//            log.info("有绑定成功，要更新roleListCacheTime和permissionListCacheTime时间戳，以动态更新用户权限缓存");
+//            setRoleListCacheTime(userId, DateUtils.zero());
+//            setPermissionListCacheTime(userId, DateUtils.zero());
+//        }
+//        return failList;
+//    }
+//
+//    @Override
+//    public List<Long> cancelBind(Long userId, List<Long> roleIds) {
+//        List<Role> bindCheckList = roleRepository.findByBindCheck(true);
+//        List<String> roleList = StpUtil.getRoleList(userId);
+//        List<Long> failList = new ArrayList<>();
+//        for (Long roleId : roleIds) {
+//            try {
+//                for (Role item : bindCheckList) {
+//                    if (roleId.equals(item.getId())) {
+//                        if (!roleList.contains(MessageFormat.format("user:bind:{0}", item.getIdentifier()))) {
+//                            throw new SysException(MessageFormat.format("权限不足，无法为用户解除绑定角色[{0} {1}]", item.getId(), item.getIdentifier()));
+//                        }
+//                        break;
+//                    }
+//                }
+//                UserRole ur = new UserRole();
+//                ur.setUserId(userId);
+//                ur.setRoleId(roleId);
+//                userRoleRepository.delete(ur);
+//                log.info("解除绑定成功: (userId=[{}], roleId=[{}])", userId, roleId);
+//            } catch (Exception e) {
+//                failList.add(roleId);
+//            }
+//        }
+//        if (failList.size() < roleIds.size()) {
+//            log.info("有解除绑定成功，要更新roleListCacheTime和permissionListCacheTime时间戳，以动态更新用户权限缓存");
+//            setRoleListCacheTime(userId, DateUtils.zero());
+//            setPermissionListCacheTime(userId, DateUtils.zero());
+//        }
+//        return failList;
+//    }
+//
+//    @Override
+//    @Transactional
+//    public DataMap editUserInfo(UserInfo form) {
+//        User user = form.exportUser();
+//        Profile profile = form.exportProfile();
+//        BeanUtils.trimString(user);
+//        BeanUtils.trimString(profile);
+//
+//        if (StpUtil.getLoginIdAsLong() == user.getId()) {
+//            log.info("操作自己的用户，不需要权限");
+//        } else {
+//            log.info("操作别人的用户，需要user:edit或user:delete权限");
+//            List<String> permissionList = StpUtil.getPermissionList();
+//            if (user.getIsDeleted() != null && !permissionList.contains("user:delete")) {
+//                throw new SysException("用户权限不足");
+//            }
+//            // 目前只支持修改这两个属性
+//            if ((user.getUsername() != null || user.getActive() != null) && !permissionList.contains("user:edit")) {
+//                throw new SysException("用户权限不足");
+//            }
+//        }
+//
+//        Optional<User> oldUser = userRepository.findById(user.getId());
+//        if (oldUser.isEmpty()) {
+//            throw new SysException("用户不存在");
+//        }
+//        if (oldUser.get().getIsDeleted()) {
+//            throw new SysException("用户已注销，无法修改");
+//        }
+//        User newUser = oldUser.get();
+//        BeanUtils.copyPropertiesNotNull(user, newUser);
+//
+//        Optional<Profile> oldProfile = profileRepository.findById(profile.getUserId());
+//        Profile newProfile = oldProfile.get();
+//        BeanUtils.copyPropertiesNotNull(profile, newProfile);
+//
+//        try {
+//            log.info("更新数据库");
+//            newUser = userRepository.save(newUser);
+//            newProfile = profileRepository.save(newProfile);
+//            log.info("更新缓存");
+//            SaSession session = StpUtil.getSessionByLoginId(newUser.getId());
+//            if (session != null) {
+//                session.set("user", newUser);
+//                session.set("profile", newProfile);
+//            }
+//
+//            UserInfo userInfo = new UserInfo();
+//            userInfo.importUser(newUser);
+//            userInfo.importProfile(newProfile);
+//
+//            DataMap result = new DataMap();
+//            result.put("user", newUser);
+//            result.put("profile", newProfile);
+//            result.put("userInfo", userInfo);
+//            return result;
+//        } catch (DataIntegrityViolationException e) {
+//            log.info(e.getMessage());
+//            throw new SysException("用户名已存在");
+//        }
+//    }
+//
+//    @Override
+//    public Profile exportProfile(Long userId) {
+//        return profileRepository.findById(userId).orElse(null);
+//    }
+//
+//    @Override
+//    @Transactional
+//    public void uploadAvatar(MultipartFile avatar) {
+//        log.info("保存头像图片文件");
+//        String filename = FileUploadUtils.uploadFile(avatar, 500 * FileUtils.ONE_KB,
+//                AVATAR_SAVE_BASE_DIR, "avatar_", null, null, MimeTypeUtils.IMAGE_EXTENSION);
+//        log.info("查询旧头像文件名");
+//        Long userId = StpUtil.getLoginIdAsLong();
+//        Optional<Profile> profile = profileRepository.findById(userId);
+//        String oldFilename = null;
+//        if (profile.isPresent()) {
+//            oldFilename = profile.get().getAvatar();
+//            try {
+//                log.info("更新新头像文件名");
+//                profile.get().setAvatar(filename);
+//                Profile newProfile = profileRepository.save(profile.get());
+//                log.info("更新用户缓存");
+//                StpUtil.getSession().set("profile", newProfile);
+//                log.info("删除旧的头像图片文件");
+//                try {
+//                    FileUtils.delete(new File(AVATAR_SAVE_BASE_DIR + oldFilename));
+//                } catch (IOException ignored) {
+//                }
+//            } catch (Exception e) {
+//                try {
+//                    log.info("失败时删除新上传的头像图片文件");
+//                    FileUtils.delete(new File(AVATAR_SAVE_BASE_DIR + filename));
+//                } catch (IOException ignored) {
+//                }
+//                throw new SysException("上传头像失败");
+//            }
+//        }
+//    }
+//
+//    @Override
+//    public void downloadAvatar(String filename, HttpServletResponse response) {
+//        try {
+//            response.setContentType(MimeTypeUtils.getMimeType(FilenameUtils.getExtension(filename)));
+//            FileUtils.writeBytes(AVATAR_SAVE_BASE_DIR + filename, response.getOutputStream());
+//        } catch (IOException e) {
+//            throw new SysException("获取输出流异常");
+//        }
+//    }
+}
