@@ -1,10 +1,12 @@
-package fun.xianlai.system.core.model.enums;
+package fun.xianlai.common.enums;
 
 /**
  * @author WyattLau
  */
-public class EConfigScope {
+public final class EConfigScope {
     public static final String SYSTEM = "SYSTEM";
     public static final String TENANT = "TENANT";
     public static final String USER = "USER";
+
+    private EConfigScope() {}
 }
