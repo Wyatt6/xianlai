@@ -19,7 +19,7 @@ import java.util.UUID;
  */
 @Slf4j
 @Component
-public class LogAndTenantFilter implements GlobalFilter, Ordered {
+public class LogAndRedirectFilter implements GlobalFilter, Ordered {
     private static final String[] EXCLUDE_URL_PATTERN = {
             ".*/actuator.*",
             ".*/druid.*"
