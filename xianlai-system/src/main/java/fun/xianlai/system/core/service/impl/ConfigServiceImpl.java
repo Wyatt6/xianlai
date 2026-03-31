@@ -38,42 +38,29 @@ public class ConfigServiceImpl implements ConfigService {
         List<XLSystemConfig> configList = systemConfigRepository.findByEnabled(true);
 
         Map<String, Map<String, Object>> allConfigs = new HashMap<>();
-        Map<String, Map<String, Object>> frontLoadConfigs = new HashMap<>();
-
         for (XLSystemConfig item : configList) {
-            Map<String, Object> map1 = new HashMap<>();
-            map1.put("value", item.getConfigValue());
-            map1.put("type", item.getValueType());
-            map1.put("scope", item.getScope());
-            map1.put("frontLoad", item.getFrontLoad());
-            allConfigs.put(item.getConfigKey(), map1);
-
-            if (item.getFrontLoad()) {
-                Map<String, Object> map2 = new HashMap<>();
-                map2.put("value", item.getConfigValue());
-                map2.put("type", item.getValueType());
-                map2.put("scope", item.getScope());
-                frontLoadConfigs.put(item.getConfigKey(), map2);
-            }
+            Map<String, Object> itemMap = new HashMap<>();
+            itemMap.put("value", item.getConfigValue());
+            itemMap.put("type", item.getValueType());
+            itemMap.put("scope", item.getScope());
+            itemMap.put("frontLoad", item.getFrontLoad());
+            allConfigs.put(item.getConfigKey(), itemMap);
         }
 
-        redis.opsForHash().putAll(SystemConst.CONFIG_ALL_CACHE_KEY, allConfigs);
-        redis.opsForHash().putAll(SystemConst.CONFIG_FRONT_LOAD_CACHE_KEY, frontLoadConfigs);
-        redis.expire(SystemConst.CONFIG_ALL_CACHE_KEY, Duration.ofHours(SystemConst.DEFAULT_CACHE_HOURS));
-        redis.expire(SystemConst.CONFIG_FRONT_LOAD_CACHE_KEY, Duration.ofHours(SystemConst.DEFAULT_CACHE_HOURS));
+        redis.opsForHash().putAll(SystemConst.CONFIG_CACHE_KEY, allConfigs);
+        redis.expire(SystemConst.CONFIG_CACHE_KEY, Duration.ofHours(SystemConst.DEFAULT_CACHE_HOURS));
         log.info("系统配置缓存完成");
     }
 
     @Override
-    public Map<String, Map<String, Object>> getAllSystemConfigs() {
-        if (!redis.hasKey(SystemConst.CONFIG_ALL_CACHE_KEY)) {
-            this.cacheSystemConfigs();
+    public Map<String, Map<String, Object>> getSystemConfigs() {
+        if (redis.hasKey(SystemConst.CONFIG_CACHE_KEY)) {
+            redis.expire(SystemConst.CONFIG_CACHE_KEY, Duration.ofHours(SystemConst.DEFAULT_CACHE_HOURS));
         } else {
-            redis.expire(SystemConst.CONFIG_ALL_CACHE_KEY, Duration.ofHours(SystemConst.DEFAULT_CACHE_HOURS));
-            redis.expire(SystemConst.CONFIG_FRONT_LOAD_CACHE_KEY, Duration.ofHours(SystemConst.DEFAULT_CACHE_HOURS));
+            this.cacheSystemConfigs();
         }
         Map<String, Map<String, Object>> configs = new HashMap<>();
-        redis.opsForHash().entries(SystemConst.CONFIG_ALL_CACHE_KEY).forEach((k, v) -> {
+        redis.opsForHash().entries(SystemConst.CONFIG_CACHE_KEY).forEach((k, v) -> {
             configs.put(String.valueOf(k), BeanUtils.objectToMap(v));
         });
         return configs;
@@ -85,14 +72,12 @@ public class ConfigServiceImpl implements ConfigService {
         Map<String, Map<String, Object>> frontLoadConfigs = new HashMap<>();
 
         // 先继承系统配置中作用域是TENANT和USER的项
-        Map<String, Map<String, Object>> systemAllConfigs = this.getAllSystemConfigs();
+        Map<String, Map<String, Object>> systemAllConfigs = this.getSystemConfigs();
         systemAllConfigs.forEach((k, v) -> {
             String scope = (String) v.remove("scope");
-
             switch (scope) {
                 case EConfigScope.TENANT, EConfigScope.USER -> allConfigs.put(k, v);
             }
-
             if ((Boolean) v.get("frontLoad")) {
                 switch (scope) {
                     case EConfigScope.TENANT, EConfigScope.USER -> frontLoadConfigs.put(k, v);
@@ -106,7 +91,6 @@ public class ConfigServiceImpl implements ConfigService {
             Map<String, Object> map1 = new HashMap<>();
             map1.put("value", item.getConfigValue());
             map1.put("type", item.getValueType());
-            map1.put("frontLoad", item.getFrontLoad());
             allConfigs.put(item.getConfigKey(), map1);
 
             if (item.getFrontLoad()) {
@@ -127,7 +111,21 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public Map<String, Map<String, Object>> getFrontLoadConfigsOfTenant(Long tenantId) {
-        return Map.of();
+    public Map<String, Map<String, Object>> getTenantFrontLoadConfigs(Long tenantId) {
+        String keyAll = MessageFormat.format(TenantConst.CONFIG_ALL_CACHE_KEY, tenantId);
+        String keyFrontLoad = MessageFormat.format(TenantConst.CONFIG_FRONT_LOAD_CACHE_KEY, tenantId);
+
+        if (redis.hasKey(keyFrontLoad)) {
+            redis.expire(keyAll, Duration.ofHours(TenantConst.DEFAULT_CACHE_HOURS));
+            redis.expire(keyFrontLoad, Duration.ofHours(TenantConst.DEFAULT_CACHE_HOURS));
+        } else {
+            this.cacheTenantConfigs(tenantId);
+        }
+
+        Map<String, Map<String, Object>> configs = new HashMap<>();
+        redis.opsForHash().entries(keyFrontLoad).forEach((k, v) -> {
+            configs.put(String.valueOf(k), BeanUtils.objectToMap(v));
+        });
+        return configs;
     }
 }
