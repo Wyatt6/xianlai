@@ -125,35 +125,4 @@ public class RetResult<T> {
         this.finishTime = finishTime;
         return this;
     }
-
-//    public RetResult addData(String key, Object value) {
-//        this.data.put(key, value);
-//        return this;
-//    }
-//
-//    public RetResult addExtraData(String key, Object extraData) {
-//        if (!this.data.containsKey("extraData")) {
-//            this.data.put("extraData", new HashMap<String, Object>());
-//        }
-//        BeanUtils.objectToMap(this.data.get("extraData")).put(key, extraData);
-//        return this;
-//    }
-//
-//    public RetResult writeFeignData(Object value) {
-//        this.success().addData("retResult", value);
-//        return this;
-//    }
-//
-//    public Object readFeignData() {
-//        return this.data.get("retResult");
-//    }
-//
-//    public RetResult writeFeignSysException(SysException e) {
-//        this.fail().addData("sysException", e.getMessage());
-//        return this;
-//    }
-//
-//    public SysException readFeignSysException() {
-//        return new SysException((String) this.data.get("sysException"));
-//    }
 }
