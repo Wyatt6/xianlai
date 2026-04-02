@@ -56,7 +56,7 @@ public class LogAndRedirectFilter implements GlobalFilter, Ordered {
             // 打印请求基础信息
             String requestTimeStr = request.getHeaders().getFirst(HeaderConst.REQUEST_TIME);
             if (requestTimeStr == null || requestTimeStr.isBlank()) {
-                log.info("Request Time  : [Header Not Exists or Blank]");
+                log.info("Request Time  : 报文头 {} 不存在或为空", HeaderConst.REQUEST_TIME);
             } else {
                 long requestTimestamp = Long.parseLong(requestTimeStr);
                 log.info("Request Time  : {}", DateUtils.timeMilliFormat(DateUtils.milliTimstampToLocalDateTime(requestTimestamp)));
@@ -69,15 +69,16 @@ public class LogAndRedirectFilter implements GlobalFilter, Ordered {
             String token = request.getHeaders().getFirst(HeaderConst.TOKEN);
             String tenantId = null;
             if (token == null || token.isBlank()) {
-                log.info("Token         : [Header Not Exists or Blank]");
+                log.info("Token         : 报文头 {} 不存在或为空", HeaderConst.TOKEN);
             } else {
+                // TODO 打印脱敏token
                 try {
                     JWSObject jwsObject = JWSObject.parse(token);
                     JWTClaimsSet claims = JWTClaimsSet.parse(jwsObject.getPayload().toJSONObject());
                     tenantId = claims.getStringClaim("tenantId");
                     log.info("Tenant ID     : {}", tenantId);
                 } catch (Exception e) {
-                    log.warn(e.getMessage());
+                    log.warn("Tenant ID     : JWT解析异常: {}", e.getMessage());
                 }
             }
 
@@ -93,7 +94,7 @@ public class LogAndRedirectFilter implements GlobalFilter, Ordered {
             // 4. 转发处理和后处理
             ServerHttpRequest redirectRequest = builder.build();
             return chain.filter(exchange.mutate().request(redirectRequest).build()).then(Mono.fromRunnable(() -> {
-                log.info("转发到: {} {}",
+                log.info("Redirect To   : {} {}",
                         exchange.getAttribute("org.springframework.cloud.gateway.support.ServerWebExchangeUtils.gatewayPredicateMatchedPathRouteIdAttr").toString(),
                         exchange.getAttribute("org.springframework.cloud.gateway.support.ServerWebExchangeUtils.gatewayRequestUrl").toString()
                 );
