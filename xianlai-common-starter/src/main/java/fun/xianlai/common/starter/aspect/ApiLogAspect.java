@@ -68,7 +68,7 @@ public class ApiLogAspect {
             Object result = joinPoint.proceed();
             log.info("-----> Execution Finish");
             if (!isInner) {
-                log.info("Result        : {}", getResultPrintText(result));
+                log.info("Result        : \n{}", getResultPrintText(result));
             }
             return result;
         } catch (Throwable e) {
