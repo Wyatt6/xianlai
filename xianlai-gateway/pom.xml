@@ -13,6 +13,11 @@
     <packaging>jar</packaging>
 
     <dependencies>
+        <!-- 内部依赖 -->
+        <dependency>
+            <groupId>fun.xianlai</groupId>
+            <artifactId>xianlai-common</artifactId>
+        </dependency>
         <!-- 外部依赖 -->
         <dependency>
             <groupId>com.nimbusds</groupId>

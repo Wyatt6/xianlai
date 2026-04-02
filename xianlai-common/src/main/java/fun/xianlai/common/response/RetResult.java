@@ -16,8 +16,8 @@ public class RetResult<T> {
     private String message;                 // 响应提示消息
     private T data;                         // 返回数据
     private String traceId;                 // 跟踪标记：网关接收请求就已经生成的全局ID，用于全链路跟踪交易
-    private long stTimestamp;               // 开始时间戳（毫秒级）
-    private long edTimestamp;               // 结束时间戳（毫秒级）
+    private long beginTime;                 // 开始时间戳（毫秒级）
+    private long finishTime;                // 结束时间戳（毫秒级）
 
     /**
      * 成功
@@ -116,13 +116,13 @@ public class RetResult<T> {
         return this;
     }
 
-    public RetResult<T> setStTimestamp(long stTimestamp) {
-        this.stTimestamp = stTimestamp;
+    public RetResult<T> setBeginTime(long beginTime) {
+        this.beginTime = beginTime;
         return this;
     }
 
-    public RetResult<T> setEdTimestamp(long edTimestamp) {
-        this.edTimestamp = edTimestamp;
+    public RetResult<T> setFinishTime(long finishTime) {
+        this.finishTime = finishTime;
         return this;
     }
 
