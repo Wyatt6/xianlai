@@ -10,6 +10,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -17,6 +18,7 @@ import java.lang.reflect.Method;
 /**
  * 基于Spring的AOP机制定义的接口自动日志打印和响应数据封装操作，用于使用@ApiLog注解的Controller方法
  * Spring AOP框架定义的各种Advice执行顺序：
+ * order注解越小越优先
  * Around(前处理部份) --> Before --> 目标方法 --> After --> AfterReturning / AfterThrowing --> Around(后处理部份)
  * 如果有异常最后还会抛出给ExceptionHandler
  *
@@ -25,6 +27,7 @@ import java.lang.reflect.Method;
 @Slf4j
 @Aspect
 @Component
+@Order(2)
 public class ApiLogAspect {
     @Pointcut("@annotation(fun.xianlai.common.annotation.ApiLog)")
     public void pointcut() {
@@ -42,7 +45,6 @@ public class ApiLogAspect {
         boolean isInner = false;
         String fromService = RequestContext.getFromService();
         if (fromService != null && !fromService.isBlank()) {
-            RequestContext.setFromService(fromService);
             if (!"gateway".equals(fromService)) {
                 isInner = true;
             }
