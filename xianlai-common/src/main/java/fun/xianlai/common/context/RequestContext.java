@@ -5,6 +5,7 @@ package fun.xianlai.common.context;
  */
 public final class RequestContext {
     private static final ThreadLocal<String> FROM_SERVICE = new ThreadLocal<>();
+    private static final ThreadLocal<String> TOKEN = new ThreadLocal<>();
     private static final ThreadLocal<Long> TENANT_ID = new ThreadLocal<>();
     private static final ThreadLocal<String> TRACE_ID = new ThreadLocal<>();
     private static final ThreadLocal<Long> BEGIN_TIME = new ThreadLocal<>();        // 内部调用的时候不是必须的
@@ -15,6 +16,14 @@ public final class RequestContext {
 
     public static String getFromService() {
         return FROM_SERVICE.get();
+    }
+
+    public static void setToken(String token) {
+        TOKEN.set(token);
+    }
+
+    public static String getToken() {
+        return TOKEN.get();
     }
 
     public static void setTenantId(Long tenantId) {
@@ -43,10 +52,12 @@ public final class RequestContext {
 
     public static void clear() {
         FROM_SERVICE.remove();
+        TOKEN.remove();
         TENANT_ID.remove();
         TRACE_ID.remove();
         BEGIN_TIME.remove();
     }
 
-    private RequestContext() {}
+    private RequestContext() {
+    }
 }

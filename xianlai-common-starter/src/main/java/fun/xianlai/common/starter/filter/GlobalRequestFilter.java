@@ -89,14 +89,21 @@ public class GlobalRequestFilter extends OncePerRequestFilter implements Filter 
                     log.info("Request Method: {}", request.getMethod());
                     log.info("Request URL   : {}", request.getRequestURL());
                 }
-                // TODO 打印脱敏token
+                // token
+                String token = request.getHeader(HeaderConst.TOKEN);
+                if (token != null && !token.isBlank()) {
+                    RequestContext.setToken(token);
+                    log.info("Token         : {}", token);  // TODO 打印脱敏token
+                } else {
+                    log.info("Token         : 报文头 {} 不存在或为空，可能影响程序运行", token);
+                }
                 // tenantId
                 String tenantIdStr = request.getHeader(HeaderConst.TENANT_ID);
                 if (tenantIdStr != null && !tenantIdStr.isBlank()) {
                     RequestContext.setTenantId(Long.parseLong(tenantIdStr));
                     log.info("Tenant ID     : {}", tenantIdStr);
                 } else {
-                    log.warn("Tenant ID     : 报文头 {} 不存在或为空，可能影响程序运行", tenantIdStr);
+                    log.info("Tenant ID     : 报文头 {} 不存在或为空，可能影响程序运行", tenantIdStr);
                 }
             }
             // 处理请求

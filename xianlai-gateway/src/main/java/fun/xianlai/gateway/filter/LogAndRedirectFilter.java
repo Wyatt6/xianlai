@@ -72,7 +72,7 @@ public class LogAndRedirectFilter implements GlobalFilter, Ordered {
             if (token == null || token.isBlank()) {
                 log.info("Token         : 报文头 {} 不存在或为空", HeaderConst.TOKEN);
             } else {
-                // TODO 打印脱敏token
+                log.info("Token         : {}", token);  // TODO 打印脱敏token
                 try {
                     JWSObject jwsObject = JWSObject.parse(token);
                     JWTClaimsSet claims = JWTClaimsSet.parse(jwsObject.getPayload().toJSONObject());
