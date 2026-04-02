@@ -1,4 +1,4 @@
-package fun.xianlai.common.enums;
+package fun.xianlai.system.enums;
 
 /**
  * @author WyattLau
