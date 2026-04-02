@@ -1,13 +1,13 @@
-package fun.xianlai.system.service.core.service.impl;
+package fun.xianlai.system.core.service.impl;
 
 import fun.xianlai.common.constant.SystemConst;
 import fun.xianlai.common.constant.TenantConst;
 import fun.xianlai.common.utils.bean.BeanUtils;
-import fun.xianlai.system.service.core.entity.XLSystemConfig;
-import fun.xianlai.system.service.core.entity.XLTenantConfig;
-import fun.xianlai.system.service.core.repository.XLSystemConfigRepository;
-import fun.xianlai.system.service.core.repository.XLTenantConfigRepository;
-import fun.xianlai.system.service.core.service.ConfigService;
+import fun.xianlai.system.core.entity.XLSystemConfig;
+import fun.xianlai.system.core.entity.XLTenantConfig;
+import fun.xianlai.system.core.repository.XLSystemConfigRepository;
+import fun.xianlai.system.core.repository.XLTenantConfigRepository;
+import fun.xianlai.system.core.service.ConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
