@@ -2,6 +2,7 @@ package fun.xianlai.common.starter.filter;
 
 import fun.xianlai.common.constant.HeaderConst;
 import fun.xianlai.common.context.RequestContext;
+import fun.xianlai.common.utils.net.IpUtils;
 import fun.xianlai.common.utils.time.DateUtils;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -84,7 +85,7 @@ public class GlobalRequestFilter extends OncePerRequestFilter implements Filter 
                     } else {
                         log.info("Begin Time    : 报文头 {} 不存在，不影响程序运行但响应的 RetResult 对象的 beginTime 为默认值 0", HeaderConst.BEGIN_TIME);
                     }
-                    // TODO 打印请求IP日志
+                    log.info("Request IP    : {}", IpUtils.getRemoteIp(request));
                     log.info("Request Method: {}", request.getMethod());
                     log.info("Request URL   : {}", request.getRequestURL());
                 }
