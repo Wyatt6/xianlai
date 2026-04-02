@@ -87,7 +87,7 @@ public class GlobalRequestFilter extends OncePerRequestFilter implements Filter 
                     }
                     log.info("Request IP    : {}", IpUtils.getRemoteIp(request));
                     log.info("Request Method: {}", request.getMethod());
-                    log.info("Request URL   : {}", request.getRequestURL());
+                    log.info("Request Path  : {}", request.getRequestURI());
                 }
                 // token
                 String token = request.getHeader(HeaderConst.TOKEN);
