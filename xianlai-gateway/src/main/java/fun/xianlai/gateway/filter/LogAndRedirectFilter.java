@@ -4,6 +4,7 @@ import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jwt.JWTClaimsSet;
 import fun.xianlai.common.constant.HeaderConst;
 import fun.xianlai.common.utils.time.DateUtils;
+import fun.xianlai.gateway.utils.IpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -61,7 +62,7 @@ public class LogAndRedirectFilter implements GlobalFilter, Ordered {
                 long requestTimestamp = Long.parseLong(requestTimeStr);
                 log.info("Request Time  : {}", DateUtils.timeMilliFormat(DateUtils.milliTimstampToLocalDateTime(requestTimestamp)));
             }
-            // TODO 打印请求IP
+            log.info("Request IP    : {}", IpUtils.getRemoteIp(request));
             log.info("Request Method: {}", request.getMethod());
             log.info("Request URL   : {}", request.getURI());
 
