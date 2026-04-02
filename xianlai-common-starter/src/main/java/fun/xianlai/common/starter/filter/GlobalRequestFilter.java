@@ -2,8 +2,6 @@ package fun.xianlai.common.starter.filter;
 
 import fun.xianlai.common.constant.HeaderConst;
 import fun.xianlai.common.context.RequestContext;
-import fun.xianlai.common.context.TenantContext;
-import fun.xianlai.common.context.TraceContext;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,7 +20,7 @@ import java.util.UUID;
  */
 @Slf4j
 @Component
-public class RequestFilter extends OncePerRequestFilter implements Filter {
+public class GlobalRequestFilter extends OncePerRequestFilter implements Filter {
     private static final String[] EXCLUDE_URL_PATTERN = {
             ".*/actuator.*",
             ".*/druid.*"
