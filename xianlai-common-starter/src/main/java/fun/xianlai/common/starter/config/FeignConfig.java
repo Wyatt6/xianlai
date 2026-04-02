@@ -23,6 +23,7 @@ import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.cloud.openfeign.support.ResponseEntityDecoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 import java.lang.reflect.Type;
 
@@ -35,6 +36,8 @@ import java.lang.reflect.Type;
 public class FeignConfig {
     @Autowired
     private ObjectFactory<HttpMessageConverters> messageConverters;
+    @Autowired
+    private Environment env;
 
     @Bean
     public Feign.Builder feignBuilder(Decoder decoder) {
@@ -47,10 +50,7 @@ public class FeignConfig {
         return new RequestInterceptor() {
             @Override
             public void apply(RequestTemplate template) {
-                String fromService = RequestContext.getFromService();
-                if (fromService != null && !fromService.isBlank()) {
-                    template.header(HeaderConst.FROM_SERVICE, fromService);
-                }
+                template.header(HeaderConst.FROM_SERVICE, env.getProperty("spring.application.name"));
 
                 String token = RequestContext.getToken();
                 if (token != null && !token.isBlank()) {
