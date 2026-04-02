@@ -40,24 +40,24 @@ public class GlobalRequestFilter extends OncePerRequestFilter implements Filter 
         try {
             String path = request.getRequestURI();
             if (shouldHandle(path)) {
-                // 1. 获取网关传递的traceId，并保存在RequestContext和日志框架的MDC上下文中
+                // 1. 获取网关传递的traceId，并保存在上下文中
                 String traceId = request.getHeader(HeaderConst.TRACE_ID);
                 if (traceId == null) {
                     traceId = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12);
                 }
-                TraceContext.setTraceId(traceId);
+                RequestContext.setTraceId(traceId);
                 MDC.put("traceId", traceId);
-                // 2. 获取网关传递的stTimestamp，并保存在RequestContext中
+                // 2. 获取网关传递的stTimestamp，并保存在上下文中
                 String stTimestampStr = request.getHeader(HeaderConst.ST_TIMESTAMP);
                 if (stTimestampStr != null && !stTimestampStr.isBlank()) {
                     RequestContext.setStTimestamp(Long.parseLong(stTimestampStr));
                 }
-                // 3. 获取网关传递的tenantId，并保存在TenantContext中
+                // 3. 获取网关传递的tenantId，并保存在上下文中
                 log.info("****** 请求: {} {}", request.getMethod(), request.getRequestURL());
                 String tenantIdStr = request.getHeader(HeaderConst.TENANT_ID);
                 if (tenantIdStr != null && !tenantIdStr.isBlank()) {
                     Long tenantId = Long.parseLong(tenantIdStr);
-                    TenantContext.setTenantId(tenantId);
+                    RequestContext.setTenantId(tenantId);
                     log.info("tenantId: {}", tenantId);
                 } else {
                     log.info("报文头无tenantId");
@@ -68,8 +68,6 @@ public class GlobalRequestFilter extends OncePerRequestFilter implements Filter 
         } finally {
             MDC.clear();
             RequestContext.clear();
-            TenantContext.clear();
-            TraceContext.clear();
         }
     }
 }
