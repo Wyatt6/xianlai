@@ -18,7 +18,15 @@
         <!-- 内部依赖 -->
         <dependency>
             <groupId>fun.xianlai</groupId>
+            <artifactId>xianlai-infra-starter-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>fun.xianlai</groupId>
             <artifactId>xianlai-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>fun.xianlai</groupId>
+            <artifactId>xianlai-system-api</artifactId>
         </dependency>
         <!-- 外部依赖 -->
         <dependency>
