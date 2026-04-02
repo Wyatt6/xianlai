@@ -56,7 +56,7 @@ public class LogAndRedirectFilter implements GlobalFilter, Ordered {
             // 打印请求基础信息
             String requestTimeStr = request.getHeaders().getFirst(HeaderConst.REQUEST_TIME);
             if (requestTimeStr == null || requestTimeStr.isBlank()) {
-                log.info("Request Time  : [NONE]");
+                log.info("Request Time  : [Header Not Exists or Blank]");
             } else {
                 long requestTimestamp = Long.parseLong(requestTimeStr);
                 log.info("Request Time  : {}", DateUtils.timeMilliFormat(DateUtils.milliTimstampToLocalDateTime(requestTimestamp)));
@@ -69,7 +69,7 @@ public class LogAndRedirectFilter implements GlobalFilter, Ordered {
             String token = request.getHeaders().getFirst(HeaderConst.TOKEN);
             String tenantId = null;
             if (token == null || token.isBlank()) {
-                log.info("Token         : [NONE]");
+                log.info("Token         : [Header Not Exists or Blank]");
             } else {
                 try {
                     JWSObject jwsObject = JWSObject.parse(token);
