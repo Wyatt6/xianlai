@@ -3,6 +3,7 @@ package fun.xianlai.system.core.service.impl;
 import fun.xianlai.common.constant.TenantConst;
 import fun.xianlai.common.exception.BizException;
 import fun.xianlai.common.response.RetCode;
+import fun.xianlai.common.utils.bean.BeanUtils;
 import fun.xianlai.system.core.entity.XLTenant;
 import fun.xianlai.system.core.repository.XLTenantRepository;
 import fun.xianlai.system.core.service.TenantService;
@@ -30,7 +31,7 @@ public class TenantServiceImpl implements TenantService {
     public XLTenant getTenantByDomain(String domain) {
         String domainKey = MessageFormat.format(TenantConst.DOMAIN_CACHE_KEY, domain);
         // 根据域名查询缓存
-        Long cachedId = (Long) redis.opsForValue().get(domainKey);
+        Long cachedId = BeanUtils.parseLong(redis.opsForValue().get(domainKey));
         if (cachedId != null) {
             String entityKey = MessageFormat.format(TenantConst.ENTITY_CACHE_KEY, cachedId);
             XLTenant cachedEntity = (XLTenant) redis.opsForValue().get(entityKey);

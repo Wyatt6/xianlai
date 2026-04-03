@@ -7,6 +7,7 @@ import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 通用对象操作工具
@@ -40,6 +41,17 @@ public final class BeanUtils {
             }
         }
         return map;
+    }
+
+
+    /**
+     * 对象解析成Long
+     */
+    public static Long parseLong(Object obj) {
+        return Optional.ofNullable(obj)
+                .map(Object::toString)
+                .map(Long::valueOf)
+                .orElse(null);
     }
 
     /**
