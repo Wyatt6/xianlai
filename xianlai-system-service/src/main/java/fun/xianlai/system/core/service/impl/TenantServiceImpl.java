@@ -55,7 +55,7 @@ public class TenantServiceImpl implements TenantService {
             String entityKey = MessageFormat.format(TenantConst.ENTITY_CACHE_KEY, tenantId);
             redis.opsForValue().set(domainKey, tenantId, Duration.ofHours(TenantConst.DEFAULT_CACHE_HOURS));
             redis.opsForValue().set(entityKey, tenant.get(), Duration.ofHours(TenantConst.DEFAULT_CACHE_HOURS));
-            log.info("成功从数据库查询到租户数据: domain={}, tenantId={}", domain, cachedId);
+            log.info("成功从数据库查询到租户数据: domain={}, tenantId={}", domain, tenantId);
             return tenant.get();
         } else {
             throw new BizException(RetCode.DATA_NOT_FOUND, "未找到对应租户，请检查域名是否正确");
