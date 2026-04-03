@@ -1,11 +1,11 @@
-package fun.xianlai.system.service.core.service.impl;
+package fun.xianlai.system.core.service.impl;
 
 import fun.xianlai.common.constant.TenantConst;
 import fun.xianlai.common.exception.BizException;
 import fun.xianlai.common.response.RetCode;
-import fun.xianlai.system.service.core.entity.XLTenant;
-import fun.xianlai.system.service.core.repository.XLTenantRepository;
-import fun.xianlai.system.service.core.service.TenantService;
+import fun.xianlai.system.core.entity.XLTenant;
+import fun.xianlai.system.core.repository.XLTenantRepository;
+import fun.xianlai.system.core.service.TenantService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -58,6 +58,33 @@ public class TenantServiceImpl implements TenantService {
             return tenant.get();
         } else {
             throw new BizException(RetCode.DATA_NOT_FOUND, "未找到对应租户，请检查域名是否正确");
+        }
+    }
+
+    @Override
+    public XLTenant getTenantById(Long id) {
+        String entityKey = MessageFormat.format(TenantConst.ENTITY_CACHE_KEY, id);
+        XLTenant cachedEntity = (XLTenant) redis.opsForValue().get(entityKey);
+        if (cachedEntity != null) {
+            String domain = cachedEntity.getDomain();
+            String domainKey = MessageFormat.format(TenantConst.DOMAIN_CACHE_KEY, domain);
+            redis.expire(domainKey, Duration.ofHours(TenantConst.DEFAULT_CACHE_HOURS));
+            redis.expire(entityKey, Duration.ofHours(TenantConst.DEFAULT_CACHE_HOURS));
+            log.info("成功从缓存查询到租户数据: domain={}, tenantId={}", domain, id);
+            return cachedEntity;
+        }
+        // 缓存查不到租户数据，再根据ID查询数据库
+        Optional<XLTenant> tenant = tenantRepository.findById(id);
+        if (tenant.isPresent()) {
+            // 成功从数据库查到租户数据，更新缓存
+            String domain = tenant.get().getDomain();
+            String domainKey = MessageFormat.format(TenantConst.DOMAIN_CACHE_KEY, domain);
+            redis.opsForValue().set(domainKey, id, Duration.ofHours(TenantConst.DEFAULT_CACHE_HOURS));
+            redis.opsForValue().set(entityKey, tenant.get(), Duration.ofHours(TenantConst.DEFAULT_CACHE_HOURS));
+            log.info("成功从数据库查询到租户数据: domain={}, tenantId={}", domain, id);
+            return tenant.get();
+        } else {
+            throw new BizException(RetCode.DATA_NOT_FOUND, "未找到对应租户，请检查租户ID是否正确");
         }
     }
 
