@@ -64,15 +64,11 @@ public class ApiLogAspect {
         }
         log.info("Execution Begin......");
 
-        try {
-            Object result = joinPoint.proceed();
-            if (!isInner) {
-                log.info("Result        : \n{}", getResultPrintText(result));
-            }
-            return result;
-        } catch (Throwable e) {
-            throw e;    // 原样抛出异常给ExceptionHandler进行处理
+        Object result = joinPoint.proceed();
+        if (!isInner) {
+            log.info("Result        : \n{}", getResultPrintText(result));
         }
+        return result;
     }
 
     /**
