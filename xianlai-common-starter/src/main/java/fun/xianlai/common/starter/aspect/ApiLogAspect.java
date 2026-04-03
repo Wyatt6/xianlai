@@ -62,11 +62,10 @@ public class ApiLogAspect {
         if (!isInner) {
             log.info("Params        : {}", LogFormatUtils.paramLoggingFormatter(joinPoint.getArgs()));  // TODO 敏感数据脱敏
         }
-        log.info("Execution Begin ----->");
+        log.info("Execution Begin......");
 
         try {
             Object result = joinPoint.proceed();
-            log.info("-----> Execution Finish");
             if (!isInner) {
                 log.info("Result        : \n{}", getResultPrintText(result));
             }
