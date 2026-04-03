@@ -72,7 +72,6 @@ public class ApiLogAspect {
             }
             return result;
         } catch (Throwable e) {
-            log.info("Exception     : {} {}", e.getMessage(), e.getClass().getName());
             throw e;    // 原样抛出异常给ExceptionHandler进行处理
         }
     }
