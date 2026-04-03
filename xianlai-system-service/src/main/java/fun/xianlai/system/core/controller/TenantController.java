@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author WyattLau
  */
 @RestController
-@RequestMapping("/tenant")
+@RequestMapping("/core/tenant")
 public class TenantController {
     @Autowired
     private TenantService tenantService;

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(
         contextId = "tenant-service-feign",
         name = "xianlai-system-service",
-        path = "/tenant"
+        path = "/core/tenant"
 )
 public interface TenantServiceFeign {
     /**

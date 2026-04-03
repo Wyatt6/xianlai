@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @FeignClient(
         contextId = "config-service-feign",
         name = "xianlai-system-service",
-        path = "/config"
+        path = "/core/config"
 )
 public interface ConfigServiceFeign {
     /**

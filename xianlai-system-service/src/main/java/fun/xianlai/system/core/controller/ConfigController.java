@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author WyattLau
  */
 @RestController
-@RequestMapping("/config")
+@RequestMapping("/core/config")
 public class ConfigController {
     @Autowired
     ConfigService configService;
