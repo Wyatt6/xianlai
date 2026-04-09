@@ -1,5 +1,6 @@
 package fun.xianlai.system.initializer;
 
+import fun.xianlai.system.core.service.ApiService;
 import fun.xianlai.system.core.service.ConfigService;
 import fun.xianlai.system.core.service.MenuService;
 import fun.xianlai.system.core.service.PathService;
@@ -23,6 +24,8 @@ public class CacheInitializer implements CommandLineRunner {
     private RouteService routeService;
     @Autowired
     private MenuService menuService;
+    @Autowired
+    private ApiService apiService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -31,6 +34,7 @@ public class CacheInitializer implements CommandLineRunner {
         pathService.cachePaths();
         routeService.cacheRoutes();
         menuService.cacheMenus();
+        apiService.cacheApis();
         log.info("......缓存初始化完成");
     }
 }

@@ -2,8 +2,10 @@ package fun.xianlai.system.core.controller;
 
 import fun.xianlai.common.annotation.ApiLog;
 import fun.xianlai.common.response.RetResult;
+import fun.xianlai.system.core.entity.XLApi;
 import fun.xianlai.system.core.entity.XLPath;
 import fun.xianlai.system.core.entity.XLTenant;
+import fun.xianlai.system.core.service.ApiService;
 import fun.xianlai.system.core.service.ConfigService;
 import fun.xianlai.system.core.service.MenuService;
 import fun.xianlai.system.core.service.PathService;
@@ -37,6 +39,8 @@ public class InitController {
     private RouteService routeService;
     @Autowired
     private MenuService menuService;
+    @Autowired
+    private ApiService apiService;
 
     @ApiLog("获取初始化数据")
     @GetMapping("/getInitData")
@@ -46,6 +50,7 @@ public class InitController {
         List<XLPath> paths = pathService.getPathsFromCache();
         List<Map<String, Object>> routes = routeService.getRoutesFromCache();
         List<Map<String, Object>> menus = menuService.getMenusFromCache();
+        List<XLApi> apis = apiService.getApisFromCache();
 
         Map<String, Object> model = new HashMap<>();
         model.put("tenant", tenant);
@@ -53,6 +58,7 @@ public class InitController {
         model.put("paths", paths);
         model.put("routes", routes);
         model.put("menus", menus);
+        model.put("apis", apis);
 
         return RetResult.success(model);
     }

@@ -1,5 +1,6 @@
 package fun.xianlai.common.starter.advice;
 
+import fun.xianlai.common.constant.ApiConst;
 import fun.xianlai.common.constant.HeaderConst;
 import fun.xianlai.common.constant.MenuConst;
 import fun.xianlai.common.constant.PathConst;
@@ -62,6 +63,7 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice<Object> {
             response.getHeaders().add(HeaderConst.PATH_UPDATE_TIME, this.getUpdateTimeInSystemConfig(PathConst.UPDATE_TIME_CONFIG_KEY));
             response.getHeaders().add(HeaderConst.ROUTE_UPDATE_TIME, this.getUpdateTimeInSystemConfig(RouteConst.UPDATE_TIME_CONFIG_KEY));
             response.getHeaders().add(HeaderConst.MENU_UPDATE_TIME, this.getUpdateTimeInSystemConfig(MenuConst.UPDATE_TIME_CONFIG_KEY));
+            response.getHeaders().add(HeaderConst.API_UPDATE_TIME, this.getUpdateTimeInSystemConfig(ApiConst.UPDATE_TIME_CONFIG_KEY));
             return result;
         } else {
             return body;
