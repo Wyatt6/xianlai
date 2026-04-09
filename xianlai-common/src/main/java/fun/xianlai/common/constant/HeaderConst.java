@@ -12,6 +12,7 @@ public final class HeaderConst {
     public static final String TRACE_ID = "X-Trace-ID";             // 网关生成的traceId
     public static final String SYSTEM_CONFIG_UPDATE_TIME = "X-System-Config-Update-Time";   // 系统配置更新时间戳（毫秒）
     public static final String TENANT_CONFIG_UPDATE_TIME = "X-Tenant-Config-Update-Time";   // 租户配置更新时间戳（毫秒）
+    public static final String PATH_UPDATE_TIME = "X-Path-Update-Time";                     // 路径数据更新时间戳（毫秒）
 
     private HeaderConst() {}
 }

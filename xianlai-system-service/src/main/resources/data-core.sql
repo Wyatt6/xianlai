@@ -8,6 +8,7 @@ IGNORE INTO tb_core_system_config(
     `id`, `enabled`, `scope`, `front_load`, `config_key`, `config_value`, `value_type`, `name`, `remark`
 ) VALUES
     (1, 1, 'SYSTEM', 0, 'system_config_update_time', current_timestamp(3), 'STRING', '系统配置最后更新时间', null),
+    (2, 1, 'SYSTEM', 0, 'path_update_time', current_timestamp(3), 'STRING', '路径数据最后更新时间', null),
 -- 1XXX 是杂项配置
     (1001, 1, 'SYSTEM', 1, 'captcha.length', '5', 'INTEGER', '验证码长度', '设置系统所有验证码的长度（字符位数），建议4～6位，默认5位'),
     (1002, 1, 'SYSTEM', 0, 'captcha.expire_seconds', '120', 'INTEGER', '验证码有效期', '设置系统所有验证码的有效期，单位：秒，默认120秒'),

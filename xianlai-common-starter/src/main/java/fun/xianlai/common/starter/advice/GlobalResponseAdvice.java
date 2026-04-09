@@ -1,6 +1,7 @@
 package fun.xianlai.common.starter.advice;
 
 import fun.xianlai.common.constant.HeaderConst;
+import fun.xianlai.common.constant.PathConst;
 import fun.xianlai.common.constant.SystemConst;
 import fun.xianlai.common.constant.TenantConst;
 import fun.xianlai.common.context.RequestContext;
@@ -56,6 +57,7 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice<Object> {
             result.setFinishTime(DateUtils.nowMilliTimestamp());
             response.getHeaders().add(HeaderConst.SYSTEM_CONFIG_UPDATE_TIME, this.getSystemConfigUpdateTime());
             response.getHeaders().add(HeaderConst.TENANT_CONFIG_UPDATE_TIME, this.getTenantConfigUpdateTime(RequestContext.getTenantId()));
+            response.getHeaders().add(HeaderConst.PATH_UPDATE_TIME, this.getPathUpdateTime());
             return result;
         } else {
             return body;
@@ -86,6 +88,20 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice<Object> {
             log.info("缓存找不到租户数据");
             XLTenantDTO tenant = tenantServiceFeign.getTenantById(tenantId);
             return tenant == null ? "0" : "" + DateUtils.localDateTimeToMilliTimestamp(tenant.getConfigUpdateTime());
+        }
+    }
+
+    private String getPathUpdateTime() {
+        if (!redis.hasKey(SystemConst.CONFIG_CACHE_KEY)) {
+            log.info("缓存找不到系统配置，先重新缓存");
+            configServiceFeign.cacheSystemConfigs();
+        }
+        Map<String, Object> configMap = BeanUtils.objectToMap(redis.opsForHash().get(SystemConst.CONFIG_CACHE_KEY, PathConst.UPDATE_TIME_CONFIG_KEY));
+        if (configMap.isEmpty()) {
+            return "0";
+        } else {
+            LocalDateTime configUpdateTime = DateUtils.parseMilliDateTime((String) configMap.get("value"));
+            return "" + DateUtils.localDateTimeToMilliTimestamp(configUpdateTime);
         }
     }
 }
