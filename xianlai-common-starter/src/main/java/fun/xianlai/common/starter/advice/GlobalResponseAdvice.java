@@ -81,8 +81,7 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice<Object> {
         String key = MessageFormat.format(TenantConst.ENTITY_CACHE_KEY, tenantId);
         if (redis.hasKey(key)) {
             Map<String, Object> tenantMap = BeanUtils.objectToMap(redis.opsForValue().get(key));
-            LocalDateTime configUpdateTime = DateUtils.parseMilliDateTime((String) tenantMap.get("configUpdateTime"));
-            return "" + DateUtils.localDateTimeToMilliTimestamp(configUpdateTime);
+            return "" + DateUtils.localDateTimeToMilliTimestamp((LocalDateTime) tenantMap.get("configUpdateTime"));
         } else {
             log.info("缓存找不到租户数据");
             XLTenantDTO tenant = tenantServiceFeign.getTenantById(tenantId);
