@@ -37,7 +37,7 @@ import java.util.List;
 public class XLMenu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @TableGenerator(name="menuPkGen", initialValue = 1000000, allocationSize = 1)
+    @TableGenerator(name="pkGenMenu", initialValue = 100000, allocationSize = 1)
     private Long id;
 
     @Column(columnDefinition = "bigint not null default 1000")
