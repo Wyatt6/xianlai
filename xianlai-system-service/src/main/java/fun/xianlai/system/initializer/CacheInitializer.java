@@ -1,6 +1,7 @@
 package fun.xianlai.system.initializer;
 
 import fun.xianlai.system.core.service.ConfigService;
+import fun.xianlai.system.core.service.MenuService;
 import fun.xianlai.system.core.service.PathService;
 import fun.xianlai.system.core.service.RouteService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,8 @@ public class CacheInitializer implements CommandLineRunner {
     private PathService pathService;
     @Autowired
     private RouteService routeService;
+    @Autowired
+    private MenuService menuService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -27,6 +30,7 @@ public class CacheInitializer implements CommandLineRunner {
         configService.cacheSystemConfigs();
         pathService.cachePaths();
         routeService.cacheRoutes();
+        menuService.cacheMenus();
         log.info("......缓存初始化完成");
     }
 }

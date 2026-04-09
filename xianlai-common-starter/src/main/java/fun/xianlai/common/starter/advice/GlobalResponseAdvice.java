@@ -1,6 +1,7 @@
 package fun.xianlai.common.starter.advice;
 
 import fun.xianlai.common.constant.HeaderConst;
+import fun.xianlai.common.constant.MenuConst;
 import fun.xianlai.common.constant.PathConst;
 import fun.xianlai.common.constant.RouteConst;
 import fun.xianlai.common.constant.SystemConst;
@@ -56,22 +57,23 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice<Object> {
             result.setTraceId(RequestContext.getTraceId());
             result.setBeginTime(RequestContext.getBeginTime());
             result.setFinishTime(DateUtils.nowMilliTimestamp());
-            response.getHeaders().add(HeaderConst.SYSTEM_CONFIG_UPDATE_TIME, this.getSystemConfigUpdateTime());
+            response.getHeaders().add(HeaderConst.SYSTEM_CONFIG_UPDATE_TIME, this.getUpdateTimeInSystemConfig(SystemConst.CONFIG_UPDATE_TIME_CONFIG_KEY));
             response.getHeaders().add(HeaderConst.TENANT_CONFIG_UPDATE_TIME, this.getTenantConfigUpdateTime(RequestContext.getTenantId()));
-            response.getHeaders().add(HeaderConst.PATH_UPDATE_TIME, this.getPathUpdateTime());
-            response.getHeaders().add(HeaderConst.ROUTE_UPDATE_TIME, this.getRouteUpdateTime());
+            response.getHeaders().add(HeaderConst.PATH_UPDATE_TIME, this.getUpdateTimeInSystemConfig(PathConst.UPDATE_TIME_CONFIG_KEY));
+            response.getHeaders().add(HeaderConst.ROUTE_UPDATE_TIME, this.getUpdateTimeInSystemConfig(RouteConst.UPDATE_TIME_CONFIG_KEY));
+            response.getHeaders().add(HeaderConst.MENU_UPDATE_TIME, this.getUpdateTimeInSystemConfig(MenuConst.UPDATE_TIME_CONFIG_KEY));
             return result;
         } else {
             return body;
         }
     }
 
-    private String getSystemConfigUpdateTime() {
+    private String getUpdateTimeInSystemConfig(String key) {
         if (!redis.hasKey(SystemConst.CONFIG_CACHE_KEY)) {
             log.info("缓存找不到系统配置，先重新缓存");
             configServiceFeign.cacheSystemConfigs();
         }
-        Map<String, Object> configMap = BeanUtils.objectToMap(redis.opsForHash().get(SystemConst.CONFIG_CACHE_KEY, SystemConst.CONFIG_UPDATE_TIME_CONFIG_KEY));
+        Map<String, Object> configMap = BeanUtils.objectToMap(redis.opsForHash().get(SystemConst.CONFIG_CACHE_KEY, key));
         if (configMap.isEmpty()) {
             return "0";
         } else {
@@ -90,34 +92,6 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice<Object> {
             log.info("缓存找不到租户数据");
             XLTenantDTO tenant = tenantServiceFeign.getTenantById(tenantId);
             return tenant == null ? "0" : "" + DateUtils.localDateTimeToMilliTimestamp(tenant.getConfigUpdateTime());
-        }
-    }
-
-    private String getPathUpdateTime() {
-        if (!redis.hasKey(SystemConst.CONFIG_CACHE_KEY)) {
-            log.info("缓存找不到系统配置，先重新缓存");
-            configServiceFeign.cacheSystemConfigs();
-        }
-        Map<String, Object> configMap = BeanUtils.objectToMap(redis.opsForHash().get(SystemConst.CONFIG_CACHE_KEY, PathConst.UPDATE_TIME_CONFIG_KEY));
-        if (configMap.isEmpty()) {
-            return "0";
-        } else {
-            LocalDateTime configUpdateTime = DateUtils.parseMilliDateTime((String) configMap.get("value"));
-            return "" + DateUtils.localDateTimeToMilliTimestamp(configUpdateTime);
-        }
-    }
-
-    private String getRouteUpdateTime() {
-        if (!redis.hasKey(SystemConst.CONFIG_CACHE_KEY)) {
-            log.info("缓存找不到系统配置，先重新缓存");
-            configServiceFeign.cacheSystemConfigs();
-        }
-        Map<String, Object> configMap = BeanUtils.objectToMap(redis.opsForHash().get(SystemConst.CONFIG_CACHE_KEY, RouteConst.UPDATE_TIME_CONFIG_KEY));
-        if (configMap.isEmpty()) {
-            return "0";
-        } else {
-            LocalDateTime configUpdateTime = DateUtils.parseMilliDateTime((String) configMap.get("value"));
-            return "" + DateUtils.localDateTimeToMilliTimestamp(configUpdateTime);
         }
     }
 }

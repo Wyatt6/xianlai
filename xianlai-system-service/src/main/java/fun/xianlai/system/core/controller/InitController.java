@@ -5,6 +5,7 @@ import fun.xianlai.common.response.RetResult;
 import fun.xianlai.system.core.entity.XLPath;
 import fun.xianlai.system.core.entity.XLTenant;
 import fun.xianlai.system.core.service.ConfigService;
+import fun.xianlai.system.core.service.MenuService;
 import fun.xianlai.system.core.service.PathService;
 import fun.xianlai.system.core.service.RouteService;
 import fun.xianlai.system.core.service.TenantService;
@@ -34,6 +35,8 @@ public class InitController {
     private PathService pathService;
     @Autowired
     private RouteService routeService;
+    @Autowired
+    private MenuService menuService;
 
     @ApiLog("获取初始化数据")
     @GetMapping("/getInitData")
@@ -42,12 +45,14 @@ public class InitController {
         Map<String, Map<String, Object>> configs = configService.getTenantFrontLoadConfigs(tenant.getId());
         List<XLPath> paths = pathService.getPathsFromCache();
         List<Map<String, Object>> routes = routeService.getRoutesFromCache();
+        List<Map<String, Object>> menus = menuService.getMenusFromCache();
 
         Map<String, Object> model = new HashMap<>();
         model.put("tenant", tenant);
         model.put("configs", configs);
         model.put("paths", paths);
         model.put("routes", routes);
+        model.put("menus", menus);
 
         return RetResult.success(model);
     }

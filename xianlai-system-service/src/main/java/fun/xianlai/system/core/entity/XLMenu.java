@@ -1,4 +1,4 @@
-package fun.xianlai.system.service.core.model.entity;
+package fun.xianlai.system.core.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,7 +31,7 @@ import java.util.List;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "tb_common_menu", indexes = {
+@Table(name = "tb_core_menu", indexes = {
         @Index(columnList = "sortId")
 })
 public class XLMenu {

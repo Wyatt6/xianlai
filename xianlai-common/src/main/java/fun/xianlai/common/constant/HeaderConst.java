@@ -14,6 +14,7 @@ public final class HeaderConst {
     public static final String TENANT_CONFIG_UPDATE_TIME = "X-Tenant-Config-Update-Time";   // 租户配置更新时间戳（毫秒）
     public static final String PATH_UPDATE_TIME = "X-Path-Update-Time";                     // 路径数据更新时间戳（毫秒）
     public static final String ROUTE_UPDATE_TIME = "X-Route-Update-Time";                   // 路由数据更新时间戳（毫秒）
+    public static final String MENU_UPDATE_TIME = "X-Menu-Update-Time";                     // 菜单数据更新时间戳（毫秒）
 
     private HeaderConst() {
     }
