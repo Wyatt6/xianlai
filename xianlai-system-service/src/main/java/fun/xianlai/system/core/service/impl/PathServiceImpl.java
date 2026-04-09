@@ -29,4 +29,13 @@ public class PathServiceImpl implements PathService {
         redis.opsForValue().set(PathConst.PATH_CACHE_KEY, paths, Duration.ofHours(PathConst.DEFAULT_CACHE_HOURS));
         log.info("路径缓存完成");
     }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<XLPath> getPathsFromCache() {
+        if (!redis.hasKey(PathConst.PATH_CACHE_KEY)) {
+            this.cachePaths();
+        }
+        return (List<XLPath>) redis.opsForValue().get(PathConst.PATH_CACHE_KEY);
+    }
 }
