@@ -3,6 +3,7 @@ package fun.xianlai.system.core.service;
 import fun.xianlai.system.core.entity.XLRoute;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author WyattLau
@@ -13,6 +14,10 @@ public interface RouteService {
      */
     void cacheRoutes();
 
+    /**
+     * 从缓存获取路由
+     */
+    List<Map<String, Object>> getRoutesFromCache();
     /**
      * 获取路由森林
      */

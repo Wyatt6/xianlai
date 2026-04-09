@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -29,13 +28,20 @@ public class RouteServiceImpl implements RouteService {
     private XLRouteRepository routeRepository;
 
     @Override
-    @Transactional
     public void cacheRoutes() {
         List<XLRoute> routes = this.getForest();
         redis.opsForValue().set(RouteConst.ROUTE_CACHE_KEY, routes, Duration.ofHours(RouteConst.DEFAULT_CACHE_HOURS));
         log.info("路由数据缓存完成");
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Map<String, Object>> getRoutesFromCache() {
+        if (!redis.hasKey(RouteConst.ROUTE_CACHE_KEY)) {
+            this.cacheRoutes();
+        }
+        return (List<Map<String, Object>>) redis.opsForValue().get(RouteConst.ROUTE_CACHE_KEY);
+    }
     @Override
     public List<XLRoute> getForest() {
         List<XLRoute> routes = routeRepository.findAll(Sort.by(Sort.Order.asc("sortId")));
