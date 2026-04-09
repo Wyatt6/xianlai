@@ -1,4 +1,4 @@
-package fun.xianlai.system.service.core.model.entity;
+package fun.xianlai.system.core.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +13,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * 路径
@@ -31,15 +34,18 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "tb_common_path", indexes = {
+@Table(name = "tb_core_path", indexes = {
         @Index(columnList = "name", unique = true),
         @Index(columnList = "path", unique = true),
-        @Index(columnList = "sortId, name") // 第1关键字sortId，第2关键字name
+        @Index(columnList = "sortId, name")
 })
-public class XLPath {
+public class XLPath implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @TableGenerator(name="pathPkGen", initialValue = 1000000, allocationSize = 1)
+    @TableGenerator(name = "pkGenPath", initialValue = 100000, allocationSize = 1)
     private Long id;
 
     @Column(columnDefinition = "bigint not null default 1000")
