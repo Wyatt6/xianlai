@@ -13,5 +13,6 @@ public interface XLTenantConverter {
     XLTenantConverter INSTANCE = Mappers.getMapper(XLTenantConverter.class);    // 单例
 
     XLTenantDTO toDto(XLTenant entity);
+
     XLTenant toEntity(XLTenantDTO dto);
 }
