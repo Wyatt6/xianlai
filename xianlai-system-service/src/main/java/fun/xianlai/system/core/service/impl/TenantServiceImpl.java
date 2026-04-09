@@ -1,6 +1,7 @@
 package fun.xianlai.system.core.service.impl;
 
 import fun.xianlai.common.constant.TenantConst;
+import fun.xianlai.common.context.RequestContext;
 import fun.xianlai.common.exception.BizException;
 import fun.xianlai.common.response.RetCode;
 import fun.xianlai.common.utils.bean.BeanUtils;
@@ -39,6 +40,7 @@ public class TenantServiceImpl implements TenantService {
                 redis.expire(domainKey, Duration.ofHours(TenantConst.DEFAULT_CACHE_HOURS));
                 redis.expire(entityKey, Duration.ofHours(TenantConst.DEFAULT_CACHE_HOURS));
                 log.info("成功从缓存查询到租户数据: domain={}, tenantId={}", domain, cachedId);
+                RequestContext.setTenantId(cachedId);
                 return cachedEntity;
             }
         }
@@ -56,6 +58,7 @@ public class TenantServiceImpl implements TenantService {
             redis.opsForValue().set(domainKey, tenantId, Duration.ofHours(TenantConst.DEFAULT_CACHE_HOURS));
             redis.opsForValue().set(entityKey, tenant.get(), Duration.ofHours(TenantConst.DEFAULT_CACHE_HOURS));
             log.info("成功从数据库查询到租户数据: domain={}, tenantId={}", domain, tenantId);
+            RequestContext.setTenantId(tenantId);
             return tenant.get();
         } else {
             throw new BizException(RetCode.DATA_NOT_FOUND, "未找到对应租户，请检查域名是否正确");
