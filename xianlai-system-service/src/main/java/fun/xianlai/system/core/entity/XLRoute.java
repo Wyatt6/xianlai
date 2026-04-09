@@ -1,4 +1,4 @@
-package fun.xianlai.system.service.core.model.entity;
+package fun.xianlai.system.core.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,14 +29,14 @@ import java.util.List;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "tb_common_route", indexes = {
+@Table(name = "tb_core_route", indexes = {
         @Index(columnList = "name", unique = true),
         @Index(columnList = "sortId")
 })
 public class XLRoute {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @TableGenerator(name="routePkGen", initialValue = 1000000, allocationSize = 1)
+    @TableGenerator(name="pkGenRoute", initialValue = 100000, allocationSize = 1)
     private Long id;
 
     @Column(columnDefinition = "bigint not null default 1000")

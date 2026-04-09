@@ -1,6 +1,6 @@
-package fun.xianlai.system.service.core.repository;
+package fun.xianlai.system.core.repository;
 
-import fun.xianlai.system.service.core.model.entity.XLRoute;
+import fun.xianlai.system.core.entity.XLRoute;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,5 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface XLRouteRepository extends JpaRepository<XLRoute, Long> {
-//    List<XLRoute> findByParentId(Long parentId);
 }
