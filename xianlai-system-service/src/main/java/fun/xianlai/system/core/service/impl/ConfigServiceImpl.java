@@ -99,10 +99,20 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public Map<String, Map<String, Object>> getTenantFrontLoadConfigs(Long tenantId) {
+        String keyAll = MessageFormat.format(TenantConst.CONFIG_ALL_CACHE_KEY, tenantId);
         String keyFrontLoad = MessageFormat.format(TenantConst.CONFIG_FRONT_LOAD_CACHE_KEY, tenantId);
         if (!redis.hasKey(keyFrontLoad)) {
             this.cacheTenantConfigs(tenantId);
+        } else {
+            if (redis.hasKey(SystemConst.CONFIG_CACHE_KEY)) {
+                String SCUTString = (String) BeanUtils.objectToMap(redis.opsForHash().get(SystemConst.CONFIG_CACHE_KEY, SystemConst.CONFIG_UPDATE_TIME_CONFIG_KEY)).get("value");
+                String SCUTStringInTenantCache = (String) BeanUtils.objectToMap(redis.opsForHash().get(keyAll, SystemConst.CONFIG_UPDATE_TIME_CONFIG_KEY)).get("value");
+                if (!SCUTStringInTenantCache.equals(SCUTString)) {
+                    this.cacheTenantConfigs(tenantId);
+                }
+            }
         }
+
         Map<String, Map<String, Object>> configs = new HashMap<>();
         redis.opsForHash().entries(keyFrontLoad).forEach((k, v) -> {
             configs.put(String.valueOf(k), BeanUtils.objectToMap(v));
