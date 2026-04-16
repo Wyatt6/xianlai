@@ -22,14 +22,14 @@ INSERT
 IGNORE INTO tb_core_system_config(
     `id`, `enabled`, `scope`, `front_load`, `config_key`, `config_value`, `value_type`, `name`, `remark`
 ) VALUES
-    (1, 1, 'SYSTEM', 0, 'system_config_update_time', current_timestamp(3), 'STRING', '系统配置最后更新时间', null),
-    (2, 1, 'SYSTEM', 0, 'path_update_time', current_timestamp(3), 'STRING', '路径数据最后更新时间', null),
-    (3, 1, 'SYSTEM', 0, 'route_update_time', current_timestamp(3), 'STRING', '路由数据最后更新时间', null),
+    (1, 1, 'SYSTEM', 0, 'systemConfigUpdateTime', current_timestamp(3), 'STRING', '系统配置最后更新时间', null),
+    (2, 1, 'SYSTEM', 0, 'pathUpdateTime', current_timestamp(3), 'STRING', '路径数据最后更新时间', null),
+    (3, 1, 'SYSTEM', 0, 'routeUpdateTime', current_timestamp(3), 'STRING', '路由数据最后更新时间', null),
 -- 1XXX 是杂项配置
     (1001, 1, 'SYSTEM', 1, 'captcha.length', '5', 'INTEGER', '验证码长度', '设置系统所有验证码的长度（字符位数），建议4～6位，默认5位'),
-    (1002, 1, 'SYSTEM', 0, 'captcha.expire_seconds', '120', 'INTEGER', '验证码有效期', '设置系统所有验证码的有效期，单位：秒，默认120秒'),
+    (1002, 1, 'SYSTEM', 0, 'captcha.expireSeconds', '120', 'INTEGER', '验证码有效期', '设置系统所有验证码的有效期，单位：秒，默认120秒'),
 -- 2XXX 是用户管理、IAM等相关的配置
-    (2001, 1, 'TENANT', 1, 'user.enable_register', 'true', 'BOOLEAN', '允许注册新用户', '是否允许新用户通过门户的“注册”按钮自主注册，true-允许 / false-禁止'),
+    (2001, 1, 'TENANT', 1, 'user.enableRegister', 'true', 'BOOLEAN', '允许注册新用户', '是否允许新用户通过门户的“注册”按钮自主注册，true-允许 / false-禁止'),
     (2002, 1, 'TENANT', 0, 'user.token.timeout', '43200', 'LONG', '用户令牌过期时长', '用户登录成功后系统颁发的令牌有效期，单位：秒，默认：12小时'),
     (2003, 1, 'TENANT', 0, 'user.token.active_timeout', '10800', 'LONG', '用户无操作令牌失效时长', '用户登录成功后超过一段时间未进行任何操作，令牌自动失效，单位：秒，默认：3小时');
 -- 复位非初始化数据的自增主键初值为100000
