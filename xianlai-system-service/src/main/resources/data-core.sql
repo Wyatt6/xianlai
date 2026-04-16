@@ -31,7 +31,13 @@ IGNORE INTO tb_core_system_config(
 -- 2XXX 是用户管理、IAM等相关的配置
     (2001, 1, 'TENANT', 1, 'user.enableRegister', 'true', 'BOOLEAN', '允许注册新用户', '是否允许新用户通过门户的“注册”按钮自主注册，true-允许 / false-禁止'),
     (2002, 1, 'TENANT', 0, 'user.token.timeout', '43200', 'LONG', '用户令牌过期时长', '用户登录成功后系统颁发的令牌有效期，单位：秒，默认：12小时'),
-    (2003, 1, 'TENANT', 0, 'user.token.active_timeout', '10800', 'LONG', '用户无操作令牌失效时长', '用户登录成功后超过一段时间未进行任何操作，令牌自动失效，单位：秒，默认：3小时');
+    (2003, 1, 'TENANT', 0, 'user.token.activeTimeout', '10800', 'LONG', '用户无操作令牌失效时长', '用户登录成功后超过一段时间未进行任何操作，令牌自动失效，单位：秒，默认：3小时'),
+-- 3XXX 是UI相关参数配置
+    (3001, 1, 'SYSTEM', 1, 'system.title', 'XianLai', 'STRING', '系统名称标题', null),
+    (3002, 1, 'SYSTEM', 1, 'system.subTitle', '开源、轻量后台管理系统', 'STRING', '系统名称副标题', null),
+    (3003, 1, 'SYSTEM', 1, 'footer.copyright', '© 2026 xianlai.fun', 'STRING', '页脚版权声明', null),
+    (3004, 1, 'SYSTEM', 1, 'footer.beian.icp', '粤ICP备XXXXXXXXXX号-X', 'STRING', '页脚ICP备案号', null),
+    (3005, 1, 'SYSTEM', 1, 'footer.beian.gongan', '粤公网安备XXXXXXXXXXXXXX号', 'STRING', '页脚公安备案号', null);
 -- 复位非初始化数据的自增主键初值为100000
 ALTER TABLE tb_core_system_config AUTO_INCREMENT = 100000;
 
