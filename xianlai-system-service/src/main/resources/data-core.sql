@@ -32,6 +32,14 @@ IGNORE INTO tb_core_system_config(
     (2001, 1, 'TENANT', 1, 'user.enableRegister', 'true', 'BOOLEAN', '允许注册新用户', '是否允许新用户通过门户的“注册”按钮自主注册，true-允许 / false-禁止'),
     (2002, 1, 'TENANT', 0, 'user.token.timeout', '43200', 'LONG', '用户令牌过期时长', '用户登录成功后系统颁发的令牌有效期，单位：秒，默认：12小时'),
     (2003, 1, 'TENANT', 0, 'user.token.activeTimeout', '10800', 'LONG', '用户无操作令牌失效时长', '用户登录成功后超过一段时间未进行任何操作，令牌自动失效，单位：秒，默认：3小时'),
+    (2004, 1, 'TENANT', 1, 'user.username.regexp', '^[a-zA-Z][a-zA-Z_0-9]{4,19}$', 'STRING', '用户名正则表达式', null),
+    (2005, 1, 'TENANT', 1, 'user.username.tips', '仅限大写、小写字母，数字，下划线(_)，必须以字母开头', 'STRING', '用户名格式提示', '注意需要同用户名正则表达式相匹配'),
+    (2006, 1, 'TENANT', 1, 'user.username.len.min', '5', 'INTEGER', '用户名最小长度', '注意需要同用户名正则表达式相匹配'),
+    (2007, 1, 'TENANT', 1, 'user.username.len.max', '20', 'INTEGER', '用户名最大长度', '注意需要同用户名正则表达式相匹配'),
+    (2008, 1, 'TENANT', 1, 'user.password.regexp', '^[a-zA-Z_0-9.~!@#$%^&*?]{6,30}$', 'STRING', '密码正则表达式', null),
+    (2009, 1, 'TENANT', 1, 'user.password.tips', '仅限大写、小写字母，数字，下划线(_)，特殊字符(.~!@#$%^&*?)', 'STRING', '密码格式提示', '注意需要同密码正则表达式相匹配'),
+    (2010, 1, 'TENANT', 1, 'user.password.len.min', '6', 'INTEGER', '密码最小长度', '注意需要同密码正则表达式相匹配'),
+    (2011, 1, 'TENANT', 1, 'user.password.len.max', '30', 'INTEGER', '密码最大长度', '注意需要同密码正则表达式相匹配'),
 -- 3XXX 是UI相关参数配置
     (3001, 1, 'SYSTEM', 1, 'system.title', 'XianLai', 'STRING', '系统名称标题', null),
     (3002, 1, 'SYSTEM', 1, 'system.subTitle', '开源、轻量后台管理系统', 'STRING', '系统名称副标题', null),
@@ -193,9 +201,6 @@ ALTER TABLE tb_core_api AUTO_INCREMENT = 100000;
 -- (30004, 'toolkit.codebook.getPageConditionally', '条件查询密码本分页', 'POST', '/api/toolkit/codebook/getPageConditionally');
 
 
-
-
-
 -- -- ------------- --
 -- -- Common模块菜单 --
 -- -- ------------- --
@@ -249,14 +254,6 @@ ALTER TABLE tb_core_api AUTO_INCREMENT = 100000;
 -- -- ---------- --
 -- -- 注册开关
 -- -- 用户名、密码格式
--- (31001, 31001, 'user', 'user.username.regexp', '^[a-zA-Z][a-zA-Z_0-9]{4,19}$', '^[a-zA-Z][a-zA-Z_0-9]{4,19}$', '用户名正则表达式', '用于规定用户名的格式。', 1, 1, 'STRING'),
--- (31002, 31002, 'user', 'user.username.tips', '仅限大写、小写字母，数字，下划线(_)，必须以字母开头', null, '用户名格式提示', '用于提示用户名应该输入什么样的内容，注意需要同用户名正则表达式相匹配。', 0, 1, 'STRING'),
--- (31003, 31003, 'user', 'user.username.minLen', '5', '5', '用户名最小长度', '最大取值不超过10，注意需要同用户名正则表达式相匹配。', 0, 1, 'NUMBER'),
--- (31004, 31004, 'user', 'user.username.maxLen', '20', '20', '用户名最大长度', '最大取值不超过100，注意需要同用户名正则表达式相匹配。', 0, 1, 'NUMBER'),
--- (31005, 31005, 'user', 'user.password.regexp', '^[a-zA-Z_0-9.~!@#$%^&*?]{6,30}$', '^[a-zA-Z_0-9.~!@#$%^&*?]{6,30}$', '密码正则表达式', '用于规定密码的格式。', 1, 1, 'STRING'),
--- (31006, 31006, 'user', 'user.password.tips', '仅限大写、小写字母，数字，下划线(_)，特殊字符(.~!@#$%^&*?)', null, '密码格式提示', '用于提示密码应该输入什么样的内容，注意需要同密码正则表达式相匹配。', 0, 1, 'STRING'),
--- (31007, 31007, 'user', 'user.password.minLen', '6', '6', '密码最小长度', '注意需要同密码正则表达式相匹配。', 0, 1, 'NUMBER'),
--- (31008, 31008, 'user', 'user.password.maxLen', '30', '30', '密码最大长度', '注意需要同密码正则表达式相匹配。', 0, 1, 'NUMBER'),
 
 
 -- -- 首页、个人中心

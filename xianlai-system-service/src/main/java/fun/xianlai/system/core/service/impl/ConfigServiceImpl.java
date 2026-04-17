@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * TODO 配置引入全局版本号
+ *
  * @author WyattLau
  */
 @Slf4j
