@@ -15,6 +15,12 @@ public final class RetCode {
     public static final String PARAM_ERROR = "400-001";                     // 请求参数校验失败
     public static final String DATA_NOT_FOUND = "400-002";                  // 数据不存在
     public static final String DATA_ALREADY_EXISTS = "400-003";             // 数据已存在
+    public static final String CAPTCHA_GENERATE_FAIL = "400-004";           // 验证码生成失败
+    public static final String CAPTCHA_EXPIRED = "400-005";                 // 验证码已过期
+    public static final String CAPTCHA_INVALID = "400-006";                 // 验证码不正确
+    public static final String CAPTCHA_FREQUENTLY = "400-007";              // 验证码获取频繁
+    public static final String NOT_SUPPORT = "400-008";                     // 不支持的操作
+    public static final String DATA_FORMAT_ERROR = "400-009";               // 数据格式错误
 
     // 认证失败/未登录（复用HTTP状态码401）
     public static final String UNAUTHORIZED = "401";
@@ -29,5 +35,6 @@ public final class RetCode {
     public static final String THIRD_SERVICE_ERROR = "500-003";             // 第三方服务异常
     public static final String FEIGN_ERROR = "500-004";                     // Feign调用异常
 
-    private RetCode() {}
+    private RetCode() {
+    }
 }

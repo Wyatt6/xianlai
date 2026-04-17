@@ -117,13 +117,13 @@ INSERT
 IGNORE INTO tb_core_api(
     `id`, `call_path`, `description`, `request_method`, `url`
 ) VALUES
-    (100001, 'core.init.getInitData', '获取初始化数据', 'GET', '/api/core/init/getInitData');
+    (10001, 'core.init.getInitData', '获取初始化数据', 'GET', '/api/core/init/getInitData'),
+    (11001, 'core.captcha.getCaptcha', '获取验证码', 'GET', '/api/core/captcha/getCaptcha');
 -- 复位非初始化数据的自增主键初值为100000
 ALTER TABLE tb_core_api AUTO_INCREMENT = 100000;
 
 
 -- -- CaptchaController
--- (11001, 'common.captcha.getCaptcha', '获取验证码', 'GET', '/api/common/captcha/getCaptcha'),
 -- -- PathController
 -- (12001, 'common.path.add', '新增路径', 'POST', '/api/common/path/add'),
 -- (12002, 'common.path.delete', '删除路径', 'GET', '/api/common/path/delete'),
