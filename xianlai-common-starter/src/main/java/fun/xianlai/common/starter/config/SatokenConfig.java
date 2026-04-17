@@ -2,6 +2,7 @@ package fun.xianlai.common.starter.config;
 
 import cn.dev33.satoken.config.SaTokenConfig;
 import cn.dev33.satoken.interceptor.SaInterceptor;
+import fun.xianlai.common.constant.HeaderConst;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -19,7 +20,7 @@ public class SatokenConfig implements WebMvcConfigurer {
     // 此配置会与 application.yml 中的配置合并 （代码配置优先）
     @Autowired
     public void configSaToken(SaTokenConfig config) {
-        config.setTokenName("X-Token");                     // token名称（同时也是cookie名称）
+        config.setTokenName(HeaderConst.TOKEN);             // token名称（同时也是cookie名称）
         config.setTimeout(DEFAULT_TIMEOUT);                 // token有效期（单位：秒），-1代表永不过期
         config.setActiveTimeout(DEFAULT_ACTIVE_TIMEOUT);    // token临时有效期（指定时间内无操作就视为token过期），-1代表永不过期
         config.setIsConcurrent(false);                      // 是否允许同一账号多地同时登录（为true时允许一起登录，为false时新登录挤掉旧登录）
