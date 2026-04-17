@@ -25,4 +25,14 @@ public interface ConfigService {
      * 获取租户加载到前端的配置（含系统配置和租户配置）
      */
     Map<String, Map<String, Object>> getTenantFrontLoadConfigs(Long tenantId);
+
+    /**
+     * 获取配置值（租户配置肯定已包含系统配置）
+     */
+    <T> T getConfig(Long tenantId, String key, Class<T> clazz);
+
+    /**
+     * 获取配置值，空时返回默认值（租户配置肯定已包含系统配置）
+     */
+    <T> T getConfigOrDefault(Long tenantId, String key, Class<T> clazz, T defaultValue);
 }
