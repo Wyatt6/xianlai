@@ -14,6 +14,15 @@ ALTER TABLE tb_core_tenant AUTO_INCREMENT = 100000;
 
 
 /*
+================
+  全局配置版本号
+================
+*/
+INSERT
+IGNORE INTO tb_core_global_config_version(`version`) VALUE (1);
+
+
+/*
 ===========
   系统配置
 ===========
