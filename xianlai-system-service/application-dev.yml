@@ -1,3 +1,7 @@
+xianlai:
+  config:
+    enabled: true
+    config-version-poll-rate: 10000    # （全局）配置版本号轮询间隔：60秒
 nacos:
   server-addr: 172.16.2.205:8848
   namespace: xianlai-dev

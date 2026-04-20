@@ -34,6 +34,7 @@ public final class RetCode {
     public static final String CACHE_ERROR = "500-002";                     // 缓存异常
     public static final String THIRD_SERVICE_ERROR = "500-003";             // 第三方服务异常
     public static final String FEIGN_ERROR = "500-004";                     // Feign调用异常
+    public static final String INIT_ERROR = "500-005";                      // 系统初始化异常
 
     private RetCode() {
     }
