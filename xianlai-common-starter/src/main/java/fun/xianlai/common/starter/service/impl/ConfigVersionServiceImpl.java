@@ -47,7 +47,7 @@ public class ConfigVersionServiceImpl implements ConfigVersionService {
                 version.set(versionFromDb);
             }
         } catch (Exception e) {
-            log.warn("配置版本号同步异常，使用本地内存的版本号，异常信息: {}", e.getMessage());
+            log.warn("配置版本号同步异常，使用本地内存的版本号: {}，异常信息: {}", version.get(), e.getMessage());
         }
     }
 
