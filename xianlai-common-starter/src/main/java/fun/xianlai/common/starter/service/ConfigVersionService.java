@@ -3,7 +3,7 @@ package fun.xianlai.common.starter.service;
 /**
  * @author WyattLau
  */
-public interface GlobalConfigVersionService {
+public interface ConfigVersionService {
     /**
      * 全局配置版本号轮询任务
      */

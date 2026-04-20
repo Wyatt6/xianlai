@@ -1,25 +1,10 @@
 /*
-=======
-  租户
-=======
+===================
+  （全局）配置版本号
+===================
 */
 INSERT
-IGNORE INTO tb_core_tenant(
-       `id`, `code`, `domain`, `status`, `expire_time`, `logo`, `display_name`,
-       `contact_name`, `contact_gender`, `contact_phone`, `contact_email`
-) VALUES
-    (1, 'default', null, 'NORMAL', null, null, '默认租户', null, 'UNKNOWN', null, null);
--- 复位非初始化数据的自增主键初值为100000
-ALTER TABLE tb_core_tenant AUTO_INCREMENT = 100000;
-
-
-/*
-================
-  全局配置版本号
-================
-*/
-INSERT
-IGNORE INTO tb_core_global_config_version(`version`) VALUE (1);
+IGNORE INTO tb_core_config_version(`version`) VALUE (1);
 
 
 /*
@@ -31,7 +16,6 @@ INSERT
 IGNORE INTO tb_core_system_config(
     `id`, `enabled`, `scope`, `front_load`, `config_key`, `config_value`, `value_type`, `name`, `remark`
 ) VALUES
-    (1, 1, 'SYSTEM', 0, 'systemConfigUpdateTime', current_timestamp(3), 'STRING', '系统配置最后更新时间', null),
     (2, 1, 'SYSTEM', 0, 'pathUpdateTime', current_timestamp(3), 'STRING', '路径数据最后更新时间', null),
     (3, 1, 'SYSTEM', 0, 'routeUpdateTime', current_timestamp(3), 'STRING', '路由数据最后更新时间', null),
 -- 1XXX 是杂项配置
@@ -138,6 +122,21 @@ IGNORE INTO tb_core_api(
     (11001, 'core.captcha.getCaptcha', '获取验证码', 'GET', '/api/system/core/captcha/getCaptcha');
 -- 复位非初始化数据的自增主键初值为100000
 ALTER TABLE tb_core_api AUTO_INCREMENT = 100000;
+
+
+/*
+=======
+  租户
+=======
+*/
+INSERT
+IGNORE INTO tb_core_tenant(
+       `id`, `code`, `domain`, `status`, `expire_time`, `logo`, `display_name`,
+       `contact_name`, `contact_gender`, `contact_phone`, `contact_email`
+) VALUES
+    (1, 'default', null, 'NORMAL', null, null, '默认租户', null, 'UNKNOWN', null, null);
+-- 复位非初始化数据的自增主键初值为100000
+ALTER TABLE tb_core_tenant AUTO_INCREMENT = 100000;
 
 
 -- -- CaptchaController

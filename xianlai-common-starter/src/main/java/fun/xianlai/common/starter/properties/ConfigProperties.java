@@ -12,5 +12,5 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("xianlai.config")
 public class ConfigProperties {
     private boolean enabled = false;
-    private long globalConfigVersionPollRate = 60L;
+    private long configVersionPollRate = 60L;
 }

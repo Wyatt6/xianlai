@@ -17,7 +17,9 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 全局配置版本号
+ * 配置版本号
+ * 只有 tb_core_config 中 belongId=0 的配置有修改时才需要更新此版本号
+ *
  * @author WyattLau
  */
 @Data
@@ -26,8 +28,8 @@ import java.time.LocalDateTime;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "tb_core_global_config_version")
-public class XLGlobalConfigVersion implements Serializable {
+@Table(name = "tb_core_config_version")
+public class XLConfigVersion implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
