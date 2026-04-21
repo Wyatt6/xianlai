@@ -6,7 +6,7 @@ import fun.xianlai.system.core.entity.XLApi;
 import fun.xianlai.system.core.entity.XLPath;
 import fun.xianlai.system.core.entity.XLTenant;
 import fun.xianlai.system.core.service.ApiService;
-import fun.xianlai.system.core.service.ConfigService;
+import fun.xianlai.system.core.service.ConfigManageService;
 import fun.xianlai.system.core.service.MenuService;
 import fun.xianlai.system.core.service.PathService;
 import fun.xianlai.system.core.service.RouteService;
@@ -32,7 +32,7 @@ public class InitController {
     @Autowired
     private TenantService tenantService;
     @Autowired
-    private ConfigService configService;
+    private ConfigManageService configManageService;
     @Autowired
     private PathService pathService;
     @Autowired
@@ -46,7 +46,7 @@ public class InitController {
     @GetMapping("/getInitData")
     public RetResult<?> getInitData(@RequestParam String domain) {
         XLTenant tenant = tenantService.getTenantByDomain(domain);
-        Map<String, Map<String, Object>> configs = configService.getTenantFrontLoadConfigs(tenant.getId());
+        Map<String, Map<String, Object>> configs = configManageService.getTenantFrontLoadConfigs(tenant.getId());
         List<XLPath> paths = pathService.getPathsFromCache();
         List<Map<String, Object>> routes = routeService.getRoutesFromCache();
         List<Map<String, Object>> menus = menuService.getMenusFromCache();
