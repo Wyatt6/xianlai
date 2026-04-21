@@ -1,10 +1,26 @@
 /*
 ===================
-  （全局）配置版本号
+  全局配置版本
 ===================
 */
 INSERT
-IGNORE INTO tb_core_config_version(`version`) VALUE (1);
+IGNORE INTO tb_core_config_version(`id`, `global_version`) VALUE (1, 1);
+
+
+/*
+===========
+  全局配置
+===========
+*/
+INSERT
+IGNORE INTO tb_core_config(
+    `id`, `enabled`, `belong_id`, `level`, `front_load`, `config_key`, `config_value`, `value_type`, `name`, `remark`
+) VALUES
+    (2, 1, 0, 'SYSTEM', 0, 'pathUpdateTime', current_timestamp(3), 'STRING', '路径数据最后更新时间', null),
+    (3, 1, 0, 'SYSTEM', 0, 'routeUpdateTime', current_timestamp(3), 'STRING', '路由数据最后更新时间', null),
+-- 1XXX 是杂项配置
+    (1001, 1, 0, 'SYSTEM', 1, 'captcha.length', '5', 'INTEGER', '验证码长度', '设置系统所有验证码的长度（字符位数），建议4～6位，默认5位'),
+    (1002, 1, 0, 'SYSTEM', 0, 'captcha.expireSeconds', '120', 'INTEGER', '验证码有效期', '设置系统所有验证码的有效期，单位：秒，默认120秒');
 
 
 /*

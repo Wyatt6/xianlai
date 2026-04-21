@@ -2,9 +2,7 @@ package fun.xianlai.common.starter.config;
 
 import fun.xianlai.common.starter.properties.ConfigProperties;
 import fun.xianlai.common.starter.service.ConfigService;
-import fun.xianlai.common.starter.service.ConfigVersionService;
 import fun.xianlai.common.starter.service.impl.ConfigServiceImpl;
-import fun.xianlai.common.starter.service.impl.ConfigVersionServiceImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,14 +20,6 @@ import java.time.Duration;
 @ConditionalOnProperty(prefix = "xianlai.config", name = "enabled", havingValue = "true")
 public class ConfigConfig {
     /**
-     * （全局）配置版本号服务
-     */
-    @Bean
-    public ConfigVersionService configVersionService() {
-        return new ConfigVersionServiceImpl();
-    }
-
-    /**
      * 配置服务
      */
     @Bean
@@ -38,16 +28,16 @@ public class ConfigConfig {
     }
 
     /**
-     * 注册全局配置版本号定时轮询任务
+     * 注册全局配置定时轮询任务
      */
     @Bean
-    public ScheduledTaskRegistrar pollVersionTaskRegistrar(
+    public ScheduledTaskRegistrar globalConfigPollingTaskRegistrar(
             ThreadPoolTaskScheduler scheduler,
-            ConfigVersionService versionService,
+            ConfigService configService,
             ConfigProperties properties) {
         ScheduledTaskRegistrar registrar = new ScheduledTaskRegistrar();
         registrar.setTaskScheduler(scheduler);
-        registrar.addFixedRateTask(versionService::pollVersionTask, Duration.ofMillis(properties.getConfigVersionPollRate()));
+        registrar.addFixedRateTask(configService::globalConfigPollingTask, Duration.ofMillis(properties.getGlobalConfigPollRate()));
         return registrar;
     }
 }

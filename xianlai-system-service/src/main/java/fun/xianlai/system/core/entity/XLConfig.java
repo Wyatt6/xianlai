@@ -24,15 +24,21 @@ import java.time.LocalDateTime;
 /**
  * 配置（包含系统配置和租户配置，不含用户配置）
  * <p>
- * belongId属性说明：
- * belongId = 0 表示系统配置
- * belongId = tenantId 表示租户配置
- * 此表中不存储用户配置
+ * 概念范围：
+ * - 全局配置：一套完整的配置集合，包含了系统配置、未实例化的租户配置和用户配置（已实例化的不应包含进全局配置的概念）
+ * - 系统配置：全局配置的子集
+ * - 租户配置：全局配置的子集，或者某个租户对该子集的实例化
+ * - 用户配置：全局配置的子集，或者某个用户对该子集的实例化
  * <p>
- * level属性说明：
- * level=SYSTEM 表示只允许系统级别使用，租户和用户不能复制、覆盖这些配置项
- * level=TENANT 表示允许系统、租户级别使用，租户可以复制、覆盖这些配置项，用户不行
- * level=USER 表示允许系统、租户、用户级别使用，用户可以复制、覆盖这些配置项
+ * belongId 属性说明：
+ * belongId = 0         表示全局配置
+ * belongId = tenantId  表示某个租户的实例化配置
+ * 此表中不保存用户配置
+ * <p>
+ * level 属性说明：
+ * level=SYSTEM     表示系统级别配置，租户和用户不能实例化这些配置项
+ * level=TENANT     表示租户级别配置，租户可以实例化这些配置项，但是用户不行
+ * level=USER       表示用户级别配置，租户、用户可以实例化这些配置项
  *
  * @author WyattLau
  */
@@ -44,7 +50,7 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 @Table(name = "tb_core_config", indexes = {
         @Index(columnList = "belongId, configKey", unique = true),
-        @Index(columnList = "belongId, enabled", unique = true)
+        @Index(columnList = "belongId, enabled")
 })
 public class XLConfig implements Serializable {
     @Serial

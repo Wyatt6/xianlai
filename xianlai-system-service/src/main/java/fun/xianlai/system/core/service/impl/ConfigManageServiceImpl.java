@@ -1,6 +1,6 @@
 package fun.xianlai.system.core.service.impl;
 
-import fun.xianlai.common.constant.SystemConst;
+import fun.xianlai.common.constant.ConfigConst;
 import fun.xianlai.common.constant.TenantConst;
 import fun.xianlai.common.exception.BizException;
 import fun.xianlai.common.response.RetCode;
@@ -9,7 +9,7 @@ import fun.xianlai.system.core.entity.XLSystemConfig;
 import fun.xianlai.system.core.entity.XLTenantConfig;
 import fun.xianlai.system.core.repository.XLSystemConfigRepository;
 import fun.xianlai.system.core.repository.XLTenantConfigRepository;
-import fun.xianlai.system.core.service.ConfigService;
+import fun.xianlai.system.core.service.ConfigManageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -22,13 +22,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO 配置引入全局版本号
- *
  * @author WyattLau
  */
 @Slf4j
 @Service
-public class ConfigServiceImpl implements ConfigService {
+public class ConfigManageServiceImpl implements ConfigManageService {
     @Autowired
     private RedisTemplate<String, Object> redis;
     @Autowired
@@ -49,18 +47,18 @@ public class ConfigServiceImpl implements ConfigService {
             allConfigs.put(item.getConfigKey(), itemMap);
         }
 
-        redis.opsForHash().putAll(SystemConst.CONFIG_CACHE_KEY, allConfigs);
-        redis.expire(SystemConst.CONFIG_CACHE_KEY, Duration.ofHours(SystemConst.DEFAULT_CACHE_HOURS));
+        redis.opsForHash().putAll(ConfigConst.CONFIG_CACHE_KEY, allConfigs);
+        redis.expire(ConfigConst.CONFIG_CACHE_KEY, Duration.ofHours(ConfigConst.DEFAULT_CACHE_HOURS));
         log.info("系统配置缓存完成");
     }
 
     @Override
     public Map<String, Map<String, Object>> getSystemConfigs() {
-        if (!redis.hasKey(SystemConst.CONFIG_CACHE_KEY)) {
+        if (!redis.hasKey(ConfigConst.CONFIG_CACHE_KEY)) {
             this.cacheSystemConfigs();
         }
         Map<String, Map<String, Object>> configs = new HashMap<>();
-        redis.opsForHash().entries(SystemConst.CONFIG_CACHE_KEY).forEach((k, v) -> {
+        redis.opsForHash().entries(ConfigConst.CONFIG_CACHE_KEY).forEach((k, v) -> {
             configs.put(String.valueOf(k), BeanUtils.objectToMap(v));
         });
         return configs;
@@ -108,9 +106,9 @@ public class ConfigServiceImpl implements ConfigService {
         if (!redis.hasKey(keyFrontLoad)) {
             this.cacheTenantConfigs(tenantId);
         } else {
-            if (redis.hasKey(SystemConst.CONFIG_CACHE_KEY)) {
-                String SCUTString = (String) BeanUtils.objectToMap(redis.opsForHash().get(SystemConst.CONFIG_CACHE_KEY, SystemConst.CONFIG_UPDATE_TIME_CONFIG_KEY)).get("value");
-                String SCUTStringInTenantCache = (String) BeanUtils.objectToMap(redis.opsForHash().get(keyAll, SystemConst.CONFIG_UPDATE_TIME_CONFIG_KEY)).get("value");
+            if (redis.hasKey(ConfigConst.CONFIG_CACHE_KEY)) {
+                String SCUTString = (String) BeanUtils.objectToMap(redis.opsForHash().get(ConfigConst.CONFIG_CACHE_KEY, ConfigConst.CONFIG_UPDATE_TIME_CONFIG_KEY)).get("value");
+                String SCUTStringInTenantCache = (String) BeanUtils.objectToMap(redis.opsForHash().get(keyAll, ConfigConst.CONFIG_UPDATE_TIME_CONFIG_KEY)).get("value");
                 if (!SCUTStringInTenantCache.equals(SCUTString)) {
                     this.cacheTenantConfigs(tenantId);
                 }
@@ -130,9 +128,9 @@ public class ConfigServiceImpl implements ConfigService {
         if (!redis.hasKey(keyAll)) {
             this.cacheTenantConfigs(tenantId);
         } else {
-            if (redis.hasKey(SystemConst.CONFIG_CACHE_KEY)) {
-                String SCUTString = (String) BeanUtils.objectToMap(redis.opsForHash().get(SystemConst.CONFIG_CACHE_KEY, SystemConst.CONFIG_UPDATE_TIME_CONFIG_KEY)).get("value");
-                String SCUTStringInTenantCache = (String) BeanUtils.objectToMap(redis.opsForHash().get(keyAll, SystemConst.CONFIG_UPDATE_TIME_CONFIG_KEY)).get("value");
+            if (redis.hasKey(ConfigConst.CONFIG_CACHE_KEY)) {
+                String SCUTString = (String) BeanUtils.objectToMap(redis.opsForHash().get(ConfigConst.CONFIG_CACHE_KEY, ConfigConst.CONFIG_UPDATE_TIME_CONFIG_KEY)).get("value");
+                String SCUTStringInTenantCache = (String) BeanUtils.objectToMap(redis.opsForHash().get(keyAll, ConfigConst.CONFIG_UPDATE_TIME_CONFIG_KEY)).get("value");
                 if (!SCUTStringInTenantCache.equals(SCUTString)) {
                     this.cacheTenantConfigs(tenantId);
                 }

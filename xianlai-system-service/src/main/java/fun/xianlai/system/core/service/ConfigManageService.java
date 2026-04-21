@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * @author WyattLau
  */
-public interface ConfigService {
+public interface ConfigManageService {
     /**
      * 缓存系统配置
      */
