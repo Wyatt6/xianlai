@@ -41,6 +41,11 @@ public class ConfigServiceImpl implements ConfigService {
     @Autowired
     private JdbcTemplate jdbc;
 
+    @Override
+    public Long getLocalGlobalVersion() {
+        return globalVersion.get();
+    }
+
     // ----- 以下用于租户配置的更新 -----
 
     /**
@@ -64,10 +69,8 @@ public class ConfigServiceImpl implements ConfigService {
         return version;
     }
 
-    /**
-     * 从缓存查询租户配置版本
-     */
-    private Long getTenantConfigVersionFromCache(Long tenantId) {
+    @Override
+    public Long getTenantConfigVersionFromCache(Long tenantId) {
         String key = getTenantConfigVersionCacheKey(tenantId);
         if (!redis.hasKey(key)) {
             refreshTenantConfigCache(tenantId);

@@ -15,4 +15,14 @@ public interface ConfigService {
      * 从缓存获取租户配置
      */
     Map<String, Map<String, Object>> getTenantConfigsFromCache(Long tenantId);
+
+    /**
+     * 获取本地全局配置版本
+     */
+    Long getLocalGlobalVersion();
+
+    /**
+     * 从缓存查询租户配置版本
+     */
+    Long getTenantConfigVersionFromCache(Long tenantId);
 }

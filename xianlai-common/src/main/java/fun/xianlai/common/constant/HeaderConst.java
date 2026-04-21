@@ -10,8 +10,8 @@ public final class HeaderConst {
     public static final String FROM_SERVICE = "X-From-Service";     // 后端服务之间流转标记的上游服务
     public static final String TENANT_ID = "X-Tenant-ID";           // 网关从token解析出来的tenantId
     public static final String TRACE_ID = "X-Trace-ID";             // 网关生成的traceId
-    public static final String SYSTEM_CONFIG_UPDATE_TIME = "X-System-Config-Update-Time";   // 系统配置更新时间戳（毫秒）
-    public static final String TENANT_CONFIG_UPDATE_TIME = "X-Tenant-Config-Update-Time";   // 租户配置更新时间戳（毫秒）
+    public static final String GLOBAL_CONFIG_VERSION = "X-Global-Config-Version";   // 全局配置更新版本
+    public static final String TENANT_CONFIG_VERSION = "X-Tenant-Config-Version";   // 租户配置更新版本
     public static final String PATH_UPDATE_TIME = "X-Path-Update-Time";                     // 路径数据更新时间戳（毫秒）
     public static final String ROUTE_UPDATE_TIME = "X-Route-Update-Time";                   // 路由数据更新时间戳（毫秒）
     public static final String MENU_UPDATE_TIME = "X-Menu-Update-Time";                     // 菜单数据更新时间戳（毫秒）

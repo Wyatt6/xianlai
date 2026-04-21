@@ -5,14 +5,13 @@ import fun.xianlai.common.constant.HeaderConst;
 import fun.xianlai.common.constant.MenuConst;
 import fun.xianlai.common.constant.PathConst;
 import fun.xianlai.common.constant.RouteConst;
-import fun.xianlai.common.constant.SystemConst;
 import fun.xianlai.common.constant.TenantConst;
 import fun.xianlai.common.context.RequestContext;
 import fun.xianlai.common.response.RetResult;
+import fun.xianlai.common.starter.service.ConfigService;
 import fun.xianlai.common.utils.bean.BeanUtils;
 import fun.xianlai.common.utils.time.DateUtils;
 import fun.xianlai.system.dto.XLTenantDTO;
-import fun.xianlai.system.feign.ConfigServiceFeign;
 import fun.xianlai.system.feign.TenantServiceFeign;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +37,7 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice<Object> {
     @Autowired
     private RedisTemplate<String, Object> redis;
     @Autowired
-    private ConfigServiceFeign configServiceFeign;
-    @Autowired
-    private TenantServiceFeign tenantServiceFeign;
+    private ConfigService configService;
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
@@ -58,8 +55,8 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice<Object> {
             result.setTraceId(RequestContext.getTraceId());
             result.setBeginTime(RequestContext.getBeginTime());
             result.setFinishTime(DateUtils.nowMilliTimestamp());
-            response.getHeaders().add(HeaderConst.SYSTEM_CONFIG_UPDATE_TIME, this.getUpdateTimeInSystemConfig(SystemConst.CONFIG_UPDATE_TIME_CONFIG_KEY));
-            response.getHeaders().add(HeaderConst.TENANT_CONFIG_UPDATE_TIME, this.getTenantConfigUpdateTime(RequestContext.getTenantId()));
+            response.getHeaders().add(HeaderConst.GLOBAL_CONFIG_VERSION, "" + configService.getLocalGlobalVersion());
+            response.getHeaders().add(HeaderConst.TENANT_CONFIG_VERSION, "" + configService.getTenantConfigVersionFromCache(RequestContext.getTenantId()));
             response.getHeaders().add(HeaderConst.PATH_UPDATE_TIME, this.getUpdateTimeInSystemConfig(PathConst.UPDATE_TIME_CONFIG_KEY));
             response.getHeaders().add(HeaderConst.ROUTE_UPDATE_TIME, this.getUpdateTimeInSystemConfig(RouteConst.UPDATE_TIME_CONFIG_KEY));
             response.getHeaders().add(HeaderConst.MENU_UPDATE_TIME, this.getUpdateTimeInSystemConfig(MenuConst.UPDATE_TIME_CONFIG_KEY));
@@ -71,29 +68,16 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice<Object> {
     }
 
     private String getUpdateTimeInSystemConfig(String key) {
-        if (!redis.hasKey(SystemConst.CONFIG_CACHE_KEY)) {
-            log.info("缓存找不到系统配置，先重新缓存");
-            configServiceFeign.cacheSystemConfigs();
-        }
-        Map<String, Object> configMap = BeanUtils.objectToMap(redis.opsForHash().get(SystemConst.CONFIG_CACHE_KEY, key));
-        if (configMap.isEmpty()) {
-            return "0";
-        } else {
-            LocalDateTime configUpdateTime = DateUtils.parseMilliDateTime((String) configMap.get("value"));
-            return "" + DateUtils.localDateTimeToMilliTimestamp(configUpdateTime);
-        }
-    }
-
-    private String getTenantConfigUpdateTime(Long tenantId) {
-        if (tenantId == null) return "0";
-        String key = MessageFormat.format(TenantConst.ENTITY_CACHE_KEY, tenantId);
-        if (redis.hasKey(key)) {
-            Map<String, Object> tenantMap = BeanUtils.objectToMap(redis.opsForValue().get(key));
-            return "" + DateUtils.localDateTimeToMilliTimestamp((LocalDateTime) tenantMap.get("configUpdateTime"));
-        } else {
-            log.info("缓存找不到租户数据");
-            XLTenantDTO tenant = tenantServiceFeign.getTenantById(tenantId);
-            return tenant == null ? "0" : "" + DateUtils.localDateTimeToMilliTimestamp(tenant.getConfigUpdateTime());
-        }
+//        if (!redis.hasKey(ConfigConst.CONFIG_CACHE_KEY)) {
+//            log.info("缓存找不到系统配置，先重新缓存");
+////            configServiceFeign.cacheSystemConfigs();
+//        }
+//        Map<String, Object> configMap = BeanUtils.objectToMap(redis.opsForHash().get(ConfigConst.CONFIG_CACHE_KEY, key));
+//        if (configMap.isEmpty()) {
+        return "0";
+//        } else {
+//            LocalDateTime configUpdateTime = DateUtils.parseMilliDateTime((String) configMap.get("value"));
+//            return "" + DateUtils.localDateTimeToMilliTimestamp(configUpdateTime);
+//        }
     }
 }
