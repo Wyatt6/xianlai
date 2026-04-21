@@ -223,7 +223,7 @@ public class ConfigServiceImpl implements ConfigService {
      * 从数据库查询全局配置版本
      */
     private Long getGlobalVersionFromDb() {
-        return jdbc.queryForObject("select global_version from tb_core_config_version where id = 1", Long.class);
+        return jdbc.queryForObject("select config_value from tb_core_config where id = 1", Long.class);
     }
 
     /**

@@ -1,13 +1,4 @@
 /*
-===================
-  全局配置版本
-===================
-*/
-INSERT
-IGNORE INTO tb_core_config_version(`id`, `global_version`) VALUE (1, 1);
-
-
-/*
 ===========
   全局配置
 ===========
@@ -16,47 +7,40 @@ INSERT
 IGNORE INTO tb_core_config(
     `id`, `enabled`, `belong_id`, `level`, `front_load`, `config_key`, `config_value`, `value_type`, `name`, `remark`
 ) VALUES
-    (2, 1, 0, 'SYSTEM', 0, 'pathUpdateTime', current_timestamp(3), 'STRING', '路径数据最后更新时间', null),
-    (3, 1, 0, 'SYSTEM', 0, 'routeUpdateTime', current_timestamp(3), 'STRING', '路由数据最后更新时间', null),
+    (1, 1, 0, 'SYSTEM', 0, 'version.globalConfig', '1', 'LONG', '全局配置版本', null),
+    (2, 1, 0, 'SYSTEM', 0, 'version.path', '1', 'LONG', '路径数据版本', null),
+    (3, 1, 0, 'SYSTEM', 0, 'version.route', '1', 'LONG', '路由数据版本', null),
+    (4, 1, 0, 'SYSTEM', 0, 'version.menu', '1', 'LONG', '菜单数据版本', null),
+    (5, 1, 0, 'SYSTEM', 0, 'version.api', '1', 'LONG', '接口数据版本', null),
 -- 1XXX 是杂项配置
     (1001, 1, 0, 'SYSTEM', 1, 'captcha.length', '5', 'INTEGER', '验证码长度', '设置系统所有验证码的长度（字符位数），建议4～6位，默认5位'),
     (1002, 1, 0, 'SYSTEM', 0, 'captcha.expireSeconds', '120', 'INTEGER', '验证码有效期', '设置系统所有验证码的有效期，单位：秒，默认120秒');
-
-
-/*
-===========
-  系统配置
-===========
-*/
-INSERT
-IGNORE INTO tb_core_system_config(
-    `id`, `enabled`, `scope`, `front_load`, `config_key`, `config_value`, `value_type`, `name`, `remark`
-) VALUES
-    (2, 1, 'SYSTEM', 0, 'pathUpdateTime', current_timestamp(3), 'STRING', '路径数据最后更新时间', null),
-    (3, 1, 'SYSTEM', 0, 'routeUpdateTime', current_timestamp(3), 'STRING', '路由数据最后更新时间', null),
--- 1XXX 是杂项配置
-    (1001, 1, 'SYSTEM', 1, 'captcha.length', '5', 'INTEGER', '验证码长度', '设置系统所有验证码的长度（字符位数），建议4～6位，默认5位'),
-    (1002, 1, 'SYSTEM', 0, 'captcha.expireSeconds', '120', 'INTEGER', '验证码有效期', '设置系统所有验证码的有效期，单位：秒，默认120秒'),
--- 2XXX 是用户管理、IAM等相关的配置
-    (2001, 1, 'TENANT', 1, 'user.enableRegister', 'true', 'BOOLEAN', '允许注册新用户', '是否允许新用户通过门户的“注册”按钮自主注册，true-允许 / false-禁止'),
-    (2002, 1, 'TENANT', 0, 'user.token.timeout', '43200', 'LONG', '用户令牌过期时长', '用户登录成功后系统颁发的令牌有效期，单位：秒，默认：12小时'),
-    (2003, 1, 'TENANT', 0, 'user.token.activeTimeout', '10800', 'LONG', '用户无操作令牌失效时长', '用户登录成功后超过一段时间未进行任何操作，令牌自动失效，单位：秒，默认：3小时'),
-    (2004, 1, 'TENANT', 1, 'user.username.regexp', '^[a-zA-Z][a-zA-Z_0-9]{4,19}$', 'STRING', '用户名正则表达式', null),
-    (2005, 1, 'TENANT', 1, 'user.username.tips', '仅限大写、小写字母，数字，下划线(_)，必须以字母开头', 'STRING', '用户名格式提示', '注意需要同用户名正则表达式相匹配'),
-    (2006, 1, 'TENANT', 1, 'user.username.len.min', '5', 'INTEGER', '用户名最小长度', '注意需要同用户名正则表达式相匹配'),
-    (2007, 1, 'TENANT', 1, 'user.username.len.max', '20', 'INTEGER', '用户名最大长度', '注意需要同用户名正则表达式相匹配'),
-    (2008, 1, 'TENANT', 1, 'user.password.regexp', '^[a-zA-Z_0-9.~!@#$%^&*?]{6,30}$', 'STRING', '密码正则表达式', null),
-    (2009, 1, 'TENANT', 1, 'user.password.tips', '仅限大写、小写字母，数字，下划线(_)，特殊字符(.~!@#$%^&*?)', 'STRING', '密码格式提示', '注意需要同密码正则表达式相匹配'),
-    (2010, 1, 'TENANT', 1, 'user.password.len.min', '6', 'INTEGER', '密码最小长度', '注意需要同密码正则表达式相匹配'),
-    (2011, 1, 'TENANT', 1, 'user.password.len.max', '30', 'INTEGER', '密码最大长度', '注意需要同密码正则表达式相匹配'),
--- 3XXX 是UI相关参数配置
-    (3001, 1, 'SYSTEM', 1, 'system.title', 'XianLai', 'STRING', '系统名称标题', null),
-    (3002, 1, 'SYSTEM', 1, 'system.subTitle', '开源、轻量后台管理系统', 'STRING', '系统名称副标题', null),
-    (3003, 1, 'SYSTEM', 1, 'footer.copyright', '© 2026 xianlai.fun', 'STRING', '页脚版权声明', null),
-    (3004, 1, 'SYSTEM', 1, 'footer.beian.icp', '粤ICP备XXXXXXXXXX号-X', 'STRING', '页脚ICP备案号', null),
-    (3005, 1, 'SYSTEM', 1, 'footer.beian.gongan', '粤公网安备XXXXXXXXXXXXXX号', 'STRING', '页脚公安备案号', null);
 -- 复位非初始化数据的自增主键初值为100000
-ALTER TABLE tb_core_system_config AUTO_INCREMENT = 100000;
+ALTER TABLE tb_core_config AUTO_INCREMENT = 100000;
+
+
+-- INSERT
+-- IGNORE INTO tb_core_system_config(
+--     `id`, `enabled`, `scope`, `front_load`, `config_key`, `config_value`, `value_type`, `name`, `remark`
+-- ) VALUES
+-- -- 2XXX 是用户管理、IAM等相关的配置
+--     (2001, 1, 'TENANT', 1, 'user.enableRegister', 'true', 'BOOLEAN', '允许注册新用户', '是否允许新用户通过门户的“注册”按钮自主注册，true-允许 / false-禁止'),
+--     (2002, 1, 'TENANT', 0, 'user.token.timeout', '43200', 'LONG', '用户令牌过期时长', '用户登录成功后系统颁发的令牌有效期，单位：秒，默认：12小时'),
+--     (2003, 1, 'TENANT', 0, 'user.token.activeTimeout', '10800', 'LONG', '用户无操作令牌失效时长', '用户登录成功后超过一段时间未进行任何操作，令牌自动失效，单位：秒，默认：3小时'),
+--     (2004, 1, 'TENANT', 1, 'user.username.regexp', '^[a-zA-Z][a-zA-Z_0-9]{4,19}$', 'STRING', '用户名正则表达式', null),
+--     (2005, 1, 'TENANT', 1, 'user.username.tips', '仅限大写、小写字母，数字，下划线(_)，必须以字母开头', 'STRING', '用户名格式提示', '注意需要同用户名正则表达式相匹配'),
+--     (2006, 1, 'TENANT', 1, 'user.username.len.min', '5', 'INTEGER', '用户名最小长度', '注意需要同用户名正则表达式相匹配'),
+--     (2007, 1, 'TENANT', 1, 'user.username.len.max', '20', 'INTEGER', '用户名最大长度', '注意需要同用户名正则表达式相匹配'),
+--     (2008, 1, 'TENANT', 1, 'user.password.regexp', '^[a-zA-Z_0-9.~!@#$%^&*?]{6,30}$', 'STRING', '密码正则表达式', null),
+--     (2009, 1, 'TENANT', 1, 'user.password.tips', '仅限大写、小写字母，数字，下划线(_)，特殊字符(.~!@#$%^&*?)', 'STRING', '密码格式提示', '注意需要同密码正则表达式相匹配'),
+--     (2010, 1, 'TENANT', 1, 'user.password.len.min', '6', 'INTEGER', '密码最小长度', '注意需要同密码正则表达式相匹配'),
+--     (2011, 1, 'TENANT', 1, 'user.password.len.max', '30', 'INTEGER', '密码最大长度', '注意需要同密码正则表达式相匹配'),
+-- -- 3XXX 是UI相关参数配置
+--     (3001, 1, 'SYSTEM', 1, 'system.title', 'XianLai', 'STRING', '系统名称标题', null),
+--     (3002, 1, 'SYSTEM', 1, 'system.subTitle', '开源、轻量后台管理系统', 'STRING', '系统名称副标题', null),
+--     (3003, 1, 'SYSTEM', 1, 'footer.copyright', '© 2026 xianlai.fun', 'STRING', '页脚版权声明', null),
+--     (3004, 1, 'SYSTEM', 1, 'footer.beian.icp', '粤ICP备XXXXXXXXXX号-X', 'STRING', '页脚ICP备案号', null),
+--     (3005, 1, 'SYSTEM', 1, 'footer.beian.gongan', '粤公网安备XXXXXXXXXXXXXX号', 'STRING', '页脚公安备案号', null);
 
 
 /*
