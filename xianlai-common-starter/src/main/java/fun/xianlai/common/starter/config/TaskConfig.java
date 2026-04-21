@@ -8,7 +8,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
  * @author WyattLau
  */
 @Configuration
-public class SystemTaskConfig {
+public class TaskConfig {
     /**
      * 创建全局定时任务调度器
      * 这里用的是Spring Task，专用于轮询、心跳、清理等系统底层任务，业务的定时任务用另外的Quartz
