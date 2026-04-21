@@ -18,7 +18,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
- * 系统接口
+ * 接口
  *
  * @author WyattLau
  */

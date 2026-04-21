@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 系统菜单
+ * 菜单
  * <p>
  * 用于控制菜单栏中显示的菜单
  *
