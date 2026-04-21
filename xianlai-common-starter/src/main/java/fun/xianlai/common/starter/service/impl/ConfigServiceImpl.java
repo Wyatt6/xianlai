@@ -1,6 +1,7 @@
 package fun.xianlai.common.starter.service.impl;
 
 import fun.xianlai.common.constant.ConfigConst;
+import fun.xianlai.common.constant.TenantConst;
 import fun.xianlai.common.exception.SysException;
 import fun.xianlai.common.response.RetCode;
 import fun.xianlai.common.starter.pojo.XLConfigPojo;
@@ -39,6 +40,100 @@ public class ConfigServiceImpl implements ConfigService {
     private RedisTemplate<String, Object> redis;
     @Autowired
     private JdbcTemplate jdbc;
+
+    // ----- 以下用于租户配置的更新 -----
+
+    /**
+     * 缓存租户配置
+     *
+     * @return 租户配置版本
+     */
+    private Long refreshTenantConfigCache(Long tenantId) {
+        Long version = getTenantConfigVersionFromDb(tenantId);
+
+        // 先用全局配置作为默认值兜底，再用租户配置覆盖
+        Map<String, Map<String, Object>> configs = new HashMap<>(globalConfigs);
+        configs.putAll(getTenantConfigsFromDb(tenantId));
+
+        String versionKey = getTenantConfigVersionCacheKey(tenantId);
+        redis.opsForValue().set(versionKey, version, Duration.ofHours(TenantConst.DEFAULT_CACHE_HOURS));
+        String configKey = getTenantConfigCacheKey(tenantId, version);
+        redis.opsForHash().putAll(configKey, configs);
+        redis.expire(configKey, Duration.ofHours(TenantConst.DEFAULT_CACHE_HOURS));
+        log.info("缓存租户配置更新完成，租户ID: {}", tenantId);
+        return version;
+    }
+
+    /**
+     * 从缓存查询租户配置版本
+     */
+    private Long getTenantConfigVersionFromCache(Long tenantId) {
+        String key = getTenantConfigVersionCacheKey(tenantId);
+        if (!redis.hasKey(key)) {
+            refreshTenantConfigCache(tenantId);
+        }
+        return BeanUtils.parseLong(redis.opsForValue().get(key));
+    }
+
+    /**
+     * 从缓存查询租户配置
+     */
+    @Override
+    public Map<String, Map<String, Object>> getTenantConfigsFromCache(Long tenantId) {
+        Long version = getTenantConfigVersionFromCache(tenantId);
+        String key = getTenantConfigCacheKey(tenantId, version);
+        if (!redis.hasKey(key)) {
+            version = refreshTenantConfigCache(tenantId);
+        }
+        key = getTenantConfigCacheKey(tenantId, version);
+        Map<String, Map<String, Object>> configs = new HashMap<>();
+        redis.opsForHash().entries(key).forEach((k, v) -> {
+            configs.put(String.valueOf(k), BeanUtils.objectToMap(v));
+        });
+        return configs;
+    }
+
+    /**
+     * 从数据库获取租户配置版本
+     */
+    private Long getTenantConfigVersionFromDb(Long tenantId) {
+        return jdbc.queryForObject("select config_version from tb_core_tenant where id = " + tenantId, Long.class);
+    }
+
+    /**
+     * 从数据库获取租户配置
+     */
+    private Map<String, Map<String, Object>> getTenantConfigsFromDb(Long tenantId) {
+        List<XLConfigPojo> configList = jdbc.query(
+                "select * from tb_core_config where belong_id = " + tenantId + " and enabled = 1",
+                BeanPropertyRowMapper.newInstance(XLConfigPojo.class)
+        );
+        Map<String, Map<String, Object>> configMap = new ConcurrentHashMap<>();
+        for (XLConfigPojo item : configList) {
+            Map<String, Object> itemMap = new HashMap<>();
+            itemMap.put("value", item.getConfigValue());
+            itemMap.put("type", item.getValueType());
+            itemMap.put("frontLoad", item.getFrontLoad());
+            configMap.put(item.getConfigKey(), itemMap);
+        }
+        return configMap;
+    }
+
+    /**
+     * 获取租户配置版本缓存key
+     */
+    private String getTenantConfigVersionCacheKey(Long tenantId) {
+        return MessageFormat.format(TenantConst.CONFIG_VERSION_CACHE_KEY, tenantId, globalVersion.get());
+    }
+
+    /**
+     * 获取租户配置缓存key
+     */
+    private String getTenantConfigCacheKey(Long tenantId, Long tenantConfigVersion) {
+        return MessageFormat.format(TenantConst.CONFIG_CACHE_KEY, tenantId, globalVersion.get(), tenantConfigVersion);
+    }
+
+    // ----- 以下用于全局配置的初始化和同步 -----
 
     /**
      * 同步全局配置版本和全局配置到本地内存

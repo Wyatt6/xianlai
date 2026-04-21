@@ -60,6 +60,10 @@ public class XLTenant implements Serializable {
     @Comment("租户过期时间")
     private LocalDateTime expireTime;
 
+    @Column(columnDefinition = "bigint not null default 0")
+    @Comment("租户配置版本")
+    private Long configVersion;
+
     @Column(columnDefinition = "datetime(3) not null default current_timestamp(3)")
     @Comment("租户配置最后更新时间")
     private LocalDateTime configUpdateTime;
@@ -98,6 +102,9 @@ public class XLTenant implements Serializable {
 
     @PrePersist
     public void prePersist() {
+        if (this.configVersion == null) {
+            this.configVersion = 0L;
+        }
         if (this.configUpdateTime == null) {
             this.configUpdateTime = LocalDateTime.now();
         }
@@ -114,7 +121,8 @@ public class XLTenant implements Serializable {
         this.updateAt = LocalDateTime.now();
     }
 
-    public void refreshConfigUpdateTime() {
+    public void refreshConfigVersionAndUpdateTime() {
+        this.configVersion += 1;
         this.configUpdateTime = LocalDateTime.now();
     }
 }
