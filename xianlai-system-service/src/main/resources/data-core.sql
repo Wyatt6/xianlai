@@ -7,11 +7,11 @@ INSERT
 IGNORE INTO tb_core_config(
     `id`, `enabled`, `belong_id`, `level`, `front_load`, `config_key`, `config_value`, `value_type`, `name`, `remark`
 ) VALUES
-    (1, 1, 0, 'SYSTEM', 0, 'version.globalConfig', '1', 'LONG', '全局配置版本', null),
-    (2, 1, 0, 'SYSTEM', 0, 'version.path', '1', 'LONG', '路径数据版本', null),
-    (3, 1, 0, 'SYSTEM', 0, 'version.route', '1', 'LONG', '路由数据版本', null),
-    (4, 1, 0, 'SYSTEM', 0, 'version.menu', '1', 'LONG', '菜单数据版本', null),
-    (5, 1, 0, 'SYSTEM', 0, 'version.api', '1', 'LONG', '接口数据版本', null),
+    (1, 1, 0, 'SYSTEM', 0, 'globalVersion', '1', 'LONG', '全局配置版本', null),
+    (2, 1, 0, 'SYSTEM', 0, 'pathVersion', '1', 'LONG', '路径数据版本', null),
+    (3, 1, 0, 'SYSTEM', 0, 'routeVersion', '1', 'LONG', '路由数据版本', null),
+    (4, 1, 0, 'SYSTEM', 0, 'menuVersion', '1', 'LONG', '菜单数据版本', null),
+    (5, 1, 0, 'SYSTEM', 0, 'apiVersion', '1', 'LONG', '接口数据版本', null),
 -- 1XXX 是杂项配置
     (1001, 1, 0, 'SYSTEM', 1, 'captcha.length', '5', 'INTEGER', '验证码长度', '设置系统所有验证码的长度（字符位数），建议4～6位，默认5位'),
     (1002, 1, 0, 'SYSTEM', 0, 'captcha.expireSeconds', '120', 'INTEGER', '验证码有效期', '设置系统所有验证码的有效期，单位：秒，默认120秒');
